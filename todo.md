@@ -290,19 +290,19 @@ derived relative phase. It does not substitute a supplied node number for an
 eigenvector, or treat search-tree links as physical movement.
 
 - [x] Commit PX1-PX8 in the consolidated formal PDF before runtime changes.
-- [ ] Implement exact integer Psi, its eigenvalue certificate, zero-gradient
+- [x] Implement exact integer Psi, its eigenvalue certificate, zero-gradient
   tie rule and Klein frame transport; check independent gradient/field oracles.
-- [ ] Construct canonical five-component f8 keys and the lower-median tree;
+- [x] Construct canonical five-component f8 keys and the lower-median tree;
   implement bounded actual tree lookup and topology-equivalent alias queries.
-- [ ] Route field-world regeneration through f8 and use its returned physical
+- [x] Route field-world regeneration through f8 and use its returned physical
   row for actual GPU operator lookup, while keeping packed G as node identity.
-- [ ] Compile and independently certify GPU eigenvector keys and tree rows
+- [x] Compile and independently certify GPU eigenvector keys and tree rows
   from device fields, with no CPU key-compiler fallback or packed-node arena.
-- [ ] Prepare and atomically install immutable replacement index versions;
+- [x] Prepare and atomically install immutable replacement index versions;
   preserve canonical history, FIFO and retained planning across order changes.
-- [ ] Verify literal keys/tree, alias transport, misses, malformed certificates,
+- [x] Verify literal keys/tree, alias transport, misses, malformed certificates,
   GPU row use, preparation failures, epoch overflow and replay across versions.
-- [ ] Record measured source-bound evidence, update the same formal PDF,
+- [x] Record measured source-bound evidence, update the same formal PDF,
   commit and push; retain the full architecture objective.
 
 The indexed universe is all recipe-derived scalar node descriptors, distinct
@@ -310,3 +310,22 @@ from the materialized pair FIFO. Keys, tree rows and generation metadata have
 their own memory accounting. This finite Psi binding governs indexing; general
 Hadamard routing, growth, continuing semantic epochs, physical adapters and
 comparative performance remain explicit work.
+
+PX1-PX8 were committed before runtime at `d8de349`. The completed suite passes
+**421 tests, zero skipped**, including **55 actual-device GPU methods**.
+The [20-check conformance capture](docs/evidence/psi-f8-v1/conformance.json)
+audits 702 supported CPU dimensions and 106,045 descriptors. All 830 nodes
+across six GPU domains undergo actual tree lookup and sample materialization.
+Every normal and deferred mission rebuild preserves canonical history, FIFO
+and retained search; the original archive hash and final pair/energy remain
+unchanged. [CLI replay](docs/evidence/psi-f8-v1/cli-replay.json) also verifies
+GPU -> CPU -> GPU recovery with different index settings and read-only inspection.
+
+[Verification](docs/evidence/psi-f8-v1/verification.json) binds runtime, tests
+and reports to normalized source hashes. The same consolidated 43-page formal
+PDF now records these results in revision 4. The ELI5 booklet remains unchanged,
+with pink Jitske and green-blue Tom; its naming commit `6df934e` was already pushed.
+The full architecture objective remains active. The implemented local Psi/f8
+binding leaves general spectral and Hadamard routing, geometry-changing growth,
+physical scale and cone/pyramid bindings, continuing semantic epochs, physical
+adapters and comparative hardware measurements as explicit next work.

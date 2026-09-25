@@ -2,10 +2,11 @@
 
 import importlib.util
 import unittest
+from threading import RLock
 from unittest.mock import Mock, patch
 
 from solvefinite.field import FieldManifest, evaluate_field
-from solvefinite.field_agent_gpu import GpuFieldAgentExecutor, MAX_ENERGY
+from solvefinite.field_agent_gpu import GpuFieldAgentExecutor, MAX_ENERGY, _IndexBundle
 from solvefinite.field_world import FieldWorld, KleinFieldRecipe
 from solvefinite.gpu import GpuUnavailable
 from solvefinite.motion import EnergyExhausted
@@ -34,10 +35,13 @@ class FieldAgentGpuOwnershipTests(unittest.TestCase):
     def test_close_attempts_all_resources_after_a_destroy_failure(self):
         owner = object.__new__(GpuFieldAgentExecutor)
         owner._closed = False
+        owner._lock = RLock()
         first, second, texture, geometry = Mock(), Mock(), Mock(), Mock()
         first.destroy.side_effect = RuntimeError("destroy failure")
         owner._buffers = [first, second]
         owner._texture, owner._geometry = texture, geometry
+        owner._bundle = _IndexBundle()
+        owner._bundle.texture = texture
         with self.assertRaisesRegex(RuntimeError, "destroy failure"):
             owner.close()
         for resource in (first, second, texture):

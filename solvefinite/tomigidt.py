@@ -8,6 +8,8 @@ profile of the underlying packed-state paradigm.
 from __future__ import annotations
 
 from copy import deepcopy
+from functools import wraps
+from threading import RLock
 from dataclasses import dataclass, field
 import json
 from pathlib import Path
@@ -16,9 +18,18 @@ from .motion import move, movement_cost
 from .navigation import NoRoute, RouteSearch, SearchBudgetExceeded, normalize_graph, shortest_route
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _json, _keys, write_json
-from .world import World, WorldConfig
+from .world import World, WorldConfig, _capacity
 from .field_agent import FIELD_POLICY, FIELD_WORD_PROFILE, FieldAgentManifest
 from .field_world import FieldWorld
+from .f8 import F8Index, IndexBinding
+
+
+def _serialized(method):
+    @wraps(method)
+    def call(self, *args, **kwargs):
+        with self._operation:
+            return method(self, *args, **kwargs)
+    return call
 
 
 FORMAT = "tomigidt-agent-v1"
@@ -158,23 +169,30 @@ class Tomigidt:
     """
 
     def __init__(self, manifest: AgentManifest | FieldAgentManifest | None = None,
-                 capacity: int = 2, *, backend: str = "cpu"):
+                 capacity: int = 2, *, backend: str = "cpu",
+                 index_binding: IndexBinding | None = None):
+        self._operation = RLock()
         self._manifest = AgentManifest() if manifest is None else manifest
         if type(self._manifest) not in (AgentManifest, FieldAgentManifest):
             raise ValueError("manifest must be an AgentManifest or FieldAgentManifest")
         self._is_field = type(self._manifest) is FieldAgentManifest
+        if index_binding is not None and (not self._is_field or type(index_binding) is not IndexBinding):
+            raise ValueError("An IndexBinding requires a field-agent manifest")
         self._graph = dict(self._manifest.graph)
         if type(backend) is not str or backend not in ("cpu", "gpu"):
             raise ValueError("backend must be cpu or gpu")
         self._gpu = None
         self._closed = False
         if self._is_field:
-            self.world = FieldWorld(self._manifest.world, capacity)
+            _capacity(capacity)
             try:
                 if backend == "gpu":
                     from .field_agent_gpu import GpuFieldAgentExecutor
-                    self._gpu = GpuFieldAgentExecutor(self._manifest.world)
-                    self.world = FieldWorld(self._manifest.world, capacity, executor=self._gpu)
+                    self._gpu = GpuFieldAgentExecutor(self._manifest.world, index_binding=index_binding)
+                    self.world = FieldWorld(self._manifest.world, capacity, executor=self._gpu,
+                                            index_binding=index_binding)
+                else:
+                    self.world = FieldWorld(self._manifest.world, capacity, index_binding=index_binding)
                 _, node, signed, _ = unpack(unpair(self.world.derive(self._manifest.start).pair)[0])
                 self._pair = pair(pack(self._manifest.initial_phase, node, signed,
                                        int(Opcode.STEP) | (self._manifest.initial_orientation << 4)))
@@ -206,20 +224,23 @@ class Tomigidt:
         self._closed = False
 
     @property
+    @_serialized
     def execution_info(self) -> dict:
         """Deployment diagnostics; adapter choice does not change journal semantics."""
         if self._is_field:
             result = {"backend": "cpu" if self._gpu is None else "gpu",
                       "word_profile": FIELD_WORD_PROFILE,
+                      "index": self.world.index_info,
                       "active_pair_payload_capacity_bytes": 8 * self.world.capacity,
                       "accounting": "Active pair payload only; recipe, geometry, search, observations, "
                                     "journal and runtime overhead are separate."}
             if self._gpu is not None:
                 result.update(adapter=dict(self._gpu.adapter_info),
                               allocation_info=self._gpu.allocation_info,
-                              gpu_stages=["certified-field-construction", "sample-materialization",
+                              gpu_stages=["certified-field-construction", "psi-key-construction",
+                                          "canonical-tree-construction", "tree-lookup", "sample-materialization",
                                           "edge-operator-compilation", "route-forecast", "actual-action"],
-                              host_stages=["geometric-certificate", "observation-admission",
+                              host_stages=["geometric-certificate", "psi-index-certificate", "observation-admission",
                                            "route-search", "action-admission", "journal"])
             return result
         return {"backend": "cpu"} if self._gpu is None else {
@@ -228,11 +249,27 @@ class Tomigidt:
             "host_stages": ["observation-admission", "route-search", "action-admission", "journal"],
         }
 
+    @_serialized
     def close(self) -> None:
         if not self._closed:
             self._closed = True
             if self._gpu is not None:
                 self._gpu.close()
+
+    @_serialized
+    def reindex(self, *, psi_sign: int | None = None,
+                phase_origin: int | None = None) -> F8Index:
+        """Change only indexed storage; preserve the complete admitted history."""
+        if self._closed:
+            raise ValueError("This agent is closed")
+        if not self._is_field:
+            raise ValueError("Reindex requires a field-agent manifest")
+        try:
+            return self.world.reindex(psi_sign=psi_sign, phase_origin=phase_origin)
+        except BaseException:
+            if self._gpu is not None and self._gpu.failed:
+                self.close()
+            raise
 
     @property
     def manifest(self) -> AgentManifest | FieldAgentManifest:
@@ -388,6 +425,7 @@ class Tomigidt:
         return (Decision("MOVE", "Follow the least-cost route in the current internal model",
                          route.route, route.cost, forecast[0], route.expansions, tuple(forecast)), None)
 
+    @_serialized
     def step(self, observations: object) -> Decision:
         try:
             return self._step(observations)
@@ -460,6 +498,7 @@ class Tomigidt:
             self._events[-1]["energy"] = self.energy
         return decision
 
+    @_serialized
     def snapshot(self) -> dict:
         snapshot = {
             "identity": self.identity, "cycle": self.cycle, "status": self.status,
@@ -487,16 +526,21 @@ class Tomigidt:
                 snapshot["planning"]["energy"] = planning.energy
         return snapshot
 
+    @_serialized
     def archive(self) -> dict:
         return {"format": FORMAT, "manifest": self.manifest.to_dict(),
                 "events": self.events, "expected": self.snapshot()}
 
     @classmethod
-    def from_archive(cls, archive: object, capacity: int = 2, *, backend: str = "cpu") -> Tomigidt:
+    def from_archive(cls, archive: object, capacity: int = 2, *, backend: str = "cpu",
+                     index_binding: IndexBinding | None = None) -> Tomigidt:
         _keys(archive, {"format", "manifest", "events", "expected"}, "Agent archive")
         if archive["format"] != FORMAT or type(archive["events"]) is not list:
             raise ValueError("Unsupported agent archive format or event array")
-        agent = cls(AgentManifest.from_dict(archive["manifest"]), capacity, backend=backend)
+        options = {"backend": backend}
+        if index_binding is not None:
+            options["index_binding"] = index_binding
+        agent = cls(AgentManifest.from_dict(archive["manifest"]), capacity, **options)
         try:
             agent._restore_events(archive)
         except BaseException:
@@ -535,7 +579,8 @@ class Tomigidt:
         write_json(path, self.archive())
 
     @classmethod
-    def load(cls, path: str | Path, capacity: int = 2, *, backend: str = "cpu") -> Tomigidt:
+    def load(cls, path: str | Path, capacity: int = 2, *, backend: str = "cpu",
+             index_binding: IndexBinding | None = None) -> Tomigidt:
         def unique_object(items: list[tuple[str, object]]) -> dict:
             value = {}
             for key, item in items:
@@ -546,4 +591,4 @@ class Tomigidt:
 
         with Path(path).open(encoding="utf-8") as stream:
             archive = json.load(stream, object_pairs_hook=unique_object)
-        return cls.from_archive(archive, capacity, backend=backend)
+        return cls.from_archive(archive, capacity, backend=backend, index_binding=index_binding)

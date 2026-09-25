@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 3. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 4. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -7,6 +7,7 @@ from pathlib import Path
 import argparse
 import hashlib
 import json
+import subprocess
 from xml.sax.saxutils import escape
 
 from reportlab.pdfgen import canvas
@@ -24,6 +25,7 @@ OUTPUT = ROOT / 'output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2
 EVIDENCE = ROOT / 'docs/evidence/formal-edition-2026-09-25'
 KLEIN_EVIDENCE = ROOT / 'docs/evidence/klein-field-v2'
 FIELD_AGENT_EVIDENCE = ROOT / 'docs/evidence/field-agent-v1'
+PSI_F8_EVIDENCE = ROOT / 'docs/evidence/psi-f8-v1'
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -97,7 +99,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 25 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 3. The implemented field formats are <font name="Mono">relational-sdf-v1</font> and <font name="Mono">relational-sdf-v2</font>. Measured FI1-FI8 integration remains on pages 35-38. This revision binds local SDF-derived Psi and a storage index in PX1-PX8, pages 39-43, before runtime implementation.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 4. The implemented field formats are <font name="Mono">relational-sdf-v1</font> and <font name="Mono">relational-sdf-v2</font>. Measured FI1-FI8 integration remains on pages 35-38. This revision records implemented local SDF-derived Psi and storage indexing against the unchanged formal-first PX1-PX8 contract, pages 39-43.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -227,7 +229,7 @@ def build_content():
         eq('H_f(u,v)_i = clip(round_nu(u_i*v_i / 2^f))\nq = H_f(DecodeVector(W), Gradient_nu(phi))\nnext = SelectNeighbor_nu(node, q, topology)\nDelta_a^2 phi(x) = phi(x+a)-2*phi(x)+phi(x-a)\nDelta_T^2 phi_T = phi_(T+1)-2*phi_T+phi_(T-1)'),
         p('Hadamard multiplication applies to decoded numerical lanes with declared fixed-point scale, widened products, rounding and clipping. Opcode, continuation and parity bits are not vector components. The gradient/stencil, neighbor admissibility, ties, stop and fallback rules must be supplied.'),
         p('Spatial and temporal second differences are different operators. On a graph, x+a means the selected adjacent sample in a declared stencil, not an undeclared external coordinate. Spacing and units are required for divided differences.'),
-        small('Current status: typed XOR, phase arithmetic and SDF second-difference bounds have checks. General Hadamard routing, eigenvector-derived Psi and a canonical f8 median index remain formal or unbound. No application-wide route-quality claim follows from the formulas alone.')
+        small('Current status: typed arithmetic, SDF bounds, the PX local eigen-operator and canonical f8 median index have CPU/GPU checks. The implemented Psi role is storage indexing. Global eigenmode traversal and Hadamard routing remain separate obligations; no route-quality claim follows from index conformance.')
     )
     page('Relations define the field world', 'GEOMETRIC INTERPRETATION | SOLUS PP.3-6; SOLIPSISM PP.12-13',
         eq('phi(x) = sigma(x) * inf { d(x,b) : b in Boundary }'),
@@ -361,7 +363,7 @@ def build_content():
             ['Compatibility','v1 retains its exact prior schema and bytes. Reject seam/topology additions to v1. Archive semantics follow the contained manifest version.'],
         ],[.26,.74]),
         p('The default generator uses W=H=8, centre 0, radius 2, initial node 0, phase 250 and orientation 0. All field-class routes take local u+; increments are [11,53,137]. The measured 64-tick CPU/GPU trace crosses eight reversing seams and ends at k:0:0 with pair 11FE00D681FE002A.'),
-        small('Klein evidence includes negative/large labels, all 702 supported dimensions, face/link audits, connected orientable covers, full torus edge/face maps, holonomy, exact scalar pullback, CPU/GPU seam traces, replay and unchanged v1 semantics. Its 311-test baseline is preserved alongside the current 368-test result on page 27.')
+        small('Klein evidence includes negative/large labels, all 702 supported dimensions, face/link audits, connected orientable covers, full torus edge/face maps, holonomy, exact scalar pullback, CPU/GPU seam traces, replay and unchanged v1 semantics. Its 311-test baseline is preserved alongside the current 421-test result on page 27.')
     )
     page('The infallible contract', 'NEW FORMALIZATION | SOLIPSISM PP.3-11',
         box('<b>Conditional infallibility.</b> Given a versioned profile with single-valued, total bounded transitions proved to preserve its declared invariants, a valid initial state, completely specified inputs and ordering, and faithful execution, every bounded request has one defined result; every accepted transition preserves those invariants; replay reproduces its canonical output.'),
@@ -420,7 +422,7 @@ def build_content():
         p('The architecture can host deterministic simulation, regenerable world models, compact geometric controllers and device-independent continuation once their profiles and adapters are specified. Robotics, optical/FPGA execution, biological growth and physical autonomous construction require additional realizations. The current repository demonstrates software/GPU substrates and a simulated/live-observation individual.'),
         box('A complete application must identify what the field means, where its inputs come from, what action an output authorizes, and how the model is validated. The formal architecture supplies a common representation and execution discipline; it does not supply an absent sensor or actuator model.')
     )
-    page('Implementation map and integration', 'MEASURED PROFILES | FI1-FI8',
+    page('Implementation map and integration', 'MEASURED PROFILES | FI1-FI8 AND PX1-PX8',
         p('The field-agent policy joins recipe-derived Klein geometry to the existing individual. The module map identifies implemented scope; remaining architectural concepts retain their separate obligations.'),
         table(['Layer','Existing implementation','Scope'],[
             ['Packed core','rp32.py','Encoding, phase, parity, full mirror and pair.'],
@@ -431,43 +433,43 @@ def build_content():
             ['Intrinsic field','field.py; field_cli.py','Strict geometry/manifest, exact field, operators, one persistent sequence and replay.'],
             ['Field GPU','sdf_gpu.py; field.wgsl','Device field construction, operator texture and ordered state transitions.'],
             ['Klein quotient','klein.py','Audited cells, connected orientation cover, intrinsic ball and v2 seam transport.'],
-            ['Field integration','field_agent.py; field_world.py; field_agent_gpu.py','Typed agent recipe/state, sample FIFO and persistent device actions; field_agent.wgsl.'],
+            ['Field / index','field_agent.py; field_world.py; field_agent_gpu.py; psi.py; f8.py','Typed field agent, sample FIFO, local eigen-axis, canonical tree and persistent device actions; field_agent.wgsl.'],
         ],[.22,.34,.44]),
         h('Profile meanings remain explicit'),
         p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and implement a field-agent policy with B=phi and separate integer energy. Shared encoding never permits an implicit role change.'),
         h('Measured integration'),
-        p('One existing Tomigidt plans over recipe-derived geometry, observes local hazards, transports its state through seams and regenerates samples. CPU/GPU canonical histories agree. Psi/f8, general growth and physical adapters remain distinct obligations.'),
-        small('Paths are relative to solvefinite/. Integration source hashes and command provenance: docs/evidence/field-agent-v1/. Retained Klein baseline: docs/evidence/klein-field-v2/. Formal-first identity and chronology are on page 33.')
+        p('Tomigidt observes, plans and acts through Klein seams. Actual CPU/GPU tree lookup and versioned index rebuild preserve its canonical history, retained search and FIFO. Global Psi, Hadamard routing, growth and physical adapters remain distinct obligations.'),
+        small('Paths are relative to solvefinite/. Current source hashes and provenance: docs/evidence/psi-f8-v1/. Prior field-agent and Klein captures remain retained. Formal-first chronology is on page 33.')
     )
     page('Fresh verification and field trace', 'OBSERVED RESULTS | 25 SEPTEMBER 2026',
         table(['Measurement','Observed result'],[
-            ['Full integrated suite','368 tests passed in 36.348 s; zero skipped.'],
-            ['Actual device coverage','41 GPU methods: the prior 28 plus 13 field-agent methods.'],
+            ['Full integrated suite','421 tests passed in 44.997 s; zero skipped.'],
+            ['Actual device coverage','55 GPU methods: the prior 41 plus 14 F8 methods.'],
             ['Klein topology coverage','All 702 admissible dimension pairs audited, including base/cover surfaces and full torus edge/face maps.'],
-            ['Conformance examples','Klein: 22 checks; field agent: all 23 checks passed, including field ablation, FIFO reconstruction and replay.'],
+            ['Conformance examples','Klein: 22 checks; field agent: 23; Psi/index: all 20 passed. PX audits 106,045 descriptors in all 702 domains; 830 GPU lookups/materializations in six domains.'],
             ['Hardware / software','NVIDIA GeForce RTX 5070 Ti Laptop GPU; Vulkan; driver 591.59; wgpu 0.32.0; Python 3.12.14.'],
             ['Cross-adapter continuation','CPU/GPU archives agree; fresh processes replay both ways before the seam and during DEFER. Live retries preserve history.'],
         ],[.32,.68]),
         eq('SDF v1: [-6,-4,-3,0,2,3,5]\nMoved boundary: [-8,-6,-5,-2,0,1,3]\nV1 tick 64: n4, pair 1102046C01020494\nKlein v2 tick 64: k:0:0, pair 11FE00D681FE002A'),
         p('Changing geometry changes field execution and agent route selection. The FI8 mission completes after four cycles at pair 06011145160111BB, energy 90. Its reversing seam yields phase 240 and eta 1. The bounded-search mission takes 41 cycles; six energy/recipe/valid-parity forecast tamper probes are rejected.'),
         h('Reproduce the measured checks'),
-        code('python -m unittest discover -s tests -v\npython -m examples.field_agent_conformance --output agent.json\npython -m examples.klein_conformance --output klein.json\npython -m examples.field_conformance --output sdf.json'),
-        p('The historical SDF capture (262 tests/21 device methods) and Klein capture (311/28) remain retained evidence, including the seven-node boundary ablation above. Counts describe tested finite profiles, not an architectural completion percentage.'),
-        small('Current evidence: docs/evidence/field-agent-v1/. Earlier captures: docs/evidence/klein-field-v2/ and docs/evidence/formal-edition-2026-09-25/. Logs, source hashes, traces, adapter details and complete archives identify each observation.')
+        code('python -m unittest discover -s tests -v\npython -m examples.psi_f8_conformance --output psi.json\npython -m examples.field_agent_conformance --output agent.json\npython -m examples.klein_conformance --output klein.json\npython -m examples.field_conformance --output sdf.json'),
+        p('Retained captures: SDF 262 tests/21 device methods, Klein 311/28 and field agent 368/41. PX rebuilds preserve the complete FI8 archive and all 41 DEFER-mission cycles. These counts describe tested finite profiles, not architectural completion.'),
+        small('Current evidence: docs/evidence/psi-f8-v1/. Prior captures remain in field-agent-v1/, klein-field-v2/ and formal-edition-2026-09-25/ under docs/evidence/. Logs, source hashes, adapter details and complete archives identify each observation.')
     )
     page('Progress against the architecture: I', 'CAPABILITY STATUS | FINITE REALIZATIONS',
         table(['Obligation','Measured status and remaining work'],[
             ['C1-C3: relational packed execution','<b>Verified subset.</b> RP32 and state-selected integer texture execution work. General active log-radius scale transitions and alternate historical carriers remain unbound.'],
             ['Exact intrinsic SDF','<b>Verified subset.</b> Weighted graph distance, declared separating boundary, units, certificate and field-governed traces work. Continuous primitives and physical calibration are separate.'],
             ['C4: Klein geometry','<b>Verified finite profile.</b> Quotient cells, nonorientability, connected orientable cover, torus maps, intrinsic ball and CPU/GPU seam transport are audited.'],
-            ['Psi traversal','<b>Supplied routes verified.</b> An eigenvector-derived traversal needs operator, eigenvalue selection, normalization, degeneracy and frame transport.'],
+            ['Local Psi / traversal','<b>Verified local index role.</b> Exact SDF eigen-operator, primitive axis, sign/zero tie and chart transport work. Global eigenmode traversal and behavioral routing remain separate.'],
             ['Hadamard / Delta-Delta','<b>Partly formal.</b> Typed arithmetic and field bounds are defined; second-difference bounds are checked. A geometric Hadamard routing profile is not implemented.'],
-            ['f8 middle-out index','<b>Formal / unbound.</b> Total key, canonical identity and median recursion are stated. Full canonical ordering, tie policy and versioned rebuild are not implemented.'],
+            ['f8 middle-out index','<b>Verified finite binding.</b> Canonical five-component keys, lower-median preorder, actual CPU/GPU lookup and atomic versioned rebuild work for scalar base descriptors.'],
         ],[.3,.7]),
         h('What the tests establish'),
         p('The implemented graph profile has exact arithmetic and a field certificate, and its tested CPU/GPU realizations agree. These are substantial completed components. They do not establish every named architectural layer by association with the same word carrier.'),
         h('What will count as progress next'),
-        p('FI1-FI8 now have end-to-end field-guided planning, observation-driven replanning and genuine sample eviction/regeneration evidence. Finite Klein cells, covers, holonomy and CPU/GPU transport remain verified. Psi/f8/Hadamard still require explicit numerical bindings and independent conformance checks.'),
+        p('FI1-FI8 preserve field-guided planning, local replanning and sample regeneration. PX1-PX8 add exact local eigenstructure and index-governed lookup without changing those histories. Next bindings concern global Psi/Hadamard routing, geometry-changing growth, active scale transitions and wider continuation.'),
         small('The requirements matrix continues on page 29. No percentage is assigned because architectural obligations differ in size and some remain unbound; counting passing tests would produce a misleading completion estimate.')
     )
     page('Progress against the architecture: II', 'CAPABILITY STATUS | INTEGRATION AND APPLICATIONS',
@@ -481,7 +483,7 @@ def build_content():
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
         h('Continuation after the integrated field agent'),
-        p('FI1-FI8 join retained geometric recipes to the existing individual’s observation/planning loop, with legacy fixtures preserved. Remaining work binds traversal/index operators, geometry-changing growth and wider continuation. Each stage requires evidence against its own obligations.'),
+        p('FI1-FI8 join retained geometry to the existing individual; PX1-PX8 add an interchangeable verified index. Legacy fixtures remain preserved. Remaining work binds global traversal/Hadamard operators, geometry-changing growth and wider continuation. Each stage requires its own evidence.'),
         small('The measured integration is finite and profile-scoped. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present profiles.')
     )
     page('Conformance and performance scope', 'ACCEPTANCE CRITERIA | ORIGINAL T1-T10',
@@ -501,7 +503,7 @@ def build_content():
         p('They are not fresh end-to-end autonomy timings, optimized CPU comparisons, cache-hit measurements or proof of device saturation. Logical transition rates for these particular loops cannot be generalized into an architectural bandwidth claim.'),
         h('Required comparison record'),
         p('A meaningful performance comparison records hardware, profile, rule set, LUT and working-set sizes, batch distribution, precision, initialization, transfers, retained inputs, total memory, latency, throughput, regeneration cost and output agreement. Compare the same workload and correctness target. Cache and occupancy claims need corresponding counters [R2-R3].'),
-        small('Historical records: docs/benchmarks/rtx5070ti-depth16.json and rtx5070ti-depth18.json. Fresh correctness results are on page 27. No new performance benchmark was run for this PDF detour.')
+        small('Historical records: docs/benchmarks/rtx5070ti-depth16.json and rtx5070ti-depth18.json. PX conformance took 21.673 s as a correctness capture, not a comparative benchmark. Default explicit device payload is 49,160 bytes, peaking at 51,528 during rebuild; retained host index payload is 1,296 bytes, peaking at 2,592. These exclude Python/driver overhead; fields, geometry and journals remain outside the FIFO.')
     )
     page('Executable default and archive schema', 'SELF-CONTAINED REFERENCE | SDF.R1-R12',
         p('This complete default manifest reproduces the implemented seven-node field. All three route columns must be legal even when the current field selects only one.'),
@@ -548,7 +550,7 @@ for tick in admitted_finite_budget:
             ['Adapters / scaling','Exact word preservation, finite cascade stages, ownership, input delivery and resource controls; R14-R15.'],
             ['Physical adapters','Samples, units, calibration, transfer functions and retained scheduling effects; R16.'],
         ],[.27,.73]),
-        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21 and <b>FI1-FI8</b> on pages 35-38. Their scopes remain separate; satisfying one profile does not silently complete another.'),
+        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38 and <b>PX1-PX8</b> on pages 39-43. Their scopes remain separate; satisfying one profile does not silently complete another.'),
         small('Original property cross-reference: P1 replay is I1 on p.22; P2 FIFO and P3 regeneration are R1/R2 on p.18; P4 mirror preservation is on p.8; P5 representation independence is the adapter/refinement contract on pp.16,23.'),
         small('Historical vocabulary: mosTADPOLE(thegreenone) names the source input/output lineage; TPVM is Topological Fixed-Point Virtual Machine. Det-0 names reproducibility with complete dependencies. Generative Topological Fabric, Packed Topological FIFO Matrix and Uniform Packed Operator Paradigm are successive functional views. REW expands to Reverse Electronic Warfare in the WElip source. f8’s “BVH replacement / S2 superseder” is an intended indexing/comparison role, not a measured replacement result.'),
         small('A complete manifest may reference immutable versioned rule tables rather than embedding every algorithm in a packet. No “infallible” designation waives a missing binding. A profile is executable only once all choices that affect its outputs are single-valued and finitely evaluable.')
@@ -565,7 +567,7 @@ for tick in admitted_finite_budget:
         small('Join each source’s two lines without spaces. Retained paths: O at repository root, S at sources/solus-ion-ad-infinitum.pdf, I at sources/solipsism.pdf. Both addenda originated in the author-named “Philosophers stone Jitske Klootwijk” source directory.'),
         h('Implementation evidence identity'),
         code('Klein: c4b41ce12a33a747bd54c8cc7f9748a06f7b59de\nCapture: 2026-09-25, 11:30:28 UTC\nPrior: 8f4b87bed131f5c084ef59aec558f3f9eb6ddedc\nPrior capture: 07:52:57 to 07:54:16 UTC'),
-        small('Chronology: SDF specification 477e576 preceded implementation 50c9389; Klein specification 8f4b87b preceded c4b41ce. FI1-FI8 revision 1 was committed as 5ccc022 before integration runtime coding. Revision 2 binds measured integration source hashes in docs/evidence/field-agent-v1/verification.json. All earlier captures and original source bytes remain preserved.')
+        small('Chronology: SDF specification 477e576 preceded implementation 50c9389; Klein specification 8f4b87b preceded c4b41ce. FI1-FI8 formal commit 5ccc022 preceded integration c8af71d. PX1-PX8 formal commit d8de349 preceded its runtime. Current source hashes: docs/evidence/psi-f8-v1/verification.json. Earlier captures and original source bytes remain preserved.')
     )
     page('Notation and technical references', 'REFERENCE INDEX',
         table(['Symbol / name','Meaning'],[
@@ -585,7 +587,7 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box('<b>Revision 3 status.</b> SDF, Klein and FI1-FI8 retain their measured finite evidence. Pages 39-43 add the formal-first PX1-PX8 binding; its runtime is pending. The prior 368-test, 41-device-method and 23-check integration capture establishes no PX runtime claim. Wider architecture remains separately scoped.')
+        box('<b>Revision 4 status.</b> SDF, Klein, FI1-FI8 and PX1-PX8 have measured finite evidence. The local eigen-axis and storage index now govern actual lookup and preserve the existing agent history across rebuilds. Prior captures remain identifiable. Global traversal, Hadamard routing and the wider architecture remain separately scoped.')
     )
     page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
@@ -637,9 +639,9 @@ for tick in admitted_finite_budget:
         ],[.3,.46,.24]),
         p('With zero hazards and only the centre changed to index 4, the first planned route becomes [15,16,17], cost 4. This ablation proves field geometry changes planning, rather than decorating an unrelated route. Both CPU and GPU now reproduce these formal-first reference vectors and complete canonical archives.'),
         small('<b>Required checks.</b> Strict recipe/manifest and typed lanes; preserved legacy formats; independently calculated costs and packed words; field ablation, hazard replanning, seam reflection and mirrors; FIFO hit order, real eviction/reconstruction and recipe-only cold rebuild; capacity-independent histories; stale-search invalidation; fresh-process and both-backend replay; device action ownership, no fallback and fail-closed errors. Energy tampering shall fail complete-event replay.'),
-        small('All 23 field-agent conformance checks pass; the full suite contains 368 tests, including 41 actual-device methods. FI1-FI8 do not claim eigenvector Psi, full f8, geometry-changing growth, infinite memory, calibrated physical energy or completion of the whole architecture.')
+        small('The retained FI integration capture has 23 passing checks and 368 tests, including 41 actual-device methods. Its exact mission archive is preserved under PX indexing. Neither binding establishes global Psi traversal, growth, infinite memory, calibrated physical energy or whole-architecture completion.')
     )
-    page('Local SDF-derived Psi binding', 'FORMAL PENDING | PX1-PX2 | NUMERICAL CHOICE BEFORE RUNTIME',
+    page('Local SDF-derived Psi binding', 'VERIFIED FINITE PROFILE | PX1-PX2 | FORMAL-FIRST CONTRACT',
         h('PX1. A declared local eigen-operator'),
         p('This profile makes a new explicit numerical choice for the eigenvector/traversal and f8 roles in the original source (original pages 7 and 11; consolidated page 11). It is not asserted to be the unique formula implied by that source. Its operational role is indexing recipe-derived scalar base descriptors. Hadamard routing, a global Psi operator and behavior-changing traversal remain separate bindings.'),
         p('Use the immutable Klein recipe, canonical node i=uH+v and certified unit-edge scalar field phi. Directions u+, u-, v+, v- are the K1 quotient directions in the canonical chart. Define the unscaled symmetric difference g and its positive-semidefinite local operator exactly:'),
@@ -649,9 +651,9 @@ for tick in admitted_finite_budget:
         p('The certified unit-edge SDF has adjacent differences at most one. Thus both components of g lie in [-2,2]. Gcd-normalized P and either Psi sign also lie in [-2,2]; lambda belongs to {0,1,2,4,5,8}. Use exact widened integer arithmetic; no floating-point eigensolver, tolerance or rounded normalization participates.'),
         eq('J = diag(1,-1)\ng_prime = J*g; A_prime = J*A*J\nPsi_prime = J*Psi'),
         p('These transformations bind an orientation-reversing Klein chart. Transport the chosen axis, including the declared degenerate choice, through J. Keys shall be derived only in the canonical frame. A temporary label or opposite local frame changes displayed components, not the indexed scalar identity.'),
-        small('PX runtime is pending. Mathematical checks of these formulas and formal reference vectors are not evidence that a CPU/GPU index, lookup path or rebuild has been implemented.')
+        small('Measured PX checks cover all 25 gradients, both signs and both local frames. The local axes, key records, full trees and actual GPU lookup results agree with independent cover/BFS oracles. The binding remains a declared finite indexing choice, not a global physical eigenmode.')
     )
-    page('Canonical index identity and key', 'FORMAL PENDING | PX3-PX4 | ONE BASE DESCRIPTOR PER NODE',
+    page('Canonical index identity and key', 'VERIFIED FINITE PROFILE | PX3-PX4 | SCALAR BASE DESCRIPTORS',
         h('PX3. Immutable binding and derivation identity'),
         p('IndexBinding has exactly the JSON keys below. Reject missing/unknown keys, Boolean integers and invalid values. Format is f8-klein-sdf-v1; epoch is a strict integer in 0..2^31-1, psi_sign is exactly -1 or +1, and phase_origin is in 0..255. Defaults are epoch 0, sign +1 and origin 0.'),
         code('format, epoch, psi_sign, phase_origin'),
@@ -664,7 +666,7 @@ for tick in admitted_finite_budget:
         p('Each key has five unsigned 32-bit components. Compare them lexicographically by numeric component, never by string representation or a hash. The final canonical node ID guarantees uniqueness even when earlier components tie. A different sign or phase origin may reorder storage while preserving every geometric node and movement edge.'),
         small('The phase derivation above is recipe/index metadata. It does not install a new phase in Tomigidt, append a movement, consume energy or supply a route to the planner.')
     )
-    page('Middle-out tree and executable lookup', 'FORMAL PENDING | PX5-PX6 | STORAGE ROWS AND DEVICE USE',
+    page('Middle-out tree and executable lookup', 'VERIFIED FINITE PROFILE | PX5-PX6 | ACTUAL DEVICE LOOKUP',
         h('PX5. Exact lower-median tree'),
         p('Sort all canonical node keys. For each half-open sorted interval [lo,hi), choose its lower median; emit that node, then its left and right subtrees recursively. Physical tree rows are this preorder. The resulting row layout is canonical for the complete recipe and binding.'),
         eq('mid = floor((lo + hi - 1)/2)\nleft interval [lo,mid); right interval [mid+1,hi)\ntree row = [key0,key1,key2,key3,key4,leftrow,rightrow,0]\nnode-key record = [key0,key1,key2,key3,key4,lambda,g_u+2,g_v+2]'),
@@ -674,9 +676,10 @@ for tick in admitted_finite_budget:
         p('The GPU shall construct keys, Psi values, numeric ranks and the complete tree from certified device fields and immutable geometry, including directional neighbors and parent/depth data. No host key compiler may substitute for explicit GPU construction. Node-key records and all rows shall exactly match independent CPU results.'),
         p('Compile the neighbor/class operator texture in tree preorder. The shader shall obtain a query key from the current state’s canonical G and walk the tree to the actual operator texture row. Validate the returned node identity before using its operator. This lookup must govern actual device actions as well as forecasts; G itself remains the canonical node ID.'),
         p('Admission certificates shall validate field-derived g, A/eigenvalue, gcd normalization, sign, parent-distance relation, K8 derivation phase and every key. They shall also validate the complete canonical lower-median/preorder tree and its node coverage. Parity or a locally plausible child link alone is insufficient.'),
-        small('Existing FI6 persistent state, no-CPU-fallback, prediction comparison and fail-closed requirements remain binding. A corrupted row or wrong returned identity shall not silently select another node’s operator.')
+        small('Existing FI6 persistent state, no-CPU-fallback, prediction comparison and fail-closed requirements remain binding. A corrupted row or wrong returned identity shall not silently select another node’s operator.'),
+        small('Measured scope: nine bounds visited tree rows, not total lookup work. The current shader additionally validates rank in O(N) and checks the parent path. The conformance capture establishes exact results and actual tree use; it does not establish a speedup or a logarithmic total runtime.')
     )
-    page('Atomic rebuild and semantic preservation', 'FORMAL PENDING | PX7 | VERSIONED STORAGE ALTERNATIVE',
+    page('Atomic rebuild and semantic preservation', 'VERIFIED FINITE PROFILE | PX7 | VERSIONED STORAGE',
         h('PX7. Prepare, certify and swap one version'),
         p('A rebuild creates a new immutable IndexBinding with epoch incremented by exactly one; psi_sign and phase_origin may optionally change within their declared bounds. Reject epoch overflow at 2^31-1 before mutation. This is the versioned alternative allowed by original requirement R7, not an in-place ambiguous reordering.'),
         p('Prepare and validate the complete candidate keys, tree, operator texture and device bind-group bundle before a serialized atomic swap. Each lookup/action uses one complete admitted bundle. Retain enough ownership to distinguish a rejected candidate from an already committed replacement.'),
@@ -693,7 +696,7 @@ for tick in admitted_finite_budget:
         p('Index metadata is separate from the bounded FIFO. It shall not hide a complete arena of packed world-node pairs. Account for both old and candidate allocations during rebuild, including device resources and all retained host metadata. A smaller active-pair capacity is not a bound on total memory.'),
         small('Current FI1-FI8 behavior remains the refinement oracle: the same admitted observations must reproduce the same movement, energy, repair and persistence history through every allowed storage version.')
     )
-    page('Psi-index reference and acceptance', 'FORMAL PENDING | PX8 | LITERAL VECTORS AND OBLIGATIONS',
+    page('Psi-index reference and acceptance', 'VERIFIED FINITE PROFILE | PX8 | VECTORS AND CONFORMANCE',
         h('PX8. Default 4 by 5 reference'),
         p('Use the default Klein recipe (centre 0, radius 2, turns [11,53,137]) and binding epoch 0, sign +1, phase origin 0. The literal orders below follow PX1-PX5. The retained docs/evidence/psi-f8-v1/formal-reference.json contains all 20 node records and the complete tree; these are formal vectors, not runtime measurements.'),
         code('sorted node IDs:\n18,17,19,15,16,4,3,14,13,1,2,11,12,9,0,5,10,6,8,7\npreorder node IDs:\n1,16,17,18,19,15,3,4,14,13,0,11,2,12,9,6,5,10,8,7'),
@@ -708,7 +711,7 @@ for tick in admitted_finite_budget:
         h('Required independent conformance'),
         p('Require independent cover/BFS and field oracles; all 25 possible gradients, both signs and both local frames; eigen-equations, zero-axis tie and bounds; literal keys, complete rows and phase derivations; negative/large aliases; strict binding types, MISS and corrupted trees.'),
         p('Require real GPU construction and tree-governed texture lookup, corrupted-row rejection and no CPU fallback; actual sample eviction/regeneration; capacity and rebuild invariance including retained DEFER search; complete candidate certification, atomic failure, cleanup-after-commit reporting and epoch overflow. Legacy archives remain bit-exact, and the entire FI8 mission remains unchanged.'),
-        box('<b>Revision 3 acceptance status: FORMAL PENDING.</b> PX1-PX8 are bound before runtime coding. The earlier 368 passing tests, 41 actual-device methods and 23 field-agent checks are preserved evidence for the prior profiles. They are not counted as execution evidence for this new Psi/index layer.'),
+        box('<b>Revision 4 acceptance status: VERIFIED FINITE PROFILE.</b> All 20 PX conformance checks pass. The complete suite has 421 passing tests, 55 actual-device methods and zero skips. Four FI8-cycle rebuilds and 41 DEFER-cycle rebuilds preserve the prior canonical archive, energy, FIFO and retained search.'),
         small('This finite binding supplies local SDF-derived eigenstructure and a canonical middle-out storage index. It does not complete global Psi traversal, Hadamard routing, geometry-changing growth, active scale transitions, physical adapters or indefinite continuation.')
     )
 
@@ -717,7 +720,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 3')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 4')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -750,7 +753,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 3')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 4')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 25 September 2026')
     count=len(PAGES)+1
@@ -758,7 +761,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 3')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 4')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  25 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -849,7 +852,9 @@ def verify_retained_inputs():
             or any(value is not True for value in conformance['checks'].values())):
         raise ValueError('Field-agent conformance does not pass all named checks')
     for relative, expected in integration['source_sha256_lf'].items():
-        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        source = subprocess.check_output(
+            ['git', 'show', f'c8af71dbb5b526deb1dee97dc61ef5bbd47e6737:{relative}'],
+            cwd=ROOT).replace(b'\r\n', b'\n')
         if hashlib.sha256(source).hexdigest() != expected:
             raise ValueError(f'Field-agent evidence source identity changed: {relative}')
     if not (FIELD_AGENT_EVIDENCE/'full-tests.txt').is_file():
@@ -858,6 +863,36 @@ def verify_retained_inputs():
     reference_bytes = reference.read_bytes().replace(b'\r\n', b'\n')
     if hashlib.sha256(reference_bytes).hexdigest() != '92ff743ae86bb31ef82669284467e7471040a0ec5e7995de520b8a6c5ed032d8':
         raise ValueError('Retained PX formal reference identity changed')
+    px = json.loads((PSI_F8_EVIDENCE/'verification.json').read_text(encoding='utf-8'))
+    if (px['tests']['passed'], px['tests']['skipped'],
+            sum(px['tests']['actual_device_methods'].values()), px['tests']['elapsed_seconds'],
+            px['conformance_checks_passed'], px['dimension_pairs_audited'],
+            px['node_descriptors_audited'], px['gpu_domains'],
+            px['gpu_lookups_and_materializations'], px['deferred_mission_cycles'],
+            px['conformance_elapsed_seconds']) != (421, 0, 55, 44.997, 20, 702, 106045, 6, 830, 41, 21.673):
+        raise ValueError('Retained PX verification disagrees with revision 4')
+    if (px['formal_binding_commit'] != 'd8de3497d1a147252cdff2635b5c5ece0bda780e'
+            or px['base_commit'] != 'c8af71dbb5b526deb1dee97dc61ef5bbd47e6737'):
+        raise ValueError('Retained PX chronology disagrees with revision 4')
+    for relative, expected in px['source_sha256_lf'].items():
+        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(source).hexdigest() != expected:
+            raise ValueError(f'PX evidence source identity changed: {relative}')
+    for relative, expected in px['report_sha256_lf'].items():
+        report = (PSI_F8_EVIDENCE/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(report).hexdigest() != expected:
+            raise ValueError(f'PX evidence report identity changed: {relative}')
+    px_conformance = json.loads((PSI_F8_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    if (px_conformance['format'] != 'psi-f8-conformance-v1'
+            or len(px_conformance['checks']) != 20
+            or any(value is not True for value in px_conformance['checks'].values())
+            or px_conformance['canonical_archive_sha256'] != integration['canonical_archive_sha256']):
+        raise ValueError('PX conformance does not retain the verified FI history')
+    allocation = px['allocation_info']
+    if (allocation['device_payload_bytes'], allocation['peak_rebuild_device_payload_bytes'],
+            allocation['host_index_payload_bytes'], allocation['peak_rebuild_host_index_payload_bytes'],
+            allocation['retained_world_node_pair_count']) != (49160, 51528, 1296, 2592, 0):
+        raise ValueError('Retained PX allocation accounting disagrees with revision 4')
 
 
 if __name__=='__main__':

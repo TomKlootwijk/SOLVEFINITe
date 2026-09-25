@@ -171,6 +171,20 @@ and replay consistency does not authenticate a source or a coordinated edit.
 
 ## Verification
 
+Field-profile sessions may select an `IndexBinding` at construction or use
+`session.reindex(psi_sign=-1, phase_origin=42)` while holding live ownership.
+Reindexing shares the session's operation lock with observations and replies.
+It changes only certified storage: it creates no sensor event and writes no
+archive. Retrying an acknowledged request after a rebuild or after restart with
+another index version returns the same recorded event. The optional CLI flags
+`--index-epoch`, `--index-sign` and `--index-phase-origin` select this storage
+binding when starting `serve` or replaying `live-inspect`. The JSONL request
+schema and sensor producer epoch remain unchanged.
+
+Pure replacement rejection leaves the session usable. An uncertain device
+fault or committed cleanup failure closes the agent and requires reopening
+from durable history before more requests can proceed.
+
 Tests exercise strict input admission, unchanged state after rejection,
 historical retries after later movement, conflicting sequences, ownership,
 source bindings, fresh input after WAIT and insufficient energy, and search

@@ -6,6 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from solvefinite.field import evaluate_field
+from solvefinite.f8 import F8Index
 from solvefinite.field_world import FieldNode, FieldWorld, KleinFieldRecipe
 from solvefinite.rp32 import Opcode, pack, pair, unpack, unpair
 
@@ -268,6 +269,7 @@ class FieldWorldExecutorProtocolTests(unittest.TestCase):
             fields = DEFAULT_FIELD
 
             def __init__(self):
+                self.index = F8Index.build(self.recipe, fields=self.fields)
                 self.derivations = []
                 self.forecasts = []
 

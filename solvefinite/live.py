@@ -21,6 +21,7 @@ from .runtime import _integer, _keys, write_json
 from .session import AgentBusy, StateLock, _read_json, _reject_constant, _unique_object
 from .tomigidt import AgentManifest, Tomigidt
 from .field_agent import FieldAgentManifest
+from .f8 import F8Index, IndexBinding
 
 
 PROTOCOL = "tomigidt-live-v1"
@@ -60,14 +61,17 @@ class LiveConfig:
 
 
 def load_live(path: str | Path, capacity: int = 2, *,
-              backend: str = "cpu") -> tuple[LiveConfig, Tomigidt]:
+              backend: str = "cpu", index_binding: IndexBinding | None = None) -> tuple[LiveConfig, Tomigidt]:
     """Replay without a lock; the caller owns and closes the returned agent."""
     value = _read_json(path)
     _keys(value, {"format", "config", "agent"}, "Live session")
     if value["format"] != LIVE_FORMAT:
         raise ValueError("Unsupported live session format")
     config = LiveConfig.from_dict(value["config"])
-    agent = Tomigidt.from_archive(value["agent"], capacity, backend=backend)
+    options = {"backend": backend}
+    if index_binding is not None:
+        options["index_binding"] = index_binding
+    agent = Tomigidt.from_archive(value["agent"], capacity, **options)
     if agent.manifest != config.manifest:
         agent.close()
         raise ValueError("Live configuration and retained agent manifests disagree")
@@ -108,16 +112,20 @@ class LiveSession:
     """
 
     def __init__(self, state_path: str | Path, capacity: int = 2,
-                 config: LiveConfig | None = None, *, backend: str = "cpu"):
+                 config: LiveConfig | None = None, *, backend: str = "cpu",
+                 index_binding: IndexBinding | None = None):
         if type(capacity) is not int or capacity < 1:
             raise ValueError("capacity must be a positive integer (not bool)")
         if config is not None and type(config) is not LiveConfig:
             raise ValueError("config must be a LiveConfig")
         if type(backend) is not str or backend not in ("cpu", "gpu"):
             raise ValueError("backend must be cpu or gpu")
+        if index_binding is not None and type(index_binding) is not IndexBinding:
+            raise ValueError("index_binding must be an IndexBinding")
         self._path = Path(state_path).resolve()
         self._capacity = capacity
         self._backend = backend
+        self._index_binding = index_binding
         self._supplied = config
         self._lock: StateLock | None = None
         self._agent: Tomigidt | None = None
@@ -140,14 +148,17 @@ class LiveSession:
         lock.__enter__()
         agent = None
         try:
+            options = {"backend": self._backend}
+            if self._index_binding is not None:
+                options["index_binding"] = self._index_binding
             restored = self.path.exists()
             if restored:
-                config, agent = load_live(self.path, self._capacity, backend=self._backend)
+                config, agent = load_live(self.path, self._capacity, **options)
                 if self._supplied is not None and self._supplied != config:
                     raise ValueError("The supplied live configuration differs from the retained session")
             else:
                 config = LiveConfig() if self._supplied is None else self._supplied
-                agent = Tomigidt(config.manifest, self._capacity, backend=self._backend)
+                agent = Tomigidt(config.manifest, self._capacity, **options)
                 write_json(self.path, {"format": LIVE_FORMAT, "config": config.to_dict(),
                                        "agent": agent.archive()})
             position = agent.manifest.start
@@ -190,7 +201,25 @@ class LiveSession:
         if self._lock is None or self._agent is None or self._config is None:
             raise RuntimeError("Live session must be used inside its ownership context")
         if self._failed:
-            raise RuntimeError("Live session storage failed; close and reopen to recover durable state")
+            raise RuntimeError("Live session failed; close and reopen to recover durable state")
+
+    @property
+    @_serialized
+    def execution_info(self) -> dict:
+        self._require_open()
+        return self._agent.execution_info
+
+    @_serialized
+    def reindex(self, *, psi_sign: int | None = None,
+                phase_origin: int | None = None) -> F8Index:
+        """Replace storage while holding live ownership; no sensor event or save."""
+        self._require_open()
+        try:
+            return self._agent.reindex(psi_sign=psi_sign, phase_origin=phase_origin)
+        except BaseException:
+            if self._agent._closed:
+                self._failed = True
+            raise
 
     def _context(self) -> dict:
         self._require_open()
@@ -273,6 +302,7 @@ class LiveSession:
 
 def serve(state_path: str | Path, *, capacity: int = 2,
           backend: str = "cpu",
+          index_binding: IndexBinding | None = None,
           config_path: str | Path | None = None,
           input_stream: TextIO | None = None, output_stream: TextIO | None = None) -> None:
     """Serve newline-delimited requests, flushing only durable result replies.
@@ -290,7 +320,7 @@ def serve(state_path: str | Path, *, capacity: int = 2,
         outgoing.write(json.dumps(value, sort_keys=True, ensure_ascii=True, allow_nan=False) + "\n")
         outgoing.flush()
 
-    with LiveSession(state_path, capacity, config, backend=backend) as session:
+    with LiveSession(state_path, capacity, config, backend=backend, index_binding=index_binding) as session:
         emit(session.ready())
         while True:
             line = incoming.readline(MAX_REQUEST_CHARS + 1)

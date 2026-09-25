@@ -244,10 +244,35 @@ backend choice are outside canonical history. See the
 [verification record](evidence/field-agent-v1/verification.json).
 
 The active FIFO accounts for only `8 * capacity` bytes of pair payload. The
-default 20-node GPU configuration also allocates 47,144 bytes of explicit device
-payload, plus a logical 80-byte host field certificate. Python objects, expanded
+default 20-node GPU configuration now allocates 49,160 bytes of explicit device
+payload, plus a logical 80-byte host field certificate and 1,296-byte host index.
+Replacing the index peaks at 51,528 device bytes and 2,592 host index bytes while
+the old and candidate versions coexist. Python objects, temporary compilation, expanded
 geometry, search, observations, journals, eviction diagnostics and driver
 allocations are additional. No total-memory bound is inferred from the FIFO.
+
+## Changing indexed storage
+
+Field agents accept an optional `IndexBinding(epoch=0, psi_sign=1, phase_origin=0)`.
+These settings select a certified storage version and are diagnostic deployment
+metadata. They do not change observation, decision or archive schemas.
+`agent.reindex(psi_sign=-1, phase_origin=42)` increments the index epoch by exactly
+one and prepares a complete replacement before installation. Invalid settings
+or a failed certificate preserve the old usable index. An uncertain GPU fault
+closes the owner; a cleanup failure after installation is explicitly reported
+as a committed replacement requiring recovery.
+
+World derivation walks the canonical tree before reconstructing a node. The GPU
+also walks its device tree to obtain the physical texture row for each move.
+Changing row order preserves pairs, energy, observations, events, FIFO order and
+counters, and the very same retained planning object during a DEFER cycle.
+Index links never define a movement edge, cost, search order or tie breaker.
+
+`agent run`, `inspect`, `serve` and `live-inspect` accept `--index-epoch`,
+`--index-sign` and `--index-phase-origin` for this profile. Replaying with other
+settings reconstructs the same canonical archive. The index epoch is scoped to
+the recipe and binding; it is separate from a live sensor producer's epoch.
+See [Psi/f8 conformance and failure checks](evidence/psi-f8-v1/README.md).
 
 ## Verification and remaining scope
 
@@ -266,7 +291,8 @@ these mechanisms within its declared finite world.
 The current application profile does not implement open-ended goal formation,
 learning, a physical sensor or actuator adapter, or a continuous multi-mission lifecycle.
 Klein cell geometry, exact scalar fields and seam transport are now verified
-finite subsets. Full f8, eigenvector Psi, Hadamard routing and WElip remain
+finite subsets. The local Psi tensor and canonical f8 tree now implement
+PX1-PX8. General spectral/Hadamard routing and WElip remain
 unimplemented source obligations. Those contracts are not silently replaced by this
 application's graph and planning rules. Larger GPU planning workloads,
 cache/utilization measurements and retained-history growth remain engineering work.

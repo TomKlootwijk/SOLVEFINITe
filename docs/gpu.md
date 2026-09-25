@@ -54,10 +54,18 @@ backend. Existing v1 and v2 policy semantics are retained.
 
 The `tomigidt-field-observe-plan-act-v1` policy uses the same agent owner with
 a `KleinFieldRecipe`. Its GPU first constructs and independently certifies exact
-scalar distances, then compiles a `12 x N` integer texture: four quotient
+scalar distances, derives exact local Psi vectors and canonical keys, builds
+the lower-median tree, then compiles a `12 x N` integer texture: four quotient
 neighbors for each of three departure field classes. Generated seam metadata
 transports phase and orientation. Live B always remains the signed distance;
-energy has its own canonical device lane.
+energy has its own canonical device lane. Texture rows follow tree preorder,
+while packed G retains its canonical geometric identity. Each movement walks
+the actual tree and verifies its result before using the returned texture row.
+Host-uploaded geometry gives directions, parents and depths; no node-to-row
+lookup table or CPU key compiler supplies the GPU index.
+The tree walk visits at most nine rows for 256 nodes. Each successful device
+lookup also checks the key's parent derivation and scans ranks for integrity;
+the row-visit bound is not a bound on total instructions or a speed claim.
 
 Forecasts execute up to 255 edges in scratch storage. An admitted MOVE or
 REPAIR dispatches from persistent device pair and energy. The owner reads back
@@ -70,19 +78,34 @@ and persistence.
 Field samples are reconstructed on demand from the certified scalar buffer,
 with no retained array of complete packed world-node pairs. The active sample
 FIFO and forecast scratch are separate from canonical state. Default resource
-payload is 47,144 device bytes plus a logical 80-byte host scalar certificate,
+payload is 49,160 device bytes plus a logical 80-byte host scalar certificate,
+1,296-byte host index and 320-byte host neighbor-tuple payload,
 outside the `8 * capacity` FIFO payload. Expanded geometry, retained inputs,
-search, history, Python overhead and driver allocations remain additional.
+search, history, temporary compilation, Python overhead and driver allocations remain additional.
+Replacing an index temporarily retains both complete bundles: the default
+peak is 51,528 device bytes and 2,592 logical host index bytes. These are
+explicit payload accounts, not a measured process or driver heap peak.
+
+Key records and tree links read back from the GPU pass an independent exact
+field/eigenvector/phase/tree certificate. A replacement owns its config,
+records, tree, status, texture and bind groups until a serialized swap.
+Canonical device state, forecast scratch and admitted history retain their
+identity. Pure candidate rejection leaves the old version usable. Uncertain
+dispatch/readback closes the owner; failure to retire a replaced bundle is
+reported as `CommittedIndexCleanupError`, with `committed=True`.
 
 ```sh
 python -m solvefinite agent run --scenario examples/tomigidt-field.json --state output/field-agent/gpu.json --backend gpu
 python -m examples.field_agent_conformance
 ```
 
-The [integration evidence](evidence/field-agent-v1/README.md) contains 23
+The historical [integration evidence](evidence/field-agent-v1/README.md) contains 23
 passing conformance checks and 368 passing tests, including 41 actual-device
 methods. It includes full agent execution with CPU field/transition oracles
 disabled, actual-action failure recovery and equality across backend restarts.
+The current [Psi/f8 evidence](evidence/psi-f8-v1/README.md) adds device index
+construction and tree lookup, changed-order rebuilds, rejected certificates,
+allocation/dispatch/cleanup failures and replay during retained search.
 
 ## Run and reproduce
 

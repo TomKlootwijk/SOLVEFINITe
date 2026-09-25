@@ -11,8 +11,11 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from dataclasses import dataclass
+from functools import wraps
+from threading import RLock
 
 from .field import FieldManifest, evaluate_field
+from .f8 import F8Index, IndexBinding
 from .klein import KleinDomain
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _keys
@@ -21,6 +24,14 @@ from .world import _capacity
 
 WORLD_VERSION = "klein-ball-world-v1"
 _RECIPE_KEYS = {"format", "width", "height", "center", "radius", "turns", "baseline_id"}
+
+
+def _serialized(method):
+    @wraps(method)
+    def call(self, *args, **kwargs):
+        with self._operation:
+            return method(self, *args, **kwargs)
+    return call
 
 
 @dataclass(frozen=True, slots=True)
@@ -112,19 +123,28 @@ class FieldWorld:
     this world neither closes it nor changes its canonical live state.
     """
 
-    def __init__(self, recipe: KleinFieldRecipe, capacity: int, executor=None):
+    def __init__(self, recipe: KleinFieldRecipe, capacity: int, executor=None, *,
+                 index_binding: IndexBinding | None = None):
         if type(recipe) is not KleinFieldRecipe:
             raise ValueError("recipe must be a KleinFieldRecipe")
         capacity = _capacity(capacity)
+        if index_binding is not None and type(index_binding) is not IndexBinding:
+            raise ValueError("index_binding must be an IndexBinding")
         if executor is not None and (
                 getattr(executor, "recipe", None) != recipe
                 or not callable(getattr(executor, "derive_node", None))
-                or not callable(getattr(executor, "forecast", None))):
+                or not callable(getattr(executor, "forecast", None))
+                or type(getattr(executor, "index", None)) is not F8Index
+                or executor.index.recipe != recipe
+                or (index_binding is not None and executor.index.binding != index_binding)):
             raise ValueError("Executor must derive and forecast the same field recipe")
+        self._operation = RLock()
         self._config = recipe
         self._capacity = capacity
         self._executor = executor
         self._manifest = recipe.field_manifest()
+        self._index = F8Index.build(recipe, index_binding) if executor is None else None
+        self._peak_index_payload = 64 * len(self._manifest.nodes) + 16
         neighbors = [set() for _ in self._manifest.nodes]
         for source, destination, _ in self._manifest.edges:
             neighbors[source].add(destination)
@@ -159,9 +179,52 @@ class FieldWorld:
     def regeneration_count(self) -> int:
         return self._regenerations
 
+    @property
+    def index(self) -> F8Index:
+        """One immutable version; GPU worlds borrow the owner's current bundle."""
+        return self._index if self._executor is None else self._executor.index
+
+    @property
+    def index_info(self) -> dict:
+        index = self.index
+        count = len(index.records)
+        return {"version": {"recipe": self.config.to_dict(), "binding": index.binding.to_dict()},
+                "descriptor_count": count, "maximum_lookup_visits": count.bit_length(),
+                "host_record_payload_bytes": 32 * count,
+                "host_tree_payload_bytes": 32 * count,
+                "host_binding_payload_bytes": 16,
+                "host_index_payload_bytes": 64 * count + 16,
+                "peak_rebuild_host_index_payload_bytes": (
+                    self._peak_index_payload if self._executor is None else
+                    self._executor.allocation_info["peak_rebuild_host_index_payload_bytes"]),
+                "retained_world_node_pair_count": 0,
+                "accounting": "Logical u32 record/tree payload outside the sample FIFO. "
+                              "Peak counts complete old and candidate index bundles. "
+                              "Recipe, expanded geometry, temporary compiler work, Python objects "
+                              "and device copies are additional; "
+                              "CPU index stores no scalar field tuple or complete sample pairs."}
+
+    @_serialized
+    def reindex(self, *, psi_sign: int | None = None,
+                phase_origin: int | None = None) -> F8Index:
+        """Install a certified new storage version without changing working state."""
+        if self._executor is not None:
+            return self._executor.reindex(psi_sign=psi_sign, phase_origin=phase_origin)
+        candidate = self.index.rebuild(psi_sign=psi_sign, phase_origin=phase_origin)
+        self._peak_index_payload = max(self._peak_index_payload,
+                                       64 * (len(self.index.records) + len(candidate.records)) + 32)
+        self._index = candidate
+        return candidate
+
+    @_serialized
     def derive(self, path: str) -> FieldNode:
         """Reconstruct a DATA pair without reading or changing the FIFO cache."""
-        index = self.config.index(path)
+        requested = self.config.index(path)
+        version = self.index
+        row = version.resolve(requested)
+        index = version.rows[row][4]
+        if index != requested:
+            raise ValueError("Index lookup changed the requested geometric identity")
         if self._executor is None:
             # No field tuple or packed copy survives this call outside the
             # returned node. A later miss genuinely regenerates its scalar.
@@ -174,6 +237,7 @@ class FieldWorld:
                 raise ValueError("GPU derivation disagrees with the certified field node")
         return FieldNode(path, value)
 
+    @_serialized
     def get(self, path: str) -> FieldNode:
         self.config.index(path)
         if path in self._active:
@@ -186,6 +250,7 @@ class FieldWorld:
         self._evict_overflow()
         return node
 
+    @_serialized
     def resize(self, capacity: int) -> None:
         self._capacity = _capacity(capacity)
         self._evict_overflow()
@@ -195,12 +260,14 @@ class FieldWorld:
             path, _ = self._active.popitem(last=False)
             self._evicted.append(path)
 
+    @_serialized
     def entry_cost(self, path: str, hazard: int) -> int:
         """Declared resource cost, separate from unit intrinsic edge length."""
         _integer(hazard, 0, 127, "hazard")
         signed = unpack(unpair(self.derive(path).pair)[0])[2]
         return 1 + abs(signed) + hazard
 
+    @_serialized
     def forecast(self, agent_pair: int, route: tuple[str, ...],
                  hazards: tuple[int, ...]) -> tuple[tuple[int, ...], tuple[int, ...]]:
         """Predict adjacent SDF transitions without spending energy or caching.
@@ -222,7 +289,10 @@ class FieldWorld:
             raise ValueError("Agent state names an unknown field node")
         if metadata not in (int(Opcode.STEP), int(Opcode.STEP) | 16):
             raise ValueError("SDF agent state requires STEP and only optional orientation")
-        indices = tuple(self.config.index(path) for path in route)
+        version = self.index
+        version.resolve(source)
+        indices = tuple(version.rows[version.resolve(self.config.index(path))][4]
+                        for path in route)
         previous = source
         for destination in indices:
             if destination not in self._neighbors[previous]:

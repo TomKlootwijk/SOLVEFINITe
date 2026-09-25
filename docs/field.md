@@ -196,8 +196,23 @@ persistent device state. See the
 [field-agent commands and contracts](tomigidt.md#intrinsic-field-application-profile)
 and [measured evidence](evidence/field-agent-v1/README.md).
 
-Eigenvector-defined Psi, canonical f8
-indexing, Hadamard/gradient routing, generated cone/pyramid boundaries,
+PX1-PX8 now bind and implement local SDF eigenvectors and a canonical f8 index.
+Directional differences form `g`; the exact tensor `A = g g^T` has selected
+eigenvalue `g.g` and primitive integer eigenvector `g / gcd(abs(g))`. At zero
+gradient the tensor stays zero and the declared axis is `(1,0)`. A binding sign
+chooses either direction. A reversing chart transports both gradient and axis
+by `diag(1,-1)`; equivalent chart labels still resolve the same canonical key.
+
+The key is `(Psi_u+2, Psi_v+2, floor(log2(d+1)), theta, node_id)`, where `d`
+is distance from the recipe centre and theta follows numeric least-parent
+derivation. It indexes all scalar node descriptors, independently of the FIFO.
+Lower-median construction and preorder storage are independently certified.
+The index is used for reconstruction and GPU texture access; its edges never
+become geometric neighbors. [Measured evidence](evidence/psi-f8-v1/README.md)
+includes the full 20-node reference and independent audits over 702 dimensions.
+
+This is a finite local Psi choice. General spectral operators,
+Hadamard/gradient routing, generated cone/pyramid boundaries,
 physical wave adapters and larger evolving field domains remain obligations
 of the complete paradigm. Topology and replay evidence do not establish GPU
 cache residency, saturation or general performance superiority.

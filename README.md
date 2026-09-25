@@ -10,16 +10,17 @@ It explains the idea in everyday language and shows which pieces already work.
 
 The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
-This single, self-contained 38-page PDF integrates the original specification,
+This single, self-contained 43-page PDF integrates the original specification,
 both supplied addenda, the exact SDF contract, the Klein extension and
-implementation evidence for the SDF, Klein and field-agent profiles. It defines
+implementation evidence for the SDF, Klein, field-agent and Psi/f8 profiles. It defines
 conditional infallibility through explicit deterministic execution and
 invariant-preservation obligations.
 The documentation detour is complete. The subsequent implementation now supports
 the intrinsic `relational-sdf-v1` field and the `relational-sdf-v2` Klein geometry
 and orientation transport. The same autonomous agent now plans over that geometry and regenerates
 evicted field samples. FI1-FI8 were committed in the consolidated PDF at
-`5ccc022` before implementation; revision 2 records the measured result.
+`5ccc022` before implementation. PX1-PX8 were likewise committed at `d8de349`
+before adding exact local eigenvectors and an executable canonical index.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
@@ -92,7 +93,7 @@ python -m examples.klein_conformance
 Both backends use the same retained manifest and produce identical packed
 sequences across seams and restarts. This implements K1-K9 of the formal
 edition. The field-agent profile below integrates regeneration and autonomous
-planning; eigenvector-derived Psi and the full f8 index remain architectural work.
+planning; the finite Psi/f8 binding below adds eigenvector-derived indexing.
 
 Klein baseline verification: **311 tests passed, zero skipped**, including 28
 actual-device GPU methods. The [conformance report](docs/evidence/klein-field-v2/conformance.json)
@@ -168,13 +169,48 @@ orientation-reversing seam and completes at `k:3:2` with pair
 energy is separate. GPU movement and repair execute from persistent device
 state and must match the forecast before the agent records a cycle.
 
-Current verification: **368 tests passed, zero skipped**, including 41
+The field-agent integration baseline passed **368 tests, zero skipped**, including 41
 actual-device GPU methods. The [23-check conformance report](docs/evidence/field-agent-v1/conformance.json)
 records full CPU/GPU histories, actual device readbacks, field ablation,
 instrumented FIFO reconstruction, live retry and fresh-process recovery before
 a seam and during unfinished planning. [Reproduction and scope](docs/evidence/field-agent-v1/README.md)
-explain the measured result. The default GPU uses 47,144 bytes of explicit device
-payload outside the FIFO; the active-pair limit is not a total-memory claim.
+explain that capture. Its 47,144-byte GPU payload predates the index; current
+index and rebuild allocations are reported separately below.
+
+## Exact Psi and canonical f8 storage
+
+Each generated field node now has an exact integer eigenvector from its local
+signed-distance gradient. The declared tensor is `A = g g^T`, with eigenvalue
+`g.g`, a primitive integer direction, and an explicit zero-gradient tie.
+This is the numerical choice bound in PX1-PX8, not a claimed unique formula
+from the qualitative addenda.
+
+The node's direction, log-distance bucket, derived phase and canonical identity
+form a total key. The CPU constructs a lower-median search tree; the GPU builds
+the same keys and tree directly from its certified field. World regeneration
+walks this tree. Actual GPU movement resolves its current node through the tree
+and uses the returned physical row of the operator texture. Tree links remain
+storage links; movement follows the Klein geometry.
+
+```sh
+python -m solvefinite agent run --scenario examples/tomigidt-field.json --state output/psi-f8/session.json --backend gpu --index-sign -1 --index-phase-origin 250
+python -m solvefinite agent inspect output/psi-f8/session.json --backend cpu --index-epoch 12
+python -m examples.psi_f8_conformance
+```
+
+An embedded field agent can call `agent.reindex(psi_sign=-1, phase_origin=42)`.
+The owner prepares and certifies a replacement before swapping it. This changes
+storage without changing events, observations, energy, retained search or FIFO
+residency. Replay can select another index version and reproduce the same archive.
+
+Current verification passes **421 tests, zero skipped**, including **55
+actual-device GPU methods**, plus 20 conformance checks. The
+[Psi/f8 evidence](docs/evidence/psi-f8-v1/README.md) records independent
+geometry and eigenvector checks, actual device tree use, rebuild failures and
+replay. Default steady device payload is 49,160 bytes, rising to 51,528 while
+old and candidate bundles coexist. Logical host index payload is 1,296 bytes,
+or 2,592 for both versions. These figures exclude Python/driver overhead and
+compiler temporaries; the `8 * capacity` FIFO covers only active sample pairs.
 
 ## GPU texture execution
 

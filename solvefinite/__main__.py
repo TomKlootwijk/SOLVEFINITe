@@ -178,6 +178,10 @@ def main(argv: list[str] | None = None) -> int:
     agent_live_inspect.add_argument("state", type=Path)
     agent_live_inspect.add_argument("--capacity", type=int, default=2)
     agent_live_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
+    for deployment in (agent_run, agent_inspect, agent_serve, agent_live_inspect):
+        deployment.add_argument("--index-epoch", type=int, help="Field index version epoch; semantic history is unchanged")
+        deployment.add_argument("--index-sign", type=int, choices=(-1, 1), help="Field index eigenvector sign")
+        deployment.add_argument("--index-phase-origin", type=int, help="Field index derivation phase in 0..255")
     args = parser.parse_args(argv)
     try:
         if args.command == "demo":
@@ -209,15 +213,26 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"manifest": str(args.output.resolve()), "profile": manifest.profile}
         else:
             from .session import Scenario, load_session, run_session
+            from .field_agent import FIELD_POLICY
+            options = {"backend": getattr(args, "backend", "cpu")}
+            index_values = tuple(getattr(args, name, None) for name in
+                                 ("index_epoch", "index_sign", "index_phase_origin"))
+            if any(value is not None for value in index_values):
+                from .f8 import IndexBinding
+                epoch, sign, origin = index_values
+                options["index_binding"] = IndexBinding(
+                    epoch=0 if epoch is None else epoch,
+                    psi_sign=1 if sign is None else sign,
+                    phase_origin=0 if origin is None else origin)
             if args.agent_command == "run":
                 result = run_session(args.state, steps=args.steps, capacity=args.capacity,
-                                     scenario_path=args.scenario, backend=args.backend)
+                                     scenario_path=args.scenario, **options)
             elif args.agent_command == "inspect":
-                _, agent = load_session(args.state, capacity=args.capacity, backend=args.backend)
+                _, agent = load_session(args.state, capacity=args.capacity, **options)
                 try:
                     result = {"verified": True, "state": agent.snapshot(),
                               "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
-                    if args.backend == "gpu":
+                    if args.backend == "gpu" or agent.manifest.policy == FIELD_POLICY:
                         result["execution_info"] = agent.execution_info
                 finally:
                     agent.close()
@@ -231,7 +246,7 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"scenario": str(args.output.resolve()), "identity": scenario.manifest.identity}
             elif args.agent_command == "serve":
                 from .live import serve
-                serve(args.state, capacity=args.capacity, config_path=args.config, backend=args.backend)
+                serve(args.state, capacity=args.capacity, config_path=args.config, **options)
                 return 0
             elif args.agent_command == "live-config":
                 from .live import LiveConfig
@@ -244,13 +259,13 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"config": str(args.output.resolve()), "identity": config.manifest.identity}
             else:
                 from .live import load_live
-                config, agent = load_live(args.state, capacity=args.capacity, backend=args.backend)
+                config, agent = load_live(args.state, capacity=args.capacity, **options)
                 try:
                     result = {"verified": True, "state": agent.snapshot(),
                               "state_path": str(args.state.resolve()),
                               "event_count": len(agent.events),
                               "producer": config.producer, "epoch": config.epoch}
-                    if args.backend == "gpu":
+                    if args.backend == "gpu" or agent.manifest.policy == FIELD_POLICY:
                         result["execution_info"] = agent.execution_info
                 finally:
                     agent.close()

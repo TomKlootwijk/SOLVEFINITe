@@ -16,6 +16,7 @@ from .rp32 import unpack
 from .runtime import _integer, _keys, write_json
 from .tomigidt import AgentManifest, Tomigidt
 from .field_agent import FieldAgentManifest
+from .f8 import IndexBinding
 
 
 SCENARIO_FORMAT = "tomigidt-simulation-v1"
@@ -183,14 +184,17 @@ class StateLock:
 
 
 def load_session(path: str | Path, capacity: int = 2, *,
-                 backend: str = "cpu") -> tuple[Scenario, Tomigidt]:
+                 backend: str = "cpu", index_binding: IndexBinding | None = None) -> tuple[Scenario, Tomigidt]:
     """Verify a session without a lock; the caller owns and closes its agent."""
     value = _read_json(path)
     _keys(value, {"format", "scenario", "agent"}, "Session")
     if value["format"] != SESSION_FORMAT:
         raise ValueError("Unsupported session format")
     scenario = Scenario.from_dict(value["scenario"])
-    agent = Tomigidt.from_archive(value["agent"], capacity, backend=backend)
+    options = {"backend": backend}
+    if index_binding is not None:
+        options["index_binding"] = index_binding
+    agent = Tomigidt.from_archive(value["agent"], capacity, **options)
     try:
         if agent.manifest != scenario.manifest:
             raise ValueError("Session scenario and agent manifests disagree")
@@ -215,6 +219,7 @@ def run_session(
     scenario_path: str | Path | None = None,
     *,
     backend: str = "cpu",
+    index_binding: IndexBinding | None = None,
 ) -> dict:
     """Create or resume one agent, atomically saving each accepted local cycle.
 
@@ -228,6 +233,11 @@ def run_session(
         raise ValueError("capacity must be a positive integer (not bool)")
     if type(backend) is not str or backend not in ("cpu", "gpu"):
         raise ValueError("backend must be cpu or gpu")
+    if index_binding is not None and type(index_binding) is not IndexBinding:
+        raise ValueError("index_binding must be an IndexBinding")
+    options = {"backend": backend}
+    if index_binding is not None:
+        options["index_binding"] = index_binding
     path = Path(state_path).resolve()
     decisions = []
     with StateLock(path):
@@ -236,12 +246,12 @@ def run_session(
         agent = None
         try:
             if restored:
-                scenario, agent = load_session(path, capacity, backend=backend)
+                scenario, agent = load_session(path, capacity, **options)
                 if supplied is not None and supplied != scenario:
                     raise ValueError("The supplied scenario differs from the retained session")
             else:
                 scenario = Scenario() if supplied is None else supplied
-                agent = Tomigidt(scenario.manifest, capacity, backend=backend)
+                agent = Tomigidt(scenario.manifest, capacity, **options)
                 write_json(path, {"format": SESSION_FORMAT,
                                   "scenario": scenario.to_dict(), "agent": agent.archive()})
             for _ in range(steps):
@@ -273,7 +283,7 @@ def run_session(
                 "decisions": decisions,
                 "stop_reason": stop_reason,
             }
-            if backend == "gpu":
+            if backend == "gpu" or type(agent.manifest) is FieldAgentManifest:
                 result["execution_info"] = agent.execution_info
             return result
         finally:

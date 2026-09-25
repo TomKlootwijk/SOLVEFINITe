@@ -1,6 +1,7 @@
 // FI1-FI8: one SDF individual, separate energy and scratch route forecasts.
 // config = [count, forecast_hops, destination, hazard_or_repair_cost,
-//           negative_turn, zero_turn, positive_turn, reserved].
+//           negative_turn, zero_turn, positive_turn, reserved,
+//           signed_psi_sign, phase_origin, maximum_tree_visits, center].
 // neighbors are four sorted canonical indices per node; seams are undirected
 // row bitsets. The 12xN texture holds three field classes per neighbor slot.
 // state = [left, mirror, separate_energy, admitted_actions]. Forecast groups
@@ -9,13 +10,127 @@
 
 @group(0) @binding(0) var<storage, read> config: array<u32>;
 @group(0) @binding(1) var<storage, read> fields: array<i32>;
-@group(0) @binding(2) var<storage, read> neighbors: array<vec4<u32>>;
+struct Geometry {
+    neighbors: vec4<u32>,
+    directions: vec4<u32>,
+    parent: u32,
+    depth: u32,
+    reserved: vec2<u32>,
+}
+struct Record { head: vec4<u32>, tail: vec4<u32> }
+@group(0) @binding(2) var<storage, read> geometry: array<Geometry>;
 @group(0) @binding(3) var<storage, read> seams: array<u32>;
 @group(0) @binding(4) var operator_target: texture_storage_2d<r32uint, write>;
 @group(0) @binding(5) var operators: texture_2d<u32>;
 @group(0) @binding(6) var<storage, read> jobs: array<vec2<u32>>;
 @group(0) @binding(7) var<storage, read_write> state: array<u32>;
 @group(0) @binding(8) var<storage, read_write> output: array<vec4<u32>>;
+@group(0) @binding(11) var<storage, read_write> records: array<Record>;
+@group(0) @binding(12) var<storage, read_write> tree: array<Record>;
+@group(0) @binding(13) var<storage, read_write> build_status: array<u32>;
+
+fn key_compare(left: Record, right: Record) -> i32 {
+    for (var component = 0u; component < 4u; component += 1u) {
+        if left.head[component] < right.head[component] { return -1; }
+        if left.head[component] > right.head[component] { return 1; }
+    }
+    if left.tail.x < right.tail.x { return -1; }
+    return select(0, 1, left.tail.x > right.tail.x);
+}
+
+fn field_record(node: u32) -> Record {
+    let directions = geometry[node].directions;
+    let gu = fields[directions.x] - fields[directions.y];
+    let gv = fields[directions.z] - fields[directions.w];
+    var a = u32(abs(gu));
+    var b = u32(abs(gv));
+    while b != 0u { let remainder = a % b; a = b; b = remainder; }
+    var primitive = vec2<i32>(1, 0);
+    if a != 0u { primitive = vec2<i32>(gu, gv) / i32(a); }
+    primitive *= bitcast<i32>(config[8]);
+    var theta = config[9];
+    var cursor = node;
+    for (var step = 0u; step < config[0]; step += 1u) {
+        let parent = geometry[cursor].parent;
+        if parent == cursor { break; }
+        let field = fields[parent];
+        let column = select(select(1u, 2u, field > 0), 0u, field < 0);
+        theta = (theta + config[4u + column]) & 255u;
+        cursor = parent;
+    }
+    return Record(vec4<u32>(u32(primitive.x + 2), u32(primitive.y + 2),
+                  31u - countLeadingZeros(geometry[node].depth + 1u), theta),
+                  vec4<u32>(node, u32(gu * gu + gv * gv), u32(gu + 2), u32(gv + 2)));
+}
+
+// [physical preorder row, left child, right child, reserved]. Numeric ranks
+// are computed on-device, not uploaded as a node-to-row indirection table.
+fn ranked_position(needle: Record) -> vec4<u32> {
+    var rank = 0u;
+    for (var node = 0u; node < config[0]; node += 1u) {
+        rank += select(0u, 1u, key_compare(records[node], needle) < 0);
+    }
+    var lo = 0u;
+    var hi = config[0];
+    var slot = 0u;
+    for (var step = 0u; step < config[10]; step += 1u) {
+        let middle = (lo + hi - 1u) / 2u;
+        if rank == middle {
+            return vec4<u32>(slot, select(256u, slot + 1u, lo < middle),
+                select(256u, slot + 1u + middle - lo, middle + 1u < hi), 0u);
+        }
+        if rank < middle { hi = middle; slot += 1u; }
+        else { slot += 1u + middle - lo; lo = middle + 1u; }
+    }
+    return vec4<u32>(256u);
+}
+
+@compute @workgroup_size(64)
+fn build_keys(@builtin(global_invocation_id) id: vec3<u32>) {
+    if id.x < config[0] { records[id.x] = field_record(id.x); }
+}
+
+@compute @workgroup_size(64)
+fn build_tree(@builtin(global_invocation_id) id: vec3<u32>) {
+    if id.x >= config[0] { return; }
+    let key = records[id.x];
+    let position = ranked_position(key);
+    if position.x < config[0] {
+        tree[position.x] = Record(key.head, vec4<u32>(id.x, position.y, position.z, 0u));
+    }
+}
+
+// Every consumer follows actual links. Rank validation only verifies the
+// visited row's storage identity; it cannot substitute for successful search.
+fn resolve_row(node: u32) -> u32 {
+    if node >= config[0] { return 256u; }
+    let needle = records[node];
+    let expected = field_record(node);
+    if any(needle.head != expected.head) || any(needle.tail != expected.tail) { return 256u; }
+    var row = 0u;
+    var lower = 256u;
+    var upper = 256u;
+    for (var visit = 0u; visit < config[10]; visit += 1u) {
+        if row >= config[0] { return 256u; }
+        let current = tree[row];
+        if current.tail.x >= config[0] || current.tail.w != 0u { return 256u; }
+        if (current.tail.y >= config[0] && current.tail.y != 256u)
+            || (current.tail.z >= config[0] && current.tail.z != 256u) { return 256u; }
+        if key_compare(current, records[current.tail.x]) != 0 { return 256u; }
+        if lower != 256u && key_compare(current, tree[lower]) <= 0 { return 256u; }
+        if upper != 256u && key_compare(current, tree[upper]) >= 0 { return 256u; }
+        let comparison = key_compare(needle, current);
+        if comparison == 0 {
+            let position = ranked_position(needle);
+            if current.tail.x != node || position.x != row
+                || position.y != current.tail.y || position.z != current.tail.z { return 256u; }
+            return row;
+        }
+        if comparison < 0 { upper = row; row = current.tail.y; }
+        else { lower = row; row = current.tail.z; }
+    }
+    return 256u;
+}
 
 fn pack_rp32(r: u32, g: u32, b: i32, a: u32) -> u32 {
     let word = (r & 255u) | ((g & 255u) << 8u)
@@ -46,12 +161,15 @@ fn transition(word: u32, destination: u32, hazard: u32) -> vec4<u32> {
     }
     var slot = 4u;
     for (var neighbor = 0u; neighbor < 4u; neighbor += 1u) {
-        if neighbors[source][neighbor] == destination { slot = neighbor; }
+        if geometry[source].neighbors[neighbor] == destination { slot = neighbor; }
     }
     if slot == 4u { return vec4<u32>(word, 0u, 1u, 0u); }
+    let row = resolve_row(source);
+    if row >= config[0] { return vec4<u32>(word, 0u, 3u, 0u); }
     let b = signed_field(word);
     let column = select(select(1u, 2u, b > 0), 0u, b < 0);
-    let op = textureLoad(operators, vec2<i32>(i32(3u * slot + column), i32(source)), 0).r;
+    let op = textureLoad(operators, vec2<i32>(i32(3u * slot + column), i32(row)), 0).r;
+    if ((op >> 8u) & 255u) != destination { return vec4<u32>(word, 0u, 3u, 0u); }
     let phase = word & 255u;
     let delta = op & 255u;
     let eta = (word >> 28u) & 1u;
@@ -65,21 +183,34 @@ fn transition(word: u32, destination: u32, hazard: u32) -> vec4<u32> {
 
 @compute @workgroup_size(64)
 fn compile_neighbors(@builtin(global_invocation_id) id: vec3<u32>) {
-    if id.x >= 12u * config[0] { return; }
-    let source = id.x / 12u;
-    let column = id.x % 3u;
-    let slot = (id.x % 12u) / 3u;
-    let destination = neighbors[source][slot];
+    if id.x >= config[0] { return; }
+    let source = id.x;
+    let row = resolve_row(source);
+    build_status[source] = select(3u, 0u, row < config[0]);
+    if row >= config[0] { return; }
     let stride = (config[0] + 31u) / 32u;
-    let tau = (seams[source * stride + destination / 32u] >> (destination % 32u)) & 1u;
-    let word = pack_rp32(config[4u + column], destination, fields[destination], 1u | (tau << 6u));
-    textureStore(operator_target, vec2<i32>(i32(3u * slot + column), i32(source)),
-                 vec4<u32>(word, 0u, 0u, 0u));
+    for (var slot = 0u; slot < 4u; slot += 1u) {
+        let destination = geometry[source].neighbors[slot];
+        let tau = (seams[source * stride + destination / 32u] >> (destination % 32u)) & 1u;
+        for (var column = 0u; column < 3u; column += 1u) {
+            let word = pack_rp32(config[4u + column], destination, fields[destination], 1u | (tau << 6u));
+            textureStore(operator_target, vec2<i32>(i32(3u * slot + column), i32(row)),
+                         vec4<u32>(word, 0u, 0u, 0u));
+        }
+    }
+}
+
+@compute @workgroup_size(1)
+fn lookup_node() {
+    let row = resolve_row(config[2]);
+    output[0] = vec4<u32>(row, config[2], 0u, 0u);
+    output[1] = vec4<u32>(select(3u, 0u, row < config[0]), 0u, 0u, 0u);
 }
 
 @compute @workgroup_size(1)
 fn derive_node() {
     let node = config[2];
+    if resolve_row(node) >= config[0] { emit(0u, 0u, 0u, 0u, 3u); return; }
     emit(0u, pack_rp32(0u, node, fields[node], 0u), 0u, 0u, 0u);
 }
 
