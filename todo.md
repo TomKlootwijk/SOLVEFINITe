@@ -231,3 +231,29 @@ indexing, typed Hadamard/gradient routing, geometry-changing growth and
 cone/pyramid bindings, continuing field epochs, physical wave calibration and
 hardware-performance measurements remain explicit obligations. A finite Klein
 tour does not stand in for those requirements.
+
+## 2026-09-25: integrate the field world with the autonomous individual
+
+The preceding implementation turn made verified progress: `c4b41ce` implements
+and tests Klein K1-K9. The next work joins that geometry to the existing
+`Tomigidt` observation/planning/replay loop and its bounded active world cache.
+
+- [x] Define FI1-FI8 in the consolidated formal PDF before runtime changes,
+  including typed SDF state, separate energy, field-based costs and recipe replay.
+- [ ] Regenerate geometric node pairs from an immutable Klein ball recipe;
+  expose genuine FIFO eviction and capacity-independent reconstruction.
+- [ ] Add a versioned manifest to the same agent, retaining all legacy profiles.
+- [ ] Plan over canonical quotient neighbors, replan from fresh hazards and
+  execute source-field-selected phase/orientation transport.
+- [ ] Compute GPU forecasts in scratch state and execute actual movement/repair
+  from persistent device state, checking the forecast before admitting a record.
+- [ ] Carry the new profile through existing sessions, live sensor ownership,
+  retained search, durable acknowledgements and replay across CPU/GPU backends.
+- [ ] Verify that changing only the field recipe changes route choice, while
+  eviction, capacity changes and restart preserve the complete admitted history.
+- [ ] Record measured evidence, update the integrated PDF's implementation
+  status, commit and push. Keep the full remaining architecture objective active.
+
+The active pair budget covers only materialized geometric pairs. Immutable
+recipes, graph/search metadata, retained observations and journals, and any
+certified GPU field/operator buffers must be accounted for separately.
