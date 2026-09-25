@@ -173,3 +173,16 @@ to the formal edition. Its progress figures come from the already recorded
 25 September evidence: 262 passing tests, including 21 actual GPU tests, and
 matching 64-step CPU/GPU field traces. No new runtime claim is introduced.
 Implementation remains parked.
+
+## 2026-09-25: ELI5 robot names
+
+Exact user request:
+
+```text
+Call the female pink robot Jitske and the green-blue-ish Tom in the ELI5 .pdf besides that commit and push
+```
+
+- [x] Label the pink robot **Jitske** and every green-blue robot **Tom**.
+- [x] Rebuild the ELI5 PDF, visually check the updated pages and verify that
+  the only added text is the four name labels.
+- [x] Commit and push the updated PDF, builder and quality record.
