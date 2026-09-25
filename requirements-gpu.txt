@@ -1,0 +1,2 @@
+# Optional: CPU reference execution uses only the Python standard library.
+wgpu==0.32.0

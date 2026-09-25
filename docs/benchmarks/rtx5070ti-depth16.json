@@ -1,0 +1,31 @@
+{
+  "adapter": {
+    "adapter_type": "DiscreteGPU",
+    "architecture": "",
+    "backend_type": "Vulkan",
+    "description": "591.59",
+    "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "device_id": 12056,
+    "stackgroup_max_size": 128,
+    "stackgroup_min_size": 4,
+    "vendor": "NVIDIA",
+    "vendor_id": 4318
+  },
+  "cpu_all_nodes_bit_exact": true,
+  "cpu_single_sweep_validation_wall_seconds": 2.755675499996869,
+  "depth": 16,
+  "explicit_device_payload_bytes": 2098264,
+  "gpu_saturation_measured": false,
+  "packed_transitions": 20971520,
+  "packed_transitions_per_wall_second": 11175869978.932478,
+  "profile": "binary-organogram-v1",
+  "repeat_words_identical": true,
+  "repeats": 20,
+  "scope": "Packed world derivation only; CPU validation is not an optimized native CPU performance baseline.",
+  "texture_cache_residency_measured": false,
+  "timed_readback_bytes": 1048576,
+  "timed_upload_bytes": 0,
+  "timing_scope": "Resident-input dispatch submissions plus final full readback; excludes setup, compilation and initial upload.",
+  "wall_seconds_submit_and_readback": 0.0018764999986160547,
+  "world_nodes": 65536
+}

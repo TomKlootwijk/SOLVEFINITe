@@ -135,20 +135,25 @@ def main(argv: list[str] | None = None) -> int:
     agent_run.add_argument("--steps", type=int, default=64, help="Maximum autonomous cycles for this invocation")
     agent_run.add_argument("--capacity", type=int, default=2, help="Active world cache capacity in pairs")
     agent_run.add_argument("--scenario", type=Path, help="Versioned simulated environment; must match on resume")
+    agent_run.add_argument("--backend", choices=("cpu", "gpu"), default="cpu",
+                           help="Execution adapter; GPU requires the optional wgpu dependency")
     agent_inspect = agent_commands.add_parser("inspect", help="Replay and inspect a retained agent session")
     agent_inspect.add_argument("state", type=Path)
     agent_inspect.add_argument("--capacity", type=int, default=2)
+    agent_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_scenario = agent_commands.add_parser("scenario", help="Write the default simulated environment")
     agent_scenario.add_argument("--output", type=Path, required=True)
     agent_serve = agent_commands.add_parser("serve", help="Keep one agent ready for live JSON-line sensor input")
     agent_serve.add_argument("--state", type=Path, default=Path("output/tomigidt/live.json"))
     agent_serve.add_argument("--capacity", type=int, default=2)
     agent_serve.add_argument("--config", type=Path, help="Live sensor identity and agent configuration; must match on resume")
+    agent_serve.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_live_config = agent_commands.add_parser("live-config", help="Write the default live agent configuration")
     agent_live_config.add_argument("--output", type=Path, required=True)
     agent_live_inspect = agent_commands.add_parser("live-inspect", help="Replay and inspect a retained live agent session")
     agent_live_inspect.add_argument("state", type=Path)
     agent_live_inspect.add_argument("--capacity", type=int, default=2)
+    agent_live_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     args = parser.parse_args(argv)
     try:
         if args.command == "demo":
@@ -159,18 +164,23 @@ def main(argv: list[str] | None = None) -> int:
             from .session import Scenario, load_session, run_session
             if args.agent_command == "run":
                 result = run_session(args.state, steps=args.steps, capacity=args.capacity,
-                                     scenario_path=args.scenario)
+                                     scenario_path=args.scenario, backend=args.backend)
             elif args.agent_command == "inspect":
-                _, agent = load_session(args.state, capacity=args.capacity)
-                result = {"verified": True, "state": agent.snapshot(),
-                          "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
+                _, agent = load_session(args.state, capacity=args.capacity, backend=args.backend)
+                try:
+                    result = {"verified": True, "state": agent.snapshot(),
+                              "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
+                    if args.backend == "gpu":
+                        result["execution_info"] = agent.execution_info
+                finally:
+                    agent.close()
             elif args.agent_command == "scenario":
                 scenario = Scenario()
                 write_json(args.output, scenario.to_dict())
                 result = {"scenario": str(args.output.resolve()), "identity": scenario.manifest.identity}
             elif args.agent_command == "serve":
                 from .live import serve
-                serve(args.state, capacity=args.capacity, config_path=args.config)
+                serve(args.state, capacity=args.capacity, config_path=args.config, backend=args.backend)
                 return 0
             elif args.agent_command == "live-config":
                 from .live import LiveConfig
@@ -179,11 +189,16 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"config": str(args.output.resolve()), "identity": config.manifest.identity}
             else:
                 from .live import load_live
-                config, agent = load_live(args.state, capacity=args.capacity)
-                result = {"verified": True, "state": agent.snapshot(),
-                          "state_path": str(args.state.resolve()),
-                          "event_count": len(agent.events),
-                          "producer": config.producer, "epoch": config.epoch}
+                config, agent = load_live(args.state, capacity=args.capacity, backend=args.backend)
+                try:
+                    result = {"verified": True, "state": agent.snapshot(),
+                              "state_path": str(args.state.resolve()),
+                              "event_count": len(agent.events),
+                              "producer": config.producer, "epoch": config.epoch}
+                    if args.backend == "gpu":
+                        result["execution_info"] = agent.execution_info
+                finally:
+                    agent.close()
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
         print(f"solvefinite: {exc}", file=sys.stderr)
         return 2

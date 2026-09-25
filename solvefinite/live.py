@@ -58,15 +58,17 @@ class LiveConfig:
         return cls.from_dict(_read_json(path))
 
 
-def load_live(path: str | Path, capacity: int = 2) -> tuple[LiveConfig, Tomigidt]:
-    """Reconstruct a live archive from original inputs without acquiring ownership."""
+def load_live(path: str | Path, capacity: int = 2, *,
+              backend: str = "cpu") -> tuple[LiveConfig, Tomigidt]:
+    """Replay without a lock; the caller owns and closes the returned agent."""
     value = _read_json(path)
     _keys(value, {"format", "config", "agent"}, "Live session")
     if value["format"] != LIVE_FORMAT:
         raise ValueError("Unsupported live session format")
     config = LiveConfig.from_dict(value["config"])
-    agent = Tomigidt.from_archive(value["agent"], capacity)
+    agent = Tomigidt.from_archive(value["agent"], capacity, backend=backend)
     if agent.manifest != config.manifest:
+        agent.close()
         raise ValueError("Live configuration and retained agent manifests disagree")
     return config, agent
 
@@ -105,13 +107,16 @@ class LiveSession:
     """
 
     def __init__(self, state_path: str | Path, capacity: int = 2,
-                 config: LiveConfig | None = None):
+                 config: LiveConfig | None = None, *, backend: str = "cpu"):
         if type(capacity) is not int or capacity < 1:
             raise ValueError("capacity must be a positive integer (not bool)")
         if config is not None and type(config) is not LiveConfig:
             raise ValueError("config must be a LiveConfig")
+        if type(backend) is not str or backend not in ("cpu", "gpu"):
+            raise ValueError("backend must be cpu or gpu")
         self._path = Path(state_path).resolve()
         self._capacity = capacity
+        self._backend = backend
         self._supplied = config
         self._lock: StateLock | None = None
         self._agent: Tomigidt | None = None
@@ -132,15 +137,16 @@ class LiveSession:
             raise AgentBusy("This live session already owns the state")
         lock = StateLock(self.path)
         lock.__enter__()
+        agent = None
         try:
             restored = self.path.exists()
             if restored:
-                config, agent = load_live(self.path, self._capacity)
+                config, agent = load_live(self.path, self._capacity, backend=self._backend)
                 if self._supplied is not None and self._supplied != config:
                     raise ValueError("The supplied live configuration differs from the retained session")
             else:
                 config = LiveConfig() if self._supplied is None else self._supplied
-                agent = Tomigidt(config.manifest, self._capacity)
+                agent = Tomigidt(config.manifest, self._capacity, backend=self._backend)
                 write_json(self.path, {"format": LIVE_FORMAT, "config": config.to_dict(),
                                        "agent": agent.archive()})
             position = ""
@@ -156,18 +162,28 @@ class LiveSession:
             self._lock = lock
             return self
         except BaseException:
-            lock.__exit__(*sys.exc_info())
+            failure = sys.exc_info()
+            try:
+                if agent is not None:
+                    agent.close()
+            finally:
+                lock.__exit__(*failure)
             raise
 
     @_serialized
     def __exit__(self, exc_type, exc_value, traceback) -> None:
         lock = self._lock
+        agent = self._agent
         self._lock = None
         self._agent = None
         self._config = None
         self._positions = []
-        if lock is not None:
-            lock.__exit__(exc_type, exc_value, traceback)
+        try:
+            if agent is not None:
+                agent.close()
+        finally:
+            if lock is not None:
+                lock.__exit__(exc_type, exc_value, traceback)
 
     def _require_open(self) -> None:
         if self._lock is None or self._agent is None or self._config is None:
@@ -255,6 +271,7 @@ class LiveSession:
 
 
 def serve(state_path: str | Path, *, capacity: int = 2,
+          backend: str = "cpu",
           config_path: str | Path | None = None,
           input_stream: TextIO | None = None, output_stream: TextIO | None = None) -> None:
     """Serve newline-delimited requests, flushing only durable result replies.
@@ -272,7 +289,7 @@ def serve(state_path: str | Path, *, capacity: int = 2,
         outgoing.write(json.dumps(value, sort_keys=True, ensure_ascii=True, allow_nan=False) + "\n")
         outgoing.flush()
 
-    with LiveSession(state_path, capacity, config) as session:
+    with LiveSession(state_path, capacity, config, backend=backend) as session:
         emit(session.ready())
         while True:
             line = incoming.readline(MAX_REQUEST_CHARS + 1)

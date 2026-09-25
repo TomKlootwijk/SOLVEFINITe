@@ -2,12 +2,13 @@
 
 The active user objective is: **Make the solipsism TOMIGIDt autonomous single agent**.
 
-The existing PDF and prior repository do not define "TOMIGIDt" or "solipsism".
-The implementation below is a declared application profile and concrete
-progress toward the objective. It is not a replacement definition of the goal.
-The exact intended meaning and autonomous task remain a question for Tom.
-The [objective audit](acceptance-audit.md) separates verified behavior from
-the requirements still needed to establish full completion.
+On 25 September 2026 Tom clarified "solipsism" as one autonomous individual
+and its world, and reaffirmed self-reference, universality and GPU texture
+execution as the architectural direction. That clarification supersedes the
+meaning-related blocker in the earlier [objective audit](acceptance-audit.md).
+The movement-and-repair task below remains a finite application profile.
+[GPU execution](gpu.md) now implements world derivation and packed motion on
+real hardware while retaining the CPU policy and durable journal.
 
 ## One agent and its perspective
 
@@ -16,7 +17,7 @@ target, its own observation history, its packed state, and a decision sequence.
 The right RP32 half is an integrity-related mirrored representation, not another
 agent, adviser, or independent decision maker.
 
-The provisional local-observation perspective is explicit:
+The current application's local-observation rules are explicit:
 
 - The agent knows the declared baseline, production rules and movement graph.
 - It receives current measurements only for its position and outgoing neighbors.
@@ -186,12 +187,13 @@ search under multiple quantum sizes. The original RP32
 reference vectors and original colony demo remain covered.
 
 What is now executable is one autonomous mission loop with persistent local
-state. It still needs Tom's definition of "solipsism TOMIGIDt" and intended
-autonomous duties before the full user goal can be audited for completion.
+state and optional GPU world derivation and motion forecasts. Tom's clarified
+single-individual direction is recorded above. The repair profile establishes
+these mechanisms within its declared finite world.
 
 The current application profile does not implement open-ended goal formation,
 learning, a physical sensor or actuator adapter, or a continuous multi-mission lifecycle.
 It also does not establish full f8, Klein-bottle field/Hadamard or WElip
 conformance. Those source contracts are not silently replaced by this
-application's graph and planning rules. Performance, retained-history growth
-and hardware realization remain separate engineering work.
+application's graph and planning rules. Larger GPU planning workloads,
+cache/utilization measurements and retained-history growth remain engineering work.

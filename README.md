@@ -56,16 +56,39 @@ numbers make lost-response retries return the original decision without
 executing another cycle. [Live-channel documentation](docs/live.md) describes
 the protocol and includes a runnable external sensor client demonstration.
 
-The current profile models movement and repair in software. External producers
-can supply observations through the live channel. The interpretation of
-"solipsism" as one locally maintained observation history is provisional until
-Tom supplies its intended meaning. This implementation is progress toward the
-full goal, not a declaration that every aspect of that goal is complete. See
-[docs/tomigidt.md](docs/tomigidt.md) for its contracts and outstanding questions.
+Tom clarified the direction on 25 September 2026: **one autonomous individual
+and its world**, with the self-referential packed LUT paradigm realized on the
+GPU through textures. GPU lanes represent that individual's world nodes, not
+additional individuals. Movement and repair remain the concrete reference task.
+See [docs/tomigidt.md](docs/tomigidt.md) for its behavioral contracts.
+
+## GPU texture execution
+
+The optional hardware backend derives world nodes and forecasts the agent's
+movements using exact integer texture lookups. Updated packed state selects
+the next packed operator inside the shader. The operator texture, world table
+and working buffers remain allocated across dispatches. Python currently
+performs observation admission, route search, action admission and journaling.
+
+```sh
+python -m pip install -r requirements-gpu.txt
+python -m solvefinite agent run --backend gpu --state output/tomigidt/gpu.json
+python -m solvefinite agent inspect output/tomigidt/gpu.json --backend cpu
+python -m solvefinite agent serve --backend gpu --state output/tomigidt/gpu-live.json
+python -m examples.gpu_benchmark --depth 16 --repeats 20
+```
+
+CPU and GPU runs preserve the same journal semantics and can resume each
+other's archives. An explicitly requested GPU never silently falls back to
+software. Real-device tests run when `wgpu` and a hardware adapter are available.
+[GPU architecture and measurements](docs/gpu.md) distinguish device allocation,
+texture-cache behavior and utilization. The six-node agent example is too
+small to keep a modern GPU busy; the larger benchmark exercises its world
+derivation substrate separately.
 
 ## Run
 
-Python **3.10 or later** is required. There are no third-party dependencies.
+Python **3.10 or later** is required. CPU execution has no third-party dependencies.
 Run these commands from the repository root; `python` must refer to a real
 Python installation. On Windows, `py -3` can be used instead.
 
@@ -173,7 +196,8 @@ Repair debits energy and marks the mission complete. It does not implement
 learning, distributed consensus, a complete f8 index, physical wave adapters,
 or the full Klein-bottle field model.
 
-Only the active **world pair payload** is bounded by `8 * capacity` bytes. Path
+Only the active **world FIFO pair payload** is bounded by `8 * capacity` bytes. The
+optional GPU world arena and its CPU witness are separately allocated. Path
 keys, Python object overhead, the agent pair, rules, observations, the journal
 and diagnostic eviction history consume additional memory. The report labels
 pair payload separately and reports serialized journal sizes. No result here
@@ -186,14 +210,11 @@ requires the original observations and rules to remain available.
 
 ## Next milestones
 
-1. The TOMIGIDt profile now supplies a movement graph, a target and generated
-   routes. Extend its objective and action model once Tom's intended meaning of
-   "solipsism TOMIGIDt" is specified.
+1. Extend the clarified single individual's internal world and hypotheses on
+   the GPU, retaining one admission authority and exact replay.
 2. Add checkpoints and bounded diagnostic retention, then measure total storage
    and reconstruction cost over long event histories.
 3. Compare an optimized conventional implementation at equal semantics and
    precision, measuring memory traffic, latency and total memory.
-4. Map the proven transition kernel to local hardware state and LUTs; measure
-   hardware resources, energy and communication costs.
-5. Add distributed input ordering and reconciliation before making claims
-   about independently evolving colonies or synchronized agents.
+4. Profile the implemented integer texture kernel's cache behavior, memory
+   traffic and utilization across LUT sizes and internal-world workloads.

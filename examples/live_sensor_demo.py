@@ -30,11 +30,12 @@ TIMEOUT = 10
 class SensorConnection:
     """Own one child process and read its flushed JSON lines with a deadline."""
 
-    def __init__(self, state: Path):
+    def __init__(self, state: Path, backend: str = "cpu"):
         self._diagnostics = tempfile.TemporaryFile(mode="w+t", encoding="utf-8")
         try:
             self.process = subprocess.Popen(
-                [sys.executable, "-m", "solvefinite", "agent", "serve", "--state", str(state)],
+                [sys.executable, "-m", "solvefinite", "agent", "serve", "--state", str(state),
+                 "--backend", backend],
                 cwd=ROOT, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                 stderr=self._diagnostics, text=True, encoding="utf-8",
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
@@ -133,7 +134,7 @@ def require(condition: bool, message: str) -> None:
         raise RuntimeError(message)
 
 
-def demonstrate(state_path: Path) -> dict:
+def demonstrate(state_path: Path, backend: str = "cpu") -> dict:
     # Check the supplied path before resolving links, including dangling ones.
     if state_path.exists() or state_path.is_symlink():
         raise ValueError(f"A fresh state path is required; already exists: {state_path}")
@@ -141,7 +142,7 @@ def demonstrate(state_path: Path) -> dict:
     connection = None
     launches = 0
     try:
-        connection = SensorConnection(state_path)
+        connection = SensorConnection(state_path, backend)
         launches += 1
         ready = connection.read()
         require(ready["type"] == "ready" and not ready["restored"],
@@ -164,7 +165,7 @@ def demonstrate(state_path: Path) -> dict:
         # Terminate only the child this demonstration created. Its durable
         # archive is the sole bridge to the replacement process.
         connection.close()
-        connection = SensorConnection(state_path)
+        connection = SensorConnection(state_path, backend)
         launches += 1
         restored = connection.read()
         resumed = (restored["type"] == "ready" and restored["restored"]
@@ -207,9 +208,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", type=Path, default=Path("output/tomigidt/live-demo.json"),
                         help="Fresh state file; existing files are never overwritten")
+    parser.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     arguments = parser.parse_args()
     try:
-        report = demonstrate(arguments.state)
+        report = demonstrate(arguments.state, arguments.backend)
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
         print(f"live_sensor_demo: {exc}", file=sys.stderr)
         return 2

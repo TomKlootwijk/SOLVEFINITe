@@ -181,25 +181,30 @@ class StateLock:
             stream.close()
 
 
-def load_session(path: str | Path, capacity: int = 2) -> tuple[Scenario, Tomigidt]:
-    """Read and verify a retained session without changing it or acquiring a lock."""
+def load_session(path: str | Path, capacity: int = 2, *,
+                 backend: str = "cpu") -> tuple[Scenario, Tomigidt]:
+    """Verify a session without a lock; the caller owns and closes its agent."""
     value = _read_json(path)
     _keys(value, {"format", "scenario", "agent"}, "Session")
     if value["format"] != SESSION_FORMAT:
         raise ValueError("Unsupported session format")
     scenario = Scenario.from_dict(value["scenario"])
-    agent = Tomigidt.from_archive(value["agent"], capacity)
-    if agent.manifest != scenario.manifest:
-        raise ValueError("Session scenario and agent manifests disagree")
-    position = ""
-    for event in agent.events:
-        recorded = {path: unpack(int(word, 16))[2]
-                    for path, word in event["input"].items()}
-        if recorded != scenario.observe(position, event["seq"]):
-            raise ValueError("Retained sensor input disagrees with the scenario timeline")
-        if event["decision"]["kind"] == "MOVE":
-            position = event["decision"]["route"][0]
-    return scenario, agent
+    agent = Tomigidt.from_archive(value["agent"], capacity, backend=backend)
+    try:
+        if agent.manifest != scenario.manifest:
+            raise ValueError("Session scenario and agent manifests disagree")
+        position = ""
+        for event in agent.events:
+            recorded = {path: unpack(int(word, 16))[2]
+                        for path, word in event["input"].items()}
+            if recorded != scenario.observe(position, event["seq"]):
+                raise ValueError("Retained sensor input disagrees with the scenario timeline")
+            if event["decision"]["kind"] == "MOVE":
+                position = event["decision"]["route"][0]
+        return scenario, agent
+    except BaseException:
+        agent.close()
+        raise
 
 
 def run_session(
@@ -207,6 +212,8 @@ def run_session(
     steps: int = 64,
     capacity: int = 2,
     scenario_path: str | Path | None = None,
+    *,
+    backend: str = "cpu",
 ) -> dict:
     """Create or resume one agent, atomically saving each accepted local cycle.
 
@@ -218,46 +225,56 @@ def run_session(
     _integer(steps, 1, 1_000_000, "steps")
     if type(capacity) is not int or capacity < 1:
         raise ValueError("capacity must be a positive integer (not bool)")
+    if type(backend) is not str or backend not in ("cpu", "gpu"):
+        raise ValueError("backend must be cpu or gpu")
     path = Path(state_path).resolve()
     decisions = []
     with StateLock(path):
         supplied = None if scenario_path is None else Scenario.load(scenario_path)
         restored = path.exists()
-        if restored:
-            scenario, agent = load_session(path, capacity)
-            if supplied is not None and supplied != scenario:
-                raise ValueError("The supplied scenario differs from the retained session")
-        else:
-            scenario = Scenario() if supplied is None else supplied
-            agent = Tomigidt(scenario.manifest, capacity)
-            write_json(path, {"format": SESSION_FORMAT,
-                              "scenario": scenario.to_dict(), "agent": agent.archive()})
-        for _ in range(steps):
-            if agent.status == "COMPLETE" or agent.cycle >= agent.manifest.max_cycles:
-                break
-            decision = agent.step(scenario.observe(agent.position, agent.cycle + 1))
-            write_json(path, {"format": SESSION_FORMAT,
-                              "scenario": scenario.to_dict(), "agent": agent.archive()})
-            decisions.append(decision.to_dict())
-            if agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
-                break
-        if agent.status == "COMPLETE":
-            stop_reason = "COMPLETE"
-        elif agent.cycle >= agent.manifest.max_cycles:
-            stop_reason = "CYCLE_BUDGET_EXHAUSTED"
-        elif agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
-            stop_reason = agent.status
-        else:
-            stop_reason = "STEP_BUDGET_EXHAUSTED"
-        return {
-            "identity": agent.identity,
-            "status": agent.status,
-            "cycle": agent.cycle,
-            "executed_cycles": len(decisions),
-            "restored": restored,
-            "state": agent.snapshot(),
-            "state_path": str(path),
-            "capacity_pairs": agent.world.capacity,
-            "decisions": decisions,
-            "stop_reason": stop_reason,
-        }
+        agent = None
+        try:
+            if restored:
+                scenario, agent = load_session(path, capacity, backend=backend)
+                if supplied is not None and supplied != scenario:
+                    raise ValueError("The supplied scenario differs from the retained session")
+            else:
+                scenario = Scenario() if supplied is None else supplied
+                agent = Tomigidt(scenario.manifest, capacity, backend=backend)
+                write_json(path, {"format": SESSION_FORMAT,
+                                  "scenario": scenario.to_dict(), "agent": agent.archive()})
+            for _ in range(steps):
+                if agent.status == "COMPLETE" or agent.cycle >= agent.manifest.max_cycles:
+                    break
+                decision = agent.step(scenario.observe(agent.position, agent.cycle + 1))
+                write_json(path, {"format": SESSION_FORMAT,
+                                  "scenario": scenario.to_dict(), "agent": agent.archive()})
+                decisions.append(decision.to_dict())
+                if agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
+                    break
+            if agent.status == "COMPLETE":
+                stop_reason = "COMPLETE"
+            elif agent.cycle >= agent.manifest.max_cycles:
+                stop_reason = "CYCLE_BUDGET_EXHAUSTED"
+            elif agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
+                stop_reason = agent.status
+            else:
+                stop_reason = "STEP_BUDGET_EXHAUSTED"
+            result = {
+                "identity": agent.identity,
+                "status": agent.status,
+                "cycle": agent.cycle,
+                "executed_cycles": len(decisions),
+                "restored": restored,
+                "state": agent.snapshot(),
+                "state_path": str(path),
+                "capacity_pairs": agent.world.capacity,
+                "decisions": decisions,
+                "stop_reason": stop_reason,
+            }
+            if backend == "gpu":
+                result["execution_info"] = agent.execution_info
+            return result
+        finally:
+            if agent is not None:
+                agent.close()

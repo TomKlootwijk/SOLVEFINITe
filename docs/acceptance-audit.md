@@ -1,5 +1,12 @@
 # TOMIGIDt objective audit
 
+> Historical audit of the commit named below. Its request for a definition of
+> solipsism was answered by Tom on 25 September 2026: one autonomous individual
+> and its world, with self-referential packed LUT execution on the GPU through
+> textures. The meaning-related blocker is superseded. See [gpu.md](gpu.md) for
+> subsequent implementation and evidence. The historical findings below refer
+> to the earlier CPU implementation, not the current GPU backend.
+
 Audit date: 25 September 2026. Implementation audited:
 `a536b4b0d6cfe0614b4e615dde1963f917f72dce`.
 

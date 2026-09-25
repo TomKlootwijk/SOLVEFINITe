@@ -1,8 +1,8 @@
 """One persistent observer with an autonomous, replayable decision loop.
 
-TOMIGIDt is a new application profile. Its local-observation interpretation is
-an explicit implementation assumption, not a definition of philosophical
-solipsism or a claim found in the source specification.
+TOMIGIDt is one individual and its internally represented world, following
+the author's clarification. Movement and repair remain a declared application
+profile of the underlying packed-state paradigm.
 """
 
 from __future__ import annotations
@@ -146,13 +146,25 @@ class Tomigidt:
     Sensors supply observations only. They cannot supply a route or action.
     """
 
-    def __init__(self, manifest: AgentManifest | None = None, capacity: int = 2):
+    def __init__(self, manifest: AgentManifest | None = None, capacity: int = 2, *, backend: str = "cpu"):
         self._manifest = AgentManifest() if manifest is None else manifest
         if type(self._manifest) is not AgentManifest:
             raise ValueError("manifest must be an AgentManifest")
         self.world = World(self._manifest.world, capacity)
         self._graph = dict(self._manifest.graph)
+        if backend not in ("cpu", "gpu"):
+            raise ValueError("backend must be cpu or gpu")
+        self._gpu = None
         self._pair = pair(pack(*self._manifest.agent_seed))
+        if backend == "gpu":
+            from .gpu import GpuExecutor, GpuWorld
+            self._gpu = GpuExecutor(self._manifest.world, tuple(self._graph))
+            try:
+                self.world = GpuWorld(self._manifest.world, capacity, self._gpu)
+                self._gpu.commit_pair(self._pair)
+            except BaseException:
+                self._gpu.close()
+                raise
         self._position = ""
         self._cycle = 0
         self._status = "ACTIVE"
@@ -160,6 +172,22 @@ class Tomigidt:
         self._last_decision: Decision | None = None
         self._planning: _Planning | None = None
         self._events: list[dict] = []
+        self._closed = False
+
+    @property
+    def execution_info(self) -> dict:
+        """Deployment diagnostics; adapter choice does not change journal semantics."""
+        return {"backend": "cpu"} if self._gpu is None else {
+            "backend": "gpu", "adapter": dict(self._gpu.adapter_info),
+            "gpu_stages": ["packed-world-derivation", "packed-route-forecast"],
+            "host_stages": ["observation-admission", "route-search", "action-admission", "journal"],
+        }
+
+    def close(self) -> None:
+        if not self._closed:
+            self._closed = True
+            if self._gpu is not None:
+                self._gpu.close()
 
     @property
     def manifest(self) -> AgentManifest:
@@ -276,20 +304,26 @@ class Tomigidt:
         next_path = route.route[0]
         if next_path not in frame or next_path not in self._graph[self.position]:
             raise ValueError("Planner proposed movement without observed adjacency")
-        imagined = self.agent_pair
-        forecast = []
-        forecast_cost = 0
-        for path in route.route:
-            hazard = unpack(known[path])[2] if path in known else 0
-            imagined, cost = move(imagined, path, self.world, hazard)
-            forecast.append(imagined)
-            forecast_cost += cost
+        hazards = tuple(unpack(known[path])[2] if path in known else 0 for path in route.route)
+        if self._gpu is not None:
+            forecast, costs = self._gpu.forecast(self.agent_pair, route.route, hazards)
+            forecast_cost = sum(costs)
+        else:
+            imagined = self.agent_pair
+            forecast = []
+            forecast_cost = 0
+            for path, hazard in zip(route.route, hazards):
+                imagined, cost = move(imagined, path, self.world, hazard)
+                forecast.append(imagined)
+                forecast_cost += cost
         if forecast_cost != route.cost:
             raise ValueError("Route search and packed imagination disagree on cost")
         return (Decision("MOVE", "Follow the least-cost route in the current internal model",
                          route.route, route.cost, forecast[0], route.expansions, tuple(forecast)), None)
 
     def step(self, observations: object) -> Decision:
+        if self._closed:
+            raise ValueError("This agent is closed")
         if self.status == "COMPLETE":
             raise ValueError("This agent's declared objective is complete")
         if self.cycle >= self.manifest.max_cycles:
@@ -299,6 +333,8 @@ class Tomigidt:
         decision, planning = self._decide(frame, known)
         if decision.expected_pair is not None:
             unpair(decision.expected_pair)
+            if self._gpu is not None:
+                self._gpu.commit_pair(decision.expected_pair)
         # Validation and hypothetical execution finish before live mutation.
         for path in frame:
             self.world.get(path)
@@ -350,11 +386,20 @@ class Tomigidt:
                 "events": self.events, "expected": self.snapshot()}
 
     @classmethod
-    def from_archive(cls, archive: object, capacity: int = 2) -> Tomigidt:
+    def from_archive(cls, archive: object, capacity: int = 2, *, backend: str = "cpu") -> Tomigidt:
         _keys(archive, {"format", "manifest", "events", "expected"}, "Agent archive")
         if archive["format"] != FORMAT or type(archive["events"]) is not list:
             raise ValueError("Unsupported agent archive format or event array")
-        agent = cls(AgentManifest.from_dict(archive["manifest"]), capacity)
+        agent = cls(AgentManifest.from_dict(archive["manifest"]), capacity, backend=backend)
+        try:
+            agent._restore_events(archive)
+        except BaseException:
+            agent.close()
+            raise
+        return agent
+
+    def _restore_events(self, archive: dict) -> None:
+        agent = self
         if len(archive["events"]) > agent.manifest.max_cycles:
             raise ValueError("Archive exceeds its declared cycle budget")
         for event in archive["events"]:
@@ -376,13 +421,12 @@ class Tomigidt:
                 raise ValueError("Replayed observation, decision or output differs from its recorded event")
         if _json(agent.snapshot()) != _json(archive["expected"]):
             raise ValueError("Replayed agent disagrees with the retained expected state")
-        return agent
 
     def save(self, path: str | Path) -> None:
         write_json(path, self.archive())
 
     @classmethod
-    def load(cls, path: str | Path, capacity: int = 2) -> Tomigidt:
+    def load(cls, path: str | Path, capacity: int = 2, *, backend: str = "cpu") -> Tomigidt:
         def unique_object(items: list[tuple[str, object]]) -> dict:
             value = {}
             for key, item in items:
@@ -393,4 +437,4 @@ class Tomigidt:
 
         with Path(path).open(encoding="utf-8") as stream:
             archive = json.load(stream, object_pairs_hook=unique_object)
-        return cls.from_archive(archive, capacity)
+        return cls.from_archive(archive, capacity, backend=backend)
