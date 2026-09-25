@@ -1,0 +1,86 @@
+{
+  "agent": {
+    "agent_seed": [
+      250,
+      3,
+      100,
+      1
+    ],
+    "graph": {
+      "": [
+        "0",
+        "1"
+      ],
+      "0": [
+        "",
+        "00"
+      ],
+      "00": [
+        "0",
+        "11"
+      ],
+      "1": [
+        "",
+        "10"
+      ],
+      "10": [
+        "1",
+        "11"
+      ],
+      "11": [
+        "00",
+        "10"
+      ]
+    },
+    "identity": "TOMIGIDt",
+    "max_cycles": 10000,
+    "max_search_expansions": 4096,
+    "perspective": "local-observation-v1",
+    "policy": "tomigidt-observe-plan-act-v1",
+    "repair_cost": 5,
+    "target": "11",
+    "word_profile": "RP32-v1",
+    "world": {
+      "baseline_id": "colony-baseline-v1",
+      "field_changes": [
+        -3,
+        4
+      ],
+      "max_depth": 8,
+      "phase_turns": [
+        [
+          11,
+          53
+        ],
+        [
+          29,
+          83
+        ],
+        [
+          47,
+          101
+        ],
+        [
+          71,
+          137
+        ]
+      ],
+      "seed": [
+        250,
+        3,
+        20,
+        2
+      ],
+      "version": "binary-organogram-v1"
+    }
+  },
+  "changes": [
+    {
+      "cycle": 2,
+      "hazard": 70,
+      "path": "00"
+    }
+  ],
+  "format": "tomigidt-simulation-v1",
+  "hazards": {}
+}

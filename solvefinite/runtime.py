@@ -14,7 +14,8 @@ import os
 from pathlib import Path
 import tempfile
 
-from .rp32 import Opcode, pack, pair, step, unpack, unpair
+from .motion import EnergyExhausted, move
+from .rp32 import Opcode, pack, pair, unpack, unpair
 from .world import World, WorldConfig
 
 
@@ -159,19 +160,11 @@ class Runtime:
 
     def _move(self, agent: int, path: str) -> tuple[int, int]:
         """Shared imagination/action kernel; no mutation or cache access."""
-        left, _ = unpair(agent)
-        r, g, energy, a = unpack(left)
-        node_left, _ = unpair(self.world.derive(path).pair)
-        _, node_g, terrain, _ = unpack(node_left)
         hazard = unpack(self._observations[path])[2] if path in self._observations else 0
-        cost = 1 + abs(terrain) // 8 + hazard
-        if energy < cost:
-            raise InfeasiblePlan(f"Insufficient energy to enter waypoint {path!r}")
-        row = (g ^ node_g ^ (r >> 6)) & 3
-        branch = int(path[-1]) if path else 0
-        delta = self.manifest.world.phase_turns[row][branch]
-        next_r, _, _, _ = unpack(step(left, delta))
-        return pair(pack(next_r, node_g, energy - cost, (a & ~7) | Opcode.STEP)), cost
+        try:
+            return move(agent, path, self.world, hazard)
+        except EnergyExhausted as exc:
+            raise InfeasiblePlan(str(exc)) from exc
 
     def evaluate(self, route: object) -> Plan:
         paths = self._route(route)

@@ -128,12 +128,37 @@ def main(argv: list[str] | None = None) -> int:
     replay_parser.add_argument("--capacity", type=int, default=2)
     replay_parser.add_argument("--resume", action="store_true", help="Finish the retained plan after replay")
     replay_parser.add_argument("--output", type=Path, help="Save the resulting journal")
+    agent_parser = commands.add_parser("agent", help="Operate the persistent TOMIGIDt single agent")
+    agent_commands = agent_parser.add_subparsers(dest="agent_command", required=True)
+    agent_run = agent_commands.add_parser("run", help="Sense, plan and act; resume the existing state if present")
+    agent_run.add_argument("--state", type=Path, default=Path("output/tomigidt/session.json"))
+    agent_run.add_argument("--steps", type=int, default=64, help="Maximum autonomous cycles for this invocation")
+    agent_run.add_argument("--capacity", type=int, default=2, help="Active world cache capacity in pairs")
+    agent_run.add_argument("--scenario", type=Path, help="Versioned simulated environment; must match on resume")
+    agent_inspect = agent_commands.add_parser("inspect", help="Replay and inspect a retained agent session")
+    agent_inspect.add_argument("state", type=Path)
+    agent_inspect.add_argument("--capacity", type=int, default=2)
+    agent_scenario = agent_commands.add_parser("scenario", help="Write the default simulated environment")
+    agent_scenario.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         if args.command == "demo":
             result = demo(args.output)
-        else:
+        elif args.command == "replay":
             result = replay(args.journal, args.capacity, args.resume, args.output)
+        else:
+            from .session import Scenario, load_session, run_session
+            if args.agent_command == "run":
+                result = run_session(args.state, steps=args.steps, capacity=args.capacity,
+                                     scenario_path=args.scenario)
+            elif args.agent_command == "inspect":
+                _, agent = load_session(args.state, capacity=args.capacity)
+                result = {"verified": True, "state": agent.snapshot(),
+                          "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
+            else:
+                scenario = Scenario()
+                write_json(args.output, scenario.to_dict())
+                result = {"scenario": str(args.output.resolve()), "identity": scenario.manifest.identity}
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
         print(f"solvefinite: {exc}", file=sys.stderr)
         return 2

@@ -15,6 +15,37 @@ The source specification is
 their original Markdown and citations. The code implements a small, declared
 realization of that direction; its demo-specific choices are described below.
 
+## TOMIGIDt: persistent autonomous single agent
+
+The `agent` command adds one named decision maker that owns a goal, packed
+state, local observations, predictions and a replayable decision journal.
+It computes routes through a declared movement graph itself, observes its
+immediate surroundings before each action, and replans when conditions change.
+No candidate routes or action sequence are supplied by the caller.
+
+```sh
+python -m solvefinite agent run --state output/tomigidt/session.json --steps 1
+python -m solvefinite agent run --state output/tomigidt/session.json --steps 64
+python -m solvefinite agent inspect output/tomigidt/session.json
+```
+
+The second command reconstructs the same agent and continues its own decision
+loop. The default simulated environment changes a hazard after the first move;
+the agent discovers it, backtracks and finds another route to the same target.
+Each accepted cycle is saved. An OS-backed lock permits only one advancing
+process per state file; a lock file's presence alone does not mean a live owner.
+
+Use `python -m solvefinite agent scenario --output output/scenario.json` to
+export the input configuration. Pass `--scenario output/scenario.json` when
+starting a new state. An existing state rejects a different scenario, and
+replays its original policy, observations and decisions before continuing.
+
+The current profile uses simulated sensing and repair. The interpretation of
+"solipsism" as one locally maintained observation history is provisional until
+Tom supplies its intended meaning. This implementation is progress toward the
+full goal, not a declaration that every aspect of that goal is complete. See
+[docs/tomigidt.md](docs/tomigidt.md) for its contracts and outstanding questions.
+
 ## Run
 
 Python **3.10 or later** is required. There are no third-party dependencies.
@@ -114,7 +145,7 @@ The RP32 arithmetic follows the specification's reference encoding. The binary
 grammar, route costs, planner, command bindings and repair action are explicit
 demo choices, documented in [docs/realization.md](docs/realization.md).
 
-The routes are supplied waypoint sequences. This experiment does not implement
+In the original `demo` command, routes are supplied waypoint sequences. That experiment does not implement
 a physical navigation graph, collision detection or an actual repair actuator.
 Repair debits energy and marks the mission complete. It does not implement
 learning, distributed consensus, a complete f8 index, physical wave adapters,
@@ -133,8 +164,9 @@ requires the original observations and rules to remain available.
 
 ## Next milestones
 
-1. Add an explicit admissible movement graph and target constraints, so generated
-   alternatives describe feasible routes to the same objective.
+1. The TOMIGIDt profile now supplies a movement graph, a target and generated
+   routes. Extend its objective and action model once Tom's intended meaning of
+   "solipsism TOMIGIDt" is specified.
 2. Add checkpoints and bounded diagnostic retention, then measure total storage
    and reconstruction cost over long event histories.
 3. Compare an optimized conventional implementation at equal semantics and
