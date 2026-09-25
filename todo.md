@@ -91,7 +91,7 @@ Work sequence:
 - [x] Distill it into the formal source corpus with explicit metric, boundary, sign, packing, topology and operator contracts before implementation: `docs/specification/relational-sdf-v1.md` (TK-LPLUT-SDF-1.0).
 - [x] Implement the versioned relational SDF profile and deterministic operator execution: `solvefinite/field.py`, `solvefinite/sdf_gpu.py`, `solvefinite/shaders/field.wgsl` and the `field` CLI.
 - [x] Verify exact CPU/GPU fields, self-referential transitions, rejection cases and replay; record evidence here.
-- [ ] Commit and push the formalization and verified implementation.
+- [x] Commit and push the formalization (`477e576`) and verified implementation (`50c9389`) to `codex/regenerating-agent-demo`.
 
 Evidence recorded on 2026-09-25:
 
