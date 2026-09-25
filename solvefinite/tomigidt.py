@@ -193,6 +193,11 @@ class Tomigidt:
     def events(self) -> list[dict]:
         return deepcopy(self._events)
 
+    def recorded_event(self, sequence: int) -> dict:
+        """Copy one admitted event without copying the entire retained history."""
+        _integer(sequence, 1, self.cycle, "sequence")
+        return deepcopy(self._events[sequence - 1])
+
     @property
     def pending_search(self) -> bool:
         """Whether another planning quantum can continue retained work."""

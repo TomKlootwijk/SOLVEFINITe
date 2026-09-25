@@ -47,7 +47,12 @@ def _json(value: object) -> str:
 
 
 def write_json(path: str | Path, value: object) -> None:
-    """Replace a generated artifact atomically within its target directory."""
+    """Flush a generated artifact's payload before replacing its target atomically.
+
+    Acknowledgments can follow a successful return. The platform's atomic
+    replace and storage guarantees still apply; this is not a claim of survival
+    through every hardware or power failure.
+    """
     destination = Path(path)
     data = _json(value)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -59,7 +64,15 @@ def write_json(path: str | Path, value: object) -> None:
         ) as stream:
             temporary = Path(stream.name)
             stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
         os.replace(temporary, destination)
+        if os.name != "nt":
+            directory = os.open(destination.parent, os.O_RDONLY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
     finally:
         if temporary is not None and temporary.exists():
             temporary.unlink()

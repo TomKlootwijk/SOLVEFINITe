@@ -140,6 +140,15 @@ def main(argv: list[str] | None = None) -> int:
     agent_inspect.add_argument("--capacity", type=int, default=2)
     agent_scenario = agent_commands.add_parser("scenario", help="Write the default simulated environment")
     agent_scenario.add_argument("--output", type=Path, required=True)
+    agent_serve = agent_commands.add_parser("serve", help="Keep one agent ready for live JSON-line sensor input")
+    agent_serve.add_argument("--state", type=Path, default=Path("output/tomigidt/live.json"))
+    agent_serve.add_argument("--capacity", type=int, default=2)
+    agent_serve.add_argument("--config", type=Path, help="Live sensor identity and agent configuration; must match on resume")
+    agent_live_config = agent_commands.add_parser("live-config", help="Write the default live agent configuration")
+    agent_live_config.add_argument("--output", type=Path, required=True)
+    agent_live_inspect = agent_commands.add_parser("live-inspect", help="Replay and inspect a retained live agent session")
+    agent_live_inspect.add_argument("state", type=Path)
+    agent_live_inspect.add_argument("--capacity", type=int, default=2)
     args = parser.parse_args(argv)
     try:
         if args.command == "demo":
@@ -155,10 +164,26 @@ def main(argv: list[str] | None = None) -> int:
                 _, agent = load_session(args.state, capacity=args.capacity)
                 result = {"verified": True, "state": agent.snapshot(),
                           "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
-            else:
+            elif args.agent_command == "scenario":
                 scenario = Scenario()
                 write_json(args.output, scenario.to_dict())
                 result = {"scenario": str(args.output.resolve()), "identity": scenario.manifest.identity}
+            elif args.agent_command == "serve":
+                from .live import serve
+                serve(args.state, capacity=args.capacity, config_path=args.config)
+                return 0
+            elif args.agent_command == "live-config":
+                from .live import LiveConfig
+                config = LiveConfig()
+                write_json(args.output, config.to_dict())
+                result = {"config": str(args.output.resolve()), "identity": config.manifest.identity}
+            else:
+                from .live import load_live
+                config, agent = load_live(args.state, capacity=args.capacity)
+                result = {"verified": True, "state": agent.snapshot(),
+                          "state_path": str(args.state.resolve()),
+                          "event_count": len(agent.events),
+                          "producer": config.producer, "epoch": config.epoch}
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
         print(f"solvefinite: {exc}", file=sys.stderr)
         return 2

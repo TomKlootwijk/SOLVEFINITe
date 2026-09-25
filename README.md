@@ -49,7 +49,15 @@ The [one-expansion scenario](examples/tomigidt-incremental.json) demonstrates
 restarting during planning; the [agent documentation](docs/tomigidt.md) includes
 commands and expected results.
 
-The current profile uses simulated sensing and repair. The interpretation of
+`agent serve --state output/tomigidt/live.json` keeps the agent available for
+new JSON-line sensor observations. Temporary missing data or high hazards do
+not end the process; later measurements can let it continue. Saved sequence
+numbers make lost-response retries return the original decision without
+executing another cycle. [Live-channel documentation](docs/live.md) describes
+the protocol and includes a runnable external sensor client demonstration.
+
+The current profile models movement and repair in software. External producers
+can supply observations through the live channel. The interpretation of
 "solipsism" as one locally maintained observation history is provisional until
 Tom supplies its intended meaning. This implementation is progress toward the
 full goal, not a declaration that every aspect of that goal is complete. See
@@ -133,6 +141,7 @@ flowchart LR
 | [solvefinite/navigation.py](solvefinite/navigation.py) | Deterministic route discovery and resumable search quanta. |
 | [solvefinite/tomigidt.py](solvefinite/tomigidt.py) | One agent's local model, versioned autonomous policy and replayable decisions. |
 | [solvefinite/session.py](solvefinite/session.py) | Simulated sensing, exclusive session ownership and per-cycle persistence. |
+| [solvefinite/live.py](solvefinite/live.py) | Live sensor admission, ordered durable results and duplicate recovery. |
 | [solvefinite/runtime.py](solvefinite/runtime.py) | Typed event admission, deterministic planning, energy accounting and replay from retained inputs. |
 | [solvefinite/__main__.py](solvefinite/__main__.py) | Runnable experiment and independent journal recovery. |
 

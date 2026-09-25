@@ -133,6 +133,13 @@ cursor and stops immediately; repeating it cannot extend the declared hop bound.
 
 ## Default runnable experiment
 
+The scenario runner below is one input adapter. The [live channel](live.md)
+adds a persistent `agent serve` process that accepts new local observations
+over standard input and emits its own decisions. It remains available after
+WAIT or insufficient energy, saves each admitted cycle before replying, and
+deduplicates retries across restarts. Its sensing interface is live; movement
+and repair retain the simulated application semantics described here.
+
 ```sh
 python -m solvefinite agent run --state output/tomigidt/session.json --steps 1
 python -m solvefinite agent run --state output/tomigidt/session.json --steps 64 --capacity 1
@@ -181,7 +188,7 @@ state. It still needs Tom's definition of "solipsism TOMIGIDt" and intended
 autonomous duties before the full user goal can be audited for completion.
 
 The current application profile does not implement open-ended goal formation,
-learning, real sensors or actuators, or a continuous multi-mission lifecycle.
+learning, a physical sensor or actuator adapter, or a continuous multi-mission lifecycle.
 It also does not establish full f8, Klein-bottle field/Hadamard or WElip
 conformance. Those source contracts are not silently replaced by this
 application's graph and planning rules. Performance, retained-history growth
