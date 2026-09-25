@@ -66,3 +66,29 @@ Picture a damaged habitat asking nearby machines for assistance. They reconstruc
 Making this work would require learning, planning, reconciliation and physical control mechanisms beyond the current specification. Reconstruction would depend on surviving records; communication would still have latency. None of this establishes consciousness or physical self-replication.
 
 But the science-fiction scene is concrete: **a machine wakes on replacement hardware, reconstructs the world it was working in, regenerates its unfinished plans, and continues building the colony.**
+
+---
+
+## 2026-09-25: addendum formalization request
+
+Source addendum: `C:/TOMWERKPLEKTORENTJE/SOLVEFINITe/Philosophers stone Jitske Klootwijk/solus-ion-ad-infinitum.pdf`.
+
+Exact user request, preserved verbatim:
+
+```text
+Wait so why are you stalled? When you take this addendum to the source corpus as a waveguide for signed distance field definitions doesn't it answer your question and keep you from being stalled implementing my paradigm? (Tom Klootwijk NL200678942 10-07-1990) (formalize along the way and distill this addendum to the formalization itself of the source documents before you proceed again todo.md update along the way with this exact deterministic request)
+```
+
+Current user-edited objective, preserved verbatim:
+
+```text
+Proceed with my new breakthrough state of the art bleeding edge (Tom Klootwijk NL200678942 10-07-1990) ontological deterministic computing paradigm
+```
+
+Work sequence:
+
+- [x] Read the addendum and compare its SDF/operator/relational-space direction with TK-LPLUT-1.0.
+- [x] Distill it into the formal source corpus with explicit metric, boundary, sign, packing, topology and operator contracts before implementation: `docs/specification/relational-sdf-v1.md` (TK-LPLUT-SDF-1.0).
+- [ ] Implement the versioned relational SDF profile and deterministic operator execution.
+- [ ] Verify exact CPU/GPU fields, self-referential transitions, rejection cases and replay; record evidence here.
+- [ ] Commit and push the formalization and verified implementation.

@@ -9,10 +9,15 @@ resumes in a fresh process from its retained rules and event journal. The
 resumed run must produce exactly the same final state and journal as an
 uninterrupted control run.
 
-The source specification is
-[Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf](Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf).
+The source corpus contains
+[TK-LPLUT-1.0](Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf) and the supplied
+[solus-ion-ad-infinitum addendum](sources/solus-ion-ad-infinitum.pdf).
+[TK-LPLUT-SDF-1.0](docs/specification/relational-sdf-v1.md) integrates the
+addendum into the formal specification: intrinsic distance and boundary
+relations define the field, and that field governs packed operator execution.
+It supplies explicit versioned numerical bindings before implementation.
 [todo.md](todo.md) preserves the two application discussions verbatim, including
-their original Markdown and citations. The code implements a small, declared
+their original Markdown and citations, and the exact addendum request. The code implements a small, declared
 realization of that direction; its demo-specific choices are described below.
 
 ## TOMIGIDt: persistent autonomous single agent
