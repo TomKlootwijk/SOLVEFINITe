@@ -165,6 +165,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_scenario = agent_commands.add_parser("scenario", help="Write the default simulated environment")
     agent_scenario.add_argument("--output", type=Path, required=True)
+    agent_scenario.add_argument("--profile", choices=("binary", "field"), default="binary")
     agent_serve = agent_commands.add_parser("serve", help="Keep one agent ready for live JSON-line sensor input")
     agent_serve.add_argument("--state", type=Path, default=Path("output/tomigidt/live.json"))
     agent_serve.add_argument("--capacity", type=int, default=2)
@@ -172,6 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_serve.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_live_config = agent_commands.add_parser("live-config", help="Write the default live agent configuration")
     agent_live_config.add_argument("--output", type=Path, required=True)
+    agent_live_config.add_argument("--profile", choices=("binary", "field"), default="binary")
     agent_live_inspect = agent_commands.add_parser("live-inspect", help="Replay and inspect a retained live agent session")
     agent_live_inspect.add_argument("state", type=Path)
     agent_live_inspect.add_argument("--capacity", type=int, default=2)
@@ -220,7 +222,11 @@ def main(argv: list[str] | None = None) -> int:
                 finally:
                     agent.close()
             elif args.agent_command == "scenario":
-                scenario = Scenario()
+                if args.profile == "field":
+                    from .field_agent import FieldAgentManifest
+                    scenario = Scenario(FieldAgentManifest(), changes=((2, "k:0:3", 70),))
+                else:
+                    scenario = Scenario()
                 write_json(args.output, scenario.to_dict())
                 result = {"scenario": str(args.output.resolve()), "identity": scenario.manifest.identity}
             elif args.agent_command == "serve":
@@ -229,7 +235,11 @@ def main(argv: list[str] | None = None) -> int:
                 return 0
             elif args.agent_command == "live-config":
                 from .live import LiveConfig
-                config = LiveConfig()
+                if args.profile == "field":
+                    from .field_agent import FieldAgentManifest
+                    config = LiveConfig(FieldAgentManifest())
+                else:
+                    config = LiveConfig()
                 write_json(args.output, config.to_dict())
                 result = {"config": str(args.output.resolve()), "identity": config.manifest.identity}
             else:

@@ -17,6 +17,8 @@ from .navigation import NoRoute, RouteSearch, SearchBudgetExceeded, normalize_gr
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _json, _keys, write_json
 from .world import World, WorldConfig
+from .field_agent import FIELD_POLICY, FIELD_WORD_PROFILE, FieldAgentManifest
+from .field_world import FieldWorld
 
 
 FORMAT = "tomigidt-agent-v1"
@@ -84,8 +86,14 @@ class AgentManifest:
             "max_cycles": self.max_cycles,
         }
 
+    @property
+    def start(self) -> str:
+        return ""
+
     @classmethod
-    def from_dict(cls, value: object) -> AgentManifest:
+    def from_dict(cls, value: object) -> AgentManifest | FieldAgentManifest:
+        if type(value) is dict and value.get("policy") == FIELD_POLICY:
+            return FieldAgentManifest.from_dict(value)
         _keys(value, {
             "identity", "policy", "perspective", "word_profile", "target", "world",
             "agent_seed", "repair_cost", "graph", "max_search_expansions", "max_cycles",
@@ -133,10 +141,13 @@ class _Planning:
     agent_pair: int
     weights: tuple[tuple[str, int], ...]
     cursor: RouteSearch
+    energy: int | None = None
 
-    def matches(self, position: str, agent_pair: int, weights: tuple[tuple[str, int], ...]) -> bool:
+    def matches(self, position: str, agent_pair: int, weights: tuple[tuple[str, int], ...],
+                energy: int | None = None) -> bool:
         # Target, graph and generation rules belong to the immutable manifest.
-        return (self.position, self.agent_pair, self.weights) == (position, agent_pair, weights)
+        return (self.position, self.agent_pair, self.weights, self.energy) == (
+            position, agent_pair, weights, energy)
 
 
 class Tomigidt:
@@ -146,17 +157,37 @@ class Tomigidt:
     Sensors supply observations only. They cannot supply a route or action.
     """
 
-    def __init__(self, manifest: AgentManifest | None = None, capacity: int = 2, *, backend: str = "cpu"):
+    def __init__(self, manifest: AgentManifest | FieldAgentManifest | None = None,
+                 capacity: int = 2, *, backend: str = "cpu"):
         self._manifest = AgentManifest() if manifest is None else manifest
-        if type(self._manifest) is not AgentManifest:
-            raise ValueError("manifest must be an AgentManifest")
-        self.world = World(self._manifest.world, capacity)
+        if type(self._manifest) not in (AgentManifest, FieldAgentManifest):
+            raise ValueError("manifest must be an AgentManifest or FieldAgentManifest")
+        self._is_field = type(self._manifest) is FieldAgentManifest
         self._graph = dict(self._manifest.graph)
-        if backend not in ("cpu", "gpu"):
+        if type(backend) is not str or backend not in ("cpu", "gpu"):
             raise ValueError("backend must be cpu or gpu")
         self._gpu = None
-        self._pair = pair(pack(*self._manifest.agent_seed))
-        if backend == "gpu":
+        self._closed = False
+        if self._is_field:
+            self.world = FieldWorld(self._manifest.world, capacity)
+            try:
+                if backend == "gpu":
+                    from .field_agent_gpu import GpuFieldAgentExecutor
+                    self._gpu = GpuFieldAgentExecutor(self._manifest.world)
+                    self.world = FieldWorld(self._manifest.world, capacity, executor=self._gpu)
+                _, node, signed, _ = unpack(unpair(self.world.derive(self._manifest.start).pair)[0])
+                self._pair = pair(pack(self._manifest.initial_phase, node, signed,
+                                       int(Opcode.STEP) | (self._manifest.initial_orientation << 4)))
+                self._energy = self._manifest.initial_energy
+                if self._gpu is not None:
+                    self._gpu.seed(self._pair, self._energy)
+            except BaseException:
+                self.close()
+                raise
+        else:
+            self.world = World(self._manifest.world, capacity)
+            self._pair = pair(pack(*self._manifest.agent_seed))
+        if backend == "gpu" and not self._is_field:
             from .gpu import GpuExecutor, GpuWorld
             self._gpu = GpuExecutor(self._manifest.world, tuple(self._graph))
             try:
@@ -165,7 +196,7 @@ class Tomigidt:
             except BaseException:
                 self._gpu.close()
                 raise
-        self._position = ""
+        self._position = self._manifest.start
         self._cycle = 0
         self._status = "ACTIVE"
         self._observations: dict[str, int] = {}
@@ -177,6 +208,20 @@ class Tomigidt:
     @property
     def execution_info(self) -> dict:
         """Deployment diagnostics; adapter choice does not change journal semantics."""
+        if self._is_field:
+            result = {"backend": "cpu" if self._gpu is None else "gpu",
+                      "word_profile": FIELD_WORD_PROFILE,
+                      "active_pair_payload_capacity_bytes": 8 * self.world.capacity,
+                      "accounting": "Active pair payload only; recipe, geometry, search, observations, "
+                                    "journal and runtime overhead are separate."}
+            if self._gpu is not None:
+                result.update(adapter=dict(self._gpu.adapter_info),
+                              allocation_info=self._gpu.allocation_info,
+                              gpu_stages=["certified-field-construction", "sample-materialization",
+                                          "edge-operator-compilation", "route-forecast", "actual-action"],
+                              host_stages=["geometric-certificate", "observation-admission",
+                                           "route-search", "action-admission", "journal"])
+            return result
         return {"backend": "cpu"} if self._gpu is None else {
             "backend": "gpu", "adapter": dict(self._gpu.adapter_info),
             "gpu_stages": ["packed-world-derivation", "packed-route-forecast"],
@@ -190,7 +235,7 @@ class Tomigidt:
                 self._gpu.close()
 
     @property
-    def manifest(self) -> AgentManifest:
+    def manifest(self) -> AgentManifest | FieldAgentManifest:
         return self._manifest
 
     @property
@@ -204,6 +249,11 @@ class Tomigidt:
     @property
     def agent_pair(self) -> int:
         return self._pair
+
+    @property
+    def energy(self) -> int:
+        """The field policy keeps energy outside its signed-distance B lane."""
+        return self._energy if self._is_field else unpack(unpair(self.agent_pair)[0])[2]
 
     @property
     def cycle(self) -> int:
@@ -236,35 +286,45 @@ class Tomigidt:
             raise ValueError("Observations must be a path-to-hazard object")
         if any(type(path) is not str or path not in self.visible_paths for path in observations):
             raise ValueError("Observation lies outside this agent's local view")
+        for hazard in observations.values():
+            _integer(hazard, 0, 127, "hazard")
         encoded = {}
         for path, hazard in sorted(observations.items()):
-            _integer(hazard, 0, 127, "hazard")
             r, g, _, _ = unpack(unpair(self.world.derive(path).pair)[0])
             encoded[path] = pack(r, g, hazard, Opcode.DATA)
         return encoded
 
+    def _entry_cost(self, path: str, hazard: int) -> int:
+        if self._is_field:
+            return self.world.entry_cost(path, hazard)
+        return movement_cost(self.world.derive(path).pair, hazard)
+
+    @property
+    def _planning_energy(self) -> int | None:
+        return self.energy if self._is_field else None
+
     def _model_weights(self, known: dict[str, int]) -> tuple[tuple[str, int], ...]:
         # Compare effective costs: observing a previously unknown zero hazard
         # confirms the baseline hypothesis without invalidating pending work.
-        return tuple((path, movement_cost(self.world.derive(path).pair,
-                                         unpack(known[path])[2] if path in known else 0))
+        return tuple((path, self._entry_cost(path, unpack(known[path])[2] if path in known else 0))
                      for path in self._graph)
 
     def _decide(self, frame: dict[str, int], known: dict[str, int]) -> tuple[Decision, _Planning | None]:
         if set(frame) != set(self.visible_paths):
             planning = self._planning
             if planning is not None and not planning.matches(
-                self.position, self.agent_pair, self._model_weights(known)
+                self.position, self.agent_pair, self._model_weights(known), self._planning_energy
             ):
                 planning = None
             return (Decision("WAIT", "Fresh observations of the current node and every outgoing neighbor are required"),
                     planning)
-        energy = unpack(unpair(self.agent_pair)[0])[2]
+        energy = self.energy
         if self.position == self.manifest.target:
             if energy < self.manifest.repair_cost:
                 return Decision("INSUFFICIENT_ENERGY", "Insufficient energy for the target repair"), None
             r, g, b, a = unpack(unpair(self.agent_pair)[0])
-            result = pair(pack(r, g, b - self.manifest.repair_cost, (a & ~7) | Opcode.EMIT))
+            result = pair(pack(r, g, b if self._is_field else b - self.manifest.repair_cost,
+                               (a & ~7) | Opcode.EMIT))
             return (Decision("REPAIR", "Observed target reached", cost=self.manifest.repair_cost,
                              expected_pair=result), None)
 
@@ -272,7 +332,7 @@ class Tomigidt:
             # Unseen farther nodes have the declared baseline hazard hypothesis.
             # A fresh local measurement is mandatory before entering any node.
             hazard = unpack(known[path])[2] if path in known else 0
-            return movement_cost(self.world.derive(path).pair, hazard)
+            return self._entry_cost(path, hazard)
 
         try:
             if self.manifest.policy == LEGACY_POLICY:
@@ -283,16 +343,20 @@ class Tomigidt:
             else:
                 weights = self._model_weights(known)
                 planning = self._planning
-                if planning is None or not planning.matches(self.position, self.agent_pair, weights):
+                if planning is None or not planning.matches(
+                        self.position, self.agent_pair, weights, self._planning_energy):
                     cursor = RouteSearch.start(self._graph, self.position, self.manifest.target,
-                                               dict(weights).__getitem__, max_hops=32)
+                                               dict(weights).__getitem__,
+                                               max_hops=self.manifest.max_hops if self._is_field else 32,
+                                               node_profile="relational-node-v1" if self._is_field
+                                               else "binary-path-v1")
                 else:
                     cursor = planning.cursor
                 cursor, route = cursor.advance(self.manifest.max_search_expansions)
                 if route is None:
                     return (Decision("DEFER", "Retained unfinished route search for the next cycle",
                                      expansions=cursor.expansions),
-                            _Planning(self.position, self.agent_pair, weights, cursor))
+                            _Planning(self.position, self.agent_pair, weights, cursor, self._planning_energy))
         except NoRoute:
             return Decision("UNREACHABLE", "The declared movement graph has no route to the target"), None
         except SearchBudgetExceeded as exc:
@@ -308,6 +372,9 @@ class Tomigidt:
         if self._gpu is not None:
             forecast, costs = self._gpu.forecast(self.agent_pair, route.route, hazards)
             forecast_cost = sum(costs)
+        elif self._is_field:
+            forecast, costs = self.world.forecast(self.agent_pair, route.route, hazards)
+            forecast_cost = sum(costs)
         else:
             imagined = self.agent_pair
             forecast = []
@@ -322,6 +389,14 @@ class Tomigidt:
                          route.route, route.cost, forecast[0], route.expansions, tuple(forecast)), None)
 
     def step(self, observations: object) -> Decision:
+        try:
+            return self._step(observations)
+        except BaseException:
+            if self._is_field and self._gpu is not None and self._gpu.failed:
+                self.close()
+            raise
+
+    def _step(self, observations: object) -> Decision:
         if self._closed:
             raise ValueError("This agent is closed")
         if self.status == "COMPLETE":
@@ -333,11 +408,36 @@ class Tomigidt:
         decision, planning = self._decide(frame, known)
         if decision.expected_pair is not None:
             unpair(decision.expected_pair)
-            if self._gpu is not None:
+            if self._gpu is not None and not self._is_field:
                 self._gpu.commit_pair(decision.expected_pair)
+        next_energy = self.energy
+        action_cost = 0
+        if self._is_field and decision.kind == "MOVE":
+            next_path = decision.route[0]
+            action_cost = self._entry_cost(next_path, unpack(frame[next_path])[2])
+            next_energy -= action_cost
+        elif self._is_field and decision.kind == "REPAIR":
+            action_cost = self.manifest.repair_cost
+            next_energy -= action_cost
         # Validation and hypothetical execution finish before live mutation.
         for path in frame:
             self.world.get(path)
+        if self._is_field and self._gpu is not None and decision.expected_pair is not None:
+            try:
+                if decision.kind == "MOVE":
+                    actual, device_cost, device_energy = self._gpu.advance_to(
+                        decision.route[0], unpack(frame[decision.route[0]])[2])
+                    if device_cost != action_cost:
+                        raise ValueError("Actual GPU movement disagrees with the admitted cost")
+                else:
+                    actual, device_energy = self._gpu.repair(action_cost)
+                if (actual, device_energy) != (decision.expected_pair, next_energy):
+                    raise ValueError("Actual GPU action disagrees with the admitted prediction")
+            except BaseException:
+                self.close()
+                raise
+        if self._is_field:
+            self._energy = next_energy
         self._observations = known
         self._planning = planning
         if decision.kind == "MOVE":
@@ -356,6 +456,8 @@ class Tomigidt:
             "seq": self.cycle, "input": {path: f"{word:08X}" for path, word in frame.items()},
             "decision": decision.to_dict(), "output": f"{self.agent_pair:016X}",
         })
+        if self._is_field:
+            self._events[-1]["energy"] = self.energy
         return decision
 
     def snapshot(self) -> dict:
@@ -371,7 +473,9 @@ class Tomigidt:
             "observations": {path: f"{word:08X}" for path, word in sorted(self._observations.items())},
             "last_decision": None if self._last_decision is None else self._last_decision.to_dict(),
         }
-        if self.manifest.policy == POLICY:
+        if self._is_field:
+            snapshot.update(energy=self.energy, word_profile=FIELD_WORD_PROFILE)
+        if self.manifest.policy in (POLICY, FIELD_POLICY):
             planning = self._planning
             snapshot["planning"] = None if planning is None else {
                 "position": planning.position, "target": self.manifest.target,
@@ -379,6 +483,8 @@ class Tomigidt:
                 "expansions": planning.cursor.expansions,
                 "pending_states": planning.cursor.pending_states,
             }
+            if self._is_field and planning is not None:
+                snapshot["planning"]["energy"] = planning.energy
         return snapshot
 
     def archive(self) -> dict:
@@ -403,7 +509,10 @@ class Tomigidt:
         if len(archive["events"]) > agent.manifest.max_cycles:
             raise ValueError("Archive exceeds its declared cycle budget")
         for event in archive["events"]:
-            _keys(event, {"seq", "input", "decision", "output"}, "Agent event")
+            _keys(event, {"seq", "input", "decision", "output"}
+                  | ({"energy"} if agent._is_field else set()), "Agent event")
+            if agent._is_field:
+                _integer(event["energy"], 0, (1 << 31) - 1, "event energy")
             if _integer(event["seq"], 1, agent.manifest.max_cycles, "seq") != agent.cycle + 1:
                 raise ValueError("Agent events must retain consecutive original sequence numbers")
             if type(event["input"]) is not dict:

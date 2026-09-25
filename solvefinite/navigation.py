@@ -18,6 +18,8 @@ from dataclasses import dataclass
 from heapq import heappop, heappush
 from types import MappingProxyType
 
+_DEFAULT_HOPS = object()
+
 
 class NoRoute(ValueError):
     """There is no directed route from start to target in the supplied graph."""
@@ -38,7 +40,17 @@ class SearchResult:
     expansions: int
 
 
-def _path(value: object, label: str) -> str:
+def _profile(value: object) -> str:
+    if type(value) is not str or value not in ("binary-path-v1", "relational-node-v1"):
+        raise ValueError("Unsupported route node profile")
+    return value
+
+
+def _path(value: object, label: str, node_profile: str = "binary-path-v1") -> str:
+    if node_profile == "relational-node-v1":
+        if type(value) is not str or not value.strip() or len(value) > 128:
+            raise ValueError(f"{label} must be a nonempty relational name of at most 128 characters")
+        return value
     if (type(value) is not str or len(value) > 32
             or any(character not in "01" for character in value)):
         raise ValueError(f"{label} must be a binary path string of length <= 32")
@@ -51,22 +63,25 @@ def _budget(value: object, upper: int, label: str) -> int:
     return value
 
 
-def normalize_graph(edges: Mapping[str, Sequence[str]]) -> dict[str, tuple[str, ...]]:
+def normalize_graph(edges: Mapping[str, Sequence[str]], *,
+                    node_profile: str = "binary-path-v1") -> dict[str, tuple[str, ...]]:
     """Validate and copy a graph, sorting both node keys and neighbor tuples.
 
     This checks structure only; disconnected components, cycles, self edges,
-    and sinks are all valid. Node identifiers are binary paths up to depth 32.
+    and sinks are all valid. Binary paths remain the default; the explicit
+    relational profile admits bounded nonempty names with the same lexical ties.
     """
+    _profile(node_profile)
     if not isinstance(edges, Mapping) or not 1 <= len(edges) <= 256:
         raise ValueError("edges must be a mapping containing 1..256 nodes")
     copied = {}
     for node, adjacent in edges.items():
-        _path(node, "node")
+        _path(node, "node", node_profile)
         if type(adjacent) not in (list, tuple):
             raise ValueError("each adjacency must be a list or tuple")
         neighbors = tuple(adjacent)
         for neighbor in neighbors:
-            _path(neighbor, "neighbor")
+            _path(neighbor, "neighbor", node_profile)
         if len(set(neighbors)) != len(neighbors):
             raise ValueError("each adjacency must contain unique neighbors")
         copied[node] = tuple(sorted(neighbors))
@@ -107,7 +122,9 @@ class RouteSearch:
         start: str,
         target: str,
         cost: Callable[[str], int],
-        max_hops: int = 32,
+        max_hops: int | object = _DEFAULT_HOPS,
+        *,
+        node_profile: str = "binary-path-v1",
     ) -> RouteSearch:
         """Snapshot validated inputs and prove reachability before any expansion.
 
@@ -116,10 +133,13 @@ class RouteSearch:
         targets beyond the hop bound raise ``SearchBudgetExceeded`` with zero
         expansions. These match the one-shot search's preflight semantics.
         """
-        _budget(max_hops, 32, "max_hops")
-        graph = normalize_graph(edges)
-        _path(start, "start")
-        _path(target, "target")
+        _profile(node_profile)
+        if max_hops is _DEFAULT_HOPS:
+            max_hops = 255 if node_profile == "relational-node-v1" else 32
+        _budget(max_hops, 255 if node_profile == "relational-node-v1" else 32, "max_hops")
+        graph = normalize_graph(edges, node_profile=node_profile)
+        _path(start, "start", node_profile)
+        _path(target, "target", node_profile)
         if start not in graph or target not in graph:
             raise ValueError("start and target must be declared graph nodes")
         if not callable(cost):

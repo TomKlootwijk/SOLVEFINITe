@@ -24,6 +24,22 @@ standard output. Diagnostics go to standard error. EOF ends the channel and
 releases ownership. A process restart with the same state file reconstructs
 the same identity, observations, decisions and unfinished search.
 
+For the recipe-derived Klein field world, use the same channel with the field
+manifest. The initial observer is `k:0:0`, and visible neighbors come from the
+quotient geometry. Sensor frames still contain only local integer hazards.
+
+```sh
+python -m solvefinite agent live-config --profile field --output output/tomigidt/field-live-config.json
+python -m solvefinite agent serve --config output/tomigidt/field-live-config.json --state output/tomigidt/field-live.json --backend gpu
+python -m solvefinite agent live-inspect output/tomigidt/field-live.json --backend cpu
+```
+
+Field events and snapshots include separate `energy`; the agent pair's B lane
+remains the signed distance. Retry positions begin at the manifest's initial
+node, including nondefault starts. Existing sequence, ownership and durable
+acknowledgment rules apply to both profiles. CPU/GPU restart and duplicate
+recovery are captured in the [field-agent evidence](evidence/field-agent-v1/README.md).
+
 ```sh
 python -m solvefinite agent live-inspect output/tomigidt/live.json --capacity 1
 ```

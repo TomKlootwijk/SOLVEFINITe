@@ -10,16 +10,19 @@ It explains the idea in everyday language and shows which pieces already work.
 
 The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
-This single, self-contained 34-page PDF integrates the original specification,
+This single, self-contained 38-page PDF integrates the original specification,
 both supplied addenda, the exact SDF contract, the Klein extension and
-implementation evidence at `8f4b87b`. It defines conditional infallibility through
-explicit deterministic execution and invariant-preservation obligations.
+implementation evidence for the SDF, Klein and field-agent profiles. It defines
+conditional infallibility through explicit deterministic execution and
+invariant-preservation obligations.
 The documentation detour is complete. The subsequent implementation now supports
-both `relational-sdf-v1` and the formal edition's `relational-sdf-v2` Klein
-geometry and orientation transport. The PDFs retain their dated evidence;
-[current field documentation](docs/field.md) records the later runtime work.
+the intrinsic `relational-sdf-v1` field and the `relational-sdf-v2` Klein geometry
+and orientation transport. The same autonomous agent now plans over that geometry and regenerates
+evicted field samples. FI1-FI8 were committed in the consolidated PDF at
+`5ccc022` before implementation; revision 2 records the measured result.
+The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
-Fresh verification at `8f4b87b`: **262 tests passed, zero skipped**, including
+Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
 21 actual-device GPU methods. CPU/GPU field traces and resumed execution agree.
 [Evidence and reproduction details](docs/evidence/formal-edition-2026-09-25/README.md)
 retain the exact scope and remaining architecture obligations.
@@ -88,10 +91,10 @@ python -m examples.klein_conformance
 
 Both backends use the same retained manifest and produce identical packed
 sequences across seams and restarts. This implements K1-K9 of the formal
-edition; integration with the regenerative world and autonomous planning,
-eigenvector-derived Psi and the full f8 index remain architectural work.
+edition. The field-agent profile below integrates regeneration and autonomous
+planning; eigenvector-derived Psi and the full f8 index remain architectural work.
 
-Fresh v2 verification: **311 tests passed, zero skipped**, including 28
+Klein baseline verification: **311 tests passed, zero skipped**, including 28
 actual-device GPU methods. The [conformance report](docs/evidence/klein-field-v2/conformance.json)
 records 22 checks, audits all 702 supported dimension pairs and retains the
 complete 64-tick CPU/GPU traces. [The verification record](docs/evidence/klein-field-v2/verification.json)
@@ -143,6 +146,35 @@ and its world**, with the self-referential packed LUT paradigm realized on the
 GPU through textures. GPU lanes represent that individual's world nodes, not
 additional individuals. Movement and repair remain the concrete reference task.
 See [docs/tomigidt.md](docs/tomigidt.md) for its behavioral contracts.
+
+## The same agent in its intrinsic field world
+
+The `field` application profile gives this same `Tomigidt` a retained Klein
+ball recipe. It generates its movement graph and signed distances from that
+recipe, chooses routes, observes hazards, replans and regenerates evicted world
+samples. No routes, actions or field values are supplied by the sensor.
+
+```sh
+python -m solvefinite agent scenario --profile field --output output/field-agent/scenario.json
+python -m solvefinite agent run --scenario output/field-agent/scenario.json --state output/field-agent/session.json --steps 1 --backend gpu --capacity 1
+python -m solvefinite agent run --state output/field-agent/session.json --steps 64 --backend cpu --capacity 8
+python -m solvefinite agent inspect output/field-agent/session.json --backend gpu
+python -m examples.field_agent_conformance
+```
+
+The reference mission changes its route after a new hazard, crosses an
+orientation-reversing seam and completes at `k:3:2` with pair
+`06011145160111BB` and **90 energy units**. B remains the exact signed distance;
+energy is separate. GPU movement and repair execute from persistent device
+state and must match the forecast before the agent records a cycle.
+
+Current verification: **368 tests passed, zero skipped**, including 41
+actual-device GPU methods. The [23-check conformance report](docs/evidence/field-agent-v1/conformance.json)
+records full CPU/GPU histories, actual device readbacks, field ablation,
+instrumented FIFO reconstruction, live retry and fresh-process recovery before
+a seam and during unfinished planning. [Reproduction and scope](docs/evidence/field-agent-v1/README.md)
+explain the measured result. The default GPU uses 47,144 bytes of explicit device
+payload outside the FIFO; the active-pair limit is not a total-memory claim.
 
 ## GPU texture execution
 
@@ -279,7 +311,8 @@ learning, distributed consensus, a complete f8 index, physical wave adapters,
 or the full Klein-bottle field model.
 
 Only the active **world FIFO pair payload** is bounded by `8 * capacity` bytes. The
-optional GPU world arena and its CPU witness are separately allocated. Path
+binary profile's optional GPU world arena and CPU witness are separately allocated.
+The field agent retains scalar/operator storage outside its sample FIFO. Path
 keys, Python object overhead, the agent pair, rules, observations, the journal
 and diagnostic eviction history consume additional memory. The report labels
 pair payload separately and reports serialized journal sizes. No result here

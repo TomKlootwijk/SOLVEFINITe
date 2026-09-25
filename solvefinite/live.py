@@ -20,6 +20,7 @@ from .rp32 import unpack
 from .runtime import _integer, _keys, write_json
 from .session import AgentBusy, StateLock, _read_json, _reject_constant, _unique_object
 from .tomigidt import AgentManifest, Tomigidt
+from .field_agent import FieldAgentManifest
 
 
 PROTOCOL = "tomigidt-live-v1"
@@ -31,13 +32,13 @@ MAX_EPOCH = (1 << 63) - 1
 
 @dataclass(frozen=True)
 class LiveConfig:
-    manifest: AgentManifest = field(default_factory=AgentManifest)
+    manifest: AgentManifest | FieldAgentManifest = field(default_factory=AgentManifest)
     producer: str = "sensor"
     epoch: int = 0
 
     def __post_init__(self) -> None:
-        if type(self.manifest) is not AgentManifest:
-            raise ValueError("Live manifest must be an AgentManifest")
+        if type(self.manifest) not in (AgentManifest, FieldAgentManifest):
+            raise ValueError("Live manifest must be an AgentManifest or FieldAgentManifest")
         if type(self.producer) is not str or not self.producer.strip() or len(self.producer) > 128:
             raise ValueError("Producer must be a nonempty name of at most 128 characters")
         _integer(self.epoch, 0, MAX_EPOCH, "epoch")
@@ -149,7 +150,7 @@ class LiveSession:
                 agent = Tomigidt(config.manifest, self._capacity, backend=self._backend)
                 write_json(self.path, {"format": LIVE_FORMAT, "config": config.to_dict(),
                                        "agent": agent.archive()})
-            position = ""
+            position = agent.manifest.start
             positions = []
             for event in agent.events:
                 positions.append(position)

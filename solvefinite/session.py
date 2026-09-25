@@ -15,6 +15,7 @@ from pathlib import Path
 from .rp32 import unpack
 from .runtime import _integer, _keys, write_json
 from .tomigidt import AgentManifest, Tomigidt
+from .field_agent import FieldAgentManifest
 
 
 SCENARIO_FORMAT = "tomigidt-simulation-v1"
@@ -42,13 +43,13 @@ def _read_json(path: str | Path) -> object:
 
 @dataclass(frozen=True)
 class Scenario:
-    manifest: AgentManifest = field(default_factory=AgentManifest)
+    manifest: AgentManifest | FieldAgentManifest = field(default_factory=AgentManifest)
     hazards: tuple[tuple[str, int], ...] = ()
     changes: tuple[tuple[int, str, int], ...] = ((2, "00", 70),)
 
     def __post_init__(self) -> None:
-        if type(self.manifest) is not AgentManifest:
-            raise ValueError("scenario manifest must be an AgentManifest")
+        if type(self.manifest) not in (AgentManifest, FieldAgentManifest):
+            raise ValueError("scenario manifest must be an AgentManifest or FieldAgentManifest")
         graph = dict(self.manifest.graph)
         if type(self.hazards) is not tuple or any(
             type(item) is not tuple or len(item) != 2 for item in self.hazards
@@ -193,7 +194,7 @@ def load_session(path: str | Path, capacity: int = 2, *,
     try:
         if agent.manifest != scenario.manifest:
             raise ValueError("Session scenario and agent manifests disagree")
-        position = ""
+        position = agent.manifest.start
         for event in agent.events:
             recorded = {path: unpack(int(word, 16))[2]
                         for path, word in event["input"].items()}

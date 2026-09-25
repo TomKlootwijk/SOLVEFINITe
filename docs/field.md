@@ -187,9 +187,16 @@ needs an external trust mechanism for authentication.
 
 The v2 implementation adds actual Klein cell topology, its orientation cover,
 intrinsic ball generation and seam transport. Its field is scalar; an
-orientation-dependent section would require a different contract. The current
-field machine and the earlier autonomous repair agent remain separate profiles.
-Regenerative field-world integration, eigenvector-defined Psi, canonical f8
+orientation-dependent section would require a different contract. The fixed-route
+field machine retains its own profile. The same autonomous `Tomigidt` now also
+accepts a field-agent policy, bound by FI1-FI8 in the consolidated PDF before
+implementation. It plans over recipe-derived Klein neighbors, observes local
+hazards, regenerates evicted samples and executes actual GPU movement from
+persistent device state. See the
+[field-agent commands and contracts](tomigidt.md#intrinsic-field-application-profile)
+and [measured evidence](evidence/field-agent-v1/README.md).
+
+Eigenvector-defined Psi, canonical f8
 indexing, Hadamard/gradient routing, generated cone/pyramid boundaries,
 physical wave adapters and larger evolving field domains remain obligations
 of the complete paradigm. Topology and replay evidence do not establish GPU

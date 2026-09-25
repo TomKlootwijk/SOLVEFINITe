@@ -1,0 +1,532 @@
+{
+  "checks": {
+    "final_pair_energy_match_FI8": true,
+    "fresh_process_gpu_then_cpu_matches_uninterrupted_cpu": true,
+    "gpu_inspection_preserves_session_bytes": true
+  },
+  "commands": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "solvefinite",
+        "agent",
+        "run",
+        "--scenario",
+        "examples/tomigidt-field.json",
+        "--state",
+        "<temporary-session.json>",
+        "--steps",
+        "1",
+        "--capacity",
+        "1",
+        "--backend",
+        "gpu"
+      ],
+      "exit_code": 0,
+      "result": {
+        "capacity_pairs": 1,
+        "cycle": 1,
+        "decisions": [
+          {
+            "cost": 5,
+            "expansions": 26,
+            "expected_pair": "11FF04FB01FF0405",
+            "forecast": [
+              "11FF04FB01FF0405",
+              "110003F001000310",
+              "81011145910111BB"
+            ],
+            "kind": "MOVE",
+            "reason": "Follow the least-cost route in the current internal model",
+            "route": [
+              "k:0:4",
+              "k:0:3",
+              "k:3:2"
+            ]
+          }
+        ],
+        "executed_cycles": 1,
+        "execution_info": {
+          "accounting": "Active pair payload only; recipe, geometry, search, observations, journal and runtime overhead are separate.",
+          "active_pair_payload_capacity_bytes": 8,
+          "adapter": {
+            "adapter_type": "DiscreteGPU",
+            "architecture": "",
+            "backend_type": "Vulkan",
+            "description": "591.59",
+            "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+            "device_id": 12056,
+            "stackgroup_max_size": 128,
+            "stackgroup_min_size": 4,
+            "vendor": "NVIDIA",
+            "vendor_id": 4318
+          },
+          "allocation_info": {
+            "accounting": "Explicit scalar/table/state/scratch buffers and integer textures, including the composed field engine, are outside the observed FIFO. Host field codes are logical i32 payload; Python objects and driver allocations are excluded. No complete packed world-node arena is retained.",
+            "device_buffer_bytes": 45944,
+            "device_payload_bytes": 47144,
+            "device_texture_bytes": 1200,
+            "host_field_code_payload_bytes": 80,
+            "retained_world_node_pair_count": 0
+          },
+          "backend": "gpu",
+          "gpu_stages": [
+            "certified-field-construction",
+            "sample-materialization",
+            "edge-operator-compilation",
+            "route-forecast",
+            "actual-action"
+          ],
+          "host_stages": [
+            "geometric-certificate",
+            "observation-admission",
+            "route-search",
+            "action-admission",
+            "journal"
+          ],
+          "word_profile": "RP32-relational-sdf-v2"
+        },
+        "identity": "TOMIGIDt",
+        "restored": false,
+        "state": {
+          "agent_pair": "11FF04FB01FF0405",
+          "cycle": 1,
+          "energy": 98,
+          "footprint": {
+            "agent": "TOMIGIDt",
+            "baseline": "klein-field-world-v1",
+            "derivation": "k:0:4",
+            "epoch": 0,
+            "profile": "tomigidt-agent-v1",
+            "sequence": 1
+          },
+          "identity": "TOMIGIDt",
+          "last_decision": {
+            "cost": 5,
+            "expansions": 26,
+            "expected_pair": "11FF04FB01FF0405",
+            "forecast": [
+              "11FF04FB01FF0405",
+              "110003F001000310",
+              "81011145910111BB"
+            ],
+            "kind": "MOVE",
+            "reason": "Follow the least-cost route in the current internal model",
+            "route": [
+              "k:0:4",
+              "k:0:3",
+              "k:3:2"
+            ]
+          },
+          "observations": {
+            "k:0:0": "00000000",
+            "k:0:1": "80000100",
+            "k:0:4": "80000400",
+            "k:1:0": "00000500",
+            "k:3:0": "00000F00"
+          },
+          "planning": null,
+          "position": "k:0:4",
+          "status": "ACTIVE",
+          "target": "k:3:2",
+          "word_profile": "RP32-relational-sdf-v2"
+        },
+        "state_path": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\field-agent-cli-db1v1t9m\\session.json",
+        "status": "ACTIVE",
+        "stop_reason": "STEP_BUDGET_EXHAUSTED"
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "solvefinite",
+        "agent",
+        "run",
+        "--state",
+        "<temporary-session.json>",
+        "--steps",
+        "64",
+        "--capacity",
+        "9",
+        "--backend",
+        "cpu"
+      ],
+      "exit_code": 0,
+      "result": {
+        "capacity_pairs": 9,
+        "cycle": 4,
+        "decisions": [
+          {
+            "cost": 3,
+            "expansions": 10,
+            "expected_pair": "81001010910010F0",
+            "forecast": [
+              "81001010910010F0",
+              "81011145910111BB"
+            ],
+            "kind": "MOVE",
+            "reason": "Follow the least-cost route in the current internal model",
+            "route": [
+              "k:3:1",
+              "k:3:2"
+            ]
+          },
+          {
+            "cost": 2,
+            "expansions": 4,
+            "expected_pair": "81011145910111BB",
+            "forecast": [
+              "81011145910111BB"
+            ],
+            "kind": "MOVE",
+            "reason": "Follow the least-cost route in the current internal model",
+            "route": [
+              "k:3:2"
+            ]
+          },
+          {
+            "cost": 5,
+            "expansions": 0,
+            "expected_pair": "06011145160111BB",
+            "forecast": [],
+            "kind": "REPAIR",
+            "reason": "Observed target reached",
+            "route": []
+          }
+        ],
+        "executed_cycles": 3,
+        "identity": "TOMIGIDt",
+        "restored": true,
+        "state": {
+          "agent_pair": "06011145160111BB",
+          "cycle": 4,
+          "energy": 90,
+          "footprint": {
+            "agent": "TOMIGIDt",
+            "baseline": "klein-field-world-v1",
+            "derivation": "k:3:2",
+            "epoch": 0,
+            "profile": "tomigidt-agent-v1",
+            "sequence": 4
+          },
+          "identity": "TOMIGIDt",
+          "last_decision": {
+            "cost": 5,
+            "expansions": 0,
+            "expected_pair": "06011145160111BB",
+            "forecast": [],
+            "kind": "REPAIR",
+            "reason": "Observed target reached",
+            "route": []
+          },
+          "observations": {
+            "k:0:0": "00000000",
+            "k:0:1": "80000100",
+            "k:0:3": "80460300",
+            "k:0:4": "80000400",
+            "k:1:0": "00000500",
+            "k:1:4": "00000900",
+            "k:2:1": "80000B00",
+            "k:2:2": "00000C00",
+            "k:3:0": "00000F00",
+            "k:3:1": "80001000",
+            "k:3:2": "00001100",
+            "k:3:3": "00001200"
+          },
+          "planning": null,
+          "position": "k:3:2",
+          "status": "COMPLETE",
+          "target": "k:3:2",
+          "word_profile": "RP32-relational-sdf-v2"
+        },
+        "state_path": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\field-agent-cli-db1v1t9m\\session.json",
+        "status": "COMPLETE",
+        "stop_reason": "COMPLETE"
+      },
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "solvefinite",
+        "agent",
+        "inspect",
+        "<temporary-session.json>",
+        "--capacity",
+        "2",
+        "--backend",
+        "gpu"
+      ],
+      "exit_code": 0,
+      "result": {
+        "event_count": 4,
+        "execution_info": {
+          "accounting": "Active pair payload only; recipe, geometry, search, observations, journal and runtime overhead are separate.",
+          "active_pair_payload_capacity_bytes": 16,
+          "adapter": {
+            "adapter_type": "DiscreteGPU",
+            "architecture": "",
+            "backend_type": "Vulkan",
+            "description": "591.59",
+            "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+            "device_id": 12056,
+            "stackgroup_max_size": 128,
+            "stackgroup_min_size": 4,
+            "vendor": "NVIDIA",
+            "vendor_id": 4318
+          },
+          "allocation_info": {
+            "accounting": "Explicit scalar/table/state/scratch buffers and integer textures, including the composed field engine, are outside the observed FIFO. Host field codes are logical i32 payload; Python objects and driver allocations are excluded. No complete packed world-node arena is retained.",
+            "device_buffer_bytes": 45944,
+            "device_payload_bytes": 47144,
+            "device_texture_bytes": 1200,
+            "host_field_code_payload_bytes": 80,
+            "retained_world_node_pair_count": 0
+          },
+          "backend": "gpu",
+          "gpu_stages": [
+            "certified-field-construction",
+            "sample-materialization",
+            "edge-operator-compilation",
+            "route-forecast",
+            "actual-action"
+          ],
+          "host_stages": [
+            "geometric-certificate",
+            "observation-admission",
+            "route-search",
+            "action-admission",
+            "journal"
+          ],
+          "word_profile": "RP32-relational-sdf-v2"
+        },
+        "state": {
+          "agent_pair": "06011145160111BB",
+          "cycle": 4,
+          "energy": 90,
+          "footprint": {
+            "agent": "TOMIGIDt",
+            "baseline": "klein-field-world-v1",
+            "derivation": "k:3:2",
+            "epoch": 0,
+            "profile": "tomigidt-agent-v1",
+            "sequence": 4
+          },
+          "identity": "TOMIGIDt",
+          "last_decision": {
+            "cost": 5,
+            "expansions": 0,
+            "expected_pair": "06011145160111BB",
+            "forecast": [],
+            "kind": "REPAIR",
+            "reason": "Observed target reached",
+            "route": []
+          },
+          "observations": {
+            "k:0:0": "00000000",
+            "k:0:1": "80000100",
+            "k:0:3": "80460300",
+            "k:0:4": "80000400",
+            "k:1:0": "00000500",
+            "k:1:4": "00000900",
+            "k:2:1": "80000B00",
+            "k:2:2": "00000C00",
+            "k:3:0": "00000F00",
+            "k:3:1": "80001000",
+            "k:3:2": "00001100",
+            "k:3:3": "00001200"
+          },
+          "planning": null,
+          "position": "k:3:2",
+          "status": "COMPLETE",
+          "target": "k:3:2",
+          "word_profile": "RP32-relational-sdf-v2"
+        },
+        "state_path": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\field-agent-cli-db1v1t9m\\session.json",
+        "verified": true
+      },
+      "stderr": ""
+    }
+  ],
+  "final_agent": {
+    "events": [
+      {
+        "decision": {
+          "cost": 5,
+          "expansions": 26,
+          "expected_pair": "11FF04FB01FF0405",
+          "forecast": [
+            "11FF04FB01FF0405",
+            "110003F001000310",
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:0:4",
+            "k:0:3",
+            "k:3:2"
+          ]
+        },
+        "energy": 98,
+        "input": {
+          "k:0:0": "00000000",
+          "k:0:1": "80000100",
+          "k:0:4": "80000400",
+          "k:1:0": "00000500",
+          "k:3:0": "00000F00"
+        },
+        "output": "11FF04FB01FF0405",
+        "seq": 1
+      },
+      {
+        "decision": {
+          "cost": 3,
+          "expansions": 10,
+          "expected_pair": "81001010910010F0",
+          "forecast": [
+            "81001010910010F0",
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:3:1",
+            "k:3:2"
+          ]
+        },
+        "energy": 97,
+        "input": {
+          "k:0:0": "00000000",
+          "k:0:3": "80460300",
+          "k:0:4": "80000400",
+          "k:1:4": "00000900",
+          "k:3:1": "80001000"
+        },
+        "output": "81001010910010F0",
+        "seq": 2
+      },
+      {
+        "decision": {
+          "cost": 2,
+          "expansions": 4,
+          "expected_pair": "81011145910111BB",
+          "forecast": [
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:3:2"
+          ]
+        },
+        "energy": 95,
+        "input": {
+          "k:0:4": "80000400",
+          "k:2:1": "80000B00",
+          "k:3:0": "00000F00",
+          "k:3:1": "80001000",
+          "k:3:2": "00001100"
+        },
+        "output": "81011145910111BB",
+        "seq": 3
+      },
+      {
+        "decision": {
+          "cost": 5,
+          "expansions": 0,
+          "expected_pair": "06011145160111BB",
+          "forecast": [],
+          "kind": "REPAIR",
+          "reason": "Observed target reached",
+          "route": []
+        },
+        "energy": 90,
+        "input": {
+          "k:0:3": "80460300",
+          "k:2:2": "00000C00",
+          "k:3:1": "80001000",
+          "k:3:2": "00001100",
+          "k:3:3": "00001200"
+        },
+        "output": "06011145160111BB",
+        "seq": 4
+      }
+    ],
+    "expected": {
+      "agent_pair": "06011145160111BB",
+      "cycle": 4,
+      "energy": 90,
+      "footprint": {
+        "agent": "TOMIGIDt",
+        "baseline": "klein-field-world-v1",
+        "derivation": "k:3:2",
+        "epoch": 0,
+        "profile": "tomigidt-agent-v1",
+        "sequence": 4
+      },
+      "identity": "TOMIGIDt",
+      "last_decision": {
+        "cost": 5,
+        "expansions": 0,
+        "expected_pair": "06011145160111BB",
+        "forecast": [],
+        "kind": "REPAIR",
+        "reason": "Observed target reached",
+        "route": []
+      },
+      "observations": {
+        "k:0:0": "00000000",
+        "k:0:1": "80000100",
+        "k:0:3": "80460300",
+        "k:0:4": "80000400",
+        "k:1:0": "00000500",
+        "k:1:4": "00000900",
+        "k:2:1": "80000B00",
+        "k:2:2": "00000C00",
+        "k:3:0": "00000F00",
+        "k:3:1": "80001000",
+        "k:3:2": "00001100",
+        "k:3:3": "00001200"
+      },
+      "planning": null,
+      "position": "k:3:2",
+      "status": "COMPLETE",
+      "target": "k:3:2",
+      "word_profile": "RP32-relational-sdf-v2"
+    },
+    "format": "tomigidt-agent-v1",
+    "manifest": {
+      "identity": "TOMIGIDt",
+      "initial_energy": 100,
+      "initial_node": "k:0:0",
+      "initial_orientation": 0,
+      "initial_phase": 250,
+      "max_cycles": 10000,
+      "max_hops": 255,
+      "max_search_expansions": 4096,
+      "perspective": "local-observation-v1",
+      "policy": "tomigidt-field-observe-plan-act-v1",
+      "repair_cost": 5,
+      "target": "k:3:2",
+      "word_profile": "RP32-relational-sdf-v2",
+      "world": {
+        "baseline_id": "klein-field-world-v1",
+        "center": 0,
+        "format": "klein-ball-world-v1",
+        "height": 5,
+        "radius": 2,
+        "turns": [
+          11,
+          53,
+          137
+        ],
+        "width": 4
+      }
+    }
+  }
+}

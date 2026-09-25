@@ -1,0 +1,199 @@
+{
+  "allocation_info": {
+    "accounting": "Explicit scalar/table/state/scratch buffers and integer textures, including the composed field engine, are outside the observed FIFO. Host field codes are logical i32 payload; Python objects and driver allocations are excluded. No complete packed world-node arena is retained.",
+    "device_buffer_bytes": 45944,
+    "device_payload_bytes": 47144,
+    "device_texture_bytes": 1200,
+    "host_field_code_payload_bytes": 80,
+    "retained_world_node_pair_count": 0
+  },
+  "base_commit": "c4b41ce12a33a747bd54c8cc7f9748a06f7b59de",
+  "canonical_archive_sha256": "291b28c7f14634079fb262d69b87c8fca2b4749fe367519e9cb75a92e15aa9cb",
+  "commands": [
+    "python -m unittest discover -s tests -v",
+    "python -m examples.field_agent_conformance --output docs/evidence/field-agent-v1/conformance.json",
+    "See cli-replay.json for fresh-process GPU1 -> CPU3 -> GPU inspection."
+  ],
+  "conformance_checks_passed": 23,
+  "deferred_mission_cycles": 41,
+  "eli5_pdf_unchanged_sha256": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0",
+  "environment": {
+    "adapter": {
+      "adapter_type": "DiscreteGPU",
+      "architecture": "",
+      "backend_type": "Vulkan",
+      "description": "591.59",
+      "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+      "device_id": 12056,
+      "stackgroup_max_size": 128,
+      "stackgroup_min_size": 4,
+      "vendor": "NVIDIA",
+      "vendor_id": 4318
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "wgpu": "0.32.0"
+  },
+  "final_state": {
+    "agent_pair": "06011145160111BB",
+    "cycle": 4,
+    "energy": 90,
+    "identity": "TOMIGIDt",
+    "position": "k:3:2",
+    "status": "COMPLETE"
+  },
+  "formal_binding_commit": "5ccc0228966684b71f6d8a9172ab31ce11715230",
+  "measured_utc": "2026-09-25T12:02:15.817126+00:00",
+  "reference_energy": [
+    100,
+    98,
+    97,
+    95,
+    90
+  ],
+  "reference_pairs": [
+    "91FE000601FE00FA",
+    "11FF04FB01FF0405",
+    "81001010910010F0",
+    "81011145910111BB",
+    "06011145160111BB"
+  ],
+  "remaining_full_paradigm_obligations": [
+    "Eigen-operator-bound Psi with deterministic eigenvalue, normalization, degeneracy and transport rules.",
+    "Full f8 canonical total order, median construction, ties, epochs and rebuild semantics.",
+    "Typed Hadamard/gradient routing and executable spatial/temporal difference operators.",
+    "Geometry-changing growth, log-resolution transitions and cone/pyramid primitive bindings.",
+    "Continuing field epochs and larger domains beyond the current explicit finite profile.",
+    "Physical wave adapters, calibration, sensory identity envelope and external measurement validation.",
+    "Measured GPU cache behavior, utilization and performance comparisons."
+  ],
+  "requirement_evidence": {
+    "FI1": [
+      "test_field_agent: strict typed manifests, nested immutable recipe, literal initial pair and energy",
+      "test_field_agent_cli: supplied graph rejected before session creation"
+    ],
+    "FI2": [
+      "test_field_agent: independent BFS scalar distances and Dijkstra route costs",
+      "conformance.json: field-center ablation changes the chosen route"
+    ],
+    "FI3": [
+      "test_relational_navigation: default255 relational reach and unchanged32 binary bound",
+      "test_field_agent: local observation admission, search invalidation and retained planning energy"
+    ],
+    "FI4": [
+      "test_field_agent: literal FI8 pairs, both orientations and separate energy",
+      "conformance.json: actual seam event and pair/energy readbacks at every cycle"
+    ],
+    "FI5": [
+      "test_field_world: FIFO hits, eviction, regeneration, pure forecast and cold reconstruction",
+      "conformance.json: instrumented CPU/GPU FIFO and capacity/resize canonical independence"
+    ],
+    "FI6": [
+      "test_field_agent_gpu: actual device actions and scratch forecasts, CPU oracles disabled",
+      "test_field_agent_gpu: uncertain seam action and prediction mismatch close owner; replay recovers"
+    ],
+    "FI7": [
+      "test_field_agent: recipe/energy/valid-parity output tamper, legacy replay, nondefault live start",
+      "conformance.json: fresh processes in both backend directions before seam and during DEFER; live duplicate retry",
+      "cli-replay.json: GPU1 -> CPU3 -> GPU inspection without rewriting saved bytes"
+    ],
+    "FI8": [
+      "conformance.json: all five literal states, hazard replanning and field ablation",
+      "full-tests.txt: 368 passing methods, zero skips, 41 actual-device methods"
+    ]
+  },
+  "scope": "Verifies FI1-FI8 in the same autonomous Tomigidt with finite recipe-derived geometry; does not complete the full architecture objective.",
+  "source_identity": "Integration measured after the formal binding and before its implementation commit; SHA256 normalizes CRLF to LF.",
+  "source_sha256_lf": {
+    "examples/field_agent_conformance.py": "60db27132ea22ee67012210b493294b1b844aafe2a188d40e6c01ca10e575f66",
+    "examples/tomigidt-field-live.json": "7a2120350f447d4c8d3af8c3ec0a4a007270867c6d39671249f6addf5974780a",
+    "examples/tomigidt-field.json": "66b8708a03635329371da4bb71a5d4c4f256d519d0307f9e369093227b421e9b",
+    "requirements-gpu.txt": "045f5d1337828593c39d75bceef74a61275c1851653b367c9540bd370523b475",
+    "solvefinite/__init__.py": "b3c2d34b93ee298fd2dd900a85b57cb550f456fe56fec13e885ff6bc6315f889",
+    "solvefinite/__main__.py": "826344c10d3c71de281bc04e6270a52b647c2c8197e6632c388f20ebbad01922",
+    "solvefinite/field.py": "8960d29bb6893ff63f7c74f8f3153428b277c942b4593673e0035dc4ec20589d",
+    "solvefinite/field_agent.py": "9afffcab33bdc5d35d70871e45619384f5cfc534ee4dac6a028f3687979e4d4f",
+    "solvefinite/field_agent_gpu.py": "e7f5a0037c4d129052605d3bdca5f9605174826af860bed1cd9c10a6bc064ec7",
+    "solvefinite/field_cli.py": "a9532e03ca1b76b5f51dac139f82fdfd728e6eab1761629b9df88178deab1779",
+    "solvefinite/field_world.py": "9ac85f52986f3483ebe378c4b748266cde69766b27877de3be3ec6d6aa3fd9c8",
+    "solvefinite/gpu.py": "b899ad08fce5db1d3defcfe5093fc638318671846c2b26fdf39d69b813a86744",
+    "solvefinite/klein.py": "7f75a857d5ad4d19d37806a51e9cde905211d5390d01c9ef3965d9c38c33f6db",
+    "solvefinite/live.py": "71762795415e8359229eff31936d0b7205c67ef7570f06237da4f0fb2c7c6786",
+    "solvefinite/motion.py": "6b65b1836be618f3bbc426e0f983f2493bea3716ad9235e5da8b77b5e72b9762",
+    "solvefinite/navigation.py": "3f82bcf963ebca3141b6a3a6c44c38bd2887346a59d5160c621bd085028eb98f",
+    "solvefinite/rp32.py": "bdee9105693db443641b64f0062707aaa76af5c74b5ed3106eaf66fe954444ad",
+    "solvefinite/runtime.py": "532a0adc9d5655ac642426cfb0b2ab95d41933695e840576eb738dcfcf6bedb4",
+    "solvefinite/sdf_gpu.py": "d4e7bff0ee0262c927e3be611c12ef640e3c9ef0809436ae96beb75013286353",
+    "solvefinite/session.py": "a8f3ebfd9e24b27d59f0facab941514941dcc216ef78c3b464e556c19f9c7dc2",
+    "solvefinite/shaders/field.wgsl": "189b8926a582cc1e40483c5ccc41ff76d0a693469c142919b57a258714559384",
+    "solvefinite/shaders/field_agent.wgsl": "aeab7ace1057d54ded7564c406fd255089eeb4a00d03b22d9f73e1af179694c8",
+    "solvefinite/shaders/packed.wgsl": "76250a5ea0560df53ecb082554282742ce888fc2f346ca7cfa5eebf4700ff5b3",
+    "solvefinite/tomigidt.py": "bfef4e3269f2ee179c8e4a5045a8eb86e3f74a3c7813313108a03cdddbff05d6",
+    "solvefinite/world.py": "c60e02783a4f0ac348e16aa755c9c1847f5993ce9bc6db862c6c46a60fa24c63",
+    "tests/test_agent_cli.py": "ce3bac7ea8ecca94cd32359543a0e0ec3eecc98638c11f28f97f03101cfafb4b",
+    "tests/test_backend_plumbing.py": "031095d5206f6d817d7379dad168cb7bb58f17c5ebba15890ceb3dc9016cb2ab",
+    "tests/test_cli.py": "04a2fe906f031f16a8cedc70098973469ca172d426fb6fc3b91e46e31c045f92",
+    "tests/test_field.py": "3043598c649a5ab6e53b907aea4b01551e54aed659d61956d8ae6326111e1d49",
+    "tests/test_field_agent.py": "a0dab25a1ecb86f9e014f98cfd18376c0449a7aab42aef9cb66b18a719d8f495",
+    "tests/test_field_agent_cli.py": "e51fba551603407fb8ca5ade2fd8781a1c3d581d10b33459459f30c3a2064eaf",
+    "tests/test_field_agent_gpu.py": "26fca8a165ee44453cda65dbcc4f6f84958eb379bff6371e570f81e0d412a6cb",
+    "tests/test_field_cli.py": "0d0189513908c1b86fb9ca479e27db4334465941861f85aa889cab6ed06cd304",
+    "tests/test_field_v2.py": "e12edd8358616b35fc63f362330b058e0ed288810a056b4310003376a5076281",
+    "tests/test_field_world.py": "11357d7b5b73f5d066f2f5f9136ca78496f2ca507e192ddbd88dec9156495c15",
+    "tests/test_gpu.py": "1e114edf14b023d5a86f5b7463cac990aeaae90a2126ef834382f86829179b7b",
+    "tests/test_incremental_agent.py": "4faf231f1e7880d33f2aeeee51a83b2e33e5b81f0fa9245b13d9cdc78bcb6adb",
+    "tests/test_incremental_navigation.py": "c19404d2129ae1e08ef9dd685714a5641ccea63208a0077471e7a16070a9cb95",
+    "tests/test_klein.py": "7bd55d61186d17584d70e7a5b2808a32549680bab9761a2cdc3458c701e5c63a",
+    "tests/test_klein_gpu.py": "e36d50268db7be7a62cc99e3f0f3113081cecd3e3480680f0e45294bbad590b5",
+    "tests/test_live.py": "24586fbfcdc1f5792e5f862958eb09b3ebc4ea2c8bf0a52fd9db34f1e73a2f1c",
+    "tests/test_live_cli.py": "46d15811e07cae167c071529d244e8c24d57c1e2047cac4aa046551744576d1a",
+    "tests/test_motion.py": "8c2c0292d0c8858787188f97a5e03548d90b4ccb950ac7b92a1b654b092f98bd",
+    "tests/test_navigation.py": "2850b5df3f870a45cbf12c6f7125ca7b69c9d3fc305449e5309def48b8f56a4f",
+    "tests/test_relational_navigation.py": "602389c71fbc42723f04d2e21c89747730f63e21c55d1534b29847937bf8227e",
+    "tests/test_rp32.py": "434949666c98da29dbed40756ec9399ce67ef0ee1a2001d0384d259630c4d902",
+    "tests/test_runtime.py": "a7947278a895f78876c387d0ac507960b6df4b0f233b87db2dd2c16d8e042350",
+    "tests/test_sdf_gpu.py": "167dc1b16f626a3b5417d3911cc6f4002ed9d677165ff201568d0c4657e61f1a",
+    "tests/test_session.py": "52699d17923e3b6f210f6c7049fdc0fbb6cc022e11dc959fb4a115a31e6d74fb",
+    "tests/test_tomigidt.py": "08b8a056433bbb5df798948bfbce46f28f5326a61521f1fca80fe6facfb87366",
+    "tests/test_world.py": "b37bd556d90b96f80dda9c38f31fc1ce32ebacd58a8a0ff5d0b630141c085583"
+  },
+  "tests": {
+    "actual_device_methods": {
+      "RealFieldAgentGpuTests": 13,
+      "RealGpuTests": 12,
+      "RealKleinGpuTests": 7,
+      "RealSdfGpuTests": 9
+    },
+    "elapsed_seconds": 36.348,
+    "module_counts": {
+      "test_agent_cli": 8,
+      "test_backend_plumbing": 6,
+      "test_cli": 4,
+      "test_field": 16,
+      "test_field_agent": 21,
+      "test_field_agent_cli": 3,
+      "test_field_agent_gpu": 14,
+      "test_field_cli": 8,
+      "test_field_v2": 19,
+      "test_field_world": 15,
+      "test_gpu": 14,
+      "test_incremental_agent": 18,
+      "test_incremental_navigation": 17,
+      "test_klein": 20,
+      "test_klein_gpu": 7,
+      "test_live": 23,
+      "test_live_cli": 11,
+      "test_motion": 9,
+      "test_navigation": 20,
+      "test_relational_navigation": 4,
+      "test_rp32": 14,
+      "test_runtime": 17,
+      "test_sdf_gpu": 10,
+      "test_session": 28,
+      "test_tomigidt": 28,
+      "test_world": 14
+    },
+    "passed": 368,
+    "skipped": 0
+  }
+}

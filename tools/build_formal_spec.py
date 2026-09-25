@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 1. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 2. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf'
 EVIDENCE = ROOT / 'docs/evidence/formal-edition-2026-09-25'
 KLEIN_EVIDENCE = ROOT / 'docs/evidence/klein-field-v2'
+FIELD_AGENT_EVIDENCE = ROOT / 'docs/evidence/field-agent-v1'
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -96,7 +97,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 25 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 1. The implemented field formats are <font name="Mono">relational-sdf-v1</font> and <font name="Mono">relational-sdf-v2</font>. This revision updates Klein evidence and binds the next integration in FI1-FI8, pages 35-38, before its runtime implementation.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 2. The implemented field formats are <font name="Mono">relational-sdf-v1</font> and <font name="Mono">relational-sdf-v2</font>. This revision records measured field-agent integration against FI1-FI8, pages 35-38, preserving the contract committed before its runtime implementation.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -106,7 +107,7 @@ def build_content():
         ],[.25,.75]),
         h('Source interpretation'),
         p('The source exports contain conversation, analogies, questions and assertions. They supply design intent, not commands or automatic proofs. This edition chooses explicit typed bindings where needed. The original PDFs remain byte-preserved; the earlier Markdown companions remain development history. Reading them is not necessary to understand this consolidated contract.'),
-        small('Reviewed Klein implementation: c4b41ce12a33a747bd54c8cc7f9748a06f7b59de. Integration FI1-FI8 is formal only at this revision. The original 38-page conversation cited by TK-LPLUT-1.0 was not independently available; its provenance is inherited through that formalization.')
+        small('Klein baseline: c4b41ce12a33a747bd54c8cc7f9748a06f7b59de. FI1-FI8 formal-first commit: 5ccc022; integration source hashes and measured evidence are retained in docs/evidence/field-agent-v1/. The original 38-page conversation cited by TK-LPLUT-1.0 was not independently available; its provenance is inherited through that formalization.')
     )
     page('Contents', 'DOCUMENT MAP', None)
     page('Paradigm charter and vocabulary', 'ARCHITECTURAL CONTRACT | ORIGINAL §§1-2',
@@ -196,7 +197,7 @@ def build_content():
         p('The live interface receives external JSONL observations, checks producer/epoch/sequence and handles duplicate retries without advancing twice. Exclusive process ownership and an in-process lock serialize commits. A state save completes before acknowledgment; a failed save poisons the session rather than acknowledging uncommitted progress.'),
         h('Time and continuation'),
         p('A new logical transition advances T; multiple records at one tick use a strictly increasing sequence. Finite clocks require an epoch/wrap policy. Replay uses original event order. Interruptions and waiting can preserve an unfinished individual without fabricating new observations.'),
-        box('The observation/planning individual and intrinsic field machine remain separate implemented profiles at c4b41ce. FI1-FI8 on pages 35-38 now specify their integration through one Tomigidt history, a retained Klein-ball recipe, typed energy and field state, local observations and regenerative working memory. That integration is formal only here.'),
+        box('FI1-FI8 on pages 35-38 now have measured integration evidence: one Tomigidt history uses a retained Klein-ball recipe, typed energy and field state, local observations and regenerative working memory. The existing standalone field and legacy agent profiles retain their meanings. One agent plans, re-observes and acts through the reversing seam.'),
         small('Original “juiciness” names a versioned display, deformation or haptic output map from phase/jitter/field changes. Such effects alter canonical state only if admitted back as inputs. Implementation evidence is measured on pages 26-30.')
     )
     page('Generative organogram', 'GRAMMAR AND DERIVATION | ORIGINAL §8',
@@ -323,7 +324,7 @@ def build_content():
         p('A preallocated capacity-C payload arena has M_active=C*w/8 bytes, or 8*C bytes for 64-bit pairs. A Python cache also has container and object overhead. The bounded payload is not a bound on the full journal, descriptors or retained observations. Arbitrary external information cannot be reconstructed after its only copy is discarded.'),
         h('Capacity independence and progress'),
         p('When capacity changes only residency, an identical requested derivation must produce the same result at any supported capacity. Resource-driven changes to depth, resolution or selected semantics must instead be recorded as versioned input/control events. Each admitted regeneration uses a finite budget even when the architecture permits an unbounded sequence of finite requests.'),
-        small('Implemented: binary-world pair FIFO, retained-context regeneration and capacity-independent decisions. The SDF field/operator arena remains resident. FI5 specifies a separate bounded geometric-sample FIFO and explicitly accounts for scalar fields and GPU arenas outside it; integration runtime is pending.')
+        small('Implemented: binary-world and FI5 geometric-sample FIFOs, retained-context regeneration and capacity-independent decisions. Field-agent evidence includes actual eviction/reconstruction and changing capacities. Scalar fields, geometry, journals and GPU arenas remain separately accounted outside the active sample bound.')
     )
     page('Finite Klein quotient', 'VERIFIED FINITE PROFILE | K1-K3',
         p('Choose strict integers W,H at least 3 with W*H at most 256. Temporary chart labels represent a quotient; they do not introduce a mandatory external physical origin.'),
@@ -360,7 +361,7 @@ def build_content():
             ['Compatibility','v1 retains its exact prior schema and bytes. Reject seam/topology additions to v1. Archive semantics follow the contained manifest version.'],
         ],[.26,.74]),
         p('The default generator uses W=H=8, centre 0, radius 2, initial node 0, phase 250 and orientation 0. All field-class routes take local u+; increments are [11,53,137]. The measured 64-tick CPU/GPU trace crosses eight reversing seams and ends at k:0:0 with pair 11FE00D681FE002A.'),
-        small('Klein evidence includes negative/large labels, all 702 supported dimensions, face/link audits, connected orientable covers, full torus edge/face maps, holonomy, exact scalar pullback, CPU/GPU seam traces, replay and unchanged v1 semantics. This is part of the 311-test result on page 27.')
+        small('Klein evidence includes negative/large labels, all 702 supported dimensions, face/link audits, connected orientable covers, full torus edge/face maps, holonomy, exact scalar pullback, CPU/GPU seam traces, replay and unchanged v1 semantics. Its 311-test baseline is preserved alongside the current 368-test result on page 27.')
     )
     page('The infallible contract', 'NEW FORMALIZATION | SOLIPSISM PP.3-11',
         box('<b>Conditional infallibility.</b> Given a versioned profile with single-valued, total bounded transitions proved to preserve its declared invariants, a valid initial state, completely specified inputs and ordering, and faithful execution, every bounded request has one defined result; every accepted transition preserves those invariants; replay reproduces its canonical output.'),
@@ -419,8 +420,8 @@ def build_content():
         p('The architecture can host deterministic simulation, regenerable world models, compact geometric controllers and device-independent continuation once their profiles and adapters are specified. Robotics, optical/FPGA execution, biological growth and physical autonomous construction require additional realizations. The current repository demonstrates software/GPU substrates and a simulated/live-observation individual.'),
         box('A complete application must identify what the field means, where its inputs come from, what action an output authorizes, and how the model is validated. The formal architecture supplies a common representation and execution discipline; it does not supply an absent sensor or actuator model.')
     )
-    page('Implementation map at the Klein commit', 'MEASURED BASELINE | c4b41ce',
-        p('Two realized stacks share the same packed arithmetic. The map below is an inventory of existing modules, not a claim that all source concepts are integrated.'),
+    page('Implementation map and integration', 'MEASURED PROFILES | FI1-FI8',
+        p('The field-agent policy joins recipe-derived Klein geometry to the existing individual. The module map identifies implemented scope; remaining architectural concepts retain their separate obligations.'),
         table(['Layer','Existing implementation','Scope'],[
             ['Packed core','rp32.py','Encoding, phase, parity, full mirror and pair.'],
             ['Derived world','world.py; runtime.py','Binary derivation, bounded active FIFO, replay and demo archives.'],
@@ -430,28 +431,29 @@ def build_content():
             ['Intrinsic field','field.py; field_cli.py','Strict geometry/manifest, exact field, operators, one persistent sequence and replay.'],
             ['Field GPU','sdf_gpu.py; field.wgsl','Device field construction, operator texture and ordered state transitions.'],
             ['Klein quotient','klein.py','Audited cells, connected orientation cover, intrinsic ball and v2 seam transport.'],
+            ['Field integration','field_agent.py; field_world.py; field_agent_gpu.py','Typed agent recipe/state, sample FIFO and persistent device actions; field_agent.wgsl.'],
         ],[.22,.34,.44]),
         h('Profile meanings remain explicit'),
-        p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and specify a new field-agent policy with B=phi and a separate energy integer. Shared encoding never permits an implicit role change.'),
-        h('Next formal binding'),
-        p('The Klein runtime is verified. Integration FI1-FI8 is specified before coding: one existing Tomigidt plans over recipe-derived geometry, observes local hazards, transports its state through seams and regenerates geometric samples. Psi/f8, general growth and physical adapters remain distinct obligations.'),
-        small('Source paths are relative to solvefinite/. Klein source hashes and command provenance are retained in docs/evidence/klein-field-v2/; the committed implementation identity is on page 33. Integration behavior is not included in that evidence.')
+        p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and implement a field-agent policy with B=phi and separate integer energy. Shared encoding never permits an implicit role change.'),
+        h('Measured integration'),
+        p('One existing Tomigidt plans over recipe-derived geometry, observes local hazards, transports its state through seams and regenerates samples. CPU/GPU canonical histories agree. Psi/f8, general growth and physical adapters remain distinct obligations.'),
+        small('Paths are relative to solvefinite/. Integration source hashes and command provenance: docs/evidence/field-agent-v1/. Retained Klein baseline: docs/evidence/klein-field-v2/. Formal-first identity and chronology are on page 33.')
     )
     page('Fresh verification and field trace', 'OBSERVED RESULTS | 25 SEPTEMBER 2026',
         table(['Measurement','Observed result'],[
-            ['Full suite at c4b41ce','311 tests passed; zero skipped. Integration FI1-FI8 is not yet tested.'],
-            ['Actual device coverage','28 GPU methods: 12 packed-world, 9 SDF and 7 Klein.'],
+            ['Full integrated suite','368 tests passed in 36.348 s; zero skipped.'],
+            ['Actual device coverage','41 GPU methods: the prior 28 plus 13 field-agent methods.'],
             ['Klein topology coverage','All 702 admissible dimension pairs audited, including base/cover surfaces and full torus edge/face maps.'],
-            ['Klein conformance example','All 22 checks passed, with 64 ticks per trace and eight reversing seam events.'],
+            ['Conformance examples','Klein: 22 checks; field agent: all 23 checks passed, including field ablation, FIFO reconstruction and replay.'],
             ['Hardware / software','NVIDIA GeForce RTX 5070 Ti Laptop GPU; Vulkan; driver 591.59; wgpu 0.32.0; Python 3.12.14.'],
-            ['Cross-adapter continuation','Klein CPU/GPU fields, operators and 64 tick pairs agree; both replay directions and fresh-process CLI continuation pass.'],
+            ['Cross-adapter continuation','CPU/GPU archives agree; fresh processes replay both ways before the seam and during DEFER. Live retries preserve history.'],
         ],[.32,.68]),
         eq('SDF v1: [-6,-4,-3,0,2,3,5]\nMoved boundary: [-8,-6,-5,-2,0,1,3]\nV1 tick 64: n4, pair 1102046C01020494\nKlein v2 tick 64: k:0:0, pair 11FE00D681FE002A'),
-        p('Changing the boundary changed the field and its resulting execution. CPU/GPU field values and traces remained equal; split batches and archived replay agreed. This tests that geometric data actually governs operator selection rather than merely decorating an unrelated state machine.'),
+        p('Changing geometry changes field execution and agent route selection. The FI8 mission completes after four cycles at pair 06011145160111BB, energy 90. Its reversing seam yields phase 240 and eta 1. The bounded-search mission takes 41 cycles; six energy/recipe/valid-parity forecast tamper probes are rejected.'),
         h('Reproduce the measured checks'),
-        code('python -m unittest discover -s tests -v\npython -m examples.field_conformance --output sdf.json\npython -m examples.klein_conformance --output klein.json'),
-        p('Retained logs, source hashes, adapter details, traces and continuation records identify these observations. The original 262-test/21-device SDF capture remains historical evidence; the current Klein capture supersedes its current-status count. Neither count is an architectural completion percentage.'),
-        small('Evidence: docs/evidence/klein-field-v2/ and docs/evidence/formal-edition-2026-09-25/. Checks include independent geometry, valid-parity forgeries, anti-fallback, replay and legacy compatibility. This document revision adds no runtime behavior.')
+        code('python -m unittest discover -s tests -v\npython -m examples.field_agent_conformance --output agent.json\npython -m examples.klein_conformance --output klein.json\npython -m examples.field_conformance --output sdf.json'),
+        p('The historical SDF capture (262 tests/21 device methods) and Klein capture (311/28) remain retained evidence, including the seven-node boundary ablation above. Counts describe tested finite profiles, not an architectural completion percentage.'),
+        small('Current evidence: docs/evidence/field-agent-v1/. Earlier captures: docs/evidence/klein-field-v2/ and docs/evidence/formal-edition-2026-09-25/. Logs, source hashes, traces, adapter details and complete archives identify each observation.')
     )
     page('Progress against the architecture: I', 'CAPABILITY STATUS | FINITE REALIZATIONS',
         table(['Obligation','Measured status and remaining work'],[
@@ -465,22 +467,22 @@ def build_content():
         h('What the tests establish'),
         p('The implemented graph profile has exact arithmetic and a field certificate, and its tested CPU/GPU realizations agree. These are substantial completed components. They do not establish every named architectural layer by association with the same word carrier.'),
         h('What will count as progress next'),
-        p('The finite Klein topology now has cell, cover, holonomy and CPU/GPU trace evidence. FI1-FI8 next require end-to-end field-guided planning, observation-driven replanning and genuine sample eviction/regeneration. Psi/f8/Hadamard still require explicit numerical bindings and independent conformance checks.'),
+        p('FI1-FI8 now have end-to-end field-guided planning, observation-driven replanning and genuine sample eviction/regeneration evidence. Finite Klein cells, covers, holonomy and CPU/GPU transport remain verified. Psi/f8/Hadamard still require explicit numerical bindings and independent conformance checks.'),
         small('The requirements matrix continues on page 29. No percentage is assigned because architectural obligations differ in size and some remain unbound; counting passing tests would produce a misleading completion estimate.')
     )
     page('Progress against the architecture: II', 'CAPABILITY STATUS | INTEGRATION AND APPLICATIONS',
         table(['Obligation','Measured status and remaining work'],[
-            ['C5: generative world','<b>Verified subset.</b> Bounded binary derivation regenerates exactly. General primitives and geometry-changing grammar execution are not integrated with the SDF world.'],
-            ['C6: finite active memory','<b>Verified subset.</b> Pair-atomic FIFO and retained-context regeneration work. Journals/inputs consume additional memory; the SDF arena is resident.'],
+            ['C5: generative world','<b>Verified subset.</b> Binary derivation and recipe-only Klein cold rebuild work. General primitives and geometry-changing grammar execution remain separate.'],
+            ['C6: finite active memory','<b>Verified subset.</b> Pair-atomic sample FIFO, genuine reconstruction and capacity-independent agent histories work. Journals, geometry, fields and device arenas consume additional memory.'],
             ['C7: complete mirror','<b>Verified subset.</b> Phase involution/commutation, parity and full pair relations work, including K8 phase reflection and orientation transport on CPU/GPU.'],
             ['C8: individual and footprint','<b>Verified subset.</b> Planning, observations, epoch/sequence, retry handling, ownership and durable continuation work. Full LUS/DIGID envelopes and global admission/authentication remain profile obligations.'],
             ['WElip / Lambda','<b>Formal / unbound.</b> Current profiles permit regeneration. A forward-only interface and complete invalidation/clock-wrap binding remain to be implemented.'],
             ['GPU / performance','<b>Verified subset.</b> Exact tested adapters and device execution exist. Cache saturation, general speed/energy superiority and other hardware adapters are unmeasured.'],
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
-        h('Continuation after the Klein implementation'),
-        p('First implement and verify FI1-FI8, joining retained geometric recipes to the existing individual’s observation/planning loop while preserving legacy profiles. Then bind remaining traversal/index operators, geometry-changing growth and wider continuation. Each stage requires evidence against its own obligations.'),
-        small('FI1-FI8 are formal only in this revision. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present finite profiles.')
+        h('Continuation after the integrated field agent'),
+        p('FI1-FI8 join retained geometric recipes to the existing individual’s observation/planning loop, with legacy fixtures preserved. Remaining work binds traversal/index operators, geometry-changing growth and wider continuation. Each stage requires evidence against its own obligations.'),
+        small('The measured integration is finite and profile-scoped. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present profiles.')
     )
     page('Conformance and performance scope', 'ACCEPTANCE CRITERIA | ORIGINAL T1-T10',
         table(['ID','Criterion and present scope'],[
@@ -546,7 +548,7 @@ for tick in admitted_finite_budget:
             ['Adapters / scaling','Exact word preservation, finite cascade stages, ownership, input delivery and resource controls; R14-R15.'],
             ['Physical adapters','Samples, units, calibration, transfer functions and retained scheduling effects; R16.'],
         ],[.27,.73]),
-        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31 and <b>K1-K9</b> on pages 19-21. New integration <b>FI1-FI8</b>, pages 35-38, is formal only. Their scopes remain separate; satisfying one profile does not silently complete another.'),
+        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21 and <b>FI1-FI8</b> on pages 35-38. Their scopes remain separate; satisfying one profile does not silently complete another.'),
         small('Original property cross-reference: P1 replay is I1 on p.22; P2 FIFO and P3 regeneration are R1/R2 on p.18; P4 mirror preservation is on p.8; P5 representation independence is the adapter/refinement contract on pp.16,23.'),
         small('Historical vocabulary: mosTADPOLE(thegreenone) names the source input/output lineage; TPVM is Topological Fixed-Point Virtual Machine. Det-0 names reproducibility with complete dependencies. Generative Topological Fabric, Packed Topological FIFO Matrix and Uniform Packed Operator Paradigm are successive functional views. REW expands to Reverse Electronic Warfare in the WElip source. f8’s “BVH replacement / S2 superseder” is an intended indexing/comparison role, not a measured replacement result.'),
         small('A complete manifest may reference immutable versioned rule tables rather than embedding every algorithm in a packet. No “infallible” designation waives a missing binding. A profile is executable only once all choices that affect its outputs are single-valued and finitely evaluable.')
@@ -563,7 +565,7 @@ for tick in admitted_finite_budget:
         small('Join each source’s two lines without spaces. Retained paths: O at repository root, S at sources/solus-ion-ad-infinitum.pdf, I at sources/solipsism.pdf. Both addenda originated in the author-named “Philosophers stone Jitske Klootwijk” source directory.'),
         h('Implementation evidence identity'),
         code('Klein: c4b41ce12a33a747bd54c8cc7f9748a06f7b59de\nCapture: 2026-09-25, 11:30:28 UTC\nPrior: 8f4b87bed131f5c084ef59aec558f3f9eb6ddedc\nPrior capture: 07:52:57 to 07:54:16 UTC'),
-        small('Chronology: SDF specification 477e576 preceded implementation 50c9389; Klein specification 8f4b87b preceded c4b41ce. Klein evidence records measured pre-commit source hashes. FI1-FI8 are bound in this revision before their runtime. Both evidence captures and all original source bytes are preserved.')
+        small('Chronology: SDF specification 477e576 preceded implementation 50c9389; Klein specification 8f4b87b preceded c4b41ce. FI1-FI8 revision 1 was committed as 5ccc022 before integration runtime coding. Revision 2 binds measured integration source hashes in docs/evidence/field-agent-v1/verification.json. All earlier captures and original source bytes remain preserved.')
     )
     page('Notation and technical references', 'REFERENCE INDEX',
         table(['Symbol / name','Meaning'],[
@@ -583,9 +585,9 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box('<b>Revision 1 status.</b> One integrated formal contract with verified SDF/Klein subsets, preserved source obligations and reproducible evidence. The following four pages bind the next integration before runtime coding. FI1-FI8 and the remaining architecture are not marked implemented.')
+        box('<b>Revision 2 status.</b> One integrated formal contract with measured SDF, Klein and FI1-FI8 subsets, preserved source obligations and reproducible evidence. The following four pages retain the formal-first integration contract. Wider architecture remains explicitly scoped by its unfulfilled obligations.')
     )
-    page('One field-guided Tomigidt', 'FORMAL FIRST | FI1-FI2 | INTEGRATION RUNTIME PENDING',
+    page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
         p('FieldAgentManifest shall select policy <font name="Mono">tomigidt-field-observe-plan-act-v1</font>, word_profile <font name="Mono">RP32-relational-sdf-v2</font> and perspective <font name="Mono">local-observation-v1</font>. One existing Tomigidt owns the goal, local observations, retained search, live state and event history. There is no separately advancing FieldMachine or second individual.'),
         p('The exact manifest keys shall be those below. Unknown/missing keys, Boolean integers and invalid shapes shall be rejected. JSON arrays become immutable tuples. Target and initial_node are canonical names; initial_node defaults to k:0:0. The .start property supplies that same name. No graph, routes, field array or sensor-supplied phi belongs in this schema.'),
@@ -597,7 +599,7 @@ for tick in admitted_finite_budget:
         p('The retained recipe regenerates canonical k:u:v nodes, every unit quotient edge, seams, cells and exact certified SDF. It replaces an expanded graph/field in the manifest. K1-K5 and the scalar mirror rule remain binding. Geometry is immutable within one manifest; original external observations remain separate retained inputs.'),
         small('This policy is a new typed application binding. Legacy AgentManifest policies, terrain/energy words, FieldMachine schemas, archives and fixture bytes retain their previous meanings. The shared session/live envelopes select this policy from their contained manifest.')
     )
-    page('Observe, plan and transport', 'FORMAL FIRST | FI3-FI4 | ONE ADMITTED ACTION SEQUENCE',
+    page('Observe, plan and transport', 'VERIFIED FINITE PROFILE | FI3-FI4 | ONE ACTION SEQUENCE',
         h('FI3. Local observations and retained planning'),
         p('Sensors supply only strict hazards in 0..127 for the current node and its outgoing quotient neighbors. DATA observation packets retain B=hazard under their explicit observation context; they are not SDF samples. No input may supply a route, action or phi. Before MOVE or REPAIR, require a fresh complete local frame. Partial frames produce WAIT; unseen distant nodes use the existing zero-hazard hypothesis.'),
         p('Generate the graph from all quotient edges. Use global lexical ordering of canonical names and lexical route ties. RouteSearch gains explicit relational mode with a strict hop bound in 1..255, default 255; legacy binary mode retains its 32-hop bound. Per-cycle search quanta retain unfinished work through DEFER. Search context includes position, current pair, separate energy and effective costs; a changed context invalidates stale work before an action can be admitted.'),
@@ -609,7 +611,7 @@ for tick in admitted_finite_budget:
         p('At the freshly observed target, require E at least repair_cost. REPAIR preserves R, G, B and eta, changes the opcode to EMIT, subtracts repair_cost from separate energy and marks COMPLETE. A negative or zero field never means negative or zero energy. Decisions, forecasts, live pairs and energy shall be checked as one admitted history.'),
         small('Planner-selected destinations are this policy’s own internal decisions. FI4 does not replace or reinterpret the fixed per-class routes of standalone FieldMachine. Existing observation admission, event ordering and finite-cycle outcomes remain in force.')
     )
-    page('Regeneration and device admission', 'FORMAL FIRST | FI5-FI6 | RESIDENCY IS NOT HISTORY',
+    page('Regeneration and device admission', 'VERIFIED FINITE PROFILE | FI5-FI6 | RESIDENCY AND HISTORY',
         h('FI5. Recipe-derived samples and bounded FIFO'),
         eq('sample(i) = Pair(pack(0,i,phi(i),DATA))\nRegen(recipe,i) = the same certified sample(i)'),
         p('The geometric world shall supply pure derive and caching get. Derive changes no cache order, counters, observations or live state. On CPU it recomputes from the retained recipe; on GPU it re-materializes the sample from the certified field buffer. Get stores atomic complete pairs in a capacity-C FIFO, C a positive strict integer. Hits do not refresh insertion order; overflow and shrinking evict oldest insertions. A later miss for an evicted node must actually reconstruct the sample.'),
@@ -621,7 +623,7 @@ for tick in admitted_finite_budget:
         p('Forecast a caller-internal planned route of at most 255 edges in scratch device state without changing the live owner. Accepted MOVE and REPAIR shall dispatch from persistent GPU pair and energy, not upload a host-computed forecast as the action. Compare the device result with the admitted prediction before committing the journal. An uncertain device outcome or prediction mismatch fails closed; reconstruct from the last durable admitted history before further work.'),
         small('CPU/GPU fields, costs, forecasts, decisions and canonical archives shall agree exactly. Explicit GPU execution shall not fall back to CPU field or transition evaluation. Adapter names, timings and cache diagnostics remain outside canonical state; host planning and admission remain explicit host stages.')
     )
-    page('Integrated replay and acceptance', 'FORMAL FIRST | FI7-FI8 | REQUIRED CONFORMANCE',
+    page('Integrated replay and acceptance', 'VERIFIED FINITE PROFILE | FI7-FI8 | CONFORMANCE',
         h('FI7. One journal, durable admission and replay'),
         p('Reuse Tomigidt’s session/live envelopes, process locks, atomic saves and durable acknowledgment. Field-policy event keys shall be exactly <font name="Mono">seq,input,decision,output,energy</font>; energy is a strict integer. Snapshots include energy and word_profile; retained planning summaries include energy in their context. Legacy events retain their exact four-key schema.'),
         p('Replay regenerates geometry and re-admits original observations in order, recomputing each (pair,energy) state rather than installing stored energy. Check every complete event, forecast and expected state, including WAIT/DEFER and search progress. Reject supplied replacement recipes for retained sessions and all replay-inconsistent records. Backend/capacity changes shall preserve canonical archives. Invalid frames shall not mutate live state, energy, search, observations or cache; legacy fixtures remain exact.'),
@@ -633,9 +635,9 @@ for tick in admitted_finite_budget:
             ['MOVE 3','17 / 187 / +1 / 1','95'],
             ['REPAIR, EMIT','17 / 187 / +1 / 1','90'],
         ],[.3,.46,.24]),
-        p('With zero hazards and only the centre changed to index 4, the first planned route becomes [15,16,17], cost 4. This ablation proves field geometry changes planning, rather than decorating an unrelated route. Expected values above are formal test vectors, not measured integration results.'),
+        p('With zero hazards and only the centre changed to index 4, the first planned route becomes [15,16,17], cost 4. This ablation proves field geometry changes planning, rather than decorating an unrelated route. Both CPU and GPU now reproduce these formal-first reference vectors and complete canonical archives.'),
         small('<b>Required checks.</b> Strict recipe/manifest and typed lanes; preserved legacy formats; independently calculated costs and packed words; field ablation, hazard replanning, seam reflection and mirrors; FIFO hit order, real eviction/reconstruction and recipe-only cold rebuild; capacity-independent histories; stale-search invalidation; fresh-process and both-backend replay; device action ownership, no fallback and fail-closed errors. Energy tampering shall fail complete-event replay.'),
-        small('FI1-FI8 bind the next finite integration before implementation. They do not claim eigenvector Psi, full f8, geometry-changing growth, infinite memory, calibrated physical energy or completion of the whole architecture.')
+        small('All 23 field-agent conformance checks pass; the full suite contains 368 tests, including 41 actual-device methods. FI1-FI8 do not claim eigenvector Psi, full f8, geometry-changing growth, infinite memory, calibrated physical energy or completion of the whole architecture.')
     )
 
 
@@ -643,7 +645,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 1')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 2')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -676,7 +678,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 1')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 2')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 25 September 2026')
     count=len(PAGES)+1
@@ -684,7 +686,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 1')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 2')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  25 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -761,6 +763,25 @@ def verify_retained_inputs():
     for filename in ('full-tests.txt', 'conformance.json', 'cli-replay.json'):
         if not (KLEIN_EVIDENCE/filename).is_file():
             raise ValueError(f'Missing retained Klein evidence: {filename}')
+    integration = json.loads((FIELD_AGENT_EVIDENCE/'verification.json').read_text(encoding='utf-8'))
+    if (integration['tests']['passed'], integration['tests']['skipped'],
+            sum(integration['tests']['actual_device_methods'].values()),
+            integration['conformance_checks_passed']) != (368, 0, 41, 23):
+        raise ValueError('Retained field-agent verification disagrees with revision 2')
+    if (integration['formal_binding_commit'] != '5ccc0228966684b71f6d8a9172ab31ce11715230'
+            or integration['base_commit'] != 'c4b41ce12a33a747bd54c8cc7f9748a06f7b59de'):
+        raise ValueError('Retained field-agent chronology disagrees with revision 2')
+    conformance = json.loads((FIELD_AGENT_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    if (conformance['format'] != 'tomigidt-field-agent-conformance-v1'
+            or len(conformance['checks']) != 23
+            or any(value is not True for value in conformance['checks'].values())):
+        raise ValueError('Field-agent conformance does not pass all named checks')
+    for relative, expected in integration['source_sha256_lf'].items():
+        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(source).hexdigest() != expected:
+            raise ValueError(f'Field-agent evidence source identity changed: {relative}')
+    if not (FIELD_AGENT_EVIDENCE/'full-tests.txt').is_file():
+        raise ValueError('Missing retained field-agent test log')
 
 
 if __name__=='__main__':

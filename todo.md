@@ -240,20 +240,37 @@ and tests Klein K1-K9. The next work joins that geometry to the existing
 
 - [x] Define FI1-FI8 in the consolidated formal PDF before runtime changes,
   including typed SDF state, separate energy, field-based costs and recipe replay.
-- [ ] Regenerate geometric node pairs from an immutable Klein ball recipe;
+- [x] Regenerate geometric node pairs from an immutable Klein ball recipe;
   expose genuine FIFO eviction and capacity-independent reconstruction.
-- [ ] Add a versioned manifest to the same agent, retaining all legacy profiles.
-- [ ] Plan over canonical quotient neighbors, replan from fresh hazards and
+- [x] Add a versioned manifest to the same agent, retaining all legacy profiles.
+- [x] Plan over canonical quotient neighbors, replan from fresh hazards and
   execute source-field-selected phase/orientation transport.
-- [ ] Compute GPU forecasts in scratch state and execute actual movement/repair
+- [x] Compute GPU forecasts in scratch state and execute actual movement/repair
   from persistent device state, checking the forecast before admitting a record.
-- [ ] Carry the new profile through existing sessions, live sensor ownership,
+- [x] Carry the new profile through existing sessions, live sensor ownership,
   retained search, durable acknowledgements and replay across CPU/GPU backends.
-- [ ] Verify that changing only the field recipe changes route choice, while
+- [x] Verify that changing only the field recipe changes route choice, while
   eviction, capacity changes and restart preserve the complete admitted history.
-- [ ] Record measured evidence, update the integrated PDF's implementation
+- [x] Record measured evidence, update the integrated PDF's implementation
   status, commit and push. Keep the full remaining architecture objective active.
 
 The active pair budget covers only materialized geometric pairs. Immutable
 recipes, graph/search metadata, retained observations and journals, and any
 certified GPU field/operator buffers must be accounted for separately.
+
+FI1-FI8 were committed before runtime changes at `5ccc022`. The new profile
+passes **368 tests, zero skipped**, including 41 actual-device GPU methods.
+The [23-check conformance report](docs/evidence/field-agent-v1/conformance.json)
+records the literal reference pairs, separate energy, field ablation, actual
+FIFO reconstruction, per-cycle device state and CPU/GPU replay before a seam
+and during deferred search. The mission ends at cycle 4, `k:3:2`, pair
+`06011145160111BB`, energy 90. The one-expansion mission takes 41 cycles with
+identical CPU/GPU histories. Actual CLI GPU1 -> CPU3 -> GPU inspection also
+matches the uninterrupted history and preserves saved bytes during inspection.
+
+[Verification](docs/evidence/field-agent-v1/verification.json) binds these
+results to normalized source hashes. The consolidated formal PDF's revision 2
+records the implemented integration; the ELI5 names and booklet remain unchanged.
+The full architecture objective remains active: Psi eigenstructure, full f8,
+Hadamard/gradient routing, growth and log-resolution transitions, continuing
+epochs, physical adapters and measured performance remain outstanding.

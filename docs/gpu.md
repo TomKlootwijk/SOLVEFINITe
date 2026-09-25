@@ -22,6 +22,9 @@ computation or intelligence. No neural-network training is involved here.
 adapters and reports missing dependencies instead of substituting CPU work.
 CPU remains the default reference backend for portability.
 
+The following table describes the original binary-world agent. The intrinsic
+field-agent policy adds actual persistent-device actions, described below.
+
 | Component | Execution |
 |---|---|
 | Derive the declared world nodes | GPU workgroups of 64 invocations, one path per lane. Each path repeatedly executes packed state -> lookup key -> packed operator -> new packed state. |
@@ -47,6 +50,40 @@ Adapter choice does not enter the canonical manifest or archive. Identical
 inputs must yield identical decisions, forecasts and journals on either
 backend. Existing v1 and v2 policy semantics are retained.
 
+## Intrinsic field-agent execution
+
+The `tomigidt-field-observe-plan-act-v1` policy uses the same agent owner with
+a `KleinFieldRecipe`. Its GPU first constructs and independently certifies exact
+scalar distances, then compiles a `12 x N` integer texture: four quotient
+neighbors for each of three departure field classes. Generated seam metadata
+transports phase and orientation. Live B always remains the signed distance;
+energy has its own canonical device lane.
+
+Forecasts execute up to 255 edges in scratch storage. An admitted MOVE or
+REPAIR dispatches from persistent device pair and energy. The owner reads back
+the actual result and checks it against the prediction before journaling.
+Uncertain device outcomes and prediction mismatches close the owner; replay
+from its last durable archive is required before continuing. Host stages are
+geometric certification, observation admission, route search, action admission
+and persistence.
+
+Field samples are reconstructed on demand from the certified scalar buffer,
+with no retained array of complete packed world-node pairs. The active sample
+FIFO and forecast scratch are separate from canonical state. Default resource
+payload is 47,144 device bytes plus a logical 80-byte host scalar certificate,
+outside the `8 * capacity` FIFO payload. Expanded geometry, retained inputs,
+search, history, Python overhead and driver allocations remain additional.
+
+```sh
+python -m solvefinite agent run --scenario examples/tomigidt-field.json --state output/field-agent/gpu.json --backend gpu
+python -m examples.field_agent_conformance
+```
+
+The [integration evidence](evidence/field-agent-v1/README.md) contains 23
+passing conformance checks and 368 passing tests, including 41 actual-device
+methods. It includes full agent execution with CPU field/transition oracles
+disabled, actual-action failure recovery and equality across backend restarts.
+
 ## Run and reproduce
 
 From the repository root, using a real Python installation:
@@ -70,7 +107,8 @@ including phase/orientation boundaries, signed saturation, depth 32, parity,
 mirrors, energy failures, changed hazards, unfinished search and replay.
 Hardware tests skip when the optional dependency or hardware is unavailable;
 shader or arithmetic failures on an available device fail the suite.
-The complete suite passed **231 tests** with the real NVIDIA adapter enabled.
+The original binary-backend suite passed **231 tests** with the real NVIDIA
+adapter enabled; the current integration result is recorded above.
 
 The actual GPU live-sensor demonstration passed all five checks: wait for
 fresh input, recover after hazards drop, reconstruct the same state in a new
@@ -81,6 +119,7 @@ completed on the GPU and replayed identically on the CPU; its final pair was
 
 ## Residency, locality and measurements
 
+The measurements in this section concern the binary derivation substrate.
 The texture and buffers are device resources. Texture-cache residency is a
 separate hardware-managed property. The current LUT is only **32 bytes**, so
 repeated access offers strong locality; allocation alone does not establish

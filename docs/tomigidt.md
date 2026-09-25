@@ -40,13 +40,15 @@ a hypothetical copy of its internal model, chooses an action and predicts its
 packed result before changing live state. Each accepted cycle emits its input
 packets, decision, full route forecast and resulting pair into the journal.
 
-When away from the target, the agent searches the explicit directed movement
-graph. Graph adjacency is independent of the binary paths used to regenerate
-world nodes. Every candidate route reaches the same declared target.
+When away from the target, the agent searches the movement graph. The binary
+application declares this graph independently of derivation paths; the field
+application generates it from the retained Klein recipe. Every candidate route
+reaches the same declared target.
 
 The planner uses positive integer entry costs and deterministic weighted search
 over `(node, hop_count)`. It minimizes `(cost, route)` among routes with at most
-32 hops. Keeping hop count in the search state prevents a cheap long prefix
+32 hops in the binary application, or the field manifest's `max_hops` (default
+255). Keeping hop count in the search state prevents a cheap long prefix
 from incorrectly displacing a shorter viable route under the hop limit.
 Search budgets and target reachability have different results:
 
@@ -59,11 +61,12 @@ Search budgets and target reachability have different results:
 | INSUFFICIENT_ENERGY | The current least-cost model cannot preserve the required repair energy. |
 | DEFER | A reachable target is unresolved; v2 retains unfinished weighted search for the next cycle. A route beyond the fixed hop limit has no resumable search. |
 
-At most 256 graph nodes and 32 hops are supported. In v2,
+At most 256 graph nodes are supported. In binary v2 and the field policy,
 `max_search_expansions` limits weighted expansions **per accepted planning
 cycle**. A DEFER consumes that quantum and retains the immutable frontier and
 best prefixes. The next complete frame continues that work if the position,
-packed agent state and effective entry costs still match. Even a quantum of
+packed agent state and effective entry costs still match. Field planning also
+binds the separate energy value. Even a quantum of
 one can eventually establish a route in a sufficiently stable model, given
 enough remaining cycles. A result reached exactly at the quantum boundary is
 used immediately. Decision `expansions` is cumulative for that search, including
@@ -83,10 +86,11 @@ best prefixes and route tuples consume memory beyond the active world cache.
 The finite cycle budget is also retained in the manifest. Budget exhaustion
 never becomes a claim of successful completion or global unreachability.
 
-The complete packed forecast and actual movement use `solvefinite.motion`.
-The original colony runtime uses that same kernel without changing its v1
-results. New measurements can invalidate earlier predicted futures; the next
-cycle replans from the current state and new observations.
+The binary profile's packed forecast and movement use `solvefinite.motion`.
+The original colony runtime uses that kernel without changing its v1 results.
+The field profile uses `field_world.py` and `field_agent_gpu.py` for its typed
+transitions. New measurements can invalidate earlier predicted futures; the
+next cycle replans from the current state and new observations.
 
 ## Persistence and single ownership
 
@@ -177,6 +181,74 @@ and completes at cycle 14. It traverses `root -> 0 -> 00 -> 11`, finishing with
 uninterrupted run of the same scenario. The static sensor schedule here differs
 from the changing-hazard default above; it isolates planning continuation.
 
+## Intrinsic field application profile
+
+FI1-FI8 in the consolidated formal PDF define
+`tomigidt-field-observe-plan-act-v1`. `FieldAgentManifest` selects this policy
+inside the existing `Tomigidt`, session runner and live channel. Its retained
+`klein-ball-world-v1` recipe generates quotient adjacency, an intrinsic ball
+boundary, signed distances and phase increments. The manifest accepts no
+supplied graph, route or scalar field. It preserves the earlier policies and
+their exact archive schemas.
+
+```sh
+python -m solvefinite agent run --scenario examples/tomigidt-field.json --state output/tomigidt/field.json --steps 1 --backend gpu --capacity 1
+python -m solvefinite agent run --state output/tomigidt/field.json --steps 64 --backend cpu --capacity 8
+python -m solvefinite agent inspect output/tomigidt/field.json --backend gpu
+```
+
+Canonical nodes use `k:u:v` names. A live pair stores phase R, node index G,
+signed distance B and orientation in the metadata; energy is a separate strict
+integer. Local observation packets use B for hazard only in their declared
+DATA context. Entry cost is `1 + abs(phi(destination)) + hazard`. The planner
+reserves the full chosen route cost plus repair energy before moving. It uses
+lexical route order to break equal-cost ties, with resumable search quanta.
+
+The departure field selects the turn, then a reversing seam reflects phase
+and toggles orientation. B becomes the destination's certified distance. Repair
+preserves these lanes, changes the opcode to EMIT and debits separate energy.
+
+| Cycle | Action / position | Packed pair | Energy |
+|---|---|---|---:|
+| 0 | Initial `k:0:0` | `91FE000601FE00FA` | 100 |
+| 1 | MOVE `k:0:4` | `11FF04FB01FF0405` | 98 |
+| 2 | MOVE `k:3:1`, reversing seam | `81001010910010F0` | 97 |
+| 3 | MOVE `k:3:2` | `81011145910111BB` | 95 |
+| 4 | REPAIR `k:3:2` | `06011145160111BB` | 90 |
+
+The initial route is `k:0:4 -> k:0:3 -> k:3:2`, cost 5. At cycle 2, a fresh
+hazard of 70 at `k:0:3` changes the remaining route to `k:3:1 -> k:3:2`, cost 3.
+With zero hazards and only the ball centre changed from 0 to 4, the first
+route instead becomes `k:3:0 -> k:3:1 -> k:3:2`, cost 4.
+
+`FieldWorld.derive` reconstructs a sample without touching the active cache.
+`get` retains complete pairs in insertion-order FIFO storage; hits do not
+refresh order. CPU derivation recomputes exact distances. GPU derivation
+dispatches a fresh sample from the certified scalar buffer, without a retained
+packed world-node array. Recipe-only cold construction rebuilds geometry and
+fields. Measured hazards require their original retained observations.
+
+The GPU uses a 12-column integer operator texture for four neighbors and three
+departure field classes. Forecasts run in scratch state; actual MOVE and REPAIR
+dispatch from the persistent device pair and energy. The owner compares the
+actual result with its admitted prediction before recording a cycle. An
+uncertain device operation or mismatch closes the owner; a new owner must
+replay the last durable archive. The host still admits observations, searches
+routes, certifies results and writes history.
+
+Field events add an explicit `energy` key; snapshots identify the word profile
+and include energy, including unfinished planning context. Replay recomputes
+every event rather than installing retained outputs. Cache capacities and
+backend choice are outside canonical history. See the
+[23-check conformance capture](evidence/field-agent-v1/conformance.json) and
+[verification record](evidence/field-agent-v1/verification.json).
+
+The active FIFO accounts for only `8 * capacity` bytes of pair payload. The
+default 20-node GPU configuration also allocates 47,144 bytes of explicit device
+payload, plus a logical 80-byte host field certificate. Python objects, expanded
+geometry, search, observations, journals, eviction diagnostics and driver
+allocations are additional. No total-memory bound is inferred from the FIFO.
+
 ## Verification and remaining scope
 
 Tests exercise generated legal routes, changed measurements, stale or incomplete
@@ -193,7 +265,8 @@ these mechanisms within its declared finite world.
 
 The current application profile does not implement open-ended goal formation,
 learning, a physical sensor or actuator adapter, or a continuous multi-mission lifecycle.
-It also does not establish full f8, Klein-bottle field/Hadamard or WElip
-conformance. Those source contracts are not silently replaced by this
+Klein cell geometry, exact scalar fields and seam transport are now verified
+finite subsets. Full f8, eigenvector Psi, Hadamard routing and WElip remain
+unimplemented source obligations. Those contracts are not silently replaced by this
 application's graph and planning rules. Larger GPU planning workloads,
 cache/utilization measurements and retained-history growth remain engineering work.
