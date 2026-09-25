@@ -6,6 +6,13 @@
 > textures. The meaning-related blocker is superseded. See [gpu.md](gpu.md) for
 > subsequent implementation and evidence. The historical findings below refer
 > to the earlier CPU implementation, not the current GPU backend.
+>
+> Tom subsequently supplied the Solus addendum and directed formalization
+> before further implementation. [TK-LPLUT-SDF-1.0](specification/relational-sdf-v1.md)
+> now supplies intrinsic field and operator contracts for the broader
+> ontological deterministic computing objective. [field.md](field.md) records
+> that continuation; the historical request for clarification below is not an
+> active implementation blocker.
 
 Audit date: 25 September 2026. Implementation audited:
 `a536b4b0d6cfe0614b4e615dde1963f917f72dce`.

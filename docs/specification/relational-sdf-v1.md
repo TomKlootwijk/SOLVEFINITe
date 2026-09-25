@@ -216,8 +216,11 @@ residency, saturation and speed advantage are separate measurements.
 
 **R12.** The canonical archive contains its format/version, complete manifest,
 ordered tick outputs and expected final pair/tick. Reconstruct from the initial
-state and original manifest; check every retained output. Reject altered or
-malformed records, unknown versions and missing fields. Adapter names and
+state and original manifest; check every retained output. Reject malformed or
+replay-inconsistent records, unknown versions and missing fields. A fully
+rewritten, internally consistent archive requires an external trusted digest
+or signature to distinguish it from an original; replay is not authentication.
+Adapter names and
 diagnostic timing are excluded from canonical state. CPU/GPU replay must be
 bit-identical for one manifest. A state file has one OS-lock owner during
 advancement; save atomically. This profile has no external sensor input yet.
@@ -233,7 +236,7 @@ arrays of three integers. Signs has N entries. Routes and turns each contain
 N rows of three integers. Units and initial state obey R2 and R9. Unknown keys
 are rejected; arrays become immutable tuples internally.
 
-Reference Python interface to be implemented after this specification:
+Reference Python interface, implemented after formalization commit `477e576`:
 
 - `FieldManifest.from_dict(value)` / `to_dict()`, immutable validated fields.
 - `evaluate_field(manifest) -> tuple[int,...]` and
@@ -263,7 +266,7 @@ physical optical simulation.
 6. Scalar phi remains unchanged under RP32 mirror; complete mirrors validate.
 7. Field values actually select operators and their resulting next state.
 8. Exact CPU/GPU fields and multi-tick traces, with no CPU fallback in GPU mode.
-9. Split batches, restart and replay preserve every tick; tampered archives fail.
+9. Split batches, restart and replay preserve every tick; replay-inconsistent archives fail.
 10. Previous terrain/energy demo archives and tests retain their meaning.
 
 ## 10. Retained source corpus

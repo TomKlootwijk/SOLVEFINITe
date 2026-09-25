@@ -20,6 +20,29 @@ It supplies explicit versioned numerical bindings before implementation.
 their original Markdown and citations, and the exact addendum request. The code implements a small, declared
 realization of that direction; its demo-specific choices are described below.
 
+## Intrinsic signed-distance execution
+
+The `field` command implements the addendum's relational geometry as the
+versioned `relational-sdf-v1` profile. Declared hinge lengths and a separating
+boundary define exact signed distances. The current packed field selects a
+geometric operator, whose output selects the next lookup. No external
+Cartesian grid is needed.
+
+```sh
+python -m solvefinite field run --state output/field/cpu.json --steps 32
+python -m pip install -r requirements-gpu.txt
+python -m solvefinite field run --backend gpu --state output/field/gpu.json --steps 32
+python -m solvefinite field inspect output/field/gpu.json --backend cpu
+python -m examples.field_conformance
+```
+
+The GPU constructs the distances, compiles the integer operator texture and
+retains one advancing packed state across batches. A separate geometric
+certificate checks exact distances before execution. CPU and GPU fields,
+tick sequences and recovery must agree exactly. [Field documentation](docs/field.md)
+and the [example manifest](examples/relational-sdf-v1.json) explain the finite
+binding and its limits. The earlier repair-agent profile remains available.
+
 ## TOMIGIDt: persistent autonomous single agent
 
 The `agent` command adds one named decision maker that owns a goal, packed

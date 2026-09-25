@@ -89,6 +89,16 @@ Work sequence:
 
 - [x] Read the addendum and compare its SDF/operator/relational-space direction with TK-LPLUT-1.0.
 - [x] Distill it into the formal source corpus with explicit metric, boundary, sign, packing, topology and operator contracts before implementation: `docs/specification/relational-sdf-v1.md` (TK-LPLUT-SDF-1.0).
-- [ ] Implement the versioned relational SDF profile and deterministic operator execution.
-- [ ] Verify exact CPU/GPU fields, self-referential transitions, rejection cases and replay; record evidence here.
+- [x] Implement the versioned relational SDF profile and deterministic operator execution: `solvefinite/field.py`, `solvefinite/sdf_gpu.py`, `solvefinite/shaders/field.wgsl` and the `field` CLI.
+- [x] Verify exact CPU/GPU fields, self-referential transitions, rejection cases and replay; record evidence here.
 - [ ] Commit and push the formalization and verified implementation.
+
+Evidence recorded on 2026-09-25:
+
+- Formalization was committed first as `477e576`, before the new field implementation.
+- The addendum copy is byte-identical to the supplied PDF; source hashes are retained in the formal companion.
+- Full suite: **262 tests passed**, including actual NVIDIA GPU execution.
+- Eight reproducible conformance checks passed in `examples/field_conformance.py`; captured results are in `docs/evidence/relational-sdf-v1.json`.
+- Default intrinsic signed field: `[-6,-4,-3,0,2,3,5]`. Moving its boundary produces `[-8,-6,-5,-2,0,1,3]` and changes operator execution; CPU/GPU traces remain equal.
+- A 32-tick GPU run resumed for 32 ticks on the CPU and replayed on the GPU, yielding pair `1102046C01020494` at tick 64.
+- The earlier meaning-related blocker is superseded. Further primitive, Klein-cover and f8 bindings are engineering work under the formal contract, not a request to repeat the clarification.

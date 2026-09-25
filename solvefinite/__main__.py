@@ -128,6 +128,18 @@ def main(argv: list[str] | None = None) -> int:
     replay_parser.add_argument("--capacity", type=int, default=2)
     replay_parser.add_argument("--resume", action="store_true", help="Finish the retained plan after replay")
     replay_parser.add_argument("--output", type=Path, help="Save the resulting journal")
+    field_parser = commands.add_parser("field", help="Execute intrinsic signed-distance operators")
+    field_commands = field_parser.add_subparsers(dest="field_command", required=True)
+    field_run = field_commands.add_parser("run", help="Advance one persistent field machine")
+    field_run.add_argument("--state", type=Path, default=Path("output/field/session.json"))
+    field_run.add_argument("--steps", type=int, default=32)
+    field_run.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
+    field_run.add_argument("--manifest", type=Path)
+    field_inspect = field_commands.add_parser("inspect", help="Reconstruct and verify a field archive")
+    field_inspect.add_argument("state", type=Path)
+    field_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
+    field_manifest = field_commands.add_parser("manifest", help="Export the default intrinsic waveguide")
+    field_manifest.add_argument("--output", type=Path, required=True)
     agent_parser = commands.add_parser("agent", help="Operate the persistent TOMIGIDt single agent")
     agent_commands = agent_parser.add_subparsers(dest="agent_command", required=True)
     agent_run = agent_commands.add_parser("run", help="Sense, plan and act; resume the existing state if present")
@@ -160,6 +172,18 @@ def main(argv: list[str] | None = None) -> int:
             result = demo(args.output)
         elif args.command == "replay":
             result = replay(args.journal, args.capacity, args.resume, args.output)
+        elif args.command == "field":
+            from .field_cli import inspect_field, run_field_session
+            from .field import FieldManifest
+            if args.field_command == "run":
+                result = run_field_session(args.state, steps=args.steps, backend=args.backend,
+                                           manifest_path=args.manifest)
+            elif args.field_command == "inspect":
+                result = inspect_field(args.state, backend=args.backend)
+            else:
+                manifest = FieldManifest()
+                write_json(args.output, manifest.to_dict())
+                result = {"manifest": str(args.output.resolve()), "profile": "relational-sdf-v1"}
         else:
             from .session import Scenario, load_session, run_session
             if args.agent_command == "run":
