@@ -102,3 +102,16 @@ Evidence recorded on 2026-09-25:
 - Default intrinsic signed field: `[-6,-4,-3,0,2,3,5]`. Moving its boundary produces `[-8,-6,-5,-2,0,1,3]` and changes operator execution; CPU/GPU traces remain equal.
 - A 32-tick GPU run resumed for 32 ticks on the CPU and replayed on the GPU, yielding pair `1102046C01020494` at tick 64.
 - The earlier meaning-related blocker is superseded. Further primitive, Klein-cover and f8 bindings are engineering work under the formal contract, not a request to repeat the clarification.
+
+## Continuing the full paradigm: Klein geometry and orientation transport
+
+The preceding goal turn made verified progress: source formalization and actual
+CPU/GPU intrinsic-field execution were committed and pushed. The complete
+ontological deterministic computing objective remains active.
+
+- [x] Formalize the next source binding before implementation: `docs/specification/klein-field-v2.md`.
+- [ ] Construct and audit the actual finite Klein quotient and its orientation double cover.
+- [ ] Generate intrinsic metric-ball boundaries and versioned field manifests from that quotient.
+- [ ] Execute seam phase/orientation transport through the shared CPU/GPU packed operator machinery.
+- [ ] Verify topology, geometric fields, mirror coherence, v1 compatibility and exact recovery.
+- [ ] Record evidence, commit and push; preserve the broader remaining source obligations.
