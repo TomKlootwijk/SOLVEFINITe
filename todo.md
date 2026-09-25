@@ -274,3 +274,39 @@ records the implemented integration; the ELI5 names and booklet remain unchanged
 The full architecture objective remains active: Psi eigenstructure, full f8,
 Hadamard/gradient routing, growth and log-resolution transitions, continuing
 epochs, physical adapters and measured performance remain outstanding.
+
+## 2026-09-25: exact SDF eigenvectors and the canonical f8 index
+
+The preceding goal turn made verified progress: `c8af71d` integrates the same
+agent's field world, planning, regeneration, GPU actions and replay. This turn
+advances the remaining Psi/f8 layer from the source's explicit requirements.
+
+The original formal source, pages 7 and 11, requires an eigen-operator and
+selection/degeneracy rules for Psi, and canonical total keys, median choice and
+versioning for f8. The addenda name those roles but provide no unique numerical
+operator. The next explicit binding uses the exact local SDF gradient's
+structure tensor, canonical geodesic descriptors, log-distance buckets and
+derived relative phase. It does not substitute a supplied node number for an
+eigenvector, or treat search-tree links as physical movement.
+
+- [x] Commit PX1-PX8 in the consolidated formal PDF before runtime changes.
+- [ ] Implement exact integer Psi, its eigenvalue certificate, zero-gradient
+  tie rule and Klein frame transport; check independent gradient/field oracles.
+- [ ] Construct canonical five-component f8 keys and the lower-median tree;
+  implement bounded actual tree lookup and topology-equivalent alias queries.
+- [ ] Route field-world regeneration through f8 and use its returned physical
+  row for actual GPU operator lookup, while keeping packed G as node identity.
+- [ ] Compile and independently certify GPU eigenvector keys and tree rows
+  from device fields, with no CPU key-compiler fallback or packed-node arena.
+- [ ] Prepare and atomically install immutable replacement index versions;
+  preserve canonical history, FIFO and retained planning across order changes.
+- [ ] Verify literal keys/tree, alias transport, misses, malformed certificates,
+  GPU row use, preparation failures, epoch overflow and replay across versions.
+- [ ] Record measured source-bound evidence, update the same formal PDF,
+  commit and push; retain the full architecture objective.
+
+The indexed universe is all recipe-derived scalar node descriptors, distinct
+from the materialized pair FIFO. Keys, tree rows and generation metadata have
+their own memory accounting. This finite Psi binding governs indexing; general
+Hadamard routing, growth, continuing semantic epochs, physical adapters and
+comparative performance remain explicit work.

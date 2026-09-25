@@ -1,0 +1,568 @@
+{
+  "records": [
+    {
+      "node": 0,
+      "phi": -2,
+      "g": [
+        0,
+        0
+      ],
+      "psi": [
+        1,
+        0
+      ],
+      "eigenvalue": 0,
+      "distance": 0,
+      "parent": 0,
+      "key": [
+        3,
+        2,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "node": 1,
+      "phi": -1,
+      "g": [
+        0,
+        2
+      ],
+      "psi": [
+        0,
+        1
+      ],
+      "eigenvalue": 4,
+      "distance": 1,
+      "parent": 0,
+      "key": [
+        2,
+        3,
+        1,
+        11,
+        1
+      ]
+    },
+    {
+      "node": 2,
+      "phi": 0,
+      "g": [
+        0,
+        1
+      ],
+      "psi": [
+        0,
+        1
+      ],
+      "eigenvalue": 1,
+      "distance": 2,
+      "parent": 1,
+      "key": [
+        2,
+        3,
+        1,
+        22,
+        2
+      ]
+    },
+    {
+      "node": 3,
+      "phi": 0,
+      "g": [
+        0,
+        -1
+      ],
+      "psi": [
+        0,
+        -1
+      ],
+      "eigenvalue": 1,
+      "distance": 2,
+      "parent": 4,
+      "key": [
+        2,
+        1,
+        1,
+        22,
+        3
+      ]
+    },
+    {
+      "node": 4,
+      "phi": -1,
+      "g": [
+        0,
+        -2
+      ],
+      "psi": [
+        0,
+        -1
+      ],
+      "eigenvalue": 4,
+      "distance": 1,
+      "parent": 0,
+      "key": [
+        2,
+        1,
+        1,
+        11,
+        4
+      ]
+    },
+    {
+      "node": 5,
+      "phi": -1,
+      "g": [
+        2,
+        0
+      ],
+      "psi": [
+        1,
+        0
+      ],
+      "eigenvalue": 4,
+      "distance": 1,
+      "parent": 0,
+      "key": [
+        3,
+        2,
+        1,
+        11,
+        5
+      ]
+    },
+    {
+      "node": 6,
+      "phi": 0,
+      "g": [
+        2,
+        2
+      ],
+      "psi": [
+        1,
+        1
+      ],
+      "eigenvalue": 8,
+      "distance": 2,
+      "parent": 1,
+      "key": [
+        3,
+        3,
+        1,
+        22,
+        6
+      ]
+    },
+    {
+      "node": 7,
+      "phi": 1,
+      "g": [
+        2,
+        1
+      ],
+      "psi": [
+        2,
+        1
+      ],
+      "eigenvalue": 5,
+      "distance": 3,
+      "parent": 2,
+      "key": [
+        4,
+        3,
+        2,
+        75,
+        7
+      ]
+    },
+    {
+      "node": 8,
+      "phi": 1,
+      "g": [
+        2,
+        -1
+      ],
+      "psi": [
+        2,
+        -1
+      ],
+      "eigenvalue": 5,
+      "distance": 3,
+      "parent": 3,
+      "key": [
+        4,
+        1,
+        2,
+        75,
+        8
+      ]
+    },
+    {
+      "node": 9,
+      "phi": 0,
+      "g": [
+        2,
+        -2
+      ],
+      "psi": [
+        1,
+        -1
+      ],
+      "eigenvalue": 8,
+      "distance": 2,
+      "parent": 4,
+      "key": [
+        3,
+        1,
+        1,
+        22,
+        9
+      ]
+    },
+    {
+      "node": 10,
+      "phi": 0,
+      "g": [
+        0,
+        0
+      ],
+      "psi": [
+        1,
+        0
+      ],
+      "eigenvalue": 0,
+      "distance": 2,
+      "parent": 5,
+      "key": [
+        3,
+        2,
+        1,
+        22,
+        10
+      ]
+    },
+    {
+      "node": 11,
+      "phi": 1,
+      "g": [
+        0,
+        2
+      ],
+      "psi": [
+        0,
+        1
+      ],
+      "eigenvalue": 4,
+      "distance": 3,
+      "parent": 6,
+      "key": [
+        2,
+        3,
+        2,
+        75,
+        11
+      ]
+    },
+    {
+      "node": 12,
+      "phi": 2,
+      "g": [
+        0,
+        1
+      ],
+      "psi": [
+        0,
+        1
+      ],
+      "eigenvalue": 1,
+      "distance": 4,
+      "parent": 7,
+      "key": [
+        2,
+        3,
+        2,
+        212,
+        12
+      ]
+    },
+    {
+      "node": 13,
+      "phi": 2,
+      "g": [
+        0,
+        -1
+      ],
+      "psi": [
+        0,
+        -1
+      ],
+      "eigenvalue": 1,
+      "distance": 4,
+      "parent": 8,
+      "key": [
+        2,
+        1,
+        2,
+        212,
+        13
+      ]
+    },
+    {
+      "node": 14,
+      "phi": 1,
+      "g": [
+        0,
+        -2
+      ],
+      "psi": [
+        0,
+        -1
+      ],
+      "eigenvalue": 4,
+      "distance": 3,
+      "parent": 9,
+      "key": [
+        2,
+        1,
+        2,
+        75,
+        14
+      ]
+    },
+    {
+      "node": 15,
+      "phi": -1,
+      "g": [
+        -2,
+        0
+      ],
+      "psi": [
+        -1,
+        0
+      ],
+      "eigenvalue": 4,
+      "distance": 1,
+      "parent": 0,
+      "key": [
+        1,
+        2,
+        1,
+        11,
+        15
+      ]
+    },
+    {
+      "node": 16,
+      "phi": 0,
+      "g": [
+        -2,
+        2
+      ],
+      "psi": [
+        -1,
+        1
+      ],
+      "eigenvalue": 8,
+      "distance": 2,
+      "parent": 4,
+      "key": [
+        1,
+        3,
+        1,
+        22,
+        16
+      ]
+    },
+    {
+      "node": 17,
+      "phi": 1,
+      "g": [
+        -2,
+        1
+      ],
+      "psi": [
+        -2,
+        1
+      ],
+      "eigenvalue": 5,
+      "distance": 3,
+      "parent": 3,
+      "key": [
+        0,
+        3,
+        2,
+        75,
+        17
+      ]
+    },
+    {
+      "node": 18,
+      "phi": 1,
+      "g": [
+        -2,
+        -1
+      ],
+      "psi": [
+        -2,
+        -1
+      ],
+      "eigenvalue": 5,
+      "distance": 3,
+      "parent": 2,
+      "key": [
+        0,
+        1,
+        2,
+        75,
+        18
+      ]
+    },
+    {
+      "node": 19,
+      "phi": 0,
+      "g": [
+        -2,
+        -2
+      ],
+      "psi": [
+        -1,
+        -1
+      ],
+      "eigenvalue": 8,
+      "distance": 2,
+      "parent": 1,
+      "key": [
+        1,
+        1,
+        1,
+        22,
+        19
+      ]
+    }
+  ],
+  "sorted_nodes": [
+    18,
+    17,
+    19,
+    15,
+    16,
+    4,
+    3,
+    14,
+    13,
+    1,
+    2,
+    11,
+    12,
+    9,
+    0,
+    5,
+    10,
+    6,
+    8,
+    7
+  ],
+  "rows": [
+    {
+      "node": 1,
+      "left": 1,
+      "right": 10
+    },
+    {
+      "node": 16,
+      "left": 2,
+      "right": 6
+    },
+    {
+      "node": 17,
+      "left": 3,
+      "right": 4
+    },
+    {
+      "node": 18,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 19,
+      "left": 256,
+      "right": 5
+    },
+    {
+      "node": 15,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 3,
+      "left": 7,
+      "right": 8
+    },
+    {
+      "node": 4,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 14,
+      "left": 256,
+      "right": 9
+    },
+    {
+      "node": 13,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 0,
+      "left": 11,
+      "right": 15
+    },
+    {
+      "node": 11,
+      "left": 12,
+      "right": 13
+    },
+    {
+      "node": 2,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 12,
+      "left": 256,
+      "right": 14
+    },
+    {
+      "node": 9,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 6,
+      "left": 16,
+      "right": 18
+    },
+    {
+      "node": 5,
+      "left": 256,
+      "right": 17
+    },
+    {
+      "node": 10,
+      "left": 256,
+      "right": 256
+    },
+    {
+      "node": 8,
+      "left": 256,
+      "right": 19
+    },
+    {
+      "node": 7,
+      "left": 256,
+      "right": 256
+    }
+  ]
+}
