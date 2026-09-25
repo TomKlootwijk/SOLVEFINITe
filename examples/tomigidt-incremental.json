@@ -34,7 +34,7 @@
     },
     "identity": "TOMIGIDt",
     "max_cycles": 10000,
-    "max_search_expansions": 4096,
+    "max_search_expansions": 1,
     "perspective": "local-observation-v1",
     "policy": "tomigidt-observe-plan-act-v2",
     "repair_cost": 5,
@@ -74,13 +74,7 @@
       "version": "binary-organogram-v1"
     }
   },
-  "changes": [
-    {
-      "cycle": 2,
-      "hazard": 70,
-      "path": "00"
-    }
-  ],
+  "changes": [],
   "format": "tomigidt-simulation-v1",
   "hazards": {}
 }

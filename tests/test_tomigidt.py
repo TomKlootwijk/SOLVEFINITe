@@ -328,6 +328,7 @@ class AutonomousValidationTests(unittest.TestCase):
             {"repair_cost": 0}, {"repair_cost": 128}, {"repair_cost": True},
             {"max_search_expansions": 0}, {"max_search_expansions": True},
             {"max_cycles": 0}, {"max_cycles": True},
+            {"policy": "future-policy"}, {"policy": None}, {"policy": []},
             {"graph": ()}, {"graph": (("", ("missing",)), ("11", ()))},
             {"graph": (("", ()), ("", ()), ("11", ()))},
             {"graph": (("0", ()), ("11", ()))},

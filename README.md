@@ -40,6 +40,15 @@ export the input configuration. Pass `--scenario output/scenario.json` when
 starting a new state. An existing state rejects a different scenario, and
 replays its original policy, observations and decisions before continuing.
 
+New agents use policy v2. When a search needs more work than the configured
+`max_search_expansions` per cycle, the agent retains its frontier and continues
+on the next cycle. A restart reconstructs that unfinished work from the journal.
+Changed observed costs invalidate the old search before an action can use it.
+Existing v1 sessions retain their original behavior and replay exactly.
+The [one-expansion scenario](examples/tomigidt-incremental.json) demonstrates
+restarting during planning; the [agent documentation](docs/tomigidt.md) includes
+commands and expected results.
+
 The current profile uses simulated sensing and repair. The interpretation of
 "solipsism" as one locally maintained observation history is provisional until
 Tom supplies its intended meaning. This implementation is progress toward the
@@ -120,6 +129,10 @@ flowchart LR
 |---|---|
 | [solvefinite/rp32.py](solvefinite/rp32.py) | Exact RP32 packing, parity, phase steps, mirror transformation and validated 64-bit pairs. |
 | [solvefinite/world.py](solvefinite/world.py) | A finite binary production grammar, state-dependent LUT selection, pure derivation and FIFO active caching. |
+| [solvefinite/motion.py](solvefinite/motion.py) | Shared packed movement and energy transitions for forecasts and execution. |
+| [solvefinite/navigation.py](solvefinite/navigation.py) | Deterministic route discovery and resumable search quanta. |
+| [solvefinite/tomigidt.py](solvefinite/tomigidt.py) | One agent's local model, versioned autonomous policy and replayable decisions. |
+| [solvefinite/session.py](solvefinite/session.py) | Simulated sensing, exclusive session ownership and per-cycle persistence. |
 | [solvefinite/runtime.py](solvefinite/runtime.py) | Typed event admission, deterministic planning, energy accounting and replay from retained inputs. |
 | [solvefinite/__main__.py](solvefinite/__main__.py) | Runnable experiment and independent journal recovery. |
 

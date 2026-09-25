@@ -1,0 +1,346 @@
+{
+  "agent": {
+    "events": [
+      {
+        "decision": {
+          "cost": 9,
+          "expansions": 7,
+          "expected_pair": "91610AD781610A29",
+          "forecast": [
+            "91610AD781610A29",
+            "115F1FBA815F1F46",
+            "915B2367815B2399"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "0",
+            "00",
+            "11"
+          ]
+        },
+        "input": {
+          "": "000003FA",
+          "0": "00000A05",
+          "1": "00000B2F"
+        },
+        "output": "91610AD781610A29",
+        "seq": 1
+      },
+      {
+        "decision": {
+          "cost": 14,
+          "expansions": 8,
+          "expected_pair": "115E03BA815E0346",
+          "forecast": [
+            "115E03BA815E0346",
+            "115A0B67015A0B99",
+            "11572220815722E0",
+            "915323BB81532345"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "",
+            "1",
+            "10",
+            "11"
+          ]
+        },
+        "input": {
+          "": "000003FA",
+          "0": "00000A05",
+          "00": "80461F34"
+        },
+        "output": "115E03BA815E0346",
+        "seq": 2
+      },
+      {
+        "decision": {
+          "cost": 11,
+          "expansions": 7,
+          "expected_pair": "115A0B67015A0B99",
+          "forecast": [
+            "115A0B67015A0B99",
+            "11572220815722E0",
+            "915323BB81532345"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "1",
+            "10",
+            "11"
+          ]
+        },
+        "input": {
+          "": "000003FA",
+          "0": "00000A05",
+          "1": "00000B2F"
+        },
+        "output": "115A0B67015A0B99",
+        "seq": 3
+      },
+      {
+        "decision": {
+          "cost": 7,
+          "expansions": 5,
+          "expected_pair": "11572220815722E0",
+          "forecast": [
+            "11572220815722E0",
+            "915323BB81532345"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "10",
+            "11"
+          ]
+        },
+        "input": {
+          "": "000003FA",
+          "1": "00000B2F",
+          "10": "80002276"
+        },
+        "output": "11572220815722E0",
+        "seq": 4
+      },
+      {
+        "decision": {
+          "cost": 4,
+          "expansions": 2,
+          "expected_pair": "915323BB81532345",
+          "forecast": [
+            "915323BB81532345"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "11"
+          ]
+        },
+        "input": {
+          "1": "00000B2F",
+          "10": "80002276",
+          "11": "800023B8"
+        },
+        "output": "915323BB81532345",
+        "seq": 5
+      },
+      {
+        "decision": {
+          "cost": 5,
+          "expansions": 0,
+          "expected_pair": "164E23BB064E2345",
+          "forecast": [],
+          "kind": "REPAIR",
+          "reason": "Observed target reached",
+          "route": []
+        },
+        "input": {
+          "00": "80461F34",
+          "10": "80002276",
+          "11": "800023B8"
+        },
+        "output": "164E23BB064E2345",
+        "seq": 6
+      }
+    ],
+    "expected": {
+      "agent_pair": "164E23BB064E2345",
+      "cycle": 6,
+      "footprint": {
+        "agent": "TOMIGIDt",
+        "baseline": "colony-baseline-v1",
+        "derivation": "11",
+        "epoch": 0,
+        "profile": "tomigidt-agent-v1",
+        "sequence": 6
+      },
+      "identity": "TOMIGIDt",
+      "last_decision": {
+        "cost": 5,
+        "expansions": 0,
+        "expected_pair": "164E23BB064E2345",
+        "forecast": [],
+        "kind": "REPAIR",
+        "reason": "Observed target reached",
+        "route": []
+      },
+      "observations": {
+        "": "000003FA",
+        "0": "00000A05",
+        "00": "80461F34",
+        "1": "00000B2F",
+        "10": "80002276",
+        "11": "800023B8"
+      },
+      "position": "11",
+      "status": "COMPLETE",
+      "target": "11"
+    },
+    "format": "tomigidt-agent-v1",
+    "manifest": {
+      "agent_seed": [
+        250,
+        3,
+        100,
+        1
+      ],
+      "graph": {
+        "": [
+          "0",
+          "1"
+        ],
+        "0": [
+          "",
+          "00"
+        ],
+        "00": [
+          "0",
+          "11"
+        ],
+        "1": [
+          "",
+          "10"
+        ],
+        "10": [
+          "1",
+          "11"
+        ],
+        "11": [
+          "00",
+          "10"
+        ]
+      },
+      "identity": "TOMIGIDt",
+      "max_cycles": 10000,
+      "max_search_expansions": 4096,
+      "perspective": "local-observation-v1",
+      "policy": "tomigidt-observe-plan-act-v1",
+      "repair_cost": 5,
+      "target": "11",
+      "word_profile": "RP32-v1",
+      "world": {
+        "baseline_id": "colony-baseline-v1",
+        "field_changes": [
+          -3,
+          4
+        ],
+        "max_depth": 8,
+        "phase_turns": [
+          [
+            11,
+            53
+          ],
+          [
+            29,
+            83
+          ],
+          [
+            47,
+            101
+          ],
+          [
+            71,
+            137
+          ]
+        ],
+        "seed": [
+          250,
+          3,
+          20,
+          2
+        ],
+        "version": "binary-organogram-v1"
+      }
+    }
+  },
+  "format": "tomigidt-session-v1",
+  "scenario": {
+    "agent": {
+      "agent_seed": [
+        250,
+        3,
+        100,
+        1
+      ],
+      "graph": {
+        "": [
+          "0",
+          "1"
+        ],
+        "0": [
+          "",
+          "00"
+        ],
+        "00": [
+          "0",
+          "11"
+        ],
+        "1": [
+          "",
+          "10"
+        ],
+        "10": [
+          "1",
+          "11"
+        ],
+        "11": [
+          "00",
+          "10"
+        ]
+      },
+      "identity": "TOMIGIDt",
+      "max_cycles": 10000,
+      "max_search_expansions": 4096,
+      "perspective": "local-observation-v1",
+      "policy": "tomigidt-observe-plan-act-v1",
+      "repair_cost": 5,
+      "target": "11",
+      "word_profile": "RP32-v1",
+      "world": {
+        "baseline_id": "colony-baseline-v1",
+        "field_changes": [
+          -3,
+          4
+        ],
+        "max_depth": 8,
+        "phase_turns": [
+          [
+            11,
+            53
+          ],
+          [
+            29,
+            83
+          ],
+          [
+            47,
+            101
+          ],
+          [
+            71,
+            137
+          ]
+        ],
+        "seed": [
+          250,
+          3,
+          20,
+          2
+        ],
+        "version": "binary-organogram-v1"
+      }
+    },
+    "changes": [
+      {
+        "cycle": 2,
+        "hazard": 70,
+        "path": "00"
+      }
+    ],
+    "format": "tomigidt-simulation-v1",
+    "hazards": {}
+  }
+}

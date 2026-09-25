@@ -211,8 +211,8 @@ def run_session(
     """Create or resume one agent, atomically saving each accepted local cycle.
 
     A resumed incomplete agent may sample again after a deferred or infeasible
-    outcome. Each invocation stops as soon as a new outcome is non-ACTIVE, so
-    retries cannot spin through a whole budget without returning control.
+    outcome. A v2 pending route search continues within the invocation's step
+    budget. Other nonacting outcomes return control after one fresh sample.
     Completed sessions and exhausted cycle budgets remain read-only no-ops.
     """
     _integer(steps, 1, 1_000_000, "steps")
@@ -239,13 +239,13 @@ def run_session(
             write_json(path, {"format": SESSION_FORMAT,
                               "scenario": scenario.to_dict(), "agent": agent.archive()})
             decisions.append(decision.to_dict())
-            if agent.status != "ACTIVE":
+            if agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
                 break
         if agent.status == "COMPLETE":
             stop_reason = "COMPLETE"
         elif agent.cycle >= agent.manifest.max_cycles:
             stop_reason = "CYCLE_BUDGET_EXHAUSTED"
-        elif agent.status != "ACTIVE":
+        elif agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
             stop_reason = agent.status
         else:
             stop_reason = "STEP_BUDGET_EXHAUSTED"

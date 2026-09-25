@@ -13,14 +13,15 @@ import json
 from pathlib import Path
 
 from .motion import move, movement_cost
-from .navigation import NoRoute, SearchBudgetExceeded, normalize_graph, shortest_route
+from .navigation import NoRoute, RouteSearch, SearchBudgetExceeded, normalize_graph, shortest_route
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _json, _keys, write_json
 from .world import World, WorldConfig
 
 
 FORMAT = "tomigidt-agent-v1"
-POLICY = "tomigidt-observe-plan-act-v1"
+LEGACY_POLICY = "tomigidt-observe-plan-act-v1"
+POLICY = "tomigidt-observe-plan-act-v2"
 PERSPECTIVE = "local-observation-v1"
 DEFAULT_GRAPH = (
     ("", ("0", "1")), ("0", ("", "00")), ("00", ("0", "11")),
@@ -38,8 +39,11 @@ class AgentManifest:
     graph: tuple[tuple[str, tuple[str, ...]], ...] = DEFAULT_GRAPH
     max_search_expansions: int = 4096
     max_cycles: int = 10_000
+    policy: str = POLICY
 
     def __post_init__(self) -> None:
+        if type(self.policy) is not str or self.policy not in (LEGACY_POLICY, POLICY):
+            raise ValueError("Unsupported agent policy")
         if type(self.identity) is not str or not self.identity.strip() or len(self.identity) > 128:
             raise ValueError("identity must be a nonempty name of at most 128 characters")
         if type(self.world) is not WorldConfig:
@@ -71,7 +75,7 @@ class AgentManifest:
 
     def to_dict(self) -> dict:
         return {
-            "identity": self.identity, "policy": POLICY, "perspective": PERSPECTIVE,
+            "identity": self.identity, "policy": self.policy, "perspective": PERSPECTIVE,
             "word_profile": "RP32-v1", "target": self.target,
             "world": self.world.to_dict(), "agent_seed": list(self.agent_seed),
             "repair_cost": self.repair_cost,
@@ -86,7 +90,7 @@ class AgentManifest:
             "identity", "policy", "perspective", "word_profile", "target", "world",
             "agent_seed", "repair_cost", "graph", "max_search_expansions", "max_cycles",
         }, "Agent manifest")
-        if (value["policy"] != POLICY or value["perspective"] != PERSPECTIVE
+        if (value["policy"] not in (LEGACY_POLICY, POLICY) or value["perspective"] != PERSPECTIVE
                 or value["word_profile"] != "RP32-v1"):
             raise ValueError("Unsupported agent policy, perspective or word profile")
         if type(value["agent_seed"]) is not list or type(value["graph"]) is not dict:
@@ -99,6 +103,7 @@ class AgentManifest:
             repair_cost=value["repair_cost"],
             graph=tuple((node, tuple(neighbors)) for node, neighbors in value["graph"].items()),
             max_search_expansions=value["max_search_expansions"], max_cycles=value["max_cycles"],
+            policy=value["policy"],
         )
 
 
@@ -122,6 +127,18 @@ class Decision:
         }
 
 
+@dataclass(frozen=True)
+class _Planning:
+    position: str
+    agent_pair: int
+    weights: tuple[tuple[str, int], ...]
+    cursor: RouteSearch
+
+    def matches(self, position: str, agent_pair: int, weights: tuple[tuple[str, int], ...]) -> bool:
+        # Target, graph and generation rules belong to the immutable manifest.
+        return (self.position, self.agent_pair, self.weights) == (position, agent_pair, weights)
+
+
 class Tomigidt:
     """A single decision maker; the mirrored half is a representation check.
 
@@ -141,6 +158,7 @@ class Tomigidt:
         self._status = "ACTIVE"
         self._observations: dict[str, int] = {}
         self._last_decision: Decision | None = None
+        self._planning: _Planning | None = None
         self._events: list[dict] = []
 
     @property
@@ -175,6 +193,11 @@ class Tomigidt:
     def events(self) -> list[dict]:
         return deepcopy(self._events)
 
+    @property
+    def pending_search(self) -> bool:
+        """Whether another planning quantum can continue retained work."""
+        return self._planning is not None
+
     def _encode_frame(self, observations: object) -> dict[str, int]:
         if type(observations) is not dict:
             raise ValueError("Observations must be a path-to-hazard object")
@@ -187,17 +210,30 @@ class Tomigidt:
             encoded[path] = pack(r, g, hazard, Opcode.DATA)
         return encoded
 
-    def _decide(self, frame: dict[str, int], known: dict[str, int]) -> Decision:
+    def _model_weights(self, known: dict[str, int]) -> tuple[tuple[str, int], ...]:
+        # Compare effective costs: observing a previously unknown zero hazard
+        # confirms the baseline hypothesis without invalidating pending work.
+        return tuple((path, movement_cost(self.world.derive(path).pair,
+                                         unpack(known[path])[2] if path in known else 0))
+                     for path in self._graph)
+
+    def _decide(self, frame: dict[str, int], known: dict[str, int]) -> tuple[Decision, _Planning | None]:
         if set(frame) != set(self.visible_paths):
-            return Decision("WAIT", "Fresh observations of the current node and every outgoing neighbor are required")
+            planning = self._planning
+            if planning is not None and not planning.matches(
+                self.position, self.agent_pair, self._model_weights(known)
+            ):
+                planning = None
+            return (Decision("WAIT", "Fresh observations of the current node and every outgoing neighbor are required"),
+                    planning)
         energy = unpack(unpair(self.agent_pair)[0])[2]
         if self.position == self.manifest.target:
             if energy < self.manifest.repair_cost:
-                return Decision("INSUFFICIENT_ENERGY", "Insufficient energy for the target repair")
+                return Decision("INSUFFICIENT_ENERGY", "Insufficient energy for the target repair"), None
             r, g, b, a = unpack(unpair(self.agent_pair)[0])
             result = pair(pack(r, g, b - self.manifest.repair_cost, (a & ~7) | Opcode.EMIT))
-            return Decision("REPAIR", "Observed target reached", cost=self.manifest.repair_cost,
-                            expected_pair=result)
+            return (Decision("REPAIR", "Observed target reached", cost=self.manifest.repair_cost,
+                             expected_pair=result), None)
 
         def entry_cost(path: str) -> int:
             # Unseen farther nodes have the declared baseline hazard hypothesis.
@@ -206,18 +242,32 @@ class Tomigidt:
             return movement_cost(self.world.derive(path).pair, hazard)
 
         try:
-            route = shortest_route(
-                self._graph, self.position, self.manifest.target, entry_cost,
-                max_hops=32, max_expansions=self.manifest.max_search_expansions,
-            )
+            if self.manifest.policy == LEGACY_POLICY:
+                route = shortest_route(
+                    self._graph, self.position, self.manifest.target, entry_cost,
+                    max_hops=32, max_expansions=self.manifest.max_search_expansions,
+                )
+            else:
+                weights = self._model_weights(known)
+                planning = self._planning
+                if planning is None or not planning.matches(self.position, self.agent_pair, weights):
+                    cursor = RouteSearch.start(self._graph, self.position, self.manifest.target,
+                                               dict(weights).__getitem__, max_hops=32)
+                else:
+                    cursor = planning.cursor
+                cursor, route = cursor.advance(self.manifest.max_search_expansions)
+                if route is None:
+                    return (Decision("DEFER", "Retained unfinished route search for the next cycle",
+                                     expansions=cursor.expansions),
+                            _Planning(self.position, self.agent_pair, weights, cursor))
         except NoRoute:
-            return Decision("UNREACHABLE", "The declared movement graph has no route to the target")
+            return Decision("UNREACHABLE", "The declared movement graph has no route to the target"), None
         except SearchBudgetExceeded as exc:
-            return Decision("DEFER", "The finite route-search budget did not establish a route",
-                            expansions=exc.expansions)
+            return (Decision("DEFER", "The finite route-search budget did not establish a route",
+                             expansions=exc.expansions), None)
         if route.cost + self.manifest.repair_cost > energy:
-            return Decision("INSUFFICIENT_ENERGY", "The least-cost known route cannot preserve repair energy",
-                            route=route.route, cost=route.cost, expansions=route.expansions)
+            return (Decision("INSUFFICIENT_ENERGY", "The least-cost known route cannot preserve repair energy",
+                             route=route.route, cost=route.cost, expansions=route.expansions), None)
         next_path = route.route[0]
         if next_path not in frame or next_path not in self._graph[self.position]:
             raise ValueError("Planner proposed movement without observed adjacency")
@@ -231,8 +281,8 @@ class Tomigidt:
             forecast_cost += cost
         if forecast_cost != route.cost:
             raise ValueError("Route search and packed imagination disagree on cost")
-        return Decision("MOVE", "Follow the least-cost route in the current internal model",
-                        route.route, route.cost, forecast[0], route.expansions, tuple(forecast))
+        return (Decision("MOVE", "Follow the least-cost route in the current internal model",
+                         route.route, route.cost, forecast[0], route.expansions, tuple(forecast)), None)
 
     def step(self, observations: object) -> Decision:
         if self.status == "COMPLETE":
@@ -241,13 +291,14 @@ class Tomigidt:
             raise ValueError("The declared agent cycle budget is exhausted")
         frame = self._encode_frame(observations)
         known = {**self._observations, **frame}
-        decision = self._decide(frame, known)
+        decision, planning = self._decide(frame, known)
         if decision.expected_pair is not None:
             unpair(decision.expected_pair)
         # Validation and hypothetical execution finish before live mutation.
         for path in frame:
             self.world.get(path)
         self._observations = known
+        self._planning = planning
         if decision.kind == "MOVE":
             self._position = decision.route[0]
             self._pair = decision.expected_pair
@@ -267,7 +318,7 @@ class Tomigidt:
         return decision
 
     def snapshot(self) -> dict:
-        return {
+        snapshot = {
             "identity": self.identity, "cycle": self.cycle, "status": self.status,
             "position": self.position, "target": self.manifest.target,
             "agent_pair": f"{self.agent_pair:016X}",
@@ -279,6 +330,15 @@ class Tomigidt:
             "observations": {path: f"{word:08X}" for path, word in sorted(self._observations.items())},
             "last_decision": None if self._last_decision is None else self._last_decision.to_dict(),
         }
+        if self.manifest.policy == POLICY:
+            planning = self._planning
+            snapshot["planning"] = None if planning is None else {
+                "position": planning.position, "target": self.manifest.target,
+                "agent_pair": f"{planning.agent_pair:016X}", "weights": dict(planning.weights),
+                "expansions": planning.cursor.expansions,
+                "pending_states": planning.cursor.pending_states,
+            }
+        return snapshot
 
     def archive(self) -> dict:
         return {"format": FORMAT, "manifest": self.manifest.to_dict(),

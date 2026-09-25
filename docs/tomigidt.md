@@ -54,11 +54,29 @@ Search budgets and target reachability have different results:
 | WAIT | Fresh local observations are incomplete; no movement or energy debit occurs. |
 | UNREACHABLE | The declared directed graph has no route to the target. |
 | INSUFFICIENT_ENERGY | The current least-cost model cannot preserve the required repair energy. |
-| DEFER | A reachable target could not be resolved within the finite search budget. |
+| DEFER | A reachable target is unresolved; v2 retains unfinished weighted search for the next cycle. A route beyond the fixed hop limit has no resumable search. |
 
-At most 256 graph nodes and 32 hops are supported. Weighted search is bounded
-by the manifest's expansion budget; preflight graph reachability is separately
-bounded by the graph-size limit. DEFER records the weighted expansions consumed.
+At most 256 graph nodes and 32 hops are supported. In v2,
+`max_search_expansions` limits weighted expansions **per accepted planning
+cycle**. A DEFER consumes that quantum and retains the immutable frontier and
+best prefixes. The next complete frame continues that work if the position,
+packed agent state and effective entry costs still match. Even a quantum of
+one can eventually establish a route in a sufficiently stable model, given
+enough remaining cycles. A result reached exactly at the quantum boundary is
+used immediately. Decision `expansions` is cumulative for that search, including
+earlier DEFER cycles; it resets when the planning context changes.
+
+Fresh changed costs discard pending work before it can choose an action.
+Incomplete frames produce WAIT: unchanged costs preserve the search without
+advancing it; changed costs invalidate it. MOVE, REPAIR and resolved planning
+outcomes clear the cursor. Persistent environmental changes can keep
+invalidating searches, so progress is conditional on a sufficiently stable
+model. Search cycles advance the sensor timeline even when no movement occurs.
+
+Preflight graph reachability is separately bounded by the graph-size limit.
+The expansion quantum does not limit all work in a cycle: reconstructing costs,
+copying the cursor and writing the journal also take time. Frontier entries,
+best prefixes and route tuples consume memory beyond the active world cache.
 The finite cycle budget is also retained in the manifest. Budget exhaustion
 never becomes a claim of successful completion or global unreachability.
 
@@ -69,11 +87,21 @@ cycle replans from the current state and new observations.
 
 ## Persistence and single ownership
 
-Agent archives use `tomigidt-agent-v1`, policy
-`tomigidt-observe-plan-act-v1`, and perspective `local-observation-v1`.
+Agent archives use envelope `tomigidt-agent-v1` and perspective
+`local-observation-v1`. The manifest selects the behavior version. New agents
+default to `tomigidt-observe-plan-act-v2`, which retains search work.
+`tomigidt-observe-plan-act-v1` remains supported with its original bounded
+search, decisions and snapshot shape; existing journals are never silently
+upgraded. Frozen fixtures from the previous implementation verify this.
 Every input that affects a decision is in the manifest or ordered event history.
 Replay reconstructs the policy decisions and predicted/output pairs, not just
 the final state. The retained expected state is only a comparison witness.
+
+For v2, that witness also includes a `planning` summary: context, cumulative
+expansions and pending state count, or null when no search remains. Replay
+rebuilds the actual frontier from the original observations and policy cycles.
+It never installs the summary as trusted live state. Restarting halfway through
+planning therefore continues the same search after verification.
 
 The CLI session also retains the simulated environment and its versioned change
 schedule. Resuming checks that historical sensor inputs agree with that
@@ -92,11 +120,16 @@ This is a simulation transaction: there is no physical actuator or external
 side effect between a decision and its saved record. Exactly-once physical
 actions would require an additional actuator acknowledgment protocol.
 
-An invocation stops after a nonacting outcome instead of spinning. A subsequent
-invocation can admit one fresh frame and recover if conditions have changed.
+An invocation continues pending v2 search within its `--steps` budget, saving
+every DEFER before admitting the next frame. Other nonacting outcomes return
+control after one new frame. A subsequent invocation can admit another fresh
+frame and recover if conditions have changed.
 For example, a lower observed hazard can make a previously unaffordable route
 viable. COMPLETE stays terminal for this mission; reaching the manifest's cycle
 budget is reported separately from the last decision status.
+Stopping at `--steps` while a search remains pending reports
+`STEP_BUDGET_EXHAUSTED`, with status `SEARCH_DEFERRED`. A hop-limit DEFER has no
+cursor and stops immediately; repeating it cannot extend the declared hop bound.
 
 ## Default runnable experiment
 
@@ -118,11 +151,29 @@ invocation resumes the same identity and history. The agent's COMPLETE status
 means only that its declared simulated target was repaired. It does not mark
 the user's broader Codex goal complete.
 
+To interrupt unfinished planning, use the supplied static scenario with one
+weighted expansion per cycle and a new state file:
+
+```sh
+python -m solvefinite agent run --scenario examples/tomigidt-incremental.json --state output/tomigidt/incremental.json --steps 2 --capacity 1
+python -m solvefinite agent run --state output/tomigidt/incremental.json --steps 64 --capacity 8
+python -m solvefinite agent inspect output/tomigidt/incremental.json
+```
+
+After the first command, the agent is at the root with two accumulated search
+expansions. The next process reconstructs those cycles, continues the frontier
+and completes at cycle 14. It traverses `root -> 0 -> 00 -> 11`, finishing with
+86 energy units and pair `9656236786562399`. Its complete archive matches an
+uninterrupted run of the same scenario. The static sensor schedule here differs
+from the changing-hazard default above; it isolates planning continuation.
+
 ## Verification and remaining scope
 
 Tests exercise generated legal routes, changed measurements, stale or incomplete
 input, full forecasts, malformed histories, cache changes, repeated recovery,
-fresh-process continuation and exclusive session ownership. The original RP32
+fresh-process continuation during search, old-policy replay and exclusive
+session ownership. Incremental search results are compared with one-shot
+search under multiple quantum sizes. The original RP32
 reference vectors and original colony demo remain covered.
 
 What is now executable is one autonomous mission loop with persistent local
@@ -131,10 +182,6 @@ autonomous duties before the full user goal can be audited for completion.
 
 The current application profile does not implement open-ended goal formation,
 learning, real sensors or actuators, or a continuous multi-mission lifecycle.
-DEFER currently retries the same bounded route search; it does not retain a
-partially explored frontier. With an unchanged model and insufficient fixed
-search budget, retries cannot make progress. Resumable bounded search is the
-next concrete autonomy improvement, with the same replay and admission rules.
 It also does not establish full f8, Klein-bottle field/Hadamard or WElip
 conformance. Those source contracts are not silently replaced by this
 application's graph and planning rules. Performance, retained-history growth

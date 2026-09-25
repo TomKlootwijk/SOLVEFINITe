@@ -270,8 +270,9 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(resumed["status"], "COMPLETE")
         self.assertEqual(resumed["stop_reason"], "COMPLETE")
 
-    def test_search_deferred_retries_once_per_run_then_stops_at_cycle_budget(self):
-        scenario = Scenario(replace(AgentManifest(), max_search_expansions=1, max_cycles=3),
+    def test_v1_search_deferred_retries_once_per_run_then_stops_at_cycle_budget(self):
+        scenario = Scenario(replace(AgentManifest(policy="tomigidt-observe-plan-act-v1"),
+                                    max_search_expansions=1, max_cycles=3),
                             changes=())
         supplied = self.scenario_file(scenario)
         for cycle in (1, 2, 3):

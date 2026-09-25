@@ -6,12 +6,17 @@ equal-cost ties; it does not assert optimality without that hop constraint.
 ``NoRoute`` proves that the target is unreachable in the supplied graph.
 ``SearchBudgetExceeded`` means a reachable target needs more hops, or the
 weighted search ran out of expansions before it could certify a result.
+``RouteSearch`` retains unfinished work across expansion quanta; the one-shot
+``shortest_route`` implementation is kept for published v1 policy replay.
 """
+
+from __future__ import annotations
 
 from collections import deque
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from heapq import heappop, heappush
+from types import MappingProxyType
 
 
 class NoRoute(ValueError):
@@ -69,6 +74,140 @@ def normalize_graph(edges: Mapping[str, Sequence[str]]) -> dict[str, tuple[str, 
            for neighbor in neighbors):
         raise ValueError("all neighbors must be declared graph nodes")
     return {node: copied[node] for node in sorted(copied)}
+
+
+@dataclass(frozen=True)
+class RouteSearch:
+    """An immutable Dijkstra cursor that resumes without re-reading its inputs.
+
+    Construct with ``start``, then retain the returned cursor from ``advance``.
+    Graph structure, entry weights and hop constraints belong to that search's
+    original model. If observations change a weight, start a new search rather
+    than continuing this one. The callback is not retained or invoked again.
+
+    Each advance settles at most its expansion quantum. An unfinished result
+    is ``None``; the returned cursor owns all pending work. Completed cursors
+    return their certified result again without consuming more expansions.
+    """
+
+    _graph: Mapping[str, tuple[str, ...]]
+    _weights: Mapping[str, int]
+    _remaining_hops: Mapping[str, int]
+    _target: str
+    _max_hops: int
+    _frontier: tuple[tuple[int, tuple[str, ...], str, int], ...]
+    _best: tuple[tuple[tuple[str, int], tuple[int, tuple[str, ...]]], ...]
+    expansions: int = 0
+    _result: SearchResult | None = None
+
+    @classmethod
+    def start(
+        cls,
+        edges: Mapping[str, Sequence[str]],
+        start: str,
+        target: str,
+        cost: Callable[[str], int],
+        max_hops: int = 32,
+    ) -> RouteSearch:
+        """Snapshot validated inputs and prove reachability before any expansion.
+
+        Costs are evaluated once per node in sorted order, including unused
+        nodes and the start. Disconnected graphs raise ``NoRoute``; reachable
+        targets beyond the hop bound raise ``SearchBudgetExceeded`` with zero
+        expansions. These match the one-shot search's preflight semantics.
+        """
+        _budget(max_hops, 32, "max_hops")
+        graph = normalize_graph(edges)
+        _path(start, "start")
+        _path(target, "target")
+        if start not in graph or target not in graph:
+            raise ValueError("start and target must be declared graph nodes")
+        if not callable(cost):
+            raise ValueError("cost must be callable")
+        weights = {}
+        for node in sorted(graph):
+            weight = cost(node)
+            if type(weight) is not int or weight < 1:
+                raise ValueError("each node cost must be a positive integer (not bool)")
+            weights[node] = weight
+        if start == target:
+            return cls(MappingProxyType(graph), MappingProxyType(weights),
+                       MappingProxyType({target: 0}), target, max_hops, (), (),
+                       _result=SearchResult((), 0, 0))
+
+        predecessors = {node: [] for node in graph}
+        for node in sorted(graph):
+            for neighbor in graph[node]:
+                predecessors[neighbor].append(node)
+        remaining_hops = {target: 0}
+        pending = deque([target])
+        while pending:
+            node = pending.popleft()
+            for predecessor in predecessors[node]:
+                if predecessor not in remaining_hops:
+                    remaining_hops[predecessor] = remaining_hops[node] + 1
+                    pending.append(predecessor)
+        if start not in remaining_hops:
+            raise NoRoute(f"no directed route from {start!r} to {target!r}")
+        if remaining_hops[start] > max_hops:
+            raise SearchBudgetExceeded("target cannot be reached within max_hops", 0)
+        return cls(MappingProxyType(graph), MappingProxyType(weights),
+                   MappingProxyType(remaining_hops), target, max_hops,
+                   ((0, (), start, 0),), (((start, 0), (0, ())),))
+
+    @property
+    def pending_states(self) -> int:
+        """Number of live frontier labels, excluding obsolete heap entries."""
+        best = dict(self._best)
+        return sum(best[(node, hops)] == (total, route)
+                   for total, route, node, hops in self._frontier)
+
+    def advance(self, max_expansions: int) -> tuple[RouteSearch, SearchResult | None]:
+        """Return a new cursor after at most this many non-target expansions.
+
+        Validation and all work leave this cursor untouched, including failure.
+        Stale entries and a reached target cost no expansions. They are handled
+        even at the quantum boundary; a popped unexpanded state is retained
+        when more work needs a later call.
+        """
+        _budget(max_expansions, 65536, "max_expansions")
+        frontier = list(self._frontier)
+        best = dict(self._best)
+        expansions = self.expansions
+        result = self._result
+        if result is None:
+            while frontier:
+                entry = heappop(frontier)
+                total, route, node, hops = entry
+                if best[(node, hops)] != (total, route):
+                    continue
+                if node == self._target:
+                    result = SearchResult(route, total, expansions)
+                    frontier = []
+                    best = {}
+                    break
+                if expansions - self.expansions == max_expansions:
+                    heappush(frontier, entry)
+                    break
+                expansions += 1
+                next_hops = hops + 1
+                for neighbor in self._graph[node]:
+                    if (neighbor not in self._remaining_hops
+                            or next_hops + self._remaining_hops[neighbor] > self._max_hops):
+                        continue
+                    candidate = (total + self._weights[neighbor], route + (neighbor,))
+                    state = (neighbor, next_hops)
+                    if state not in best or candidate < best[state]:
+                        best[state] = candidate
+                        heappush(frontier, (*candidate, neighbor, next_hops))
+            if not frontier and result is None:
+                raise RuntimeError("reachable route was lost during weighted search")
+        updated = RouteSearch(
+            self._graph, self._weights, self._remaining_hops, self._target,
+            self._max_hops, tuple(frontier), tuple(sorted(best.items())),
+            expansions, result,
+        )
+        return updated, result
 
 
 def shortest_route(
