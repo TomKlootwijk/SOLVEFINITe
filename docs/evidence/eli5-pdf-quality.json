@@ -1,0 +1,15 @@
+{
+  "artifact": "output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf",
+  "sha256": "a07c87b7e2c8f03ae6fd27403f4f46c608d582196e8e8b78064653b3d8516116",
+  "pages": 6,
+  "outline_entries": 6,
+  "extracted_words": 768,
+  "off_page_characters": 0,
+  "replacement_characters": 0,
+  "rebuild_byte_identical": true,
+  "render_dpi": 105,
+  "visual_review": "All six final pages reviewed at full rendered size; no clipping, overlap or missing glyphs observed.",
+  "illustrations": "Original PDF vectors",
+  "formal_pdf_unchanged": true,
+  "runtime_tests": "Not rerun for this documentation-only change; figures quote the retained 25 September 2026 baseline."
+}

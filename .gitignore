@@ -5,4 +5,5 @@ output/*
 !output/pdf/
 output/pdf/*
 !output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf
+!output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf
 tmp/pdfs/

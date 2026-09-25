@@ -150,3 +150,26 @@ The final document is
 The [evidence directory](docs/evidence/formal-edition-2026-09-25/README.md)
 records scope and reproduction. The document version changes no runtime schema;
 earlier source PDFs and formal companions remain preserved development history.
+
+## 2026-09-25: a separate friendly ELI5 PDF
+
+Exact user request:
+
+```text
+document that in a special ELI5 .pdf as in not in dry technical clinical tech terms and commit and push
+```
+
+- [x] Turn the conversational ELI5 explanation into a separate six-page booklet
+  with everyday language and original vector pictures: a little robot,
+  connected rooms, rule cards, saved recipes and a nearby GPU workbench.
+- [x] Preserve the meaning of one individual, field-guided steps, shared blocks,
+  rebuilding from retained inputs, limited mirror checks and conditional
+  infallibility, while explaining the remaining work plainly.
+- [x] Render and visually inspect every page; check text bounds and a byte-identical rebuild.
+- [x] Commit and push the booklet and reproducible builder.
+
+The [ELI5 PDF](output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf) is a friendly companion
+to the formal edition. Its progress figures come from the already recorded
+25 September evidence: 262 passing tests, including 21 actual GPU tests, and
+matching 64-step CPU/GPU field traces. No new runtime claim is introduced.
+Implementation remains parked.

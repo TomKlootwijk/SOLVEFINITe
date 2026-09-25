@@ -3,6 +3,11 @@
 A runnable reference experiment for Tom Klootwijk's **Self-Referential
 Log-Encoded Polar LUT Paradigm**.
 
+For a friendly introduction, read
+[the illustrated ELI5 booklet](output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf):
+six short pages with a little robot, connected rooms, rule cards and recipes.
+It explains the idea in everyday language and shows which pieces already work.
+
 The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
 This single, self-contained 34-page PDF integrates the original specification,
@@ -17,6 +22,11 @@ Fresh verification at `8f4b87b`: **262 tests passed, zero skipped**, including
 21 actual-device GPU methods. CPU/GPU field traces and resumed execution agree.
 [Evidence and reproduction details](docs/evidence/formal-edition-2026-09-25/README.md)
 retain the exact scope and remaining architecture obligations.
+
+The ELI5 booklet can be rebuilt with `python tools/build_eli5.py` using
+ReportLab, pypdf, and the Windows Georgia/Segoe UI fonts. Its illustrations are
+drawn as PDF vectors. The formal edition remains the source for precise rules
+and proofs; neither PDF changes the implementation.
 
 The first experiment follows a simulated colony agent that compares repair
 plans, evicts and regenerates world state, pauses halfway through its plan, and
