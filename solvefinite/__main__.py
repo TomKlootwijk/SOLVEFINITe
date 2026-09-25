@@ -140,6 +140,16 @@ def main(argv: list[str] | None = None) -> int:
     field_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     field_manifest = field_commands.add_parser("manifest", help="Export the default intrinsic waveguide")
     field_manifest.add_argument("--output", type=Path, required=True)
+    field_klein = field_commands.add_parser("klein", help="Generate and audit a Klein field manifest")
+    field_klein.add_argument("--output", type=Path, required=True)
+    field_klein.add_argument("--width", type=int, default=8)
+    field_klein.add_argument("--height", type=int, default=8)
+    field_klein.add_argument("--center", type=int, default=0, help="Intrinsic ball center node index")
+    field_klein.add_argument("--radius", type=int, default=2, help="Intrinsic ball radius in edge steps")
+    field_klein.add_argument("--initial-node", type=int, default=0)
+    field_klein.add_argument("--initial-phase", type=int, default=250)
+    field_klein.add_argument("--initial-orientation", type=int, default=0)
+    field_klein.add_argument("--max-ticks", type=int, default=65536)
     agent_parser = commands.add_parser("agent", help="Operate the persistent TOMIGIDt single agent")
     agent_commands = agent_parser.add_subparsers(dest="agent_command", required=True)
     agent_run = agent_commands.add_parser("run", help="Sense, plan and act; resume the existing state if present")
@@ -180,10 +190,21 @@ def main(argv: list[str] | None = None) -> int:
                                            manifest_path=args.manifest)
             elif args.field_command == "inspect":
                 result = inspect_field(args.state, backend=args.backend)
+            elif args.field_command == "klein":
+                from .klein import KleinDomain
+                domain = KleinDomain(args.width, args.height)
+                manifest = domain.field_manifest(
+                    center=args.center, radius=args.radius, initial_node=args.initial_node,
+                    initial_phase=args.initial_phase, initial_orientation=args.initial_orientation,
+                    max_ticks=args.max_ticks)
+                audit = domain.audit()
+                write_json(args.output, manifest.to_dict())
+                result = {"manifest": str(args.output.resolve()), "profile": manifest.profile,
+                          "topology_audit": audit}
             else:
                 manifest = FieldManifest()
                 write_json(args.output, manifest.to_dict())
-                result = {"manifest": str(args.output.resolve()), "profile": "relational-sdf-v1"}
+                result = {"manifest": str(args.output.resolve()), "profile": manifest.profile}
         else:
             from .session import Scenario, load_session, run_session
             if args.agent_command == "run":

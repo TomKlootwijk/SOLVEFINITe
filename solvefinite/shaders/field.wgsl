@@ -1,4 +1,4 @@
-// TK-LPLUT-SDF-1.0: intrinsic graph distances and geometric RP32 operators.
+// TK-LPLUT-SDF-1.0 / TK-LPLUT-KLEIN-1.0: intrinsic distances and RP32 transport.
 // All addresses are manifest indices, not Cartesian positions.
 // Each entry point uses an automatically inferred subset of this group:
 //  0 configuration [node_count, batch_ticks, max_ticks, reserved]
@@ -8,6 +8,7 @@
 //  7 operator texture storage view; 8 sampled integer operator view
 //  9 persistent [left RP32, right RP32, tick, reserved]
 // 10 batch output pairs. Distances and intermediate sums are widened u32.
+// 11 undirected seam adjacency, ceil(node_count / 32) u32 words per row.
 
 @group(0) @binding(0) var<storage, read> config: array<u32>;
 @group(0) @binding(1) var<storage, read> signs: array<i32>;
@@ -20,6 +21,7 @@
 @group(0) @binding(8) var operators: texture_2d<u32>;
 @group(0) @binding(9) var<storage, read_write> state: array<u32>;
 @group(0) @binding(10) var<storage, read_write> output: array<vec2<u32>>;
+@group(0) @binding(11) var<storage, read> seams: array<u32>;
 
 const INFINITY: u32 = 0x3fffffffu;
 
@@ -79,7 +81,11 @@ fn compile_operators(@builtin(global_invocation_id) id: vec3<u32>) {
     let slot = id.x;
     if slot >= 3u * config[0] { return; }
     let rule = rules[slot];
-    let word = pack_rp32(rule.y, rule.x, fields[rule.x], 1u);
+    let source = slot / 3u;
+    let stride = (config[0] + 31u) / 32u;
+    let tau = (seams[source * stride + rule.x / 32u] >> (rule.x % 32u)) & 1u;
+    // Operator bit 6 holds relative edge transport; its orientation bit is 0.
+    let word = pack_rp32(rule.y, rule.x, fields[rule.x], 1u | (tau << 6u));
     textureStore(operator_target, vec2<i32>(i32(slot % 3u), i32(slot / 3u)),
                  vec4<u32>(word, 0u, 0u, 0u));
 }
@@ -98,10 +104,15 @@ fn advance_ticks(@builtin(global_invocation_id) id: vec3<u32>) {
         let phase = word & 255u;
         let delta = op & 255u;
         let metadata = (word >> 24u) & 127u;
-        let next_phase = select(phase + delta, phase + 256u - delta,
-                                (metadata & 16u) != 0u) & 255u;
+        let departure_phase = select(phase + delta, phase + 256u - delta,
+                                     (metadata & 16u) != 0u) & 255u;
+        let tau = (op >> 30u) & 1u;
+        let next_phase = select(departure_phase, (256u - departure_phase) & 255u,
+                                tau != 0u);
+        // Only STEP and the transported orientation enter live metadata.
+        let next_metadata = 1u | ((metadata & 16u) ^ (tau << 4u));
         word = pack_rp32(next_phase, (op >> 8u) & 255u,
-                         signed_field(op), metadata);
+                         signed_field(op), next_metadata);
         output[tick] = vec2<u32>(word, mirror_rp32(word));
     }
     state[0] = word;

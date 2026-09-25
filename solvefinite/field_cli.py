@@ -27,7 +27,7 @@ def run_field_session(state_path, *, steps=32, backend="cpu", manifest_path=None
             outputs = machine.advance(steps)
             write_json(path, machine.archive())
             return {
-                "profile": "relational-sdf-v1", "restored": restored,
+                "profile": machine.manifest.profile, "restored": restored,
                 "executed_ticks": len(outputs), "state_path": str(path),
                 "state": machine.snapshot(),
                 "field": dict(zip(machine.manifest.nodes, machine.fields)),
@@ -41,7 +41,8 @@ def run_field_session(state_path, *, steps=32, backend="cpu", manifest_path=None
 def inspect_field(state_path, *, backend="cpu"):
     machine = FieldMachine.from_archive(_read_json(state_path), backend=backend)
     try:
-        return {"verified": True, "state_path": str(Path(state_path).resolve()),
+        return {"verified": True, "profile": machine.manifest.profile,
+                "state_path": str(Path(state_path).resolve()),
                 "state": machine.snapshot(), "field": dict(zip(machine.manifest.nodes, machine.fields)),
                 "execution_info": machine.execution_info}
     finally:

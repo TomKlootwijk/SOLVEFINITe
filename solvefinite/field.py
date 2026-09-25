@@ -1,6 +1,6 @@
 """Exact intrinsic signed fields and one field-governed RP32 state sequence.
 
-The numerical contracts are TK-LPLUT-SDF-1.0, ``relational-sdf-v1``.
+The numerical contracts are TK-LPLUT-SDF-1.0 and TK-LPLUT-KLEIN-1.0.
 The boundary and metric are declared graph data, not inferred physical space.
 """
 
@@ -16,6 +16,7 @@ from .runtime import _integer, _keys
 
 
 PROFILE = "relational-sdf-v1"
+PROFILE_V2 = "relational-sdf-v2"
 FORMAT = "relational-sdf-machine-v1"
 DEFAULT_NODES = tuple(f"n{i}" for i in range(7))
 DEFAULT_EDGES = tuple((i, i + 1, weight)
@@ -55,8 +56,17 @@ class FieldManifest:
     initial_phase: int = 250
     initial_orientation: int = 0
     max_ticks: int = 65536
+    profile: str = PROFILE
+    seams: tuple[tuple[int, int], ...] = ()
+    topology: tuple[int, int] | None = None
 
     def __post_init__(self) -> None:
+        if type(self.profile) is not str or self.profile not in (PROFILE, PROFILE_V2):
+            raise ValueError("Unsupported field manifest format")
+        if type(self.seams) is not tuple:
+            raise ValueError("seams must be an immutable tuple")
+        if self.profile == PROFILE and (self.seams or self.topology is not None):
+            raise ValueError("relational-sdf-v1 cannot carry seams or topology")
         _name(self.identity, "identity")
         if type(self.nodes) is not tuple or not 1 <= len(self.nodes) <= 256:
             raise ValueError("nodes must be an immutable tuple of 1..256 names")
@@ -99,6 +109,26 @@ class FieldManifest:
                     pending.append(neighbor)
         if len(seen) != count:
             raise ValueError("The metric graph must be connected")
+        previous = None
+        for seam in self.seams:
+            if type(seam) is not tuple or len(seam) != 2:
+                raise ValueError("Each seam must be an immutable (u,v) tuple")
+            u, v = seam
+            _integer(u, 0, count - 1, "seam source")
+            _integer(v, 0, count - 1, "seam destination")
+            if u >= v or (previous is not None and seam <= previous):
+                raise ValueError("Seams require sorted unique endpoints u < v")
+            if v not in neighbors[u]:
+                raise ValueError("A seam must name an existing edge")
+            previous = seam
+        if self.topology is not None:
+            if type(self.topology) is not tuple or len(self.topology) != 2:
+                raise ValueError("topology must be an immutable (width,height) tuple")
+            from .klein import KleinDomain
+            domain = KleinDomain(*self.topology)
+            if (self.nodes, self.edges, self.seams) != (domain.nodes, domain.edges, domain.seams):
+                raise ValueError("Klein descriptor disagrees with nodes, edges or seams")
+            domain.audit()
         for name, rows in (("routes", self.routes), ("turns", self.turns)):
             if type(rows) is not tuple or len(rows) != count:
                 raise ValueError(f"{name} must have one immutable row per node")
@@ -119,8 +149,8 @@ class FieldManifest:
         _integer(self.max_ticks, 1, 65536, "max_ticks")
 
     def to_dict(self) -> dict:
-        return {
-            "format": PROFILE, "identity": self.identity, "nodes": list(self.nodes),
+        result = {
+            "format": self.profile, "identity": self.identity, "nodes": list(self.nodes),
             "edges": [list(edge) for edge in self.edges], "signs": list(self.signs),
             "routes": [list(row) for row in self.routes],
             "turns": [list(row) for row in self.turns],
@@ -128,18 +158,39 @@ class FieldManifest:
             "initial_node": self.initial_node, "initial_phase": self.initial_phase,
             "initial_orientation": self.initial_orientation, "max_ticks": self.max_ticks,
         }
+        if self.profile == PROFILE_V2:
+            result["seams"] = [list(seam) for seam in self.seams]
+            result["topology"] = (None if self.topology is None else {
+                "format": "klein-grid-v1", "width": self.topology[0], "height": self.topology[1],
+            })
+        return result
+
+    def seam(self, source: int, destination: int) -> int:
+        """Relative orientation transport; this does not grant adjacency."""
+        _integer(source, 0, len(self.nodes) - 1, "source")
+        _integer(destination, 0, len(self.nodes) - 1, "destination")
+        return int((min(source, destination), max(source, destination)) in self.seams)
 
     @classmethod
     def from_dict(cls, value: object) -> FieldManifest:
-        _keys(value, _MANIFEST_KEYS, "Field manifest")
-        if type(value["format"]) is not str or value["format"] != PROFILE:
+        if (type(value) is not dict or type(value.get("format")) is not str
+                or value["format"] not in (PROFILE, PROFILE_V2)):
             raise ValueError("Unsupported field manifest format")
-        for name in ("nodes", "edges", "signs", "routes", "turns"):
+        is_v2 = value["format"] == PROFILE_V2
+        _keys(value, _MANIFEST_KEYS | ({"seams", "topology"} if is_v2 else set()),
+              "Field manifest")
+        for name in ("nodes", "edges", "signs", "routes", "turns") + (("seams",) if is_v2 else ()):
             if type(value[name]) is not list:
                 raise ValueError(f"{name} must be a JSON array")
-        for name in ("edges", "routes", "turns"):
+        for name in ("edges", "routes", "turns") + (("seams",) if is_v2 else ()):
             if any(type(row) is not list for row in value[name]):
                 raise ValueError(f"{name} rows must be JSON arrays")
+        topology = value["topology"] if is_v2 else None
+        if topology is not None:
+            _keys(topology, {"format", "width", "height"}, "Field topology")
+            if type(topology["format"]) is not str or topology["format"] != "klein-grid-v1":
+                raise ValueError("Unsupported field topology format")
+            topology = (topology["width"], topology["height"])
         return cls(
             identity=value["identity"], nodes=tuple(value["nodes"]),
             edges=tuple(tuple(edge) for edge in value["edges"]), signs=tuple(value["signs"]),
@@ -148,6 +199,9 @@ class FieldManifest:
             unit_num=value["unit_num"], unit_den=value["unit_den"],
             initial_node=value["initial_node"], initial_phase=value["initial_phase"],
             initial_orientation=value["initial_orientation"], max_ticks=value["max_ticks"],
+            profile=value["format"],
+            seams=tuple(tuple(seam) for seam in value["seams"]) if is_v2 else (),
+            topology=topology,
         )
 
 
@@ -209,9 +263,10 @@ def certify_field(manifest: FieldManifest, values: object) -> None:
 def build_operators(manifest: FieldManifest, fields: object) -> tuple[tuple[int, int, int], ...]:
     """Compile the three field-class operators for every manifest node."""
     certify_field(manifest, fields)
-    return tuple(tuple(pack(turn, destination, fields[destination], Opcode.STEP)
+    return tuple(tuple(pack(turn, destination, fields[destination],
+                            int(Opcode.STEP) | (manifest.seam(node, destination) << 6))
                        for turn, destination in zip(turns, routes))
-                 for turns, routes in zip(manifest.turns, manifest.routes))
+                 for node, (turns, routes) in enumerate(zip(manifest.turns, manifest.routes)))
 
 
 def _state_fields(value: int, manifest: FieldManifest,
@@ -319,10 +374,14 @@ class FieldMachine:
             for _ in range(steps):
                 phase, node, signed, metadata = _state_fields(state, self.manifest, self.fields)
                 column = 0 if signed < 0 else 1 if signed == 0 else 2
-                turn, destination, field, _ = unpack(self._operators[node][column])
+                turn, destination, field, operation = unpack(self._operators[node][column])
                 direction = -1 if metadata & 16 else 1
-                state = pair(pack((phase + direction * turn) % 256,
-                                  destination, field, metadata))
+                next_phase = (phase + direction * turn) % 256
+                seam = (operation >> 6) & 1
+                if seam:
+                    next_phase = (-next_phase) % 256
+                metadata = int(Opcode.STEP) | ((metadata & 16) ^ (seam << 4))
+                state = pair(pack(next_phase, destination, field, metadata))
                 generated.append(state)
             outputs = tuple(generated)
         self._pair = outputs[-1]

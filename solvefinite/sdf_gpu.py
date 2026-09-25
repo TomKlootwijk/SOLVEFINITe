@@ -1,4 +1,4 @@
-"""Optional actual-GPU execution of the relational-sdf-v1 field profile.
+"""Optional actual-GPU execution of the relational-sdf-v1/v2 field profiles.
 
 The device constructs graph distances, compiles their packed operators into an
 integer texture, and retains one individual's current pair across tick batches.
@@ -117,6 +117,17 @@ class GpuFieldExecutor:
             lengths[right * count + left] = length
         weights = self._buffer(4 * count * count,
                                struct.pack(f"<{count * count}I", *lengths))
+        # Upload edge geometry independently of the route program. The shader
+        # derives each operator's transport bit from this authoritative seam
+        # adjacency, rather than accepting host-compiled per-route actions.
+        # A compact row bitset needs at most 8 KiB at the 256-node limit.
+        seam_stride = (count + 31) // 32
+        seam_words = [0] * (count * seam_stride)
+        for left, right in manifest.seams:
+            seam_words[left * seam_stride + right // 32] |= 1 << (right % 32)
+            seam_words[right * seam_stride + left // 32] |= 1 << (left % 32)
+        seams = self._buffer(4 * len(seam_words),
+                             struct.pack(f"<{len(seam_words)}I", *seam_words))
         distances = (self._buffer(4 * count), self._buffer(4 * count))
         self._field_buffer = self._buffer(4 * count)
         rules_data = bytearray(3 * count * 8)
@@ -170,7 +181,7 @@ class GpuFieldExecutor:
         view = self._texture.create_view()
         compile_group = self._group(pipelines["compile_operators"], {
             0: resource(self._config), 5: resource(self._field_buffer),
-            6: resource(rules), 7: view,
+            6: resource(rules), 7: view, 11: resource(seams),
         })
         encoder = device.create_command_encoder()
         self._pass(encoder, pipelines["compile_operators"], compile_group,

@@ -11,12 +11,13 @@ It explains the idea in everyday language and shows which pieces already work.
 The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
 This single, self-contained 34-page PDF integrates the original specification,
-both supplied addenda, the exact SDF contract, the proposed Klein extension and
-current implementation evidence. It defines conditional infallibility through
+both supplied addenda, the exact SDF contract, the Klein extension and
+implementation evidence at `8f4b87b`. It defines conditional infallibility through
 explicit deterministic execution and invariant-preservation obligations.
-The document version does not change runtime formats: `relational-sdf-v1`
-is implemented; the Klein/v2 extension is formal only. Implementation work is
-parked for this documentation detour.
+The documentation detour is complete. The subsequent implementation now supports
+both `relational-sdf-v1` and the formal edition's `relational-sdf-v2` Klein
+geometry and orientation transport. The PDFs retain their dated evidence;
+[current field documentation](docs/field.md) records the later runtime work.
 
 Fresh verification at `8f4b87b`: **262 tests passed, zero skipped**, including
 21 actual-device GPU methods. CPU/GPU field traces and resumed execution agree.
@@ -70,6 +71,31 @@ certificate checks exact distances before execution. CPU and GPU fields,
 tick sequences and recovery must agree exactly. [Field documentation](docs/field.md)
 and the [example manifest](examples/relational-sdf-v1.json) explain the finite
 binding and its limits. The earlier repair-agent profile remains available.
+
+The v2 profile constructs the actual Klein quotient, its faces and its connected
+orientation double cover. The audit checks edge incidences, every vertex link,
+orientability, the complete cover-to-torus edge and face maps, and loop holonomy.
+Its intrinsic metric-ball boundary generates an exact scalar field. Crossing a
+reversing seam transports both phase and orientation within the GPU lookup loop.
+
+```sh
+python -m solvefinite field klein --output output/field/klein-manifest.json
+python -m solvefinite field run --manifest output/field/klein-manifest.json --state output/field/klein.json --steps 32 --backend gpu
+python -m solvefinite field run --state output/field/klein.json --steps 32 --backend cpu
+python -m solvefinite field inspect output/field/klein.json --backend gpu
+python -m examples.klein_conformance
+```
+
+Both backends use the same retained manifest and produce identical packed
+sequences across seams and restarts. This implements K1-K9 of the formal
+edition; integration with the regenerative world and autonomous planning,
+eigenvector-derived Psi and the full f8 index remain architectural work.
+
+Fresh v2 verification: **311 tests passed, zero skipped**, including 28
+actual-device GPU methods. The [conformance report](docs/evidence/klein-field-v2/conformance.json)
+records 22 checks, audits all 702 supported dimension pairs and retains the
+complete 64-tick CPU/GPU traces. [The verification record](docs/evidence/klein-field-v2/verification.json)
+binds these results to source hashes and lists the remaining obligations.
 
 ## TOMIGIDt: persistent autonomous single agent
 

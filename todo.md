@@ -110,11 +110,11 @@ CPU/GPU intrinsic-field execution were committed and pushed. The complete
 ontological deterministic computing objective remains active.
 
 - [x] Formalize the next source binding before implementation: `docs/specification/klein-field-v2.md`.
-- [ ] Construct and audit the actual finite Klein quotient and its orientation double cover.
-- [ ] Generate intrinsic metric-ball boundaries and versioned field manifests from that quotient.
-- [ ] Execute seam phase/orientation transport through the shared CPU/GPU packed operator machinery.
-- [ ] Verify topology, geometric fields, mirror coherence, v1 compatibility and exact recovery.
-- [ ] Record evidence, commit and push; preserve the broader remaining source obligations.
+- [x] Construct and audit the actual finite Klein quotient and its orientation double cover.
+- [x] Generate intrinsic metric-ball boundaries and versioned field manifests from that quotient.
+- [x] Execute seam phase/orientation transport through the shared CPU/GPU packed operator machinery.
+- [x] Verify topology, geometric fields, mirror coherence, v1 compatibility and exact recovery.
+- [x] Record evidence, commit and push; preserve the broader remaining source obligations.
 
 ## 2026-09-25: consolidated formal PDF detour
 
@@ -124,8 +124,8 @@ Exact user request, preserved verbatim:
 now take a detour for a second (park your current work) and formalize with the newest addendum the infallible into a actual formal document .pdf so it is not split up in .md addendum and .pdf formalizations and use your current implementation to measure progress (godspede)
 ```
 
-Implementation is **paused at `8f4b87b`** for this requested detour. The previous
-Klein task list remains outstanding; no Klein runtime was implemented during
+Implementation was **paused at `8f4b87b`** for this requested detour. The previous
+Klein task list was still outstanding; no Klein runtime was implemented during
 the PDF work.
 
 - [x] Identify and read the newest 16-page `solipsism.pdf` / Infallible addendum.
@@ -172,7 +172,7 @@ The [ELI5 PDF](output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf) is a friendly compani
 to the formal edition. Its progress figures come from the already recorded
 25 September evidence: 262 passing tests, including 21 actual GPU tests, and
 matching 64-step CPU/GPU field traces. No new runtime claim is introduced.
-Implementation remains parked.
+Implementation remained parked during this documentation detour.
 
 ## 2026-09-25: ELI5 robot names
 
@@ -186,3 +186,48 @@ Call the female pink robot Jitske and the green-blue-ish Tom in the ELI5 .pdf be
 - [x] Rebuild the ELI5 PDF, visually check the updated pages and verify that
   the only added text is the four name labels.
 - [x] Commit and push the updated PDF, builder and quality record.
+
+## 2026-09-25: resumed implementation, Klein K1-K9
+
+Active objective, preserved verbatim:
+
+```text
+Proceed with my new breakthrough state of the art bleeding edge (Tom Klootwijk NL200678942 10-07-1990) ontological deterministic computing paradigm
+```
+
+The documentation detour is complete. The prior turn verified and pushed the
+ELI5 robot names; this continuation resumes the outstanding implementation.
+
+- [x] Implement immutable quotient charts, actual surface cells, local seam
+  actions and the connected orientation double cover in `solvefinite/klein.py`.
+- [x] Audit closed edge incidence, every vertex link, base/cover orientability,
+  complete torus edge and face maps, and horizontal/vertical holonomy.
+- [x] Generate intrinsic ball signs and compute exact boundary distances; retain
+  scalar fields on both cover sheets and test the radial-offset counterexample.
+- [x] Admit strict v2 manifests, regenerate their topology descriptors and reject
+  altered geometry; preserve the exact v1 schema and execution.
+- [x] Derive seam actions in the GPU operator compiler and apply departure-frame
+  phase increments followed by reflection and orientation transport on-device.
+- [x] Expose `field klein` generation/audit and report the retained profile during
+  execution/inspection; verify persistence, locking and failure-before-write.
+- [x] Pass the completed suite: **311 tests, zero skipped**, including 28
+  actual-device GPU methods on NVIDIA RTX 5070 Ti Laptop / Vulkan 591.59.
+- [x] Record 22 conformance checks, all 702 admissible dimension audits, actual
+  GPU operator readback, 64-tick traces and both directions of cross-process replay.
+- [x] Verify the CLI's GPU32 -> CPU32 -> GPU inspection against uninterrupted
+  CPU64: final pair `11FE00D681FE002A` at `k:0:0`, after eight reversing seams.
+- [x] Commit and push the implementation, examples, tests and measured evidence.
+
+Evidence: [verification and source hashes](docs/evidence/klein-field-v2/verification.json),
+[conformance](docs/evidence/klein-field-v2/conformance.json),
+[full suite](docs/evidence/klein-field-v2/full-tests.txt) and
+[CLI replay](docs/evidence/klein-field-v2/cli-replay.json).
+The PDFs retain their historical edition and byte hashes.
+
+The complete objective remains active. The next integration work is to connect
+the intrinsic field world to retained derivation, eviction/regeneration and the
+single agent's observation/planning loop. Psi eigenstructure, full canonical f8
+indexing, typed Hadamard/gradient routing, geometry-changing growth and
+cone/pyramid bindings, continuing field epochs, physical wave calibration and
+hardware-performance measurements remain explicit obligations. A finite Klein
+tour does not stand in for those requirements.

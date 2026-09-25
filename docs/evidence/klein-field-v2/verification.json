@@ -1,0 +1,166 @@
+{
+  "measured_utc": "2026-09-25T11:30:28.552624+00:00",
+  "base_commit": "6df934e7ae80df8ad82454e1d57d2ed4cc5e2dc8",
+  "source_identity": "Source changes measured before commit; SHA256 normalizes CRLF to LF.",
+  "source_sha256_lf": {
+    "examples/klein_conformance.py": "f84cd90461078ee5c2b69da72188733b8f52e1c9d5d8d95a8557b450534b5bf0",
+    "examples/relational-sdf-v1.json": "975d160ebb708c231fd5680b35915f3033e0b5f7ad80ebc75ba19fad5ccb93cc",
+    "examples/relational-sdf-v2.json": "9dbe45507d7c23fa69ad5c8eeb98029fcbed1f87e8805b56e83e3b7bdf1e36c1",
+    "requirements-gpu.txt": "045f5d1337828593c39d75bceef74a61275c1851653b367c9540bd370523b475",
+    "solvefinite/__init__.py": "b3c2d34b93ee298fd2dd900a85b57cb550f456fe56fec13e885ff6bc6315f889",
+    "solvefinite/__main__.py": "93ff294749b4ab16abfb1a542711c66204735a55402a15a157142c05563ba3f6",
+    "solvefinite/field.py": "8960d29bb6893ff63f7c74f8f3153428b277c942b4593673e0035dc4ec20589d",
+    "solvefinite/field_cli.py": "a9532e03ca1b76b5f51dac139f82fdfd728e6eab1761629b9df88178deab1779",
+    "solvefinite/gpu.py": "b899ad08fce5db1d3defcfe5093fc638318671846c2b26fdf39d69b813a86744",
+    "solvefinite/klein.py": "7f75a857d5ad4d19d37806a51e9cde905211d5390d01c9ef3965d9c38c33f6db",
+    "solvefinite/live.py": "0e8d792f906fadd3db0c9b786963257f98010eddb9eb85869da73d56baf97874",
+    "solvefinite/motion.py": "6b65b1836be618f3bbc426e0f983f2493bea3716ad9235e5da8b77b5e72b9762",
+    "solvefinite/navigation.py": "89aae5777014350c5d4668ad531ee3443eca6b4dfc2a6763657abdbfb492274b",
+    "solvefinite/rp32.py": "bdee9105693db443641b64f0062707aaa76af5c74b5ed3106eaf66fe954444ad",
+    "solvefinite/runtime.py": "532a0adc9d5655ac642426cfb0b2ab95d41933695e840576eb738dcfcf6bedb4",
+    "solvefinite/sdf_gpu.py": "d4e7bff0ee0262c927e3be611c12ef640e3c9ef0809436ae96beb75013286353",
+    "solvefinite/session.py": "22facacfed0883f0cd880dfed0f62a2c47cf3857e050015f8bf8e878c8bf3fcb",
+    "solvefinite/shaders/field.wgsl": "189b8926a582cc1e40483c5ccc41ff76d0a693469c142919b57a258714559384",
+    "solvefinite/shaders/packed.wgsl": "76250a5ea0560df53ecb082554282742ce888fc2f346ca7cfa5eebf4700ff5b3",
+    "solvefinite/tomigidt.py": "0e515c0e49d0111485a4db6b35a106c8d5f36e6b19c3462938abdb93e48fbcff",
+    "solvefinite/world.py": "c60e02783a4f0ac348e16aa755c9c1847f5993ce9bc6db862c6c46a60fa24c63",
+    "tests/test_agent_cli.py": "ce3bac7ea8ecca94cd32359543a0e0ec3eecc98638c11f28f97f03101cfafb4b",
+    "tests/test_backend_plumbing.py": "031095d5206f6d817d7379dad168cb7bb58f17c5ebba15890ceb3dc9016cb2ab",
+    "tests/test_cli.py": "04a2fe906f031f16a8cedc70098973469ca172d426fb6fc3b91e46e31c045f92",
+    "tests/test_field.py": "3043598c649a5ab6e53b907aea4b01551e54aed659d61956d8ae6326111e1d49",
+    "tests/test_field_cli.py": "0d0189513908c1b86fb9ca479e27db4334465941861f85aa889cab6ed06cd304",
+    "tests/test_field_v2.py": "e12edd8358616b35fc63f362330b058e0ed288810a056b4310003376a5076281",
+    "tests/test_gpu.py": "1e114edf14b023d5a86f5b7463cac990aeaae90a2126ef834382f86829179b7b",
+    "tests/test_incremental_agent.py": "4faf231f1e7880d33f2aeeee51a83b2e33e5b81f0fa9245b13d9cdc78bcb6adb",
+    "tests/test_incremental_navigation.py": "c19404d2129ae1e08ef9dd685714a5641ccea63208a0077471e7a16070a9cb95",
+    "tests/test_klein.py": "7bd55d61186d17584d70e7a5b2808a32549680bab9761a2cdc3458c701e5c63a",
+    "tests/test_klein_gpu.py": "e36d50268db7be7a62cc99e3f0f3113081cecd3e3480680f0e45294bbad590b5",
+    "tests/test_live.py": "24586fbfcdc1f5792e5f862958eb09b3ebc4ea2c8bf0a52fd9db34f1e73a2f1c",
+    "tests/test_live_cli.py": "46d15811e07cae167c071529d244e8c24d57c1e2047cac4aa046551744576d1a",
+    "tests/test_motion.py": "8c2c0292d0c8858787188f97a5e03548d90b4ccb950ac7b92a1b654b092f98bd",
+    "tests/test_navigation.py": "2850b5df3f870a45cbf12c6f7125ca7b69c9d3fc305449e5309def48b8f56a4f",
+    "tests/test_rp32.py": "434949666c98da29dbed40756ec9399ce67ef0ee1a2001d0384d259630c4d902",
+    "tests/test_runtime.py": "a7947278a895f78876c387d0ac507960b6df4b0f233b87db2dd2c16d8e042350",
+    "tests/test_sdf_gpu.py": "167dc1b16f626a3b5417d3911cc6f4002ed9d677165ff201568d0c4657e61f1a",
+    "tests/test_session.py": "52699d17923e3b6f210f6c7049fdc0fbb6cc022e11dc959fb4a115a31e6d74fb",
+    "tests/test_tomigidt.py": "08b8a056433bbb5df798948bfbce46f28f5326a61521f1fca80fe6facfb87366",
+    "tests/test_world.py": "b37bd556d90b96f80dda9c38f31fc1ce32ebacd58a8a0ff5d0b630141c085583"
+  },
+  "commands": [
+    "python -m unittest discover -s tests -v",
+    "python -m examples.klein_conformance --output docs/evidence/klein-field-v2/conformance.json",
+    "See cli-replay.json for the four fresh-process CLI invocations."
+  ],
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "wgpu": "0.32.0",
+    "adapter": {
+      "adapter_type": "DiscreteGPU",
+      "architecture": "",
+      "backend_type": "Vulkan",
+      "description": "591.59",
+      "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+      "device_id": 12056,
+      "stackgroup_max_size": 128,
+      "stackgroup_min_size": 4,
+      "vendor": "NVIDIA",
+      "vendor_id": 4318
+    }
+  },
+  "tests": {
+    "passed": 311,
+    "skipped": 0,
+    "module_counts": {
+      "test_agent_cli": 8,
+      "test_backend_plumbing": 6,
+      "test_cli": 4,
+      "test_field": 16,
+      "test_field_cli": 8,
+      "test_field_v2": 19,
+      "test_gpu": 14,
+      "test_incremental_agent": 18,
+      "test_incremental_navigation": 17,
+      "test_klein": 20,
+      "test_klein_gpu": 7,
+      "test_live": 23,
+      "test_live_cli": 11,
+      "test_motion": 9,
+      "test_navigation": 20,
+      "test_rp32": 14,
+      "test_runtime": 17,
+      "test_sdf_gpu": 10,
+      "test_session": 28,
+      "test_tomigidt": 28,
+      "test_world": 14
+    },
+    "actual_device_methods": {
+      "RealGpuTests": 12,
+      "RealKleinGpuTests": 7,
+      "RealSdfGpuTests": 9
+    }
+  },
+  "conformance_checks_passed": 22,
+  "dimension_pairs_audited": 702,
+  "final_state": {
+    "agent_pair": "11FE00D681FE002A",
+    "identity": "TOMIGIDt",
+    "node": "k:0:0",
+    "tick": 64
+  },
+  "requirement_evidence": {
+    "K1": [
+      "test_klein.KleinQuotientTests",
+      "conformance.json: all 702 admissible dimension pairs"
+    ],
+    "K2": [
+      "test_klein.py: independent rectangle gluing and directed steps",
+      "test_field_v2.py: strict existing-edge seam membership"
+    ],
+    "K3": [
+      "test_klein.py: edge incidence, links, orientability, malformed and pinched complexes",
+      "conformance.json: base audits for all supported dimensions"
+    ],
+    "K4": [
+      "test_klein.py: connected orientation cover, full toroidal edge and face sets, holonomy",
+      "conformance.json: cover audits for all supported dimensions"
+    ],
+    "K5": [
+      "test_klein.py: independent BFS, scalar pullback, radial-offset counterexample",
+      "conformance.json: exact base and cover fields"
+    ],
+    "K6": [
+      "test_field_v2.py: strict schemas, descriptor regeneration, literal v1 compatibility",
+      "test_field_cli.py: generated export, rejected edits and fresh-process resume"
+    ],
+    "K7": [
+      "test_field_v2.py: independently encoded operator metadata and live pairs",
+      "conformance.json: actual GPU operator texture readback"
+    ],
+    "K8": [
+      "test_field_v2.py: all phases, both orientations, mirror commutation",
+      "test_klein_gpu.py: both seam directions and field classes on hardware",
+      "conformance.json: eight measured seam events and mirrored traces"
+    ],
+    "K9": [
+      "test_klein_gpu.py: CPU oracle disabled, boundary bitset words, max batches, replay",
+      "conformance.json: GPU fields, operators, traces and cross-process replay",
+      "cli-replay.json: GPU32 to CPU32 followed by GPU inspection"
+    ]
+  },
+  "historical_pdfs_unchanged_sha256": {
+    "Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf": "1dd5f95d8fd160d51bd40829b21d28317cba817e51e69b02834472195da882ab",
+    "Tom_Klootwijk_Paradigm_ELI5.pdf": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0"
+  },
+  "remaining_full_paradigm_obligations": [
+    "Regenerative field-world integration and single-agent observation/planning over derived geometry.",
+    "Eigen-operator-bound Psi with deterministic eigenvalue, normalization, degeneracy and transport rules.",
+    "Full f8 canonical total order, median construction, ties, epochs and rebuild semantics.",
+    "Typed Hadamard/gradient routing and executable spatial/temporal difference operators.",
+    "Geometry-changing growth, log-resolution transitions and cone/pyramid primitive bindings.",
+    "Continuing field epochs and larger domains beyond the current explicit finite profile.",
+    "Physical wave adapters, calibration, sensory identity envelope and external measurement validation.",
+    "Measured GPU cache behavior, utilization and performance comparisons."
+  ],
+  "scope": "Verifies the finite K1-K9 implementation. It does not complete the full architecture objective."
+}

@@ -79,7 +79,86 @@ Changing the boundary labels changes the derived field and operator selection.
 Every proposed field must satisfy sign, zero-set, edge-bound and decreasing
 distance-witness checks. Pair parity alone cannot establish geometric validity.
 
-## Verified evidence
+## Klein geometry and transported execution
+
+The `relational-sdf-v2` profile implements K1-K9 from the consolidated formal
+edition, originally committed as [TK-LPLUT-KLEIN-1.0](specification/klein-field-v2.md)
+before this code. Generate a default 8 by 8 quotient and execute it with:
+
+```sh
+python -m solvefinite field klein --output output/field/klein-manifest.json
+python -m solvefinite field run --manifest output/field/klein-manifest.json --state output/field/klein.json --steps 32 --backend gpu
+python -m solvefinite field run --state output/field/klein.json --steps 32 --backend cpu
+python -m solvefinite field inspect output/field/klein.json --backend gpu
+python -m examples.klein_conformance
+```
+
+The generator accepts `--width`, `--height`, `--center`, `--radius`,
+`--initial-node`, `--initial-phase`, `--initial-orientation` and `--max-ticks`.
+Widths and heights are at least 3 and their product is at most 256. The center
+is a canonical node index; radius is an intrinsic integer distance level.
+`field klein` returns a surface audit and writes the validated v2 manifest.
+Invalid geometry or parameters leave an existing output file unchanged.
+
+`KleinDomain` generates the quotient `(u+W,v) ~ (u,-v)` and `(u,v+H) ~ (u,v)`,
+unit edges, reversing seams, quadrilateral faces, and both lifts of every cell.
+For the default domain the base has 64 vertices, 128 edges and 64 faces; the
+connected orientation cover has 128 vertices, 256 edges and 128 faces. The
+audit verifies closed manifold incidences and vertex links, a nonorientable
+base, an orientable cover and exact cover edge and face correspondence to a
+16 by 8 torus. A horizontal loop reverses the frame, two horizontal loops
+restore it, and a vertical loop preserves it.
+
+The metric-ball signs classify distance from the chosen center. Actual field
+values are then recomputed as shortest distance to the boundary, rather than
+assuming `distance(center,node)-radius`. An independent BFS test includes a
+case where those quantities differ. The scalar field agrees on both lifts.
+
+The v2 manifest retains `seams` and a `klein-grid-v1` topology descriptor along
+with explicit signs and rules. Reconstructing the descriptor must reproduce
+every node, edge and seam exactly. Generic v2 graphs can use `topology: null`;
+arbitrary reversing edges alone do not establish a Klein surface. Existing v1
+manifests and archives keep their previous schema and packed behavior.
+
+Each operator's bit 6 encodes its relative seam action. The GPU compiler derives
+that bit from the undirected seam set. Every tick adds the phase increment in
+the departure frame, then reflects the phase and flips orientation when crossing
+a seam. Operator bit 6 never enters live metadata. The complete mirror commutes
+with this action. The default generator follows `u+` for all three field classes,
+using their distinct increments 11, 53 and 137; it crosses its first seam at
+tick 8. The GPU retains the state throughout a batch, without host action input
+between ticks.
+
+## Verified v2 evidence
+
+The completed suite passed **311 tests, zero skipped**, including 28 actual-device
+GPU methods, on 25 September 2026. The new coverage includes 20 topology/field
+tests, 19 CPU schema/transport tests, seven GPU transport tests and three added
+CLI tests. The retained [verification report](evidence/klein-field-v2/verification.json)
+maps K1-K9 to evidence and hashes the measured source. The
+[complete test log](evidence/klein-field-v2/full-tests.txt) records the individual results.
+
+The [conformance report](evidence/klein-field-v2/conformance.json) passes 22 checks.
+It audits all 702 admissible dimension pairs, reads back the actual GPU operator
+texture, compares base and cover distances, and records every CPU/GPU pair and
+seam crossing in the 64-tick run. Both mirrored initial states obey the same
+transport law. Split batches and both directions of fresh-process CPU/GPU replay
+reproduce the uninterrupted archive. GPU tests also disable the CPU field
+evaluator, operator compiler and per-route seam lookup during hardware execution.
+
+The separate [CLI evidence](evidence/klein-field-v2/cli-replay.json) exports a
+manifest, runs 32 ticks on the GPU, continues 32 on the CPU, then reconstructs
+the full sequence on the GPU in another process. All 64 pairs match the
+uninterrupted CPU control. The final pair is `11FE00D681FE002A` at `k:0:0`,
+after eight reversing seams. The measured adapter is an NVIDIA GeForce RTX
+5070 Ti Laptop GPU, Vulkan driver 591.59, using pinned `wgpu 0.32.0`.
+
+The [v2 example manifest](../examples/relational-sdf-v2.json) can be regenerated
+with `field klein`; its default execution budget is 65536 ticks. The conformance
+runner explicitly reduces its budget to 64. The two PDFs keep their original
+dated implementation evidence and were not regenerated for this code change.
+
+## Historical v1 evidence
 
 The full suite passed **262 tests** on 25 September 2026, including 16 CPU SDF
 tests, 10 optional-GPU SDF tests and five field CLI/persistence tests. The GPU
@@ -106,8 +185,12 @@ the declared graph; it does not claim arbitrary continuous-space accuracy.
 Replay checks consistency; a fully rewritten, internally consistent archive
 needs an external trust mechanism for authentication.
 
-This profile supplies the SDF and field-governed execution layer requested by
-the addendum. Full Klein cell topology, orientation-dependent fields, an
-eigenvector-defined Psi, generated cone/pyramid boundaries, physical wave
-adapters and larger evolving field domains remain separately specified
-extensions. They can now be added against an explicit geometric contract.
+The v2 implementation adds actual Klein cell topology, its orientation cover,
+intrinsic ball generation and seam transport. Its field is scalar; an
+orientation-dependent section would require a different contract. The current
+field machine and the earlier autonomous repair agent remain separate profiles.
+Regenerative field-world integration, eigenvector-defined Psi, canonical f8
+indexing, Hadamard/gradient routing, generated cone/pyramid boundaries,
+physical wave adapters and larger evolving field domains remain obligations
+of the complete paradigm. Topology and replay evidence do not establish GPU
+cache residency, saturation or general performance superiority.

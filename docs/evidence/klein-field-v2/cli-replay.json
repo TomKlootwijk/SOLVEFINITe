@@ -1,0 +1,193 @@
+{
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-m",
+        "solvefinite",
+        "field",
+        "klein",
+        "--output",
+        "C:\\Users\\ietsm\\AppData\\Local\\Temp\\klein-cli-n3j8iza3\\manifest.json"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-m",
+        "solvefinite",
+        "field",
+        "run",
+        "--manifest",
+        "C:\\Users\\ietsm\\AppData\\Local\\Temp\\klein-cli-n3j8iza3\\manifest.json",
+        "--state",
+        "C:\\Users\\ietsm\\AppData\\Local\\Temp\\klein-cli-n3j8iza3\\state.json",
+        "--steps",
+        "32",
+        "--backend",
+        "gpu"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-m",
+        "solvefinite",
+        "field",
+        "run",
+        "--state",
+        "C:\\Users\\ietsm\\AppData\\Local\\Temp\\klein-cli-n3j8iza3\\state.json",
+        "--steps",
+        "32",
+        "--backend",
+        "cpu"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-m",
+        "solvefinite",
+        "field",
+        "inspect",
+        "C:\\Users\\ietsm\\AppData\\Local\\Temp\\klein-cli-n3j8iza3\\state.json",
+        "--backend",
+        "gpu"
+      ],
+      "returncode": 0,
+      "stderr": ""
+    }
+  ],
+  "checks": {
+    "exported_and_audited_klein_manifest": {
+      "width": 8,
+      "height": 8,
+      "base": {
+        "vertices": 64,
+        "edges": 128,
+        "faces": 64,
+        "euler_characteristic": 0,
+        "connected": true,
+        "closed": true,
+        "edge_incidence": true,
+        "vertex_links": true,
+        "orientable": false
+      },
+      "cover": {
+        "vertices": 128,
+        "edges": 256,
+        "faces": 128,
+        "euler_characteristic": 0,
+        "connected": true,
+        "closed": true,
+        "edge_incidence": true,
+        "vertex_links": true,
+        "orientable": true
+      },
+      "seam_cocycle": true,
+      "toroidal_cover_edges": true,
+      "toroidal_cover_faces": true,
+      "holonomy": {
+        "horizontal": 1,
+        "double_horizontal": 0,
+        "vertical": 0
+      }
+    },
+    "gpu32_cpu32_equals_uninterrupted_cpu64": true,
+    "fresh_gpu_inspect_replayed_all64": true,
+    "reported_manifest_version_in_every_command": true
+  },
+  "adapter": {
+    "backend": "gpu",
+    "adapter": {
+      "vendor": "NVIDIA",
+      "architecture": "",
+      "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+      "description": "591.59",
+      "stackgroup_min_size": 4,
+      "stackgroup_max_size": 128,
+      "vendor_id": 4318,
+      "device_id": 12056,
+      "adapter_type": "DiscreteGPU",
+      "backend_type": "Vulkan"
+    }
+  },
+  "final_state": {
+    "identity": "TOMIGIDt",
+    "tick": 64,
+    "node": "k:0:0",
+    "agent_pair": "11FE00D681FE002A"
+  },
+  "trace": [
+    "11FF08FB01FF0805",
+    "910010F081001010",
+    "910118BB81011845",
+    "91022032010220CE",
+    "910128A981012857",
+    "91003020010030E0",
+    "91FF38EB81FF3815",
+    "81FE002011FE00E0",
+    "01FF082B11FF08D5",
+    "01001036910010CA",
+    "8101186B91011895",
+    "010220F41102200C",
+    "0101287D11012883",
+    "81003006110030FA",
+    "81FF383B91FF38C5",
+    "11FE00BA81FE0046",
+    "91FF08AF81FF0851",
+    "110010A40100105C",
+    "9101186F81011891",
+    "910220E60102201A",
+    "1101285D010128A3",
+    "110030D40100302C",
+    "91FF389F81FF3861",
+    "01FE006C11FE0094",
+    "01FF087711FF0889",
+    "010010829100107E",
+    "010118B711011849",
+    "01022040110220C0",
+    "010128C911012837",
+    "01003052910030AE",
+    "01FF388711FF3879",
+    "11FE006E81FE0092",
+    "91FF086381FF089D",
+    "11001058810010A8",
+    "11011823010118DD",
+    "1102209A81022066",
+    "91012811810128EF",
+    "1100308881003078",
+    "91FF385381FF38AD",
+    "01FE00B891FE0048",
+    "01FF08C311FF083D",
+    "810010CE11001032",
+    "01011803110118FD",
+    "0102208C11022074",
+    "81012815910128EB",
+    "0100309E91003062",
+    "81FF38D391FF382D",
+    "91FE002201FE00DE",
+    "91FF081781FF08E9",
+    "9100100C810010F4",
+    "910118D781011829",
+    "1102204E810220B2",
+    "910128C58101283B",
+    "1100303C010030C4",
+    "11FF380701FF38F9",
+    "81FE000491FE00FC",
+    "01FF080F11FF08F1",
+    "8100101A110010E6",
+    "8101184F910118B1",
+    "810220D811022028",
+    "810128619101289F",
+    "010030EA91003016",
+    "81FF381F91FF38E1",
+    "11FE00D681FE002A"
+  ]
+}
