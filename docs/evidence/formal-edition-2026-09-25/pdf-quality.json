@@ -1,0 +1,31 @@
+{
+  "artifact": "output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf",
+  "sha256": "1dd5f95d8fd160d51bd40829b21d28317cba817e51e69b02834472195da882ab",
+  "pages": 34,
+  "outline_entries": 34,
+  "internal_contents_links": 32,
+  "external_reference_links": 7,
+  "off_page_characters": 0,
+  "replacement_characters": 0,
+  "extracted_words": 9844,
+  "rendered_pages": 34,
+  "render_dpi": 110,
+  "reportlab": "4.4.9",
+  "pypdf": "6.10.0",
+  "python": "3.12.14",
+  "scope": "Artifact structure and text bounds; visual inspection recorded separately.",
+  "rebuild_byte_identical": true,
+  "visual_review": {
+    "all_34_pages_in_contact_sheets": "passed",
+    "selected_full_resolution_pages": [
+      1,
+      18,
+      21,
+      22,
+      31,
+      32,
+      34
+    ],
+    "result": "No clipping, missing glyphs or overlaps observed after spacing correction."
+  }
+}

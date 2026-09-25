@@ -1,7 +1,22 @@
 # SOLVEFINITe
 
 A runnable reference experiment for Tom Klootwijk's **Self-Referential
-Log-Encoded Polar LUT Paradigm**, TK-LPLUT-1.0.
+Log-Encoded Polar LUT Paradigm**.
+
+The consolidated formal reading edition is
+[TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
+This single, self-contained 34-page PDF integrates the original specification,
+both supplied addenda, the exact SDF contract, the proposed Klein extension and
+current implementation evidence. It defines conditional infallibility through
+explicit deterministic execution and invariant-preservation obligations.
+The document version does not change runtime formats: `relational-sdf-v1`
+is implemented; the Klein/v2 extension is formal only. Implementation work is
+parked for this documentation detour.
+
+Fresh verification at `8f4b87b`: **262 tests passed, zero skipped**, including
+21 actual-device GPU methods. CPU/GPU field traces and resumed execution agree.
+[Evidence and reproduction details](docs/evidence/formal-edition-2026-09-25/README.md)
+retain the exact scope and remaining architecture obligations.
 
 The first experiment follows a simulated colony agent that compares repair
 plans, evicts and regenerates world state, pauses halfway through its plan, and
@@ -9,13 +24,16 @@ resumes in a fresh process from its retained rules and event journal. The
 resumed run must produce exactly the same final state and journal as an
 uninterrupted control run.
 
-The source corpus contains
+The preserved source corpus contains
 [TK-LPLUT-1.0](Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf) and the supplied
-[solus-ion-ad-infinitum addendum](sources/solus-ion-ad-infinitum.pdf).
+[solus-ion-ad-infinitum addendum](sources/solus-ion-ad-infinitum.pdf), plus the newest
+[solipsism / Infallible addendum](sources/solipsism.pdf).
 [TK-LPLUT-SDF-1.0](docs/specification/relational-sdf-v1.md) integrates the
 addendum into the formal specification: intrinsic distance and boundary
 relations define the field, and that field governs packed operator execution.
-It supplies explicit versioned numerical bindings before implementation.
+It records the numerical bindings made before implementation. That companion
+and the [Klein proposal](docs/specification/klein-field-v2.md) remain development
+history; their contracts are integrated into the consolidated PDF above.
 [todo.md](todo.md) preserves the two application discussions verbatim, including
 their original Markdown and citations, and the exact addendum request. The code implements a small, declared
 realization of that direction; its demo-specific choices are described below.

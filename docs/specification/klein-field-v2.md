@@ -1,5 +1,10 @@
 # TK-LPLUT-KLEIN-1.0: quotient geometry and transported field execution
 
+This formal-only proposal is now consolidated in the
+[TK-LPLUT-2.0 formal PDF](../../output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf),
+pages 19-21. The PDF supplies the integrated reading edition and measured
+implementation status. The Klein runtime remains unimplemented at `8f4b87b`.
+
 Formal companion to TK-LPLUT-1.0 and TK-LPLUT-SDF-1.0, 25 September 2026.
 Paradigm author: Tom Klootwijk. Field profile: `relational-sdf-v2`.
 Generated topology descriptor: `klein-grid-v1`.

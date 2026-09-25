@@ -1,5 +1,10 @@
 # TK-LPLUT-SDF-1.0: intrinsic fields and geometric operators
 
+This recorded pre-implementation companion is now consolidated in the
+[TK-LPLUT-2.0 formal PDF](../../output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf),
+pages 13-17 and 31. The PDF supplies the integrated reading edition, both
+addenda and measured progress; this file preserves the development history.
+
 Formal companion to **TK-LPLUT-1.0**, 25 September 2026.
 Paradigm author: **Tom Klootwijk**. Executable profile: `relational-sdf-v1`.
 

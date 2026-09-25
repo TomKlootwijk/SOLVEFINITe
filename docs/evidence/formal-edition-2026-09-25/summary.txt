@@ -1,0 +1,16 @@
+Fresh verification for PDF, 25 September 2026
+Commit: 8f4b87bed131f5c084ef59aec558f3f9eb6ddedc
+Full suite: 262 passed, zero skipped; unittest elapsed 23.359 seconds.
+Real-device test methods: 12 packed GPU + 9 SDF GPU = 21.
+Field family: 16 CPU + 10 GPU/dependency + 5 CLI = 31 test methods.
+Adapter: NVIDIA GeForce RTX 5070 Ti Laptop GPU; Vulkan; driver 591.59; wgpu 0.32.0.
+examples.field_conformance: all 8 checks passed, with 64 ticks per trace.
+Separate trace: all 64 CPU/GPU packed pairs identical; archives identical;
+GPU32 then CPU32 and CPU32 then GPU32 equal uninterrupted 64 ticks.
+Final state: TOMIGIDt, tick64, n4, pair1102046C01020494.
+Default field: [-6,-4,-3,0,2,3,5]. Shifted: [-8,-6,-5,-2,0,1,3].
+Klein status: committed formal specification only. No runtime implementation,
+seam/cover runtime tests or intrinsic-ball generator in this commit.
+No current saturation/cache-hit/performance advantage measurement made.
+Full command provenance: verification.json. Full test log: full-tests.txt.
+Detailed scope and limitations: readiness-matrix.json.

@@ -1,0 +1,39 @@
+import datetime, json, pathlib, subprocess
+import wgpu
+from solvefinite.field import FieldMachine
+out=pathlib.Path("output/pdf-evidence")
+owners=[]
+def own(machine):
+    owners.append(machine)
+    return machine
+try:
+    cpu=own(FieldMachine())
+    gpu=own(FieldMachine(backend="gpu"))
+    initial=cpu.snapshot()
+    cpu_trace=cpu.advance(64)
+    gpu_trace=gpu.advance(64)
+    gpu_half=own(FieldMachine(backend="gpu"))
+    gpu_half.advance(32)
+    resumed_cpu=own(FieldMachine.from_archive(gpu_half.archive(),backend="cpu"))
+    resumed_cpu.advance(32)
+    cpu_half=own(FieldMachine())
+    cpu_half.advance(32)
+    resumed_gpu=own(FieldMachine.from_archive(cpu_half.archive(),backend="gpu"))
+    resumed_gpu.advance(32)
+    checks={"all_64_pairs_equal":cpu_trace==gpu_trace,
+            "archives_equal":cpu.archive()==gpu.archive(),
+            "gpu32_to_cpu32_equals_uninterrupted64":resumed_cpu.archive()==cpu.archive(),
+            "cpu32_to_gpu32_equals_uninterrupted64":resumed_gpu.archive()==cpu.archive()}
+    assert all(checks.values()),checks
+    report={"commit":subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip(),
+            "verified_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "wgpu_version":wgpu.__version__,"profile":"relational-sdf-v1",
+            "manifest":cpu.manifest.to_dict(),"fields":cpu.fields,
+            "initial":initial,"final":cpu.snapshot(),"checks":checks,
+            "cpu_trace":[f"{v:016X}" for v in cpu_trace],
+            "gpu_trace":[f"{v:016X}" for v in gpu_trace],
+            "execution_info":gpu.execution_info}
+    (out/"cross-adapter-trace.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
+    print(json.dumps({"checks":checks,"final":cpu.snapshot(),"execution_info":gpu.execution_info}))
+finally:
+    for owner in reversed(owners): owner.close()

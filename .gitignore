@@ -1,4 +1,8 @@
 __pycache__/
 *.py[cod]
 .venv/
-output/
+output/*
+!output/pdf/
+output/pdf/*
+!output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf
+tmp/pdfs/

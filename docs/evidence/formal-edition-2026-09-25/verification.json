@@ -1,0 +1,60 @@
+{
+  "commit": "8f4b87bed131f5c084ef59aec558f3f9eb6ddedc",
+  "started_utc": "2026-09-25T07:52:57.903831+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+  "working_tree_status_before": "",
+  "commands": [
+    {
+      "name": "full-tests",
+      "argv": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 23.837662099991576,
+      "output_file": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\pdf-evidence\\full-tests.txt",
+      "test_count": 262,
+      "unittest_seconds": 23.359,
+      "skipped_count": 0,
+      "summary_lines": [
+        "----------------------------------------------------------------------",
+        "Ran 262 tests in 23.359s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "name": "field-conformance",
+      "argv": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-m",
+        "examples.field_conformance",
+        "--output",
+        "output/pdf-evidence/field-conformance.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.0787526999920374,
+      "output_file": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\pdf-evidence\\field-conformance.txt"
+    },
+    {
+      "name": "cross-adapter-probe",
+      "argv": [
+        "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\.venv\\Scripts\\python.exe",
+        "-"
+      ],
+      "stdin_source_file": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\pdf-evidence\\cross-adapter-probe-source.txt",
+      "exit_code": 0,
+      "wall_seconds": 4.227984500001185,
+      "output_file": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\pdf-evidence\\cross-adapter-probe.txt"
+    }
+  ],
+  "finished_utc": "2026-09-25T07:54:16.995275+00:00",
+  "commit_after": "8f4b87bed131f5c084ef59aec558f3f9eb6ddedc",
+  "working_tree_status_after": ""
+}

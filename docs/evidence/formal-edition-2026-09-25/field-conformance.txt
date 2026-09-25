@@ -1,0 +1,54 @@
+{
+  "profile": "relational-sdf-v1",
+  "checks": {
+    "default_exact_field": true,
+    "cpu_gpu_field_equal": true,
+    "cpu_gpu_tick_trace_equal": true,
+    "split_gpu_batches_equal": true,
+    "gpu_archive_replayed_by_cpu": true,
+    "shifted_boundary_changes_field": true,
+    "shifted_boundary_changes_execution": true,
+    "shifted_boundary_cpu_gpu_equal": true
+  },
+  "ticks_per_trace": 64,
+  "field": [
+    -6,
+    -4,
+    -3,
+    0,
+    2,
+    3,
+    5
+  ],
+  "shifted_field": [
+    -8,
+    -6,
+    -5,
+    -2,
+    0,
+    1,
+    3
+  ],
+  "state": {
+    "identity": "TOMIGIDt",
+    "tick": 64,
+    "node": "n4",
+    "agent_pair": "1102046C01020494"
+  },
+  "execution_info": {
+    "backend": "gpu",
+    "adapter": {
+      "vendor": "NVIDIA",
+      "architecture": "",
+      "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+      "description": "591.59",
+      "stackgroup_min_size": 4,
+      "stackgroup_max_size": 128,
+      "vendor_id": 4318,
+      "device_id": 12056,
+      "adapter_type": "DiscreteGPU",
+      "backend_type": "Vulkan"
+    }
+  },
+  "scope": "Exact finite intrinsic graph fields and packed execution; no hardware performance or continuous-geometry claim."
+}

@@ -115,3 +115,38 @@ ontological deterministic computing objective remains active.
 - [ ] Execute seam phase/orientation transport through the shared CPU/GPU packed operator machinery.
 - [ ] Verify topology, geometric fields, mirror coherence, v1 compatibility and exact recovery.
 - [ ] Record evidence, commit and push; preserve the broader remaining source obligations.
+
+## 2026-09-25: consolidated formal PDF detour
+
+Exact user request, preserved verbatim:
+
+```text
+now take a detour for a second (park your current work) and formalize with the newest addendum the infallible into a actual formal document .pdf so it is not split up in .md addendum and .pdf formalizations and use your current implementation to measure progress (godspede)
+```
+
+Implementation is **paused at `8f4b87b`** for this requested detour. The previous
+Klein task list remains outstanding; no Klein runtime was implemented during
+the PDF work.
+
+- [x] Identify and read the newest 16-page `solipsism.pdf` / Infallible addendum.
+- [x] Integrate TK-LPLUT-1.0, both addenda, SDF.R1-R12 and Klein K1-K9 into one
+  self-contained formal reading edition: **TK-LPLUT-2.0, The Infallible Contract**.
+- [x] Define infallibility conditionally through single-valued total bounded
+  transitions, proved invariant preservation, complete input context and faithful
+  execution; distinguish mathematical proofs, code evidence and physical models.
+- [x] Measure the existing implementation with fresh verification: **262 passed,
+  zero skipped**, including 21 actual-device GPU test methods and all eight
+  field conformance checks. Complete 64-tick CPU/GPU traces and both directions
+  of resumed execution agree; final pair `1102046C01020494` at `n4`.
+- [x] Include the complete architecture progress matrix, with verified subsets,
+  formal-only Klein work and unbound/integration obligations kept distinct.
+- [x] Preserve source bytes, command provenance, trace evidence and the PDF builder.
+- [x] Render and inspect the complete 34-page PDF; verify its page bounds,
+  text extraction, contents links and exact reference data.
+- [x] Commit and push the consolidated document and evidence.
+
+The final document is
+[the integrated PDF](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
+The [evidence directory](docs/evidence/formal-edition-2026-09-25/README.md)
+records scope and reproduction. The document version changes no runtime schema;
+earlier source PDFs and formal companions remain preserved development history.
