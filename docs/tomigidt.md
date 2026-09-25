@@ -6,6 +6,8 @@ The existing PDF and prior repository do not define "TOMIGIDt" or "solipsism".
 The implementation below is a declared application profile and concrete
 progress toward the objective. It is not a replacement definition of the goal.
 The exact intended meaning and autonomous task remain a question for Tom.
+The [objective audit](acceptance-audit.md) separates verified behavior from
+the requirements still needed to establish full completion.
 
 ## One agent and its perspective
 
