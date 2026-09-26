@@ -12,7 +12,8 @@ The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
 This single, self-contained PDF integrates the original specification,
 both supplied addenda, the exact SDF contract, the Klein extension and
-implementation evidence for the SDF, Klein, field-agent, Psi/f8, Hadamard, geometry-growth and organogram profiles. It defines
+implementation evidence for the SDF, Klein, field-agent, Psi/f8, Hadamard,
+geometry-growth, organogram, W and directional taper profiles. It defines
 conditional infallibility through explicit deterministic execution and
 invariant-preservation obligations.
 The documentation detour is complete. The subsequent implementation now supports
@@ -33,12 +34,14 @@ boundaries that become the same individual's next field. The
 independent arithmetic reference from measured CPU/GPU execution.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
-Revision 13 adds the **formal-only DP1-DP10 directional taper contract** on
-pages 84-97 of the same PDF. It defines direct projected sections, exact union
-boundaries, original-context regeneration and explicit Wv2 continuation before
-runtime implementation. The [independent directional reference](docs/evidence/directional-v1/README.md)
-retains numerical expectations and a separate geometry audit. Earlier measured
-CPU/GPU counts remain tied to their historical implementations.
+Revision 14 adds **measured DP1-DP10 implementation evidence** on pages 98-100
+of the same PDF. Pages 84-97 preserve the directional contract committed at
+`1979e66` before implementation, including its historical status labels.
+The new `taper` profile generates projected directional sections and exact
+union boundaries, retains original contexts and continues through explicit
+Wv2 sessions. The [directional evidence](docs/evidence/directional-v1/README.md)
+separates the frozen independent arithmetic from actual CPU/GPU execution.
+Earlier counts remain tied to their historical implementations.
 
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
 21 actual-device GPU methods. CPU/GPU field traces and resumed execution agree.
@@ -380,9 +383,53 @@ the retained reports. `python tools/capture_organogram_evidence.py` creates a ne
 capture; replacing the pinned evidence requires a reviewed formal-document update.
 The retained capture passes **623 tests, zero skipped**, including **136
 actual-device GPU methods**, and all **15 organogram conformance checks**.
-Arbitrary cone/pyramid and graph productions, global spectral choices,
-WElip/clock continuation, physical adapters and comparative hardware evidence
-remain obligations of the broader architecture.
+The later W and taper profiles below extend that milestone. Distinct 3D
+cone/pyramid volumes, general graph productions, global spectral choices,
+physical adapters and comparative hardware evidence remain open.
+
+## Directional geometry in the same agent
+
+The `taper` profile adds `TAPER(height,numerator,denominator)` to a separately
+versioned parameterized grammar. The previous field and intrinsic phase choose
+its shaft. Every footprint site projects through the Klein seam; the union's
+inner boundary then defines an exact signed field. This is a two-dimensional
+axial section, with extent, slope and branch scale retained in the recipe.
+
+```sh
+python -m solvefinite agent scenario --profile taper --output output/taper/scenario.json
+python -m solvefinite agent run --scenario output/taper/scenario.json --state output/taper/session.json --backend gpu --steps 4
+python -m solvefinite agent run --state output/taper/session.json --backend cpu --steps 1
+python -m solvefinite agent run --state output/taper/session.json --backend gpu --steps 64
+python -m solvefinite agent inspect output/taper/session.json --backend cpu
+python -m examples.taper_conformance --output output/taper/conformance.json
+```
+
+The default mission generates two tapers and a ball at cycle 5, retains the
+same owner's node/phase/orientation, and completes at cycle **11**, energy
+**69**, pair `16000534060005CC`. Original stage ticks, pairs and event-prefix
+hashes reproduce historical fields after eviction, reindexing or process restart.
+The two-epoch reference completes at cycle **17**, energy **55**.
+
+CPU and GPU geometry producers have separate implementations. An independent
+certificate checks the full derivation, projected occupancy, boundary and exact
+field before admission. Actual GPU tests disable CPU production and cover all
+four shaft directions in both orientations, including reversing seams. Complete
+candidate rejection preserves the old owner; uncertainty requires reconstruction.
+
+For the forward interface, `--profile taper` writes **Wv2** configuration:
+
+```sh
+python -m solvefinite agent welip-config --profile taper --output output/taper/welip-config.json
+python -m solvefinite agent welip --config output/taper/welip-config.json --state output/taper/welip-session.json --backend gpu
+python -m examples.taper_welip_conformance --output output/taper/welip-conformance.json
+```
+
+Use protocol `welip-field-agent-v2` and the returned `next` context for each
+request. Existing Wv1 configurations retain their four prior policies; switching
+the version alone cannot convert a saved session. The raw carrier encoding is
+shared, so admission uses the exact configuration and protocol as well as the
+record. The [DP evidence](docs/evidence/directional-v1/README.md) records three
+complete Wv2 lifecycles and fresh GPU → CPU → GPU recovery.
 
 ## WElip clock and forward interface
 

@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 13. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 14. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -35,6 +35,9 @@ DIRECTIONAL_EVIDENCE = ROOT / 'docs/evidence/directional-v1'
 OG_CAPTURE_COMMIT = 'f125a76b75052c3611c39557779c08e4553e620a'
 W_CAPTURE_COMMIT = '1ea93207ae8545a5c5d344677cb73a5c459dc91c'
 DP_REFERENCE = None
+DP_VERIFICATION = None
+DP_CONFORMANCE = None
+DP_W_CONFORMANCE = None
 HP_VERIFICATION = None
 GD_VERIFICATION = None
 GD_CONFORMANCE = None
@@ -156,7 +159,7 @@ def build_content():
     if any(value is None for value in (HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE,
                                        OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE,
                                        W_VERIFICATION, W_CONFORMANCE)):
-        raise ValueError('Verify historical HP/GD/OG/W evidence before revision 13')
+        raise ValueError('Verify historical HP/GD/OG/W evidence before revision 14')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
@@ -177,7 +180,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 13. FI/PX/HP contracts remain on pages 35-48; HP evidence at 5a304bc is on page 49. GD contracts/evidence at 94f86c7 remain on pages 50-57. OG contracts remain on pages 58-66, with the historical f125a76 capture on pages 67-68. W1-W8 remain on pages 69-81, with historical 1ea9320 measurements on pages 82-83. The directional taper contract and independent arithmetic begin on page 84; their runtime implementation remains pending.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 14. FI/PX/HP remain on pages 35-49; GD on pages 50-57; OG on pages 58-68; W on pages 69-83. Pages 84-97 preserve revision 13\'s preimplementation DP contract and its historical “FORMAL ONLY” labels. Current DP evidence follows: <link href="#p98">geometry and missions, p.98</link>; <link href="#p99">Wv2 recovery, p.99</link>; <link href="#p100">evidence and scope, p.100</link>. Prior captures retain their original source identities and counts.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -1633,11 +1636,61 @@ def build_directional_content():
     )
 
 
+def build_directional_measured_pages():
+    if any(value is None for value in (DP_VERIFICATION, DP_CONFORMANCE, DP_W_CONFORMANCE)):
+        raise ValueError('Verify the source-bound DP runtime capture before rendering measured pages')
+    measured = DP_VERIFICATION
+    tests = measured['tests']
+    methods = sum(tests['actual_device_methods'].values())
+    adapter = measured['environment']['adapter']
+    page('Measured directional geometry and missions', 'IMPLEMENTATION CAPTURE | DP1-DP10 | 26 SEPTEMBER 2026',
+        box(f"The new source-bound capture passes {tests['passed']} tests with zero skips, including {methods} actual-device GPU methods. It passes {measured['conformance_checks_passed']} geometry/mission conformance checks and {measured['welip_conformance_checks_passed']} Wv2 checks. DP1-DP10 were committed at 1979e66 before this runtime implementation."),
+        p(f"Device: {escape(adapter['device'])}, {escape(adapter['backend_type'])}. The CPU and actual GPU construct the declared directional axial sections, mixed with intrinsic balls. Complete trajectories, primitive descriptors, inner boundaries and signed fields match the frozen independent reference. The retained reference is unchanged."),
+        table(['Literal mission','Cycles','Final energy','Final packed pair'],[
+            ['One epoch','11','69','16000534060005CC'],
+            ['Full mirror','11','69','060005CC16000534'],
+            ['Two epochs','17','55','0600111E960011E2'],
+            ['Zero epochs','4','86','06011145160111BB'],
+        ],[.27,.10,.15,.48]),
+        h('Device production and separate admission'),
+        p('The GPU reads typed instruction words, transports the branch cursor, selects each shaft from the prior field and intrinsic phase, and emits primitive descriptors. A parallel pass projects every admitted footprint site, forms the occupied union and its inner boundary, then computes exact graph distances. The independent host certificate reconstructs the complete trajectory and checks occupancy through inverse lift membership before accepting the field.'),
+        p('GPU conformance disables CPU geometry, field, index and routing producers. Tests cover negative coordinates and reversing seams, repeated wraps, all four shaft directions, both orientations, thin sections, overlap, slope/extent/phase/tick changes, complete branch restoration, strict decoding and finite workload limits. Signed cover coordinates use explicit floor arithmetic in the shader.'),
+        small('The new field remains on the original finite Klein graph. Directional 2D sections are implemented; distinct three-dimensional cone/pyramid volumes and arbitrary graph production are not established by these results.')
+    )
+    page('Same individual and Wv2 recovery', 'MEASURED CONTINUATION | ORIGINAL CONTEXT | VERSIONED ADMISSION',
+        h('Geometry changes preserve the owner'),
+        p('REPAIR reaches GROWTH_PENDING. One later fresh frame admits the complete new field, debits the declared cost and retains the owner\'s node, phase and orientation. Its signed-distance lane and next target change under the new geometry. The hypothetical grammar cursor never replaces the owner. Observation, planning and FIFO state reset; global cycle, energy and history continue.'),
+        p('One- and two-epoch missions, mirrored execution, zero-epoch completion, pending search and original-prefix historical samples agree across CPU and GPU. Capacity changes and index rebinding preserve the complete archive at the same planning quantum. Six fresh-process crossovers reconstruct before/after GROW and during generated-world DEFER. Different planning quanta can change original production time and are not claimed equivalent.'),
+        h('Three complete Wv2 lifecycle variants'),
+        table(['Witness','Measured result'],[
+            ['Default, mirror, capacity eight','Each executes 19 operations, produces 20 records and 41 carrier words, and reaches clock (1,13). CPU and GPU private archives agree.'],
+            ['Original geometry time','GROW remains agent cycle 5 at W operation 10. Replacement cache/executor counters reset without resetting the individual\'s cycle.'],
+            ['Fresh endpoint continuation','GPU, CPU and GPU processes reopen the retained prefix with distinct indexes, exact latest retries and no duplicate admitted action.'],
+            ['Final default emission','Ordered words 000DCC00060005CC and 000DCC0016000534; energy 69, geometry epoch 1.'],
+        ],[.31,.69]),
+        p('Wv2 admits the taper policy under explicit config, protocol and archive versions. Wv1 retains its four prior policies. Both use the same raw carrier/state encoding; a bare record or baseline label cannot establish geometry identity. Admission retains the exact immutable configuration and protocol, and rejects mixed versions before allocating an owner.'),
+        small('Actual-device W emission runs with the host state encoder disabled. Pure complete rejection preserves the usable owner; uncertain device work or save closes it. Recovery resolves the durable prefix, including before/after replacement and latest retry behavior. Physical exactly-once actuation is outside this interface.')
+    )
+    page('Directional evidence and next obligations', 'REPRODUCIBLE CAPTURE | PRESERVED CONTRACTS | ARCHITECTURAL SCOPE',
+        h('Evidence belongs to these sources'),
+        p('The capture records every runtime, shader, test, example and independent reference identity, checks the source inventory before and after execution, and requires the complete suite with zero skips. The formal builder verifies report hashes, formal chronology, mission states, cross-backend archives, W lifecycle literals and protected source PDFs before displaying these results.'),
+        code('python tools/capture_taper_evidence.py\npython -m examples.taper_conformance --output dp-recheck.json\npython -m examples.taper_welip_conformance --output wv2-recheck.json\npython tools/build_formal_spec.py'),
+        small('Capture directory: docs/evidence/directional-v1/. verification.json identifies full-tests.txt, conformance.json and welip-conformance.json. The earlier formal-reference.json, geometry-audit.json and revision-13 preservation record remain historical. This edition adds its own document-preservation audit.'),
+        small('Canonical default agent archive SHA-256: '+measured['canonical_agent_archive_sha256']),
+        small('Canonical default Wv2 archive SHA-256: '+measured['welip_archive_sha256']),
+        h('Resource accounting has a defined scope'),
+        p('The actual GPU pipeline records instruction, movement, occupancy and scratch payloads, bounded private stack payload, retained recipe/transcript sizes and old/candidate coexistence. The maximum primitive-site budget bounds charged dispatch work; duplicate sites may project onto the same vertex. These are logical payload counts, not total driver/Python memory or physical energy measurements.'),
+        h('The broader architecture continues'),
+        p('This milestone realizes one source-motivated geometry family and its autonomous continuation. Distinct three-dimensional primitive volumes, more general graph productions, global spectral choices, physical adapters, broader continuation and computational universality still require definitions and evidence. Comparative throughput, texture-cache behavior and physical memory bottlenecks still need controlled hardware measurements.'),
+        small('The original three PDFs and separate ELI5 booklet remain byte-identical, including pink Jitske and green-blue Tom. All prior page bodies 4-97 and numerical contracts are retained; historical counts are never attributed to the new runtime.')
+    )
+
+
 def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 13')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 14')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -1670,7 +1723,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 13')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 14')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -1678,7 +1731,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 13')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 14')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -2389,6 +2442,116 @@ def verify_directional_inputs():
     DP_REFERENCE = reference
 
 
+def verify_directional_capture():
+    global DP_VERIFICATION, DP_CONFORMANCE, DP_W_CONFORMANCE
+    measured = json.loads((DIRECTIONAL_EVIDENCE/'verification.json').read_text(encoding='utf-8'))
+    captured = json.loads((DIRECTIONAL_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    welip = json.loads((DIRECTIONAL_EVIDENCE/'welip-conformance.json').read_text(encoding='utf-8'))
+    canonical = lambda value: hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',',':'),
+        ensure_ascii=True, allow_nan=False).encode('utf-8')).hexdigest()
+    formal_commit = '1979e66634c10fc8ede019fd677434bb1dba4a7d'
+    formal_pdf = subprocess.check_output(['git','show',formal_commit+':output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf'],cwd=ROOT)
+    if (measured['format'] != 'directional-verification-v1'
+            or measured['formal_binding_commit'] != formal_commit
+            or measured['base_commit'] != W_CAPTURE_COMMIT
+            or measured['preimplementation_formal_pdf_sha256'] != hashlib.sha256(formal_pdf).hexdigest()
+            or measured['preimplementation_formal_pdf_sha256'] != 'b11d6ab9037578dc2d46fe806dc45502ab0002d23ca8d79f044ef94edb29bd77'
+            or measured['actual_GPU_capture'] is not True or measured['partial'] is not False
+            or measured['source_manifest_unchanged_during_capture'] is not True):
+        raise ValueError('Directional capture chronology or scope disagrees')
+    sources = measured['source_sha256_lf']
+    required = {'solvefinite/taper.py','solvefinite/taper_gpu.py','solvefinite/shaders/taper.wgsl',
+                'tests/test_taper.py','tests/test_taper_gpu.py','tests/test_taper_agent.py',
+                'tests/test_taper_session.py','tests/test_taper_welip.py',
+                'examples/taper_conformance.py','examples/taper_welip_conformance.py',
+                'tools/capture_taper_evidence.py'}
+    if not required <= set(sources):
+        raise ValueError('Directional source inventory is incomplete')
+    for path, identity in sources.items():
+        if hashlib.sha256((ROOT/path).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
+            raise ValueError('Directional captured source changed: '+path)
+    for name, identity in measured['report_sha256_lf'].items():
+        if hashlib.sha256((DIRECTIONAL_EVIDENCE/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
+            raise ValueError('Directional report identity changed: '+name)
+    tests = measured['tests']
+    log = (DIRECTIONAL_EVIDENCE/'full-tests.txt').read_text(encoding='utf-8')
+    if (tests['complete_suite'] is not True or tests['skipped'] != 0
+            or tests['passed'] <= W_VERIFICATION['tests']['passed']
+            or sum(tests['module_counts'].values()) != tests['passed']
+            or not re.search(r'Ran '+str(tests['passed'])+r' tests in [0-9.]+s',log)
+            or not log.rstrip().endswith('OK') or '... skipped' in log
+            or not {'TaperGpuTests','RealTaperAgentTests','RealTaperContinuationTests','TaperWelipGpuTests'} <= set(tests['actual_device_methods'])):
+        raise ValueError('Directional full-suite or hardware test record disagrees')
+    reference_sha = hashlib.sha256((DIRECTIONAL_EVIDENCE/'formal-reference.json').read_bytes().replace(b'\r\n',b'\n')).hexdigest()
+    for report, key in ((captured,'conformance_checks_passed'),(welip,'welip_conformance_checks_passed')):
+        if (report['actual_GPU_capture'] is not True or report.get('partial',False)
+                or not report['checks'] or any(value is not True for value in report['checks'].values())
+                or measured[key] != len(report['checks'])):
+            raise ValueError('Directional conformance obligation failed')
+    if (captured['format'] != 'taper-conformance-v1' or captured['formal_commit'] != formal_commit
+            or captured['formal_reference_sha256_lf'] != reference_sha
+            or welip['format'] != 'taper-welip-conformance-v1'
+            or welip['formal_binding_commit'] != formal_commit or welip['reference_sha256_lf'] != reference_sha
+            or welip['adapter'] != measured['environment']['adapter']
+            or welip['adapter']['adapter_type'] not in ('DiscreteGPU','IntegratedGPU')):
+        raise ValueError('Directional conformance reference or actual device differs')
+    for label in ('default','mirrored_default','two_epoch','zero_epoch'):
+        literal = DP_REFERENCE[label+'_mission']
+        cpu, gpu = captured['CPU']['cases'][label], captured['GPU'][label]
+        state = gpu['archive']['expected']
+        if (cpu['archive'] != gpu['archive'] or canonical(cpu['archive']) != cpu['archive_sha256']
+                or canonical(gpu['archive']) != gpu['archive_sha256']
+                or (state['cycle'],state['energy'],state['agent_pair']) !=
+                    (literal['cycles'],literal['final']['energy'],literal['final']['pair'])
+                or state != measured['mission_results'][label]
+                or gpu['world_fields'] != [world['field'] for world in literal['worlds']]
+                or cpu['world_fields'] != gpu['world_fields']
+                or len(gpu['actual_device_states']) != literal['cycles']+1):
+            raise ValueError('Directional literal mission differs: '+label)
+        for stage in gpu['stages']:
+            if canonical(stage['expected_derivation']) != stage['derivation_sha256']:
+                raise ValueError('Directional retained transcript digest differs')
+    if (captured['CPU']['deferred']['archive'] != captured['GPU_deferred']['archive']
+            or len(captured['fresh_process_replays']) != 6):
+        raise ValueError('Directional deferred or fresh recovery evidence differs')
+    for label, case in captured['fresh_process_replays'].items():
+        expected = captured['CPU']['deferred' if label.startswith('DEFER') else 'cases']
+        if not label.startswith('DEFER'):
+            expected = expected['default']
+        if case['archive'] != expected['archive']:
+            raise ValueError('Directional fresh continuation differs: '+label)
+    for name in ('w_v2_lifecycle','w_v2_mirrored_lifecycle','w_v2_capacity8_lifecycle'):
+        literal = DP_REFERENCE[name]
+        cpu, gpu = welip['CPU']['lifecycles'][name], welip['GPU']['lifecycles'][name]
+        if (cpu['archive'] != gpu['archive'] or gpu['archive']['operations'] != literal['operations']
+                or (gpu['record_count'],gpu['fragment_count']) != (20,41)
+                or gpu['operation_transcript_sha256'] != literal['operation_transcript_sha256']
+                or canonical(gpu['archive']) != gpu['welip_archive_sha256']):
+            raise ValueError('Directional Wv2 literal lifecycle differs: '+name)
+    main = welip['GPU']['lifecycles']['w_v2_lifecycle']['archive']
+    agent_sha, w_sha = canonical(main['agent']), canonical(main)
+    if (agent_sha != measured['canonical_agent_archive_sha256']
+            or agent_sha != captured['canonical_archive_sha256']
+            or agent_sha != welip['canonical_agent_archive_sha256']
+            or w_sha != measured['welip_archive_sha256'] or w_sha != welip['welip_archive_sha256']
+            or agent_sha != '94b4979c5c5d006b2ef589ffa027475d46d039e04e977cab7ec8245672822c4e'
+            or w_sha != '0e121009810d616adc79e1fd4175e28386cfcfadc7f7ef709c57b9a855d52d8a'):
+        raise ValueError('Directional canonical archive identity differs')
+    fresh = welip['fresh_process_recovery']
+    if ([row['backend'] for row in fresh['captures']] != ['gpu','cpu','gpu']
+            or fresh['final_archive_sha256'] != w_sha
+            or welip['identity_scope']['bare_initial_record_equal'] is not True
+            or welip['identity_scope']['cross_profile_rejected_before_allocation'] is not True):
+        raise ValueError('Directional W recovery or identity scope differs')
+    for name, identity in measured['original_source_sha256'].items():
+        if identity != W_VERIFICATION['original_source_sha256'][name] or hashlib.sha256((ROOT/name).read_bytes()).hexdigest() != identity:
+            raise ValueError('Directional capture changed original source: '+name)
+    if (measured['eli5_pdf_unchanged_sha256'] != W_VERIFICATION['eli5_pdf_unchanged_sha256']
+            or hashlib.sha256((ROOT/'output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf').read_bytes()).hexdigest() != measured['eli5_pdf_unchanged_sha256']):
+        raise ValueError('Directional capture changed ELI5 booklet')
+    DP_VERIFICATION, DP_CONFORMANCE, DP_W_CONFORMANCE = measured, captured, welip
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--output',type=Path,default=OUTPUT)
@@ -2396,7 +2559,9 @@ if __name__=='__main__':
     args=parser.parse_args()
     verify_retained_inputs()
     verify_directional_inputs()
+    verify_directional_capture()
     register_fonts(args.font_dir)
     build_content()
     build_directional_content()
+    build_directional_measured_pages()
     render(args.output)

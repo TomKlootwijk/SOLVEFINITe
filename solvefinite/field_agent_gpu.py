@@ -88,8 +88,9 @@ class GpuFieldAgentExecutor:
     def __init__(self, recipe, index_binding=None, *, routing=None):
         from .field_world import KleinFieldRecipe
         from .organogram import GeneratedFieldRecipe
+        from .taper import TaperFieldRecipe
 
-        if type(recipe) not in (KleinFieldRecipe, GeneratedFieldRecipe):
+        if type(recipe) not in (KleinFieldRecipe, GeneratedFieldRecipe, TaperFieldRecipe):
             raise ValueError("recipe must be a supported field recipe")
         if index_binding is None:
             index_binding = IndexBinding()
@@ -97,7 +98,7 @@ class GpuFieldAgentExecutor:
             raise ValueError("index_binding must be an IndexBinding")
         if routing is not None and type(routing) is not HadamardBinding:
             raise ValueError("routing must be a HadamardBinding")
-        generated = type(recipe) is GeneratedFieldRecipe
+        generated = type(recipe) in (GeneratedFieldRecipe, TaperFieldRecipe)
         if generated and routing != recipe.routing:
             raise ValueError("Generated recipe requires its original routing binding")
         self._lock = RLock()
@@ -133,8 +134,12 @@ class GpuFieldAgentExecutor:
             # Reuse the actual-device distance construction and independent
             # certificate. Its fixed-route tick engine is never advanced here.
             if generated:
-                from .organogram_gpu import GpuOrganogramGeometry
-                self._geometry = GpuOrganogramGeometry(recipe)
+                if type(recipe) is TaperFieldRecipe:
+                    from .taper_gpu import GpuTaperGeometry
+                    self._geometry = GpuTaperGeometry(recipe)
+                else:
+                    from .organogram_gpu import GpuOrganogramGeometry
+                    self._geometry = GpuOrganogramGeometry(recipe)
                 self._manifest = self._geometry.manifest
             else:
                 self._geometry = GpuFieldExecutor(self._manifest)
@@ -238,7 +243,8 @@ class GpuFieldAgentExecutor:
                 routing_binding=self._routing.to_dict(),
             )
         if self.certificate is not None:
-            result["organogram"] = self._geometry.allocation_info
+            from .taper import TaperFieldRecipe
+            result["taper" if type(self.recipe) is TaperFieldRecipe else "organogram"] = self._geometry.allocation_info
         return result
 
     def _buffer(self, size, data=None, *, bundle=None):
@@ -484,19 +490,25 @@ class GpuFieldAgentExecutor:
         return row[0]
 
     @_serialized
-    def admit_generated(self, source, cost, *, organogram, prefix_sha256):
-        """OG7: admit one exact historical extension without host state seeding."""
+    def admit_generated(self, source, cost, *, organogram=None, taper=None, prefix_sha256):
+        """Admit one typed historical extension without host state seeding."""
         from .field_world import KleinFieldRecipe
         from .organogram import GeneratedFieldRecipe, OrganogramBinding
+        from .taper import TaperFieldRecipe, TaperBinding
         self._check_open()
-        if self._seeded or type(self.recipe) is not GeneratedFieldRecipe:
+        if self._seeded or type(self.recipe) not in (GeneratedFieldRecipe, TaperFieldRecipe):
             raise ValueError("Generated admission requires an unseeded generated candidate")
         if type(source) is not GpuFieldAgentExecutor or source is self:
             raise ValueError("Generated admission requires a distinct source executor")
-        if type(organogram) is not OrganogramBinding or organogram != self.recipe.organogram:
+        tapered = type(self.recipe) is TaperFieldRecipe
+        binding = taper if tapered else organogram
+        binding_type = TaperBinding if tapered else OrganogramBinding
+        binding_key = "taper" if tapered else "organogram"
+        if ((organogram is not None if tapered else taper is not None)
+                or type(binding) is not binding_type or binding != getattr(self.recipe, binding_key)):
             raise ValueError("Candidate grammar differs from the owner's immutable binding")
-        _integer(cost, 1, 127, "organogram cost")
-        if cost != organogram.cost:
+        _integer(cost, 1, 127, "production cost")
+        if cost != binding.cost:
             raise ValueError("Generated admission cost must equal its immutable binding")
         if (type(prefix_sha256) is not str or len(prefix_sha256) != 64
                 or any(c not in "0123456789abcdef" for c in prefix_sha256)):
@@ -506,8 +518,8 @@ class GpuFieldAgentExecutor:
             raise ValueError("Generated admission requires identical routing")
         if type(old) is KleinFieldRecipe:
             valid = new.base == old and len(new.stages) == 1
-        elif type(old) is GeneratedFieldRecipe:
-            valid = (new.base == old.base and new.organogram == old.organogram
+        elif type(old) is type(new):
+            valid = (new.base == old.base and getattr(new, binding_key) == getattr(old, binding_key)
                      and new.routing == old.routing and new.stages[:-1] == old.stages
                      and len(new.stages) == len(old.stages) + 1)
         else:

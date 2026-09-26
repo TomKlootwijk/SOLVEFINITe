@@ -678,7 +678,7 @@ new shape name into the existing balls would not establish a new geometry.
 
 - [x] Bind the next directional primitive family and independent reference
   in the same consolidated PDF before runtime changes.
-- [ ] Implement and certify that geometry through the existing CPU/GPU
+- [x] Implement and certify that geometry through the existing CPU/GPU
   generation, regeneration and W continuation, preserving old profiles.
 - [ ] Continue the broader unresolved graph, spectral, physical-adapter,
   universality and comparative hardware obligations; this milestone does
@@ -708,7 +708,7 @@ pyramid volumes still need their own geometry and metric.
 - [x] Freeze and independently verify numerical references and geometry checks;
   render/review the full PDF and verify original source/contract preservation.
 - [x] Commit and push the formal baseline before changing runtime code.
-- [ ] Implement and certify DP1-DP10 on CPU and GPU in the same individual,
+- [x] Implement and certify DP1-DP10 on CPU and GPU in the same individual,
   including regeneration, pending planning and Wv2 continuation.
 
 The default independent mixed-shape mission currently completes 11 cycles at
@@ -734,3 +734,75 @@ ELI5 booklet are unchanged. The formal PDF, arithmetic reference, separate
 geometry audit and document-preservation reports form this committed and
 pushed milestone. Runtime implementation remains the next required work;
 broader three-dimensional, spectral, physical and hardware claims stay open.
+
+## 2026-09-26: directional geometry and Wv2 in the same individual
+
+The complete architecture objective remains active. The current naming check
+confirmed the already-pushed ELI5 change at `6df934e`: pink **Jitske** and
+green-blue **Tom**. That PDF remains byte-identical. Work then resumed from
+the DP1-DP10 formal baseline committed at `1979e66`, without changing the
+frozen arithmetic reference or earlier numerical profiles.
+
+- [x] Implement strict `TaperBinding`, typed TP-TAPE32 instructions, finite
+  preflight, complete branch interpretation and original-context recipes.
+- [x] Produce projected taper/ball occupancy and inner-boundary signed fields
+  independently on CPU and GPU; admit through a sealed certificate that
+  reconstructs the trajectory and verifies inverse-lift membership.
+- [x] Integrate same-owner GROW, target selection, historical regeneration,
+  pending planning, reindexing and durable continuation with no host reseeding
+  after GPU initialization.
+- [x] Add strict Wv2 config/protocol/archive dispatch for taper while preserving
+  Wv1's four previous policies, carrier words and canonical archive identities.
+- [x] Add literal and fault/recovery tests, guarded actual-device conformance
+  and fresh CPU/GPU process transitions; capture an unchanged source inventory.
+- [x] Record measured progress in revision 14 of the same consolidated PDF,
+  preserving earlier page bodies 4-97 and the three original source PDFs.
+
+The complete capture passes **796 tests, zero skips**, in **298.596 s**,
+including **179 actual-device GPU methods**, plus **15** mission/geometry and
+**8** Wv2 conformance checks. The actual device is an NVIDIA GeForce RTX 5070
+Ti Laptop GPU using Vulkan. All **120** captured runtime, shader, test, example
+and reference identities match before and after the **324.735 s** capture.
+Five host-only rejection/CPU-wrapper methods in GPU classes are explicitly
+excluded from the current actual-device count. Earlier published counts remain
+historical, with their original classifications and source identities.
+
+The default/mirrored missions complete 11 cycles at energy 69; two epochs
+complete 17 cycles at energy 55; zero epochs complete 4 cycles at energy 86.
+The mixed stage uses 19 logical instructions, 23 texels, 7 forward steps,
+3 primitives and 41 charged sites. CPU and GPU complete archives agree.
+Six fresh-process crossovers preserve before/after-GROW and generated-world
+DEFER contexts. Wv2 executes all three 19-operation lifecycles, with 20 records
+and 41 carrier words each; fresh GPU → CPU → GPU endpoints preserve the exact
+ledger, original GROW cycle, retries and cache witnesses.
+
+Independent review prompted an explicit all-eight shaft/orientation device
+fixture and corrected method accounting. Actual device checks also caught and
+fixed negative-coordinate floor arithmetic and accounted for status/zero-step
+padded readbacks. Final fields, reference documents, failure semantics and
+resource accounting pass after those corrections. GPU conformance disables
+CPU geometry, field, index, routing and state-emission producers as applicable.
+
+Default agent archive SHA-256:
+`94b4979c5c5d006b2ef589ffa027475d46d039e04e977cab7ec8245672822c4e`.
+Default Wv2 archive SHA-256:
+`0e121009810d616adc79e1fd4175e28386cfcfadc7f7ef709c57b9a855d52d8a`.
+The capture and its reproduction commands are retained under
+`docs/evidence/directional-v1/`; the original formal/reference/preservation
+files there are unchanged. New runtime and document reports have separate names.
+
+Revision 14 has **100 pages**, all rendered and visually reviewed. Its
+independent rebuild is byte-identical, and the preservation audit confirms
+94 unchanged page bodies/definitions (pages 4-97), 100 bookmarks, 98 logical
+internal links represented by 99 valid rectangles, and 7 unchanged external
+links. The extra rectangle is an inline link that wraps onto another line.
+The PDF SHA-256 is
+`63ceb47473b9e44c7e3b287ebaf25c413d4027099dc964e8a58e8f02f047247e`.
+This progress record accompanies the implementation/evidence/PDF commit and push.
+
+The broader task is not complete. Next source obligations include distinct
+three-dimensional cone/pyramid volumes, general graph production, global
+spectral choices, physical adapters and broader continuation. Universality,
+comparative throughput, texture-cache saturation and physical bottleneck
+claims still need their respective proofs or measurements. Future numerical
+bindings must enter this same formal PDF before their runtime implementations.

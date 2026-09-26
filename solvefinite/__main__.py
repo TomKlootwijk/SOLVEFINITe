@@ -165,7 +165,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_scenario = agent_commands.add_parser("scenario", help="Write the default simulated environment")
     agent_scenario.add_argument("--output", type=Path, required=True)
-    agent_scenario.add_argument("--profile", choices=("binary", "field", "hadamard", "growth", "organogram"), default="binary")
+    agent_scenario.add_argument("--profile", choices=("binary", "field", "hadamard", "growth", "organogram", "taper"), default="binary")
     agent_serve = agent_commands.add_parser("serve", help="Keep one agent ready for live JSON-line sensor input")
     agent_serve.add_argument("--state", type=Path, default=Path("output/tomigidt/live.json"))
     agent_serve.add_argument("--capacity", type=int, default=2)
@@ -173,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_serve.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_live_config = agent_commands.add_parser("live-config", help="Write the default live agent configuration")
     agent_live_config.add_argument("--output", type=Path, required=True)
-    agent_live_config.add_argument("--profile", choices=("binary", "field", "hadamard", "growth", "organogram"), default="binary")
+    agent_live_config.add_argument("--profile", choices=("binary", "field", "hadamard", "growth", "organogram", "taper"), default="binary")
     agent_live_inspect = agent_commands.add_parser("live-inspect", help="Replay and inspect a retained live agent session")
     agent_live_inspect.add_argument("state", type=Path)
     agent_live_inspect.add_argument("--capacity", type=int, default=2)
@@ -184,7 +184,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_welip.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_welip_config = agent_commands.add_parser("welip-config", help="Write a W field-agent configuration")
     agent_welip_config.add_argument("--output", type=Path, required=True)
-    agent_welip_config.add_argument("--profile", choices=("field", "hadamard", "growth", "organogram"),
+    agent_welip_config.add_argument("--profile", choices=("field", "hadamard", "growth", "organogram", "taper"),
                                     default="organogram")
     agent_welip_config.add_argument("--producer", default="sensor")
     agent_welip_config.add_argument("--producer-epoch", type=int, default=0)
@@ -226,7 +226,7 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"manifest": str(args.output.resolve()), "profile": manifest.profile}
         else:
             from .session import Scenario, load_session, run_session
-            from .field_agent import FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY
+            from .field_agent import FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY
             options = {"backend": getattr(args, "backend", "cpu")}
             index_values = tuple(getattr(args, name, None) for name in
                                  ("index_epoch", "index_sign", "index_phase_origin"))
@@ -245,15 +245,15 @@ def main(argv: list[str] | None = None) -> int:
                 try:
                     result = {"verified": True, "state": agent.snapshot(),
                               "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
-                    if args.backend == "gpu" or agent.manifest.policy in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
+                    if args.backend == "gpu" or agent.manifest.policy in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY):
                         result["execution_info"] = agent.execution_info
                 finally:
                     agent.close()
             elif args.agent_command == "scenario":
-                if args.profile in ("field", "hadamard", "growth", "organogram"):
+                if args.profile in ("field", "hadamard", "growth", "organogram", "taper"):
                     from .field_agent import FieldAgentManifest
                     policy = {"field": FIELD_POLICY, "hadamard": HADAMARD_POLICY,
-                              "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY}[args.profile]
+                              "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY, "taper": TAPER_POLICY}[args.profile]
                     scenario = Scenario(FieldAgentManifest(policy=policy), changes=((2, "k:0:3", 70),))
                 else:
                     scenario = Scenario()
@@ -269,21 +269,22 @@ def main(argv: list[str] | None = None) -> int:
                 return 0
             elif args.agent_command == "welip-config":
                 from .field_agent import FieldAgentManifest
-                from .welip import WelipConfig
+                from .welip import WelipConfig, CONFIG_FORMAT, CONFIG_FORMAT_V2
                 policy = {"field": FIELD_POLICY, "hadamard": HADAMARD_POLICY,
-                          "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY}[args.profile]
+                          "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY, "taper": TAPER_POLICY}[args.profile]
                 config = WelipConfig(
                     manifest=FieldAgentManifest(policy=policy), producer=args.producer,
                     producer_epoch=args.producer_epoch, clock_origin=args.clock_origin,
-                    max_events=args.max_events, initial_capacity=args.initial_capacity)
+                    max_events=args.max_events, initial_capacity=args.initial_capacity,
+                    version=CONFIG_FORMAT_V2 if args.profile == "taper" else CONFIG_FORMAT)
                 write_json(args.output, config.to_dict())
                 result = {"config": str(args.output.resolve()), "identity": config.manifest.identity}
             elif args.agent_command == "live-config":
                 from .live import LiveConfig
-                if args.profile in ("field", "hadamard", "growth", "organogram"):
+                if args.profile in ("field", "hadamard", "growth", "organogram", "taper"):
                     from .field_agent import FieldAgentManifest
                     policy = {"field": FIELD_POLICY, "hadamard": HADAMARD_POLICY,
-                              "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY}[args.profile]
+                              "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY, "taper": TAPER_POLICY}[args.profile]
                     config = LiveConfig(FieldAgentManifest(policy=policy))
                 else:
                     config = LiveConfig()
@@ -297,7 +298,7 @@ def main(argv: list[str] | None = None) -> int:
                               "state_path": str(args.state.resolve()),
                               "event_count": len(agent.events),
                               "producer": config.producer, "epoch": config.epoch}
-                    if args.backend == "gpu" or agent.manifest.policy in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
+                    if args.backend == "gpu" or agent.manifest.policy in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY):
                         result["execution_info"] = agent.execution_info
                 finally:
                     agent.close()

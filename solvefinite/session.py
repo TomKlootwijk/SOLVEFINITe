@@ -15,7 +15,7 @@ from pathlib import Path
 from .rp32 import unpack
 from .runtime import _integer, _keys, write_json
 from .tomigidt import AgentManifest, Tomigidt
-from .field_agent import FieldAgentManifest, GROWTH_POLICY, ORGANOGRAM_POLICY
+from .field_agent import FieldAgentManifest, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY
 from .f8 import IndexBinding
 
 
@@ -109,7 +109,7 @@ class Scenario:
 
     def observe(self, position: str, cycle: int, *, geometry_epoch: int = 0) -> dict[str, int]:
         """Fresh local frame; configured hazards belong only to geometry epoch 0."""
-        is_growth = self.manifest.policy in (GROWTH_POLICY, ORGANOGRAM_POLICY)
+        is_growth = self.manifest.policy in (GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY)
         maximum = self.manifest.growth_binding.max_epochs if is_growth else 0
         _integer(geometry_epoch, 0, maximum, "geometry_epoch")
         if self.manifest.policy == GROWTH_POLICY:

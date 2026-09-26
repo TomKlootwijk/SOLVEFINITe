@@ -20,7 +20,7 @@ from .navigation import NoRoute, RouteSearch, SearchBudgetExceeded, normalize_gr
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _json, _keys, write_json
 from .world import World, WorldConfig, _capacity
-from .field_agent import (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY,
+from .field_agent import (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY,
                           FIELD_WORD_PROFILE, FieldAgentManifest)
 from .growth import EpochFieldNode, grow_recipe, map_node, select_target
 from .hadamard_navigation import HadamardRouteSearch
@@ -29,6 +29,8 @@ from .hadamard import HadamardBinding
 from .f8 import F8Index, IndexBinding
 from .organogram import (OrganogramBinding, StageContext, GeneratedFieldRecipe,
                          regenerate, select_target as select_organogram_target)
+from .taper import (TaperBinding, TaperFieldRecipe,
+                    regenerate as regenerate_taper, select_target as select_taper_target)
 
 
 def _serialized(method):
@@ -97,6 +99,48 @@ class OrganogramFieldNode:
                 "path": self.path, "pair": f"{self.pair:016X}", "prefix_sha256": self.prefix_sha256}
 
 
+@dataclass(frozen=True, slots=True)
+class TaperFieldNode:
+    """A historical DP sample bound to its admitted original production."""
+
+    geometry_epoch: int
+    origin_sequence: int
+    initial_recipe: KleinFieldRecipe
+    taper: TaperBinding
+    routing: HadamardBinding
+    stages: tuple[StageContext, ...]
+    path: str
+    pair: int
+    prefix_sha256: str
+
+    def __post_init__(self):
+        if (type(self.initial_recipe) is not KleinFieldRecipe or
+                type(self.taper) is not TaperBinding or type(self.routing) is not HadamardBinding):
+            raise ValueError("Historical taper sample requires its exact immutable bindings")
+        _integer(self.geometry_epoch, 0, self.taper.max_epochs, "geometry_epoch")
+        _integer(self.origin_sequence, 0, 1_000_000, "origin_sequence")
+        if ((self.geometry_epoch == 0) != (self.origin_sequence == 0) or
+                type(self.stages) is not tuple or len(self.stages) != self.geometry_epoch):
+            raise ValueError("Historical taper sample has an inconsistent original generation")
+        if self.stages:
+            TaperFieldRecipe(self.initial_recipe, self.taper, self.routing, self.stages)
+            if self.stages[-1].tick != self.origin_sequence:
+                raise ValueError("Historical taper sample has a different original tick")
+        if (type(self.prefix_sha256) is not str or len(self.prefix_sha256) != 64 or
+                any(c not in '0123456789abcdef' for c in self.prefix_sha256)):
+            raise ValueError("Historical sample requires a lowercase original-prefix SHA256")
+        _integer(self.pair, 0, (1 << 64) - 1, "pair")
+        r, node, _, metadata = unpack(unpair(self.pair)[0])
+        if (r, node, metadata) != (0, self.initial_recipe.index(self.path), int(Opcode.DATA)):
+            raise ValueError("Historical sample requires a canonical DATA pair for its path")
+
+    def to_dict(self):
+        return {"geometry_epoch": self.geometry_epoch, "origin_sequence": self.origin_sequence,
+                "initial_recipe": self.initial_recipe.to_dict(), "taper": self.taper.to_dict(),
+                "routing": self.routing.to_dict(), "stages": [stage.to_dict() for stage in self.stages],
+                "path": self.path, "pair": f"{self.pair:016X}", "prefix_sha256": self.prefix_sha256}
+
+
 @dataclass(frozen=True)
 class AgentManifest:
     identity: str = "TOMIGIDt"
@@ -158,7 +202,7 @@ class AgentManifest:
 
     @classmethod
     def from_dict(cls, value: object) -> AgentManifest | FieldAgentManifest:
-        if type(value) is dict and value.get("policy") in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
+        if type(value) is dict and value.get("policy") in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY):
             return FieldAgentManifest.from_dict(value)
         _keys(value, {
             "identity", "policy", "perspective", "word_profile", "target", "world",
@@ -232,9 +276,10 @@ class Tomigidt:
             raise ValueError("manifest must be an AgentManifest or FieldAgentManifest")
         self._is_field = type(self._manifest) is FieldAgentManifest
         self._is_organogram = self._manifest.policy == ORGANOGRAM_POLICY
-        self._is_growth = self._manifest.policy in (GROWTH_POLICY, ORGANOGRAM_POLICY)
+        self._is_taper = self._manifest.policy == TAPER_POLICY
+        self._is_growth = self._manifest.policy in (GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY)
         self._growth_binding = self._manifest.growth_binding if self._is_growth else None
-        self._is_hadamard = self._manifest.policy in (HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY)
+        self._is_hadamard = self._manifest.policy in (HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY)
         self._geometry_epoch = 0
         self._target = self._manifest.target
         self._growth_peak: dict = {}
@@ -323,13 +368,15 @@ class Tomigidt:
                                                   "manifests, temporary compiler work, search, observations, "
                                                   "history, Python objects and driver allocations are additional."}
                 if self._gpu is not None:
-                    result["gpu_stages"].append("organogram-field-admission" if self.is_organogram else "dyadic-growth-mapping")
+                    result["gpu_stages"].append("taper-field-admission" if self.is_taper else
+                                                "organogram-field-admission" if self.is_organogram else "dyadic-growth-mapping")
                     result["host_stages"].extend(["growth-admission", "derived-target-selection"])
-                if self.is_organogram:
+                if self.is_generated:
                     del result["growth"]["scale_exponent"]
                     if self._gpu is not None:
                         result["gpu_stages"].extend(["integer-instruction-texture", "branch-interpreter",
-                                                     "generated-ball-signs", "generated-field-distances"])
+                                                     "projected-primitive-occupancy" if self.is_taper else "generated-ball-signs",
+                                                     "generated-field-distances"])
                         result["host_stages"].extend(["parameterized-parallel-rewrite", "tape-preflight",
                                                       "independent-stage-certificate"])
             return result
@@ -427,6 +474,14 @@ class Tomigidt:
         return self._is_organogram
 
     @property
+    def is_taper(self) -> bool:
+        return self._is_taper
+
+    @property
+    def is_generated(self) -> bool:
+        return self._is_organogram or self._is_taper
+
+    @property
     def geometry_epoch(self) -> int:
         return self._geometry_epoch
 
@@ -451,7 +506,7 @@ class Tomigidt:
                 break
             if event["growth"] is not None:
                 receipt = event["growth"]
-                if self.is_organogram:
+                if self.is_generated:
                     if index == 0:
                         raise ValueError("A grammar stage requires an original repaired state")
                     recipe = self._organogram_recipe(recipe, event["seq"],
@@ -469,17 +524,21 @@ class Tomigidt:
 
     def _organogram_recipe(self, previous, tick, start_pair, prefix):
         """Bind the next generation to original inputs without evaluating it."""
-        stages = previous.stages if type(previous) is GeneratedFieldRecipe else ()
+        recipe_type = TaperFieldRecipe if self.is_taper else GeneratedFieldRecipe
+        stages = previous.stages if type(previous) is recipe_type else ()
         fingerprint = hashlib.sha256(json.dumps(
             prefix, sort_keys=True, separators=(',', ':'), ensure_ascii=True,
             allow_nan=False).encode('utf-8')).hexdigest()
         context = StageContext(epoch=len(stages) + 1, tick=tick,
                                start_pair=start_pair, prefix_sha256=fingerprint)
+        if self.is_taper:
+            return TaperFieldRecipe(base=self.manifest.world, taper=self.manifest.taper,
+                                    routing=self.manifest.routing, stages=(*stages, context))
         return GeneratedFieldRecipe(base=self.manifest.world, organogram=self.manifest.organogram,
                                     routing=self.manifest.routing, stages=(*stages, context))
 
     @_serialized
-    def derive_epoch(self, epoch: int, path: str) -> EpochFieldNode | OrganogramFieldNode:
+    def derive_epoch(self, epoch: int, path: str) -> EpochFieldNode | OrganogramFieldNode | TaperFieldNode:
         """Regenerate a qualified sample without changing the live state or FIFO."""
         if self.closed:
             raise ValueError("This agent is closed")
@@ -503,6 +562,12 @@ class Tomigidt:
                 historical = FieldWorld(recipe, 1, executor=owner,
                                         index_binding=self.world.index.binding, routing=self.manifest.routing)
                 sample = historical.derive(path)
+            if self.is_taper:
+                return TaperFieldNode(
+                    geometry_epoch=epoch, origin_sequence=origin, initial_recipe=self.manifest.world,
+                    taper=self.manifest.taper, routing=self.manifest.routing,
+                    stages=recipe.stages if type(recipe) is TaperFieldRecipe else (),
+                    prefix_sha256=prefix_digest, path=path, pair=sample.pair)
             if self.is_organogram:
                 return OrganogramFieldNode(
                     geometry_epoch=epoch, origin_sequence=origin, initial_recipe=self.manifest.world,
@@ -713,7 +778,7 @@ class Tomigidt:
             for key in ("device_buffer_bytes", "device_texture_bytes", "device_payload_bytes",
                         "host_field_code_payload_bytes", "host_geometry_payload_bytes"):
                 payload[key] = old[key] + new[key]
-        if self.is_organogram:
+        if self.is_generated:
             payload["recipe_json_bytes"] = sum(len(json.dumps(value.to_dict(), sort_keys=True,
                 separators=(',', ':'), ensure_ascii=True, allow_nan=False).encode('utf-8'))
                 for value in (self.current_recipe, candidate_recipe))
@@ -722,8 +787,9 @@ class Tomigidt:
                     certificate.last_derivation, sort_keys=True, separators=(',', ':'),
                     ensure_ascii=True, allow_nan=False).encode('utf-8'))
             if candidate_gpu is not None:
-                old_grammar = old.get("organogram", {})
-                new_grammar = new["organogram"]
+                family = "taper" if self.is_taper else "organogram"
+                old_grammar = old.get(family, {})
+                new_grammar = new[family]
                 for key in ("instruction_texture_bytes", "grammar_movement_texture_bytes",
                             "grammar_scratch_buffer_bytes", "grammar_private_stack_payload_bytes",
                             "peak_grammar_host_stage_payload_bytes", "peak_grammar_host_tape_metadata_bytes",
@@ -749,16 +815,16 @@ class Tomigidt:
                 raise ValueError("Growth source pair disagrees with its original field")
             recipe = (self._organogram_recipe(self.current_recipe, self.cycle + 1,
                        f"{self.agent_pair:016X}", self._events)
-                      if self.is_organogram else grow_recipe(self.current_recipe))
+                      if self.is_generated else grow_recipe(self.current_recipe))
             binding = self.world.index.binding
             if old_gpu is not None:
                 from .field_agent_gpu import GpuFieldAgentExecutor
                 candidate_gpu = GpuFieldAgentExecutor(recipe, index_binding=binding,
                                                       routing=self.manifest.routing)
-                certificate = candidate_gpu.certificate if self.is_organogram else None
+                certificate = candidate_gpu.certificate if self.is_generated else None
                 self._growth_peak = self._growth_payload(recipe, candidate_gpu, certificate)
-            elif self.is_organogram:
-                certificate = regenerate(recipe)
+            elif self.is_generated:
+                certificate = regenerate_taper(recipe) if self.is_taper else regenerate(recipe)
             certificate_options = {"certificate": certificate} if certificate is not None else {}
             candidate_world = FieldWorld(recipe, self.world.capacity, executor=candidate_gpu,
                                          index_binding=binding, routing=self.manifest.routing, **certificate_options)
@@ -768,32 +834,39 @@ class Tomigidt:
                 fields = certificate.fields if certificate is not None else evaluate_field(recipe.field_manifest())
             else:
                 fields = candidate_gpu.fields
-            mapped = old_node if self.is_organogram else map_node(self.current_recipe, old_node)
+            mapped = old_node if self.is_generated else map_node(self.current_recipe, old_node)
             phase = (-r if metadata & 16 else r) & 255
-            target_node = (select_organogram_target(recipe, fields, mapped, phase, certificate=certificate)
-                           if self.is_organogram else select_target(recipe, fields, mapped, phase))
+            if self.is_generated:
+                choose_target = select_taper_target if self.is_taper else select_organogram_target
+                target_node = choose_target(recipe, fields, mapped, phase, certificate=certificate)
+            else:
+                target_node = select_target(recipe, fields, mapped, phase)
             position = f"k:{mapped // recipe.height}:{mapped % recipe.height}"
             target = f"k:{target_node // recipe.height}:{target_node % recipe.height}"
             expected = pair(pack(r, mapped, fields[mapped], int(Opcode.STEP) | (metadata & 16)))
             energy = self.energy - self._growth_binding.cost
             if candidate_gpu is not None:
-                if self.is_organogram:
+                if self.is_generated:
+                    grammar_option = {"taper": self.manifest.taper} if self.is_taper else {
+                        "organogram": self.manifest.organogram}
                     actual = candidate_gpu.admit_generated(
-                        old_gpu, self._growth_binding.cost, organogram=self.manifest.organogram,
+                        old_gpu, self._growth_binding.cost, **grammar_option,
                         prefix_sha256=recipe.stages[-1].prefix_sha256)
                 else:
                     actual = candidate_gpu.admit_growth(old_gpu, self._growth_binding.cost)
                 if actual != (expected, energy):
                     raise ValueError("Actual GPU growth differs from independent admission")
             next_epoch = self.geometry_epoch + 1
-            receipt = {"format": "klein-organogram-growth-v1" if self.is_organogram else self.manifest.growth.format,
+            receipt = {"format": "klein-taper-growth-v1" if self.is_taper else
+                       "klein-organogram-growth-v1" if self.is_organogram else self.manifest.growth.format,
                        "from_epoch": self.geometry_epoch, "to_epoch": next_epoch,
                        "mapped_node": position, "target": target, "recipe": recipe.to_dict()}
-            if self.is_organogram:
+            if self.is_generated:
                 receipt["derivation_sha256"] = hashlib.sha256(json.dumps(
                     certificate.last_derivation, sort_keys=True, separators=(',', ':'),
                     ensure_ascii=True, allow_nan=False).encode('utf-8')).hexdigest()
-            decision = Decision("GROW", "Generate a branching field and derive its target" if self.is_organogram
+            decision = Decision("GROW", "Generate a directional field and derive its target" if self.is_taper else
+                                "Generate a branching field and derive its target" if self.is_organogram
                                 else "Generate the next geometry and derive its target",
                                 cost=self._growth_binding.cost, expected_pair=expected)
             event = {"seq": self.cycle + 1,
@@ -933,9 +1006,9 @@ class Tomigidt:
             snapshot.update(energy=self.energy, word_profile=FIELD_WORD_PROFILE)
         if self.is_growth:
             snapshot.update(geometry_epoch=self.geometry_epoch, current_recipe=self.current_recipe.to_dict())
-            if not self.is_organogram:
+            if not self.is_generated:
                 snapshot["scale_exponent"] = self.geometry_epoch
-        if self.manifest.policy in (POLICY, FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
+        if self.manifest.policy in (POLICY, FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY):
             planning = self._planning
             snapshot["planning"] = None if planning is None else {
                 "position": planning.position, "target": self.target,

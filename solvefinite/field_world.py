@@ -109,18 +109,22 @@ class KleinFieldRecipe:
 
 
 def require_field_recipe(value):
-    """Admit only the two versioned recipe types, never arbitrary lookalikes."""
+    """Admit registered versioned recipe types, never arbitrary lookalikes."""
     from .organogram import GeneratedFieldRecipe
-    if type(value) not in (KleinFieldRecipe, GeneratedFieldRecipe):
+    from .taper import TaperFieldRecipe
+    if type(value) not in (KleinFieldRecipe, GeneratedFieldRecipe, TaperFieldRecipe):
         raise ValueError("recipe must be a registered Klein field recipe")
 
 
 def field_recipe_from_dict(value):
     from .organogram import GeneratedFieldRecipe
+    from .taper import TaperFieldRecipe, WORLD_PROFILE as TAPER_WORLD_PROFILE
     if type(value) is not dict:
         raise ValueError("Field recipe must be an object")
     if value.get("format") == WORLD_VERSION:
         return KleinFieldRecipe.from_dict(value)
+    if value.get("format") == TAPER_WORLD_PROFILE:
+        return TaperFieldRecipe.from_dict(value)
     return GeneratedFieldRecipe.from_dict(value)
 
 
@@ -132,14 +136,16 @@ def resolve_field_certificate(recipe, fields=None, certificate=None):
     Legacy recipes retain their original manifest and certificate semantics.
     """
     from .organogram import GeneratedFieldRecipe, GeneratedFieldCertificate, regenerate
+    from .taper import TaperFieldRecipe, TaperFieldCertificate, regenerate as regenerate_taper
     require_field_recipe(recipe)
-    if type(recipe) is not GeneratedFieldRecipe:
+    if type(recipe) is KleinFieldRecipe:
         if certificate is not None:
             raise ValueError("A generated-field certificate requires its generated recipe")
         return None
     if certificate is None:
-        certificate = regenerate(recipe)
-    if type(certificate) is not GeneratedFieldCertificate or certificate.recipe != recipe:
+        certificate = regenerate_taper(recipe) if type(recipe) is TaperFieldRecipe else regenerate(recipe)
+    certificate_type = TaperFieldCertificate if type(recipe) is TaperFieldRecipe else GeneratedFieldCertificate
+    if type(certificate) is not certificate_type or certificate.recipe != recipe:
         raise ValueError("Generated certificate belongs to a different recipe")
     if fields is not None:
         if type(fields) not in (tuple, list) or len(fields) != len(certificate.fields):

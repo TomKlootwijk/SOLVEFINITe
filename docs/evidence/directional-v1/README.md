@@ -2,8 +2,10 @@
 
 The normative contract is in the existing consolidated
 [TK-LPLUT-2.0 PDF](../../../output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf),
-revision 13, pages 84-97. This is a **formal-only** milestone before runtime
-implementation. No new CPU/GPU conformance result is claimed here.
+pages 84-97, was committed in revision 13 at `1979e66` before runtime
+implementation. Revision 14 preserves that contract and adds measured results
+on pages 98-100. The original arithmetic and formal preservation reports below
+remain historical; new runtime evidence uses separate report files.
 
 Original specification pages 5 and 7 and the addenda's side-view discussion
 motivate a two-dimensional section with a local shaft, slope and extent.
@@ -63,8 +65,39 @@ bound to commit `1ea9320` and its 106 source/reference identities, rather than
 being inherited by future implementations. The three source PDFs and the
 Tom/Jitske ELI5 booklet remain unchanged.
 
-Next work is the actual CPU/GPU producer, independent sealed certificate,
-same-owner continuation and Wv2 recovery against DP10's acceptance cases.
+The CPU/GPU producer, independent sealed certificate, same-owner continuation
+and Wv2 recovery are now implemented. `conformance.json` captures all four
+literal missions, independent complete stage documents, actual device states,
+historical samples, deferred planning and six fresh-process crossovers.
+`welip-conformance.json` captures all three 19-operation Wv2 lifecycles and
+GPU → CPU → GPU endpoint recovery with CPU geometry/state producers disabled.
+
+`verification.json` binds the complete zero-skip test log (`full-tests.txt`),
+both conformance reports, device identity, formal chronology and the source
+inventory before/after execution. Its actual-device method count excludes five
+host-only rejection/CPU-wrapper tests inside GPU test classes; the separate
+class-level adapter probe is not counted as execution by those methods.
+`runtime-preservation.json` and `runtime-pdf-quality.json` audit revision 14;
+the earlier `preservation.json` and `pdf-quality.json` remain unchanged.
+
+The retained capture passes **796 tests, zero skipped**, including **179
+actual-device GPU methods**, plus **15 mission/geometry** and **8 Wv2** checks.
+The suite takes 298.596 s; the complete capture takes 324.735 s on the recorded
+NVIDIA GeForce RTX 5070 Ti Laptop GPU/Vulkan environment. All 120 captured
+source/reference identities remain unchanged during execution. These timings
+describe validation work and are not throughput benchmarks.
+
+Recheck into temporary reports without replacing this capture:
+
+```powershell
+python -m unittest discover -s tests -v
+python -m examples.taper_conformance --output tmp/dp-recheck.json
+python -m examples.taper_welip_conformance --output tmp/wv2-recheck.json
+python tools/capture_taper_evidence.py --output-dir tmp/dp-capture
+python tools/build_formal_spec.py
+python docs/evidence/directional-v1/runtime-preservation-audit.py --final --rebuild
+```
+
 The broader architecture objective also retains 3D volumes, more general
 graphs/production, global spectral choices, physical adapters, universality
 and comparative hardware measurements. This contract does not claim GPU

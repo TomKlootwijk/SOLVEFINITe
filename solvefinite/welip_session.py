@@ -20,10 +20,11 @@ from .f8 import IndexBinding
 from .runtime import _integer, _keys, write_json
 from .session import StateLock, _read_json, _reject_constant, _unique_object
 from .tomigidt import Tomigidt
-from .welip import MAX_REQUEST_CHARS, OPERATIONS, PROTOCOL, WelipConfig, make_record
+from .welip import MAX_REQUEST_CHARS, OPERATIONS, WelipConfig, make_record
 
 
 SESSION_FORMAT = "welip-field-session-v1"
+SESSION_FORMAT_V2 = "welip-field-session-v2"
 _COMMON = {"protocol", "op", "producer", "producer_epoch", "seq", "clock_epoch",
            "tick16", "agent_cycle", "geometry_epoch"}
 _FIELDS = {"IGNITE": {"payload"}, "ADVANCE": {"position", "observations"},
@@ -102,13 +103,26 @@ class WelipSession:
                 retained = _read_json(self.path) if self._restored else None
                 if self._restored:
                     _keys(retained, {"format", "config", "operations", "agent", "expected"}, "W archive")
-                    if retained["format"] != SESSION_FORMAT:
+                    if (type(retained["format"]) is not str
+                            or retained["format"] not in (SESSION_FORMAT, SESSION_FORMAT_V2)):
                         raise ValueError("Unsupported W archive format")
                     config = WelipConfig.from_dict(retained["config"])
+                    if retained["format"] != config.session_format:
+                        raise ValueError("W archive and configuration versions disagree")
                     if type(retained["operations"]) is not list or len(retained["operations"]) > config.max_events:
                         raise ValueError("W archive exceeds its finite operation bound")
                     if self._supplied is not None and self._supplied != config:
                         raise ValueError("Supplied W configuration differs from the retained configuration")
+                    if (type(retained["agent"]) is not dict
+                            or _canonical(retained["agent"].get("manifest")) != _canonical(config.manifest.to_dict())):
+                        raise ValueError("Retained agent and W configuration namespaces disagree")
+                    # Reject mixed namespaces before allocating or replaying an
+                    # owner. The full canonical ledger is checked during replay.
+                    for row in retained["operations"]:
+                        request = row.get("request") if type(row) is dict else None
+                        if (type(request) is not dict or type(request.get("protocol")) is not str
+                                or request["protocol"] != config.protocol):
+                            raise ValueError("Retained W operation has another protocol namespace")
                 else:
                     config = self._supplied if self._supplied is not None else WelipConfig()
                 self._config = config
@@ -176,7 +190,7 @@ class WelipSession:
                          "visible_paths": list(agent.visible_paths),
                          "active_paths": list(agent.world.active_paths), "capacity": agent.world.capacity,
                          "agent_status": agent.status, "allowed_ops": allowed}
-        return {"protocol": PROTOCOL, "producer": config.producer, "producer_epoch": config.producer_epoch,
+        return {"protocol": config.protocol, "producer": config.producer, "producer_epoch": config.producer_epoch,
                 "head": self._head(sequence), "next": following}
 
     @_serialized
@@ -192,7 +206,7 @@ class WelipSession:
         if self._config is None:
             raise RuntimeError("No admitted W configuration exists")
         if failure.fatal:
-            context = {"protocol": PROTOCOL, "producer": self._config.producer,
+            context = {"protocol": self._config.protocol, "producer": self._config.producer,
                        "producer_epoch": self._config.producer_epoch, "head": None, "next": None}
         else:
             self._require_open()
@@ -203,7 +217,7 @@ class WelipSession:
 
     def _static(self, request):
         if (type(request) is not dict or type(request.get("protocol")) is not str
-                or request["protocol"] != PROTOCOL or type(request.get("op")) is not str):
+                or request["protocol"] != self._config.protocol or type(request.get("op")) is not str):
             raise WelipProtocolError("INVALID_REQUEST", "A W request requires the exact protocol and an operation")
         operation = request["op"]
         if operation in _BACKWARD:
@@ -338,7 +352,7 @@ class WelipSession:
 
     def _archive(self, rows):
         sequence = len(rows)
-        return {"format": SESSION_FORMAT, "config": self._config.to_dict(), "operations": rows,
+        return {"format": self._config.session_format, "config": self._config.to_dict(), "operations": rows,
                 "agent": self._agent.archive(),
                 "expected": {"seq": sequence, **self._config.clock(sequence),
                              "ignited": bool(sequence), "cache": self._cache()}}

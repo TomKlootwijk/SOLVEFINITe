@@ -10,13 +10,23 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .field_agent import FieldAgentManifest, GROWTH_POLICY, ORGANOGRAM_POLICY, MAX_ENERGY
+from .field_agent import (FieldAgentManifest, FIELD_POLICY, HADAMARD_POLICY,
+                          GROWTH_POLICY, ORGANOGRAM_POLICY, TAPER_POLICY, MAX_ENERGY)
 from .rp32 import unpack, unpair
 from .runtime import _integer, _keys
 
 
 PROTOCOL = "welip-field-agent-v1"
 CONFIG_FORMAT = "welip-field-config-v1"
+PROTOCOL_V2 = "welip-field-agent-v2"
+CONFIG_FORMAT_V2 = "welip-field-config-v2"
+# The enclosing immutable configuration supplies the geometry namespace. The
+# unchanged carrier/LUS words cannot identify it without that context.
+_VERSION_BINDINGS = {
+    CONFIG_FORMAT: (PROTOCOL, "welip-field-session-v1",
+                    (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY)),
+    CONFIG_FORMAT_V2: (PROTOCOL_V2, "welip-field-session-v2", (TAPER_POLICY,)),
+}
 WORD_PROFILE = "welip-16-16-32-v1"
 STATE_PROFILE = "RP32-relational-sdf-v2"
 LUS_FORMAT = "welip-lus-v1"
@@ -42,6 +52,12 @@ def _config(value: object) -> None:
         raise ValueError("config must be a WelipConfig")
 
 
+def _version(value: object) -> tuple[str, str, tuple[str, ...]]:
+    if type(value) is not str or value not in _VERSION_BINDINGS:
+        raise ValueError("Unsupported W configuration format")
+    return _VERSION_BINDINGS[value]
+
+
 @dataclass(frozen=True, slots=True)
 class WelipConfig:
     """One immutable namespace, initial field agent and finite clock horizon."""
@@ -52,10 +68,14 @@ class WelipConfig:
     clock_origin: int = 0
     max_events: int = MAX_EVENTS
     initial_capacity: int = 2
+    version: str = CONFIG_FORMAT
 
     def __post_init__(self) -> None:
+        _, _, policies = _version(self.version)
         if type(self.manifest) is not FieldAgentManifest:
             raise ValueError("W manifest must be a FieldAgentManifest")
+        if self.manifest.policy not in policies:
+            raise ValueError("Agent policy is outside this W configuration version")
         if (type(self.producer) is not str or not self.producer or self.producer != self.producer.strip()
                 or len(self.producer) > 128):
             raise ValueError("producer must be a trimmed nonempty name of at most 128 characters")
@@ -67,16 +87,25 @@ class WelipConfig:
             raise ValueError("clock_origin + max_events exceeds the unsigned 48-bit clock horizon")
 
     def to_dict(self) -> dict:
-        return {"format": CONFIG_FORMAT, "agent": self.manifest.to_dict(), "producer": self.producer,
+        return {"format": self.version, "agent": self.manifest.to_dict(), "producer": self.producer,
                 "producer_epoch": self.producer_epoch, "clock_origin": self.clock_origin,
                 "max_events": self.max_events, "initial_capacity": self.initial_capacity}
 
     @classmethod
     def from_dict(cls, value: object) -> WelipConfig:
         _keys(value, _CONFIG_KEYS, "W configuration")
-        _literal(value["format"], CONFIG_FORMAT, "W configuration format")
+        _version(value["format"])
         return cls(manifest=FieldAgentManifest.from_dict(value["agent"]),
+                   version=value["format"],
                    **{key: value[key] for key in _CONFIG_KEYS - {"format", "agent"}})
+
+    @property
+    def protocol(self) -> str:
+        return _version(self.version)[0]
+
+    @property
+    def session_format(self) -> str:
+        return _version(self.version)[1]
 
     @classmethod
     def load(cls, path: str | Path) -> WelipConfig:
@@ -172,6 +201,8 @@ def validate_record(record: object, config: WelipConfig, *, expected_pair: int |
     Context ranges and configured W time are checked here. The owning session
     additionally verifies the admitted current cycle/generation and operation.
     No field compiler or CPU state producer is used by this checker.
+    The caller retains the exact enclosing config/protocol namespace: a bare
+    record's baseline label and carrier words do not authenticate that context.
     """
     _config(config)
     _keys(record, _RECORD_KEYS, "LUS record")

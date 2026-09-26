@@ -1,0 +1,65 @@
+{
+  "format": "tk-lplut-directional-runtime-pdf-quality-v1",
+  "revision": "TK-LPLUT-2.0 revision 14",
+  "pdf": "output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf",
+  "pdf_sha256": "63ceb47473b9e44c7e3b287ebaf25c413d4027099dc964e8a58e8f02f047247e",
+  "builder_sha256_lf": "c0d54b6ac325a7a5b98078e9768ee0ca0936a72ccd82e23da9173c79e1a869ff",
+  "pages": 100,
+  "bookmarks": 100,
+  "resolved_internal_links": 98,
+  "internal_link_rectangles": 99,
+  "unchanged_external_links": 7,
+  "rendering": {
+    "all_pages_rendered": true,
+    "long_edge_pixels": 1100,
+    "contact_sheets_reviewed": 7,
+    "root_detail_pages": [
+      2,
+      98,
+      99,
+      100
+    ],
+    "independent_detail_pages": [
+      1,
+      2,
+      3,
+      98,
+      99,
+      100
+    ],
+    "review": "Root reviewed all seven contact sheets and detailed new/edition pages; independent reviewer checked cover, edition, contents and all three added pages."
+  },
+  "layout": {
+    "minimum_content_y_points": 60.49,
+    "main_contents_bottom_points": 71.89,
+    "clipping": false,
+    "overlap": false,
+    "broken_glyphs": false,
+    "glyph_and_link_bounds_verified": true,
+    "link_fragmentation": "The inline page-2 link to page99 wraps across two lines, yielding two valid rectangles for one logical destination."
+  },
+  "preservation": {
+    "report_sha256_lf": "251358ea09b2934263d3cf8a5ab78354458caacf199e3a2b25b6ae1f0740c7ab",
+    "protected_page_bodies": [
+      4,
+      97
+    ],
+    "protected_page_count": 94,
+    "original_source_pdfs_unchanged": 3,
+    "eli5_pdf_unchanged": true,
+    "prior_formal_evidence_unchanged": true,
+    "byte_identical_rebuild": true
+  },
+  "capture": {
+    "verification_sha256_lf": "178238cdac0ddfef75f46e936edcac49320b294d60eea4c9b2bcc3cdaa7ca7ae",
+    "source_files": 120,
+    "tests_passed": 796,
+    "tests_skipped": 0,
+    "actual_device_methods": 179,
+    "host_only_methods_excluded_from_device_count": 5,
+    "mission_checks": 15,
+    "welip_checks": 8
+  },
+  "scope": "Measured finite DP implementation in the existing consolidated formal PDF; prior numerical definitions and source PDFs preserved. Broader architecture claims remain open.",
+  "result": "PASS"
+}
