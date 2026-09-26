@@ -806,3 +806,74 @@ spectral choices, physical adapters and broader continuation. Universality,
 comparative throughput, texture-cache saturation and physical bottleneck
 claims still need their respective proofs or measurements. Future numerical
 bindings must enter this same formal PDF before their runtime implementations.
+
+## 2026-09-26: complete and publish the three-dimensional formal binding
+
+Exact user request:
+
+```text
+Commit and push, how far along is my main formalization, how would you describe it as? since this a frontier paradigm
+```
+
+This bounded documentation task finishes the saved volume-contract work.
+The broader implementation goal remains paused; no new runtime implementation
+is included or claimed in this milestone.
+
+- [x] Integrate VP1-VP16 into revision 15 of the same formal PDF, with a linked
+  appendix map and 17 new pages (101-117), preserving earlier page bodies 4-100.
+- [x] Bind the actual cubical Klein-times-circle domain, genuine sphere/cone/
+  pyramid volumes, exact graph boundary distance, three-component Psi and f8,
+  eight-bank/six-neighbor routing, grammar and full branch context.
+- [x] Bind same-owner growth, original-context recipes and Wv3 continuation,
+  including strict configuration identity and distinct carrier/payload profiles.
+- [x] Specify exact four-u16-limb cone arithmetic and finite preflight, including
+  an admitted 75-site witness where native-u32 multiplication is incorrect.
+- [x] Reproduce the independent mathematical reference and separate geometry
+  audit byte-identically, and compare eight complete fields across their outputs.
+- [x] Review the complete document visually and preserve original sources,
+  the Tom/Jitske ELI5 booklet, all 82 prior evidence files and the 120-file DP
+  capture inventory; verify navigation, glyph placement and identical rebuild.
+- [x] Update the main README and evidence reproduction record, then commit and
+  push the finished formalization and evidence together.
+
+The main formalization is now a **coherent deterministic geometric computing
+research architecture with a tested finite CPU/GPU core**. Its central
+integration connects packed relational state, state-dependent geometric
+operators, one persistent individual, generated world structure and exact
+reconstruction from retained original context. The specification is ahead of
+the new 3D runtime: VP1-VP16 are defined and independently checked, with device
+implementation and durable Wv3 execution still required.
+
+Existing implementation evidence remains the unchanged `2943578` capture:
+**796 tests, zero skips, 179 actual-device GPU methods, 15 directional checks
+and 8 Wv2 checks**. Those counts belong to the implemented prior profiles;
+they were not rerun or reassigned to the formal-only volume extension.
+
+The new separate audit passes **20 mathematical checks**, covering all **523**
+admitted domain shapes, **91,290** octahedral vertex links, **1,460,640**
+orientation-cover cells, **480** primitive cases, **111,240** transported walks
+and **2,400** deck/inverse-lift comparisons. Cone/pyramid/sphere witnesses
+contain respectively **4/8/8 complete occupied cubes**, with distinct full
+volume membership rather than repeated axial sections. Work/coordinate
+preflight and multiword arithmetic retain the original parameter ranges.
+
+Independent default/mirror missions expect **10 cycles, energy 170**; two
+epochs expect **18 cycles, energy 158**. The quantum-7 mission has 18 DEFERs
+and grows at original cycle 19. All three reference Wv3 lifecycles have
+**18 operations, 19 records and 39 fragments**, ending at clock epoch 1,
+tick 12. These are mathematical expectations, not actual volume GPU results
+or canonical runtime archive identities.
+
+Revision 15 PDF SHA-256:
+`68951a1c6c63e1e9e454045fc0c9d043d3b2e6afb3c6ec9235ec284341cd9253`.
+The separate preservation and visual-quality records are retained in
+`docs/evidence/volume-v1/`. Earlier source/document identities and historical
+measurements remain inspectable.
+
+The remaining research obligations include volume runtime integration,
+general graph production, global spectral choices, physical adapters and
+comparative measurements. Unrestricted universality and elimination of
+physical memory bottlenecks have not been established by these finite
+profiles. “Infallible” remains conditional correctness within a declared
+model; “frontier” describes the research direction, with independent novelty
+assessment and hardware comparisons still open.

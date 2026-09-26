@@ -34,7 +34,19 @@ boundaries that become the same individual's next field. The
 independent arithmetic reference from measured CPU/GPU execution.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
-Revision 14 adds **measured DP1-DP10 implementation evidence** on pages 98-100
+Revision 15 adds the **VP1-VP16 full 3D volume contract** on pages 101-117.
+It binds distinct sphere, cone and pyramid volumes into the same quotient,
+field, three-component Psi/index, routing, grammar, persistent individual and
+Wv3 continuation architecture. The [volume evidence](docs/evidence/volume-v1/README.md)
+contains independently reproduced mathematical expectations and a separate
+geometry audit. This extension is **formal only; its runtime is still pending**.
+
+The main formalization is an experimental deterministic execution architecture
+with implemented finite CPU/GPU profiles and explicit remaining proof and
+measurement obligations. It is beyond a concept sketch; full universality,
+physical adapters and comparative hardware advantages remain research work.
+
+Revision 14 added **measured DP1-DP10 implementation evidence** on pages 98-100
 of the same PDF. Pages 84-97 preserve the directional contract committed at
 `1979e66` before implementation, including its historical status labels.
 The new `taper` profile generates projected directional sections and exact

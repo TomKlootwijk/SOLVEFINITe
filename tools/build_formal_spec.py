@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 14. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 15. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -32,8 +32,12 @@ GROWTH_EVIDENCE = ROOT / 'docs/evidence/growth-v1'
 ORGANOGRAM_EVIDENCE = ROOT / 'docs/evidence/organogram-v1'
 WELIP_EVIDENCE = ROOT / 'docs/evidence/welip-v1'
 DIRECTIONAL_EVIDENCE = ROOT / 'docs/evidence/directional-v1'
+VOLUME_EVIDENCE = ROOT / 'docs/evidence/volume-v1'
 OG_CAPTURE_COMMIT = 'f125a76b75052c3611c39557779c08e4553e620a'
 W_CAPTURE_COMMIT = '1ea93207ae8545a5c5d344677cb73a5c459dc91c'
+DP_CAPTURE_COMMIT = '2943578d6d8cb998281469fd4d93d677bf393259'
+VP_REFERENCE = None
+VP_AUDIT = None
 DP_REFERENCE = None
 DP_VERIFICATION = None
 DP_CONFORMANCE = None
@@ -159,7 +163,7 @@ def build_content():
     if any(value is None for value in (HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE,
                                        OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE,
                                        W_VERIFICATION, W_CONFORMANCE)):
-        raise ValueError('Verify historical HP/GD/OG/W evidence before revision 14')
+        raise ValueError('Verify historical HP/GD/OG/W evidence before revision 15')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
@@ -180,7 +184,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 14. FI/PX/HP remain on pages 35-49; GD on pages 50-57; OG on pages 58-68; W on pages 69-83. Pages 84-97 preserve revision 13\'s preimplementation DP contract and its historical “FORMAL ONLY” labels. Current DP evidence follows: <link href="#p98">geometry and missions, p.98</link>; <link href="#p99">Wv2 recovery, p.99</link>; <link href="#p100">evidence and scope, p.100</link>. Prior captures retain their original source identities and counts.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 15. FI/PX/HP remain on pages 35-49; GD on pages 50-57; OG on pages 58-68; W on pages 69-83. Pages 84-97 retain the DP contract. Its historical 2943578 capture follows: <link href="#p98">geometry and missions, p.98</link>; <link href="#p99">Wv2 recovery, p.99</link>; <link href="#p100">evidence and scope, p.100</link>. The <link href="#p101">complete 3D volume binding, p.101</link>, is formal only: VP runtime implementation is pending. Earlier status labels and counts retain their original scope.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -1686,11 +1690,250 @@ def build_directional_measured_pages():
     )
 
 
+def build_volume_content():
+    if VP_REFERENCE is None or VP_AUDIT is None:
+        raise ValueError('Verify the independent volume inputs before revision 15')
+    page('Three-dimensional volume contract', 'APPENDIX MAP | VP1-VP16 | FORMAL ONLY',
+        p('This appendix binds a genuine third spatial component into the same architecture: quotient topology, solid geometry, signed field, Psi, f8, routing, grammar, one advancing individual and W continuation. It is a proposed numerical realization of the source corpus, with independently checked finite expectations. Runtime implementation has not yet been admitted or measured.'),
+        table(['Section','Contract','Page'], [
+            ['VP1','Source scope and versioned profiles','<link href="#p102">102</link>'],
+            ['VP2','Cubical quotient, metric and orientation cover','<link href="#p103">103</link>'],
+            ['VP3','Sphere, cone and pyramid membership','<link href="#p104">104</link>'],
+            ['VP4','Intrinsic shaft and transported frame','<link href="#p105">105</link>'],
+            ['VP5','Union, boundary and exact signed distances','<link href="#p106">106</link>'],
+            ['VP6','Three-component Psi and degeneracy','<link href="#p107">107</link>'],
+            ['VP7','Canonical index and new record layout','<link href="#p108">108</link>'],
+            ['VP8','Eight phase banks and six-neighbor routing','<link href="#p109">109</link>'],
+            ['VP9','Parameterized grammar and branch context','<link href="#p110">110</link>'],
+            ['VP10','Typed tape and finite preflight','<link href="#p111">111</link>'],
+            ['VP11','Exact wide membership arithmetic','<link href="#p112">112</link>'],
+            ['VP12','Recipes and independent admission','<link href="#p113">113</link>'],
+            ['VP13','Same individual and Wv3 continuation','<link href="#p114">114</link>'],
+            ['VP14','Device pipeline and resource accounting','<link href="#p115">115</link>'],
+            ['VP15','Independent literal expectations','<link href="#p116">116</link>'],
+            ['VP16','Acceptance, maturity and open obligations','<link href="#p117">117</link>'],
+        ], [.12,.77,.11]),
+        small('Earlier pages retain their original status and evidence dates. The 796-test DP capture on pages 98-100 belongs to commit 2943578; it is not evidence that this new volume runtime exists.')
+    )
+    page('Source scope and versioned profiles', 'FORMAL ONLY | VP1 | EXPLICIT REALIZATION CHOICES',
+        p('The original source requires explicit metric, boundary, sign, units and geometry-to-field rules for primitives; Solus says operators possess shape, boundary and volume and illustrates sphere, cone and pyramid sections. Those sections guide this binding but do not uniquely determine it. K times a circle, sampled Euclidean solid membership and graph redistance are the declared choices here.'),
+        p('The original two-dimensional radial phase sweep remains the RP32 phase mechanism. Three-dimensional space does not add a second phase angle. The source discussion of a four-dimensional Klein bottle supplies no defined dimensional-collapse map, so this product construction establishes no such claim.'),
+        table(['Role','Exact profile identifier'],[
+            ['Agent / packed state','tomigidt-field-volume-plan-act-v1<br/>RP32-relational-sdf-v3'],
+            ['Field / base recipe','relational-sdf-v3<br/>klein-volume-sphere-world-v1'],
+            ['Grammar / generated recipe','klein-volume-organogram-v1<br/>klein-volume-world-v1'],
+            ['Derivation / growth receipt','klein-volume-derivation-v1<br/>klein-volume-growth-v1'],
+            ['Routing / index','hadamard-klein-volume-routing-v1<br/>f8-klein-volume-sdf-v1'],
+            ['Index snapshot / tape','f8-klein-volume-index-snapshot-v1<br/>VP-TAPE32-v1'],
+        ], [.30,.70]),
+        p('The agent manifest inherits the common FI/HP admission fields and adds exactly routing and volume. It has no growth, organogram or taper key. The volume binding has exactly format, max_epochs, cost, symbols, axiom, rules, generations and limits. Routing has exactly format and gains; the index binding has exactly format, epoch, psi_sign and phase_origin.'),
+        p('The field manifest retains the common field keys and seams, with topology exactly {kind: "klein-volume", width, height, depth}. Nodes use the canonical VP2 paths. All old integer/type/arity, graph and unit validation remains required. Generated fields use unit 1/1 and u+ for each of the three baseline operator routes. Agent navigation uses all six neighbors.'),
+        small('Every declared key is required; unknown keys, aliases, Boolean/float replacements for integers and implicit profile conversion are rejected. Original source PDFs, earlier profiles and the Tom/Jitske ELI5 booklet remain unchanged.')
+    )
+    page('Cubical quotient and orientation cover', 'FORMAL ONLY | VP2 | KLEIN TIMES CIRCLE',
+        p('Let W,H,D be strict integers at least 3, with N=WHD at most 256. Canonical coordinates obey 0 <= u < W, 0 <= v < H, 0 <= w < D; G=(uH+v)D+w and path v:u:v:w. Decimal path components have no leading zeros. Coordinates name temporary charts, not a physical external origin.'),
+        eq('k = floor(X/W);  u = X - kW\nP(X,Y,Z) = (u, ((-1)^k Y) mod H, Z mod D)\nLift(u,v,w) = (u+mW, (-1)^m v+nH, w+lD)'),
+        p('All moduli return nonnegative remainders. The six directional stencil slots are u+,u-,v+,v-,w+,w-. Project each unit covering-space step, retaining its seam reflection. Neighbors stored for search are instead numerically sorted by G. These two orders must not be interchanged.'),
+        p('The complex contains every unit covering cube and its projected faces, edges and vertices. Canonicalize cells by their complete projected corner/incidence data: an odd reflection changes a face or cube base differently from a lone vertex. Each occupied subcomplex retains exactly the cells whose corners are all occupied.'),
+        eq('V=N, E=3N, F=3N, C=N;  V-E+F-C=0\nOrientation cover: T(2W,H,D), with 2N vertices\n(u,v,w,eta) -> (u+eta W, (-1)^eta v, w)'),
+        p('Each face has two incident cubes and every vertex link is an octahedral two-sphere. The quotient is connected, closed and nonorientable; its connected double cover is orientable. A reversing horizontal loop establishes nonorientability. The cover has exactly two preimages for each cell, with commuting face maps.'),
+        h('Unit graph metric'),
+        eq('c_P(x)=min(x mod P, (-x) mod P)\nd0=c_(2W)(u2-u1)+c_H(v2-v1)+c_D(w2-w1)\nd1=c_(2W)(u2-u1+W)+c_H(v2+v1)+c_D(w2-w1)\nd=min(d0,d1)'),
+        small('Equivalently compute exact six-neighbor shortest paths. The independent audit checks all 523 admissible dimension triples, including genuine cubical incidence and orientation-cover cells; Euler counts alone are insufficient.')
+    )
+    page('Three distinct sampled solids', 'FORMAL ONLY | VP3 | FULL VOLUME MEMBERSHIP',
+        p('For a canonical apex A and the ordered unit frame (e,f,h) of VP4, map local integer coordinates (s,t,r) to the covering point A+s e+t f+r h. Evaluate every admitted local member, project it with P, and take set union. Wrapping may identify several local members; no nearest-lift shortcut is allowed.'),
+        eq('L = h_raw * 2^scale;  B = floor(pL/q)\nCONE: 0<=s<=L, |t|,|r|<=B, q^2(t^2+r^2)<=p^2 s^2\nPYRAMID: 0<=s<=L, |t|,|r|<=B, q max(|t|,|r|)<=ps\nSPHERE: x^2+y^2+z^2<=R^2,  |x|,|y|,|z|<=R'),
+        p('The cone and square pyramid include their apex, sides and end cap. SPHERE uses all three local components around its center, with effective radius R. It is a sampled Euclidean ball before projection, distinct from the earlier intrinsic graph ball. All three produce discrete occupied vertex sets and induced cubical support.'),
+        h('A literal witness that separates the volumes'),
+        p('Use a 6 by 6 by 6 domain. Put the cone and pyramid apex at (0,3,3), shaft u+, eta=0, L=4 and slope 1/2. Use a radius-2 sphere centered at (3,3,3).'),
+        table(['Solid','Occupied / boundary / interior','Complete occupied cubes'],[
+            ['Cone','29 / 27 / 2','4'],
+            ['Pyramid','45 / 43 / 2','8'],
+            ['Sphere','33 / 26 / 7','8'],
+        ], [.22,.49,.29]),
+        p('The cone layers contain [1,1,5,9,13] vertices; pyramid layers contain [1,1,9,9,25]. Their r=0 axial sections agree, while (s,t,r)=(2,1,1) belongs only to the pyramid. Sphere layers are [1,9,13,9,1]. Its offset (1,1,1) belongs to the radius-2 sphere but not a radius-2 graph ball.'),
+        small('These witnesses distinguish full three-component occupancy and contain complete 3-cells. Thin admitted solids may still have only boundary vertices. The resulting signed field is graph distance to the sampled boundary, not a continuous Euclidean signed-distance function.')
+    )
+    page('Select once, then transport the frame', 'FORMAL ONLY | VP4 | SHAFT, MIRROR AND DECK ACTION',
+        p('A primitive reads the prior field and the current grammar STEP pair at its apex. Decode intrinsic phase t=(-1)^eta R mod 256 and compute the VP8 guided vector q. Choose the shaft once in that canonical chart. The shaft code order is u+,v+,w+,u-,v-,w-; it differs from the six directional stencil slots.'),
+        eq('e = sigma E_j,  sigma in {-1,+1}, j in {0,1,2}\nf = (-1)^eta E_((j+1) mod 3)\nh = sigma E_((j+2) mod 3)\ndet(e,f,h) = (-1)^eta'),
+        p('Score all six cardinal shafts by q dot e. Take a maximum, breaking ties by shaft-code order rotated by floor(6t/256). This makes all six axes available even for a zero guided vector. Selection does not use the index phase or the index-only Psi sign.'),
+        h('Complete mirror and a changed covering chart'),
+        p('The complete packed mirror sends R to -R modulo 256 and flips eta, preserving intrinsic t. It therefore preserves the selected shaft e and h, and reverses f. The three solid inequalities are symmetric in each transverse sign, so mirrored descriptors produce identical scalar occupancy and signed fields.'),
+        eq('D_m = diag(1,(-1)^m,1)\nA -> (u+mW, (-1)^m v+nH, w+lD)\n(e,f,h) -> (D_m e,D_m f,D_m h)'),
+        p('When changing a deck lift, transport all three existing vectors by D_m. Do not rerun shaft selection or reconstruct the frame from transformed shaft and eta. For some shafts that reconstruction changes both transverse axes by a half-turn; symmetric occupancy may coincide even though the ordered frame differs.'),
+        p('Equivalently trace local displacements as unit steps and transport the remaining displacement through each seam. Independent direct projection, transported walks and inverse-lift membership must agree. The scalar field is lift-independent; vector and tensor components obey their declared transport laws.'),
+        box('eta remains one bit of reflection parity. This contract supplies an intrinsic cardinal frame for these operators. It does not encode arbitrary three-dimensional attitude, mechanical hinge dynamics, Euler angles or a physical force law.')
+    )
+    page('Union boundary and exact signed field', 'FORMAL ONLY | VP5 | A GEOMETRIC ADMISSION OBLIGATION',
+        p('Build the occupied set U by OR-union of every projected primitive membership. Ordered duplicate descriptors remain in the derivation even when their occupied vertices coincide. Reject empty U or U equal to the whole quotient before admission.'),
+        eq('Z = {x in U : some six-neighbor y is not in U}\nsign(x) = 0 on Z, -1 on U minus Z, +1 outside U\nphi(x) = sign(x) * d_graph(x,Z)'),
+        p('Z is the inner occupied vertex boundary. Since the graph is connected and U is nonempty and proper, Z is nonempty. Every interior-to-outside path crosses Z. Adjacent signs cannot jump directly from -1 to +1, and exact unit-graph redistance gives |phi(x)-phi(y)| <= 1 on each edge.'),
+        p('Require every signed code in [-127,127]. The zero set equals Z exactly. A thin solid with no negative vertices is permitted; silently replacing its boundary with a different convention is not. Compute union first and then redistance; minimums of individual signed fields are not the specified construction.'),
+        h('The base field follows the same rule'),
+        p('The sphere base recipe projects all integer offsets in its radius cube, tests the full three-dimensional sphere inequality, and obtains its field from U and Z. It requires the same finite preflight and provenance checks. Reusing the old graph-ball radius offset would change the new profile.'),
+        h('A certificate checks omissions as well as additions'),
+        p('Independently reconstruct the prior-stage field and complete grammar trajectory. For each canonical quotient vertex, examine all inverse lifts allowed by a descriptor bound, using separately implemented local-coordinate membership. Compare this complete set with the produced occupancy, then compare Z, signs and exact distances. Verify descriptor order, apex pairs, frame selection, budget and prior-certificate identity.'),
+        p('Distance admission requires the exact zero set, declared signs, edge consistency and, at each nonboundary vertex, a neighbor whose absolute field value is exactly one smaller. These conditions certify exact graph distance on the finite connected domain. A separate all-pairs relaxation in the audit corroborates the literal fields.'),
+        small('Packed mirror/parity checks detect representation faults under their stated rules; they do not prove geometric membership, completeness, physical truth or correctness of arbitrary external observations.')
+    )
+    page('A three-component local Psi operator', 'FORMAL ONLY | VP6 | TENSOR, SIGN AND DEGENERACY',
+        p('At each canonical node form signed central differences in the directional stencil order. The scalar field has unit edge bounds, so each component is an integer in [-2,2]. This is a local rank-one tensor binding of the source Psi contract; it is not a global graph spectral solution.'),
+        eq('g = (phi(u+)-phi(u-), phi(v+)-phi(v-),\n     phi(w+)-phi(w-))\nA = g g^T;  lambda = g dot g, 0 <= lambda <= 12\nd = gcd(|g_u|,|g_v|,|g_w|)\nPsi = g/d if d>0; otherwise Psi=(1,0,0)'),
+        p('For g nonzero, A Psi=lambda Psi and Psi is a primitive integer eigenvector. The selected sign agrees with g. If g=0, every direction is an eigenvector for eigenvalue zero; the explicit fallback resolves the degeneracy deterministically. The two-dimensional tensor, lambda bound 8 and two-component zero fallback do not apply to this profile.'),
+        h('Separate the geometric operator from its lookup encoding'),
+        p('An index binding may choose psi_sign=+1 or -1 for the stored eigenvector, and any phase_origin in [0,255]. Those choices change index records and lookup order. They cannot change the physical node identity, scalar field, movement cost, branch interpretation, intrinsic owner phase, selected subgoal or a pending search cursor.'),
+        eq('g -> D_m g;  Psi -> D_m Psi;  A -> D_m A D_m\nlambda is unchanged under the deck action'),
+        p('The zero fallback (1,0,0) is unchanged under this reflection. Eigenvalue and sign conventions must be checked at seams and in zero-gradient regions. A complete packed mirror preserves scalar geometry while transporting its related views according to the original mirror contract.'),
+        h('Hadamard means decoded component multiplication'),
+        p('The routing operator multiplies three decoded integer components elementwise, as specified in VP8. It never multiplies packed RP32 words to approximate this operation. Gains, gradients, Psi, packing and phase-bank selection have separate typed domains and exact bounds.'),
+        small('The arithmetic reference retains full fields, g, Psi, lambda, index records, tree walks and routing penalties for the base and generated stages. These are preimplementation expectations, not a measured GPU spectral engine.')
+    )
+    page('Canonical f8 index and record layout', 'FORMAL ONLY | VP7 | THREE COMPONENTS REQUIRE A NEW ABI',
+        p('Anchor the geometric BFS at base.center. Distances use all six unit neighbors. The root is its own parent; every other parent is the smallest numerical G at distance one less. Starting from phase_origin, accumulate the departure field-class turn along each parent chain to obtain intrinsic index theta modulo 256.'),
+        eq('record = (Psi_u+2, Psi_v+2, Psi_w+2,\n          floor(log2(d_graph+1)), theta, G,\n          lambda, g_u+2, g_v+2, g_w+2)\nkey = record[0:6];  physical record = record + (0,0)\ntree row = (key[0:6], left, right);  NULL = 256'),
+        p('Apply the chosen psi_sign to Psi before encoding. The ten semantic components occupy twelve u32 words, with the last two exactly zero. Each tree row occupies eight u32 words. G is slot 5, not the old slot 4. Records are retained by canonical G; sort complete keys lexicographically to construct the tree.'),
+        p('Use the lower-middle key of each interval, emitting root then left and right recursively in preorder. Child fields are row indices or NULL. Since G is part of every key, keys are unique. Binary traversal takes at most N.bit_length() visited rows; actual materialization must traverse and validate the resulting node, rather than treating the index as decoration.'),
+        h('Reindexing is an encoding operation'),
+        p('Binding fields are exactly format, epoch, psi_sign and phase_origin, with the inherited index epoch bounds and strict integer checks. A new epoch/sign/origin rebuilds and certifies records, tree, descriptors and lookup results. It preserves canonical geometry, owner state, observations, FIFO contents and any pending phase-aware search when its semantic context is unchanged.'),
+        table(['Payload','Logical bytes'],[
+            ['Padded records','48N'],['Tree rows','32N'],
+            ['Index descriptor','16'],['Combined index','80N + 16'],
+        ], [.62,.38]),
+        small('Snapshots use f8-klein-volume-index-snapshot-v1. Neither a two-component snapshot nor the old five-component key/tree reader may be admitted as this profile. The index is an exact lookup structure over this finite geometry; its name alone establishes no universality theorem.')
+    )
+    page('Eight phase banks and six neighbors', 'FORMAL ONLY | VP8 | ROUTING AND FINITE SEARCH',
+        p('Routing gains are exactly eight triples of strict integers in [-4,4], including zero. The defaults below retain a declared cyclic order; arbitrary gains within the bounds are accepted. Decode the owner phase before selecting the bank.'),
+        eq('default gains = [(1,1,1),(-1,1,1),(-1,-1,1),(1,-1,1),\n                 (1,1,-1),(-1,1,-1),(-1,-1,-1),(1,-1,-1)]\nt = (-1)^eta R mod 256;  bank = t >> 5\nq_i = gain[bank,i] * (1 + Psi_i^2) * g_i\npenalty(e) = max_i |q_i| - q dot e'),
+        p('Each |q_i| is at most 40; each penalty is in [0,80]. Movement slots use numerically sorted canonical neighbors; the appropriate cardinal edge direction supplies e. Shaft selection uses the same q but its own declared code order and phase-dependent tie rule. Index psi_sign cancels in the squared factor.'),
+        eq('cost(x,t,y) = 1 + |phi(y)| + hazard(y) + penalty(e_xy)\nt_next = (t + turn[class(phi(x))]) mod 256'),
+        p('This is the inherited FI/HP destination-field cost, not a field-difference cost. Apply departure turns before any seam reflection in packed chart phase; intrinsic t follows the formula above. Mirror/parity repacking and the existing hazard/energy bounds still apply. All edge costs are positive.'),
+        h('The planner retains phase, hops and original context'),
+        p('Search state is (canonical G, intrinsic phase, hops), with at most 255 hops. Compare cost, then the complete tuple of canonical path strings; neighbor enumeration is numerical but path tie-breaking remains lexicographic. The retained target, observation map, epoch, energy and starting pair define the semantic context. Index-only changes do not invalidate it.'),
+        p('Each search quantum consumes the inherited bounded expansion budget. DEFER preserves the exact frontier, best-state map, expansion count and context, without a movement or energy debit. A new admitted input that changes that context resets the cursor. A later successful plan is checked against reserve energy and replayed through the same packed transitions.'),
+        small('The reference includes a quantum-7 mission and index rebuilds between its quanta. Additional DEFER cycles alter original input time and may therefore change later grammar branches. Different quantum schedules are not promised identical global histories.')
+    )
+    page('Parameterized volume grammar', 'FORMAL ONLY | VP9 | COMPLETE ORIGINAL BRANCH CONTEXT',
+        p('The profile inherits OG parameter declarations, finite integer expressions, conditions, ordered rule priorities and first-match parallel rewriting, complete derivation addresses and branch paths. Unmatched declared nonterminals follow that contract; undeclared symbols are rejected. Retain the exact rule version and original inputs, rather than regenerating from the current owner state.'),
+        table(['Terminal','Arity and interpretation'],[
+            ['F','1; raw length 1..256, multiplied by 2^scale. Each step consumes the prior field turn and six-axis routing.'],
+            ['+ / -','1; phase-turn magnitude 1..16 under the inherited signed-turn rule.'],
+            ['[ / ]','0; push / pop the complete branch context.'],
+            ['R / SCALE','1; radius 1..127 / scale 0..4. Effective sphere radius must remain 1..127.'],
+            ['SPHERE','0; emit a full sphere at the current cursor; no cursor advance.'],
+            ['CONE / PYRAMID','3; raw height, slope numerator and denominator, each 1..65535; reduced positive slope. Emit without advancing.'],
+        ], [.25,.75]),
+        p('PUSH retains both packed views, radius, scale and branch path. POP restores every retained component. The interpreter never rewinds program counter, logical output order or retained history. It stores no additional mechanical heading or roll: the next primitive selects its frame from its current prior-field STEP pair.'),
+        p('Each stage has exact original context {epoch,tick,start_pair,prefix_sha256}: contiguous positive growth epochs, strictly increasing original ticks, the prior EMIT pair including its prior-field B, and the event digest before GROW. Initialize the cursor by repacking that pair as STEP, radius 1, scale 0 and empty branch/stack. Use one unchanged prior field for the entire stage. Rewriting reads only retained inputs and rules.'),
+        p('A sphere descriptor has exactly kind, address, branch_path, center, radius and pair. A cone/pyramid descriptor has exactly kind, address, branch_path, apex, height, numerator, denominator, shaft and pair. Height/radius are effective values; shaft is 0..5; pair is the descriptor-time STEP pair. Ordered duplicates remain significant provenance.'),
+        small('No S or TAPER alias is introduced. A SPHERE token is distinct from the historical intrinsic-ball S token. The existing complete parameter/address expression grammar is retained; the new typed terminal set changes its interpretation under the explicit volume profile.')
+    )
+    page('Typed tape and finite preflight', 'FORMAL ONLY | VP10 | VP-TAPE32-v1',
+        eq('operand bits 0..15; opcode bits 24..27; parity bit 31\nreserved mask = 0x70FF0000; total parity is even\n0 F; 1 +; 2 -; 3 PUSH; 4 POP; 5 R; 6 SPHERE; 7 SCALE\nCONE triple: 8/height, 9/numerator, 10/denominator\nPYRAMID triple: 11/height, 12/numerator, 13/denominator'),
+        p('Opcodes 14 and 15 are invalid. Reject reserved bits, wrong parity, nonzero operands on zero-arity instructions, standalone slope words, incomplete triples and mixed CONE/PYRAMID triples. The interpreter tracks logical PC separately from texel offset; a three-word solid is one logical instruction.'),
+        table(['Limit','Exact admitted domain'],[
+            ['generations / max_epochs / cost','0..8 / 0..4 / 1..127'],
+            ['max_symbols / max_steps','1..1024 logical symbols / 1..4096 forward steps'],
+            ['max_primitives / max_stack','1..64 descriptors / 0..32 frames'],
+            ['max_primitive_sites','1..16777216; default 1048576'],
+            ['Tape capacity','At most 1024 logical instructions and 1152 texels'],
+        ], [.46,.54]),
+        eq('L=h_raw << scale; B=floor(pL/q)\ncone/pyramid charged sites = (L+1)(2B+1)^2\nsphere charged sites = (2R+1)^3'),
+        p('Sum charged bounding-box sites over all primitives, including duplicate projections, and require the sum at most max_primitive_sites. Test the complete cube/box budget even if a producer skips excluded cells. Radius 127 charges 255^3=16,581,375 sites and fits the maximum single-primitive budget; charging N would undercount work.'),
+        p('Require 1 <= L,pL <= 2147483647, 0 <= qB <= 2147483647, and P-1+L+B <= 2147483647 for each dimension P in {W,H,D}. Sphere coordinates obey P-1+R <= that bound. Before base owner/device allocation, preflight all retained stages: expansions, tape syntax, stack/primitive counts, operands and work. Certify produced descriptors and fields before owner installation.'),
+        small('These bounds reject before admission and avoid INT_MIN in lifted arithmetic. They do not authorize clamping, truncation or silently narrowing slope parameters to fit native GPU multiplication. Full and empty projected sets remain geometric rejection cases after bounded construction.')
+    )
+    page('Exact wide cone membership arithmetic', 'FORMAL ONLY | VP11 | FOUR BASE-65536 LIMBS',
+        p('Preflight bounds each of q|t|, q|r| and ps by 2^31-1. Their squares can exceed u32 even for very small admitted solids. The cone predicate shall therefore compare exact nonnegative multiword integers:'),
+        eq('(q|t|)^2 + (q|r|)^2 <= (ps)^2\n0 <= each square input <= 2147483647\nmaximum two-square sum = 2(2147483647)^2 < 2^63'),
+        p('Use four unsigned base-65536 limbs in least-significant-first order, or an independently equivalent exact implementation. No floating-point approximation or wrapped native-u32 square may determine membership. The following square algorithm uses only safe u32 intermediate operations.'),
+        eq('x = a + 65536 b, 0<=a<=65535, 0<=b<=32767\nlo = a*a\ncross = 2*a*b + (lo >> 16)\nupper = b*b + (cross >> 16)\nsquare(x) = [lo & 65535, cross & 65535,\n             upper & 65535, upper >> 16]'),
+        p('a*a is at most 4,294,836,225. cross is at most 4,294,836,224, below 2^32; upper is below 2^30. The four limbs therefore encode the complete square without overflow. Add two squares limbwise with carry: each temporary digit is at most 131071. Compare limbs from most significant to least significant. Retain all four digits.'),
+        h('An admitted overflow witness'),
+        p('With raw height 2, scale 0 and reduced slope 65535/65534, the cone charges only 75 sites. The independent audit retains 40 membership decisions that a wrapped native-u32 implementation gets wrong. Rejecting only enormous work budgets does not remove this arithmetic obligation.'),
+        p('Pyramid membership needs only the already bounded q max(|t|,|r|) and ps products. For a sphere, R <= 127 bounds the sum of three local squared coordinates by 48,387. Negative covering coordinates still require explicit floor division and positive remainder; a language remainder operator with different negative semantics must be adapted.'),
+        small('The mathematical generator and a separate audit compare limb squares, sums and geometric predicates with unbounded integer arithmetic. Runtime acceptance additionally requires actual-device comparisons on both sides of the membership boundary and at these exact operand limits.')
+    )
+    page('Retained recipes and geometric admission', 'FORMAL ONLY | VP12 | RECONSTRUCTION WITH COMPLETE CONTEXT',
+        p('The base recipe has exactly format, width, height, depth, center, radius, turns and baseline_id. center is canonical G; radius is 1..127; turns are the three inherited field-class increments. Default values are W=4,H=5,D=3, center=0, radius=1, turns=[11,53,137], baseline_id="klein-volume-world-v1".'),
+        p('A generated recipe has exactly format, base, volume, routing and stages. Its format is klein-volume-world-v1 and its base is the complete typed sphere recipe. Stages retain the original contexts of VP9 in order. All stages share the base dimensions; no two-dimensional archive is implicitly lifted into this geometry.'),
+        p('The growth receipt uses klein-volume-growth-v1 and retains from_epoch, to_epoch, mapped_node, target, recipe and derivation_sha256. The hashed derivation has exactly format, context, tape, trace, segments, primitives and final_context, with format klein-volume-derivation-v1. Preflight, encoded words, shaft certificates and union/field diagnostics are outside that document. Canonical JSON/digest rules remain unchanged.'),
+        h('Recursive provenance is part of admission'),
+        p('Begin from the certified sphere base. For each retained stage, reconstruct the original prior field, ordered rewriting, complete branch trajectory and packed pairs; certify every descriptor and the independently recomputed union field. Chain the prior certificate and exact configuration identity. A correct final array with a false derivation is rejected.'),
+        p('Production may enumerate local cover members. Independent admission must use a distinct inverse-lift membership construction and independently certify distances, Psi, index and routing. It must detect missing and extra occupancy, altered phase/eta/shaft, incomplete branch restore, wrong original epoch/tick/prefix, stale prior field and bad padding or typed words.'),
+        h('Historical samples retain their world identity'),
+        p('A retained historical sample after growth includes the admitted GROW in its replay prefix; the original stage context used to create that growth hashes the events before GROW. These are different boundaries. Reconstruct from the correct recipe, version and original observations, then compare the complete packed result and field value.'),
+        box('The producer and certifier share a specification, not a generated-array shortcut. Certificates and source identity make a result checkable within this finite contract. External observations that cannot be derived must still be retained faithfully.')
+    )
+    page('One continuing individual and Wv3', 'FORMAL ONLY | VP13 | OWNER, ORIGINAL TIME AND NAMESPACE',
+        p('The existing individual reaches its target and performs REPAIR. If another epoch is allowed, enter GROWTH_PENDING, then admit GROW on a fresh observation cycle. Debit growth cost and increment global cycle and world epoch once. Retain canonical G, R and eta; replace B from the new field and repack both views as STEP.'),
+        eq('reserve = repair_cost + remaining_epochs * (volume.cost + repair_cost)'),
+        p('Choose the next target excluding the owner: minimize |phi|, then maximize graph distance from the owner, then apply the inherited intrinsic-phase tie rule over numerical G. Reset world-specific observations, planning, FIFO and counters, while preserving global energy, cycle and history. Initial creation remains distinct from this same-owner growth transition.'),
+        table(['Namespace','Admitted volume identity'],[
+            ['Configuration','welip-field-config-v3'],
+            ['Protocol','welip-field-agent-v3'],
+            ['Session/archive','welip-field-session-v3'],
+            ['State word profile','RP32-relational-sdf-v3'],
+        ], [.32,.68]),
+        p('Wv3 admits the volume policy only. Wv1 retains its four older policies and Wv2 retains taper. Validate protocol plus exact configuration before owner allocation. baseline_id alone is merely a label; even different depth-3 and depth-4 configurations can produce identical initial state records. The independent reference retains that collision witness.'),
+        p('Raw LUS carrier and binary state layout are unchanged. A state record keeps word_profile=welip-16-16-32-v1; its payload_profile is RP32-relational-sdf-v3. The agent configuration word_profile is also RP32-relational-sdf-v3. Preserve all five W operations, operation order, clock carry, latest-only identical retry, durable receipt behavior and fresh-process recovery under the preceding W contract.'),
+        p('Field controls preserve admitted history. Recovery reconstructs the latest committed owner without rewinding admitted cycles. Once initialized, the GPU owner must advance and emit canonical state words on-device; host reseeding and host state-encoder fallback are forbidden in actual-device acceptance.'),
+        small('The formal Wv3 projection includes normal, complete-mirror and capacity-8 lifecycles. These establish expected arithmetic records and owner transitions; a future runtime must still prove durable CPU/GPU and fresh-process conformance to them.')
+    )
+    page('Device construction and logical payloads', 'FORMAL ONLY | VP14 | PRODUCTION, VALIDATION AND OWNERSHIP',
+        p('The declared host grammar front end may rewrite and encode the exact typed tape. The GPU shall validate and interpret that uploaded tape, produce the complete branch trace/descriptors, project occupancy, derive boundary/signs, compute distances, and construct Psi, index, routing and movement textures. Independently certify the candidate before installing it into the same owner; keep old and candidate worlds alive until admission.'),
+        table(['Payload','Layout / logical bytes'],[
+            ['Host geometry','8 u32/node: six directional neighbors, parent, depth; 32N'],
+            ['Device geometry','16 u32/node: six sorted + six directional neighbors, parent, depth, seam_flags, reserved zero; 64N'],
+            ['Index records/tree/descriptor','12-word record + 8-word tree row; 80N+16'],
+            ['Routing penalties / increments','48 u32 penalties + one u32 increment per node; 196N'],
+            ['Neighbor / gain arrays','6N u32 neighbors = 24N; 24 integer gains = 96'],
+            ['Movement/cost atlas','36 by 8N r32uint texels; 1152N bytes'],
+            ['Primitive movement / base operator','6 by N in shaft order = 24N; 3 by N = 12N'],
+        ], [.36,.64]),
+        p('Device-geometry fields occur in the table order. seam_flags bits 0..5 follow sorted neighbors: set a bit exactly when that edge crosses the reversing u seam; bits 6..31 are zero. Directional slots follow VP2; primitive movement follows VP4. The atlas holds six neighbors, three field classes and two words across eight banks. Use the new index strides and node offset.'),
+        p('Account separately for the 4N^2-byte weight matrix, distance ping-pong, sign/occupancy arrays, typed tape, traces, descriptors, bounded private branch stacks, owner/search state, retained recipes, status/readback padding and simultaneous old/candidate resources. Logical payload accounting is not a total allocation or performance measurement.'),
+        p('The CPU implementation and GPU producers must be independently exercised against the frozen reference. Actual-device conformance shall disable CPU geometry, field, Psi/index, routing and state-emission producers as applicable. Host certification may inspect readbacks, but cannot silently replace device production.'),
+        small('A failed bounded construction, certificate or allocation cannot partially admit an epoch or reseed the owner. Preserve the preceding fault and retry semantics and measure their implementation. Texture use alone proves neither cache residency nor saturation nor removal of physical memory traffic.')
+    )
+    page('Independent finite expectations', 'FORMAL ONLY | VP15 | FROZEN NUMERICAL REFERENCE',
+        p('The volume reference imports no solvefinite module. It uses separately pinned earlier mathematical helpers for unchanged grammar/carrier rules. A second audit imports neither the volume producer nor runtime and independently reconstructs eight literal fields. The formal builder compares their complete occupancy, boundary, signs and distance arrays.'),
+        table(['Mission','Cycles / energy','Final pair'],[
+            ['Default','10 / 170','9600143F860014C1'],
+            ['Complete mirror','10 / 170','860014C19600143F'],
+            ['Two epochs','18 / 158','16002BAD06002B53'],
+            ['Zero epochs','4 / 185','860236C39602363D'],
+            ['Quantum 7','28 / 174','060020C11600203F'],
+        ], [.32,.23,.45]),
+        p('Default initial state: base 4 by 5 by 3, energy 200, phase 250, eta=0, target G=54 (v:3:3:0). In epoch zero, hazard 70 appears at G=6 from cycle 2. First growth is cycle 5. The stage has 19 logical instructions, 23 texels, 7 forward steps, 3 primitives, 90 charged sites and stack depth 2.'),
+        p('The first stage emits a height-3 slope-1/2 cone with shaft v-, a height-2 slope-1/2 pyramid with shaft v+, and a radius-1 sphere. In the reference, the owner moves along the third coordinate at cycle 8, from v:0:1:0 to v:0:1:2. A second-stage pyramid uses shaft w+. Default and second-growth targets are G=20 and G=43.'),
+        p('The quantum-7 mission retains 18 DEFER events and grows at original cycle 19. Rebuilding the index between its quanta preserves the exact reference history. Each of the three Wv3 lifecycles has 18 operations, 19 records and 39 carrier fragments, ending at clock epoch 1, tick 12.'),
+        p('The separate geometry audit passes 20 checks: all 523 admissible dimensions, 91,290 octahedral vertex links, 1,460,640 cover cells, 480 primitive cases, 111,240 transported walks, 2,400 deck/inverse-lift comparisons, 6,231 wide geometric comparisons and 10,108 preflight candidates.'),
+        small('Retained files: docs/evidence/volume-v1/reference-builder.py, formal-reference.json, geometry-audit.py and geometry-audit.json. Builder guards pin exact hashes. Mathematical event-prefix and W operation digests are reference identities, not measured runtime archive identities.')
+    )
+    page('Acceptance and architecture maturity', 'FORMAL ONLY | VP16 | WHAT IS DEFINED, EXECUTED AND OPEN',
+        table(['Layer','Status at this edition'],[
+            ['Architectural core','Integrated definitions for packed state, self-reference, relational geometry, derivation, one individual and conditional invariant preservation.'],
+            ['Existing finite realization','Implemented CPU/GPU field execution, Klein transport, local Psi/f8, Hadamard routing, planning, regeneration, branching, directional sections and Wv2 continuation.'],
+            ['New full 3D binding','VP1-VP16 defined with independent arithmetic and geometry audits. Runtime, device production and durable Wv3 execution remain required.'],
+            ['Broader research claims','Universality, global spectral choices, general graph production, physical adapters and comparative hardware advantages remain open.'],
+        ], [.30,.70]),
+        h('Required before calling VP implemented'),
+        p('Implement strict typed admissions and all new strides/profiles; independently produce the full volumes and certify complete provenance; match every literal field, descriptor, tape, mission and W record; exercise all six shafts and both mirrors, seam/deck transport, degenerate Psi, reindexing, budget edges and wide arithmetic on the actual GPU.'),
+        p('Verify same-owner growth and subgoal selection, pending searches, eviction/regeneration, all W operations, exact retries, clock carry, malformed/wrong-profile rejection before allocation, atomic failure and fresh CPU-to-GPU/GPU-to-CPU recovery. Disable CPU production fallbacks in device checks. Run the complete existing regression suite and capture the exact source inventory before and after.'),
+        h('How to describe the paradigm at this stage'),
+        p('An experimental deterministic execution architecture in which one autonomous individual carries packed relational state, follows state-dependent geometric operators, generates its world through retained rules, and reconstructs derived state from complete original context. It is more specific than a concept sketch: substantial finite profiles are executable and tested.'),
+        p('The formalization is an evolving mathematical specification with independently audited numerical realizations. The 796-test capture is evidence for its declared implementation, not a machine-checked proof of the whole architecture. A bounded 256-node profile does not establish unrestricted computational universality.'),
+        small('“Frontier” describes the research ambition here; priority and comparative novelty require a separate prior-art assessment. “Infallible” remains conditional on the stated model, admitted inputs and faithful execution. GPU locality must still be measured against optimized baselines before claiming bottleneck elimination, cache saturation, energy advantage or broad superiority.')
+    )
+
+
 def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 14')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 15')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -1723,7 +1966,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 14')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 15')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -1731,7 +1974,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 14')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 15')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -2468,8 +2711,9 @@ def verify_directional_capture():
     if not required <= set(sources):
         raise ValueError('Directional source inventory is incomplete')
     for path, identity in sources.items():
-        if hashlib.sha256((ROOT/path).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
-            raise ValueError('Directional captured source changed: '+path)
+        historical = subprocess.check_output(['git','show',DP_CAPTURE_COMMIT+':'+path],cwd=ROOT)
+        if hashlib.sha256(historical.replace(b'\r\n',b'\n')).hexdigest() != identity:
+            raise ValueError('Historical directional captured source differs: '+path)
     for name, identity in measured['report_sha256_lf'].items():
         if hashlib.sha256((DIRECTIONAL_EVIDENCE/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
             raise ValueError('Directional report identity changed: '+name)
@@ -2552,6 +2796,79 @@ def verify_directional_capture():
     DP_VERIFICATION, DP_CONFORMANCE, DP_W_CONFORMANCE = measured, captured, welip
 
 
+def verify_volume_inputs():
+    global VP_REFERENCE, VP_AUDIT
+    expected = {
+        'reference-builder.py': 'ad0917629ec4a29105db477609b2c707861cc3ab73b998546faf41a6ddb3874d',
+        'formal-reference.json': 'a6f06509ff83133d4ef1381f02ab991e5207948459c5e8479b01b0af3471a1a1',
+        'geometry-audit.py': 'a5cee1c990ab751b24b982fb3fbb255328661180facec7d8315fc3c407462ae8',
+        'geometry-audit.json': '3e061ad2b04ac85db204115fff8a3f6642b4407f89f6562d2bf037459a8fb284',
+    }
+    for name, identity in expected.items():
+        if hashlib.sha256((VOLUME_EVIDENCE/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
+            raise ValueError('Frozen volume mathematical input changed: '+name)
+    reference = json.loads((VOLUME_EVIDENCE/'formal-reference.json').read_text(encoding='utf-8'))
+    audit = json.loads((VOLUME_EVIDENCE/'geometry-audit.json').read_text(encoding='utf-8'))
+    if (reference['format'] != 'volume-independent-formal-reference-v1'
+            or reference['status'] != 'formal-only'
+            or reference['generator_sha256_lf'] != expected['reference-builder.py']
+            or audit['script_sha256_lf'] != expected['geometry-audit.py']
+            or audit['format'] != 'solvefinite-volume-geometry-audit-v1'
+            or len(audit['checks']) != 20 or not all(value is True for value in audit['checks'].values())):
+        raise ValueError('Volume reference/audit status or scope disagrees')
+    for path, identity in reference['independent_source_sha256_lf'].items():
+        if hashlib.sha256((ROOT/path).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
+            raise ValueError('Volume independent helper changed: '+path)
+    fixtures = {case['name']: case for case in audit['independent_literal_fixtures']}
+    compared = {
+        'cone-distinct-3d': audit['literal_geometry_witnesses']['cone'],
+        'pyramid-distinct-3d': audit['literal_geometry_witnesses']['pyramid'],
+        'cone-round-section': fixtures['cone_6_cubed'],
+        'pyramid-square-section': fixtures['pyramid_6_cubed'],
+        'negative-u-seam': fixtures['negative_u_cone'],
+        'multiple-wraps': fixtures['multiwrap_pyramid'],
+        'zero-breadth-third-axis': fixtures['zero_breadth_cone'],
+        'sphere-euclidean-lattice': fixtures['sphere_6_cubed'],
+    }
+    if set(compared) != {case['name'] for case in reference['geometry_vectors']}:
+        raise ValueError('Volume independent geometry comparison coverage differs')
+    for case in reference['geometry_vectors']:
+        separate = compared[case['name']]
+        if (any(case[key] != separate[key] for key in ('occupancy','boundary','interior','signs'))
+                or case['field'] != separate['fields']):
+            raise ValueError('Independent volume geometry disagrees: '+case['name'])
+    literals = {
+        'default_mission': (10,170,'9600143F860014C1'),
+        'mirrored_default_mission': (10,170,'860014C19600143F'),
+        'two_epoch_mission': (18,158,'16002BAD06002B53'),
+        'zero_epoch_mission': (4,185,'860236C39602363D'),
+        'deferred_mission': (28,174,'060020C11600203F'),
+    }
+    for name, literal in literals.items():
+        mission = reference[name]
+        if (mission['cycles'],mission['final']['energy'],mission['final']['pair']) != literal:
+            raise ValueError('Displayed volume mission disagrees: '+name)
+    if (reference['default_mission']['stages'][0]['result']['preflight'] != {
+            'effective_steps':7,'primitives':3,'primitive_sites':90,'stack_high_water':2,
+            'logical_instructions':19,'texels':23}
+            or len(reference['deferred_mission']['deferred_cursors']) != 18
+            or reference['same_quantum_index_rebuild']['equal_to_deferred'] is not True):
+        raise ValueError('Volume preflight or deferred-index witness disagrees')
+    for name in ('w_v3_lifecycle','w_v3_mirrored_lifecycle','w_v3_capacity8_lifecycle'):
+        lifecycle = reference[name]
+        if (len(lifecycle['operations']), lifecycle['record_count'], lifecycle['fragment_count'],
+                lifecycle['expected']['clock_epoch'],lifecycle['expected']['tick16']) != (18,19,39,1,12):
+            raise ValueError('Displayed volume Wv3 lifecycle disagrees: '+name)
+    if (audit['topology_counts']['domains'] != 523
+            or audit['topology_counts']['octahedral_vertex_links'] != 91290
+            or audit['topology_counts']['orientation_cover_cells'] != 1460640
+            or audit['geometry_counts']['primitive_cases'] != 480
+            or audit['geometry_counts']['transported_walk_endpoints'] != 111240
+            or reference['arithmetic_vectors']['maximum_two_square_sum'] != 9223372028264841218):
+        raise ValueError('Displayed volume audit arithmetic disagrees')
+    VP_REFERENCE, VP_AUDIT = reference, audit
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--output',type=Path,default=OUTPUT)
@@ -2560,8 +2877,10 @@ if __name__=='__main__':
     verify_retained_inputs()
     verify_directional_inputs()
     verify_directional_capture()
+    verify_volume_inputs()
     register_fonts(args.font_dir)
     build_content()
     build_directional_content()
     build_directional_measured_pages()
+    build_volume_content()
     render(args.output)
