@@ -178,7 +178,20 @@ def main(argv: list[str] | None = None) -> int:
     agent_live_inspect.add_argument("state", type=Path)
     agent_live_inspect.add_argument("--capacity", type=int, default=2)
     agent_live_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
-    for deployment in (agent_run, agent_inspect, agent_serve, agent_live_inspect):
+    agent_welip = agent_commands.add_parser("welip", help="Own one forward-only W field-agent JSONL endpoint")
+    agent_welip.add_argument("--state", type=Path, default=Path("output/welip/session.json"))
+    agent_welip.add_argument("--config", type=Path, help="Immutable W configuration; must match on resume")
+    agent_welip.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
+    agent_welip_config = agent_commands.add_parser("welip-config", help="Write a W field-agent configuration")
+    agent_welip_config.add_argument("--output", type=Path, required=True)
+    agent_welip_config.add_argument("--profile", choices=("field", "hadamard", "growth", "organogram"),
+                                    default="organogram")
+    agent_welip_config.add_argument("--producer", default="sensor")
+    agent_welip_config.add_argument("--producer-epoch", type=int, default=0)
+    agent_welip_config.add_argument("--clock-origin", type=int, default=0)
+    agent_welip_config.add_argument("--max-events", type=int, default=1000000)
+    agent_welip_config.add_argument("--initial-capacity", type=int, default=2)
+    for deployment in (agent_run, agent_inspect, agent_serve, agent_live_inspect, agent_welip):
         deployment.add_argument("--index-epoch", type=int, help="Field index version epoch; semantic history is unchanged")
         deployment.add_argument("--index-sign", type=int, choices=(-1, 1), help="Field index eigenvector sign")
         deployment.add_argument("--index-phase-origin", type=int, help="Field index derivation phase in 0..255")
@@ -250,6 +263,21 @@ def main(argv: list[str] | None = None) -> int:
                 from .live import serve
                 serve(args.state, capacity=args.capacity, config_path=args.config, **options)
                 return 0
+            elif args.agent_command == "welip":
+                from .welip_session import serve
+                serve(args.state, config_path=args.config, **options)
+                return 0
+            elif args.agent_command == "welip-config":
+                from .field_agent import FieldAgentManifest
+                from .welip import WelipConfig
+                policy = {"field": FIELD_POLICY, "hadamard": HADAMARD_POLICY,
+                          "growth": GROWTH_POLICY, "organogram": ORGANOGRAM_POLICY}[args.profile]
+                config = WelipConfig(
+                    manifest=FieldAgentManifest(policy=policy), producer=args.producer,
+                    producer_epoch=args.producer_epoch, clock_origin=args.clock_origin,
+                    max_events=args.max_events, initial_capacity=args.initial_capacity)
+                write_json(args.output, config.to_dict())
+                result = {"config": str(args.output.resolve()), "identity": config.manifest.identity}
             elif args.agent_command == "live-config":
                 from .live import LiveConfig
                 if args.profile in ("field", "hadamard", "growth", "organogram"):

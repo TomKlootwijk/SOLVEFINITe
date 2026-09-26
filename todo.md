@@ -582,16 +582,16 @@ original inputs and organogram event contexts remain the basis for regeneration.
 - [x] Freeze W1-W8 and independent carrier, clock, cache and lifecycle vectors
   in the existing consolidated formal PDF; preserve earlier contracts and
   identify the OG measurements with their historical source commit.
-- [ ] Implement strict W64/LUS encoding, the five-operation interface, ordered
+- [x] Implement strict W64/LUS encoding, the five-operation interface, ordered
   local invalidation and capacity changes, and terminal-state emission.
-- [ ] Produce GPU state records from the actual canonical device owner with
+- [x] Produce GPU state records from the actual canonical device owner with
   no replacement CPU state producer; preserve pair, energy and device counter.
-- [ ] Persist the complete W operation order before acknowledgement and
+- [x] Persist the complete W operation order before acknowledgement and
   reconstruct cache controls alongside agent steps during private recovery.
-- [ ] Verify latest-only retry without historical payload, clock carry and
+- [x] Verify latest-only retry without historical payload, clock carry and
   exhaustion, all four policies, incomplete observations, GROW/DEFER, mirrors,
   cache regeneration, atomic failure handling and fresh CPU/GPU processes.
-- [ ] Capture source-bound implementation evidence, update the same PDF's
+- [x] Capture source-bound implementation evidence, update the same PDF's
   measured status, commit and push. Keep broader architecture work active.
 
 The frozen design treats a lost state response as replaceable by a new forward
@@ -619,3 +619,67 @@ bodies. All 94 OG source/reference identities, the three source PDFs and the
 Tom/Jitske ELI5 booklet are unchanged. Historical OG measurements are now pinned
 to `f125a76` so later code cannot silently inherit that capture. This formal
 baseline is committed and pushed before the still-pending W implementation.
+
+The W implementation now follows that committed baseline. A single durable
+owner admits the five forward operations and emits typed carrier records from
+its actual CPU or GPU state. Its 16-bit tick carries into the retained clock
+epoch independently of agent cycles, geometry generations and executor counts.
+Private reconstruction replays the full interleaved operation ledger, including
+cache resizing and invalidation. A latest exact retry contains only a current
+cursor and sequence receipt; it never returns the original payload or repeats
+an action, device emission or save.
+
+Review found and fixed two recovery defects before the full capture. An existing
+file containing JSON null is rejected without overwriting it or allocating an
+owner. KeyboardInterrupt/SystemExit during an accepted transition, cache change,
+save or result construction poison the owner, retaining its OS lock until exit;
+reopening resolves the actual durable prefix. Complete malformed output remains
+retryable only when the whole admitted prestate has been preserved.
+
+The session suite includes 29 CPU methods with reopening after every operation
+of all three frozen lifecycles, all four field policies, concurrent duplicate
+admission, strict corruption rejection and failure before/after replacement.
+Retained DEFER survives WAIT, cache controls and restarts through OG growth with
+the same original agent archive. Temporary insufficient energy recovers from
+fresh hazards. UNREACHABLE is explicitly tested through an injected planner
+outcome; every currently supported Klein graph is connected.
+
+The source-bound W capture passes **698 tests with zero skips**, including
+**145 actual-device GPU methods**, and all **14 conformance checks**. Three
+frozen lifecycles each produce the exact 17 operations, 18 records and 37 words
+on CPU and GPU. All four policies retain terminal emission. Fresh GPU-to-CPU-to-GPU
+endpoint processes reproduce the original ledger across carry and GROW using
+different storage indexes. The complete W archive identity is
+`9dd6e452c43b37482d6b780786b76f40a80e41846d67feb8c9af6a2e10b8b9c1`;
+its historical OG projection remains
+`e2834ba2cc6b4d51f2b23f274cd9f2a0db8a4e88754ed9d2aadc76c074f134df`.
+Capture source inventories match before and after execution. CPU state encoding
+and 17 older geometry producer/compiler paths are forbidden in actual GPU
+conformance and private GPU reconstruction. This is correctness and recovery
+evidence; throughput, GPU saturation and hardware speedup remain unmeasured.
+
+Revision 12 records the implementation in the same consolidated **83-page**
+formal PDF. All pages were rendered and visually reviewed; 83 bookmarks and
+81 internal links resolve. Previous normative pages 35-66 and W1-W8 numerical
+definitions/acceptance bodies are preserved, with explicit measured-status
+updates. The independent rebuild is byte-identical, all 106 runtime/reference
+source identities remain tied to the capture, and the three original PDFs and
+Tom/Jitske ELI5 booklet remain unchanged. This implementation, evidence, PDF and
+progress record form the committed and pushed W milestone.
+
+The complete architecture goal remains active. The next source-backed gap is
+the original specification's requirement for a geometry-to-field map for every
+primitive (p.7), together with the Pyramid/Sphere/Cone and eigenvector-hinge
+discussion in the addenda. Current OG production covers intrinsic-ball unions
+on a fixed Klein graph. A directional boundary family needs a declared shaft,
+transverse metric, finite extent/slope, phase/Psi context and seam behavior,
+followed by exact redistancing and same-owner continuation. Merely expanding a
+new shape name into the existing balls would not establish a new geometry.
+
+- [ ] Bind the next directional primitive family and independent reference
+  in the same consolidated PDF before runtime changes.
+- [ ] Implement and certify that geometry through the existing CPU/GPU
+  generation, regeneration and W continuation, preserving old profiles.
+- [ ] Continue the broader unresolved graph, spectral, physical-adapter,
+  universality and comparative hardware obligations; this milestone does
+  not redefine the overall goal as complete.

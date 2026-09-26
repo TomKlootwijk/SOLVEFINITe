@@ -347,6 +347,51 @@ class Tomigidt:
                 self._gpu.close()
 
     @_serialized
+    def emit_welip_state(self, tick16: int) -> tuple[int, list[str]]:
+        """Emit this same field owner under W time, including after completion."""
+        if self._closed:
+            raise ValueError("This agent is closed")
+        if not self._is_field:
+            raise ValueError("WElip emission requires a field-agent manifest")
+        _integer(tick16, 0, 65535, "tick16")
+        if self._gpu is None:
+            from .welip import encode_state
+            return encode_state(self.agent_pair, tick16)
+        try:
+            with self._gpu._lock:
+                if (self._gpu._pair, self._gpu._energy) != (self.agent_pair, self.energy):
+                    self._gpu._failed = True
+                    raise ValueError("WElip executor differs from its owning individual")
+                return self._gpu.emit_welip(tick16)
+        except BaseException as exc:
+            if (self._gpu.failed or self._gpu._closed
+                    or getattr(exc, "device_uncertain", False)):
+                self.close()
+            raise
+
+    @_serialized
+    def resize_welip_cache(self, capacity: int) -> list[str]:
+        """Resize only the current field FIFO and report removals in FIFO order."""
+        if self._closed:
+            raise ValueError("This agent is closed")
+        if not self._is_field:
+            raise ValueError("WElip cache controls require a field-agent manifest")
+        _integer(capacity, 1, 256, "capacity")
+        with self.world._operation:
+            before = len(self.world.evicted_paths)
+            self.world.resize(capacity)
+            return list(self.world.evicted_paths[before:])
+
+    @_serialized
+    def invalidate_welip_cache(self, paths: list[str]) -> list[str]:
+        """Release complete current DATA pairs without changing the individual."""
+        if self._closed:
+            raise ValueError("This agent is closed")
+        if not self._is_field:
+            raise ValueError("WElip cache controls require a field-agent manifest")
+        return self.world.invalidate(paths)
+
+    @_serialized
     def reindex(self, *, psi_sign: int | None = None,
                 phase_origin: int | None = None) -> F8Index:
         """Change only indexed storage; preserve the complete admitted history."""

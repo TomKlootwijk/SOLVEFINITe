@@ -48,6 +48,12 @@ class CommittedIndexCleanupError(RuntimeError):
     committed = True
 
 
+class MalformedWelipEmissionError(ValueError):
+    """A complete W7 result was invalid while canonical state stayed intact."""
+
+    device_uncertain = False
+
+
 class _IndexBundle:
     def __init__(self):
         self.buffers = []
@@ -284,7 +290,8 @@ class GpuFieldAgentExecutor:
         shader = self._device.create_shader_module(code=Path(__file__).with_name(
             "shaders").joinpath("field_agent.wgsl").read_text(encoding="utf-8"))
         entries = ("build_keys", "build_tree", "compile_neighbors", "lookup_node",
-                   "derive_node", "forecast", "advance_to", "repair", "admit_growth", "admit_generated")
+                   "derive_node", "forecast", "advance_to", "repair", "admit_growth", "admit_generated",
+                   "emit_welip")
         if self._routing is not None:
             entries += ("compile_hadamard", "export_routing")
         self._pipelines = {
@@ -418,6 +425,10 @@ class GpuFieldAgentExecutor:
             }),
             "repair": self._group(self._pipelines["repair"], {
                 0: config, 7: resource(self._canonical), 8: output,
+            }),
+            "emit_welip": self._group(self._pipelines["emit_welip"], {
+                0: config, 1: field, 6: resource(self._jobs),
+                7: resource(self._canonical), 8: output,
             }),
             # Eight storage buffers, reusing independent job and state arenas.
             "admit_growth": self._group(self._pipelines["admit_growth"], {
@@ -803,6 +814,51 @@ class GpuFieldAgentExecutor:
             raise ValueError("Canonical GPU state disagrees with its last admitted result")
         self._failed = False
         return value, energy
+
+    @_serialized
+    def emit_welip(self, tick16: int) -> tuple[int, list[str]]:
+        """Emit W7 fragments from current device state without advancing it.
+
+        Only the requested clock and a reserved zero are uploaded. A complete
+        malformed result is recoverable only after a separate canonical read
+        proves that the admitted pair, energy and action counter are intact.
+        """
+        self._check_open()
+        _integer(tick16, 0, 65535, "tick16")
+        if not self._seeded:
+            raise ValueError("Canonical GPU state has not been seeded")
+        self._failed = True
+        try:
+            self._device.queue.write_buffer(self._jobs, 0, struct.pack("<2I", tick16, 0))
+            self._dispatch(self._pipelines["emit_welip"], self._groups["emit_welip"])
+            row, = self._read_outputs(1)
+            if len(row) != 8:
+                raise ValueError("GPU returned an incomplete WElip emission")
+            raw = self._device.queue.read_buffer(self._canonical)
+            left, right, energy, ticks = struct.unpack("<4I", raw)
+            value = left | (right << 32)
+            _, _, phase, _, metadata = self._live_pair(
+                value, Opcode.EMIT if self._terminal else Opcode.STEP)
+            if (value, energy, ticks) != (self._pair, self._energy, self._ticks):
+                raise ValueError("WElip canonical state differs from its admitted owner")
+            intrinsic = (-phase if metadata & 16 else phase) % 256
+            phase16 = intrinsic << 8
+            header = (tick16 << 16) | phase16
+            if row != (left, header, right, header, energy, ticks, 1, 0):
+                self._failed = False
+                raise MalformedWelipEmissionError("GPU returned a malformed WElip emission")
+            self._failed = False
+            return phase16, [f"{row[1]:08X}{row[0]:08X}", f"{row[3]:08X}{row[2]:08X}"]
+        except BaseException as exc:
+            if self._failed:
+                _tag_device_uncertainty(exc, True)
+                # W7 must retire an uncertain owner for every field policy,
+                # including FIELD, whose routing binding is None.
+                try:
+                    self.close()
+                except BaseException:
+                    _tag_device_uncertainty(exc, True)
+            raise
 
     @_serialized
     def close(self) -> None:

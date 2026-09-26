@@ -345,6 +345,29 @@ class FieldWorld:
         self._capacity = _capacity(capacity)
         self._evict_overflow()
 
+    @_serialized
+    def invalidate(self, paths: list[str]) -> list[str]:
+        """Discard an admitted active selector atomically, in original FIFO order.
+
+        Only complete cached DATA pairs are removed. Their recipes and index
+        remain available for later reconstruction; removal itself is neither
+        a cache hit nor a regeneration.
+        """
+        if type(paths) is not list or not 1 <= len(paths) <= 256:
+            raise ValueError("Invalidation paths must be a list of 1..256 active paths")
+        for path in paths:
+            self.config.index(path)
+        if paths != sorted(set(paths)):
+            raise ValueError("Invalidation paths must be sorted and unique")
+        if any(path not in self._active for path in paths):
+            raise ValueError("Every invalidation path must be currently active")
+        selected = set(paths)
+        removed = [path for path in self._active if path in selected]
+        for path in removed:
+            del self._active[path]
+        self._evicted.extend(removed)
+        return removed
+
     def _evict_overflow(self) -> None:
         while len(self._active) > self.capacity:
             path, _ = self._active.popitem(last=False)

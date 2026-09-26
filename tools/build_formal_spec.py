@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 11. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 12. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -39,6 +39,8 @@ OG_REFERENCE = None
 OG_VERIFICATION = None
 OG_CONFORMANCE = None
 W_REFERENCE = None
+W_VERIFICATION = None
+W_CONFORMANCE = None
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -110,8 +112,9 @@ def page(title, subtitle, *items):
 
 def build_content():
     if any(value is None for value in (HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE,
-                                       OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE)):
-        raise ValueError('Verify historical HP/GD/OG evidence and the W reference before revision 11')
+                                       OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE,
+                                       W_VERIFICATION, W_CONFORMANCE)):
+        raise ValueError('Verify historical HP/GD/OG evidence and the W capture before revision 12')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
@@ -132,7 +135,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 11. FI/PX/HP contracts remain on pages 35-48; HP evidence at 5a304bc is on page 49. GD contracts/evidence at 94f86c7 remain on pages 50-57. OG contracts remain on pages 58-66, with the historical f125a76 capture on pages 67-68. W1-W8 begin on page 69 as a formal-first binding, before implementation. Earlier profiles retain their meanings.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 12. FI/PX/HP contracts remain on pages 35-48; HP evidence at 5a304bc is on page 49. GD contracts/evidence at 94f86c7 remain on pages 50-57. OG contracts remain on pages 58-66, with the historical f125a76 capture on pages 67-68. W1-W8 were bound before implementation at 74e00f4; their definitions remain on pages 69-81, with measured results on pages 82-83.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -343,7 +346,7 @@ def build_content():
         h('Regenerative R and forward-only W'),
         table(['Profile','Public interaction contract'],[
             ['R: regenerative','Admit named historical derivations whose original context is retained. This is the current implementation family.'],
-            ['W: WElip','Admit IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT; expose no historical-read operation at this interface. W1-W8 from page 69 bind this finite profile; formal only.'],
+            ['W: WElip','Admit IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT; expose no historical-read operation at this interface. W1-W8 from page 69 bind this finite profile; measured continuation is on pages 82-83.'],
         ],[.23,.77]),
         p('PRISM reverse lock names a specified rejection predicate for backward-history requests. “Poisoned pill” means localized active-entry invalidation with a recorded cause and retention policy. A read attempt is an event only if the interface detects it. Observation does not automatically change parity.'),
         small('An internally consistent rewritten archive can still replay. Authentication needs an external trust mechanism. Atomic save and exclusive ownership protect the implemented update protocol; replay consistency is not a signature, nor a claim of immunity to storage failure.')
@@ -423,7 +426,7 @@ def build_content():
         p('Integer execution avoids floating-point rounding in the canonical field arithmetic. Width, signedness, overflow, shifting and conversion still require exact rules. Floating-point rounding is not inherently randomness; evaluation order and arithmetic semantics determine reproducibility [R6]. A finite discrete representation can execute an incorrect rule perfectly.'),
         h('Geometry changes are accepted state changes'),
         p('The addendum’s internally generated growth can be formalized as a versioned graph-rewrite event. Such an event shall supply a finite rule, affected domain, retained derivation context and deterministic node correspondence. Its result must pass connectivity, boundary, range, topology and operator checks before admission. GD1-GD8 now realize one finite dyadic geometry production under this contract; arbitrary rewriting remains separate.'),
-        p('The source’s “zero-order decay” or Lambda label requires a deterministic invalidation function Lambda_nu(S,e), including selected entries, predicate, retention effects and result. W1-W8 bind one finite active-pair invalidation on page 71; it remains formal only. Biological reaction-diffusion analogies require actual equations before they become physical models.'),
+        p('The source’s “zero-order decay” or Lambda label requires a deterministic invalidation function Lambda_nu(S,e), including selected entries, predicate, retention effects and result. W1-W8 bind finite active-pair invalidation on page 71, with measured recovery on pages 82-83. Biological reaction-diffusion analogies require actual equations before they become physical models.'),
         small('Attribution remains attribution. Personal judgments in the exported discussion are not computing predicates. The meaningful architectural claim is a declared domain with exact admitted transitions, for which proof obligations and implementation measurements can be stated and discharged.')
     )
     page('Typed zero, XOR and integrity', 'NEW FORMALIZATION | SOLIPSISM PP.2-3, 7, 11-16',
@@ -510,8 +513,8 @@ def build_content():
             ['C5: generative world','<b>Verified finite GD and OG.</b> Dyadic Klein generations and parameterized branching productions change geometry or field and continue the same individual. Complete branch context and original-time replay are tested. General primitives remain separate.'],
             ['C6: finite active memory','<b>Verified subset.</b> Pair-atomic sample FIFO, genuine reconstruction and capacity-independent agent histories work. Journals, geometry, fields and device arenas consume additional memory.'],
             ['C7: complete mirror','<b>Verified subset.</b> Phase involution/commutation, parity and full pair relations work, including K8 phase reflection and orientation transport on CPU/GPU.'],
-            ['C8: individual and footprint','<b>Verified subset.</b> Planning, observations, epoch/sequence, retry handling, ownership and durable continuation work. Full LUS/DIGID envelopes and global admission/authentication remain profile obligations.'],
-            ['WElip / Lambda','<b>Formal only.</b> W1-W8 from page 69 bind a forward interface, local invalidation, finite epoch clock, current-state emission and private recovery. Runtime conformance remains to be implemented.'],
+            ['C8: individual and footprint','<b>Verified subset.</b> Planning, observations, epoch/sequence, retry handling, ownership and durable continuation work. W adds a typed LUS envelope; broader DIGID semantics and global admission/authentication remain open.'],
+            ['WElip / Lambda','<b>Verified finite W profile.</b> W1-W8 bind a forward interface, local invalidation, finite epoch clock, current-state emission and private recovery. Source-bound CPU/GPU evidence is on pages 82-83. Broader Lambda semantics remain outside this binding.'],
             ['GPU / performance','<b>Verified subset.</b> Exact tested adapters and device execution exist. Cache saturation, general speed/energy superiority and other hardware adapters are unmeasured.'],
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
@@ -583,7 +586,7 @@ for tick in admitted_finite_budget:
             ['Adapters / scaling','Exact word preservation, finite cascade stages, ownership, input delivery and resource controls; R14-R15.'],
             ['Physical adapters','Samples, units, calibration, transfer functions and retained scheduling effects; R16.'],
         ],[.27,.73]),
-        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38, <b>PX1-PX8</b> on pages 39-43, <b>HP1-HP8</b> on pages 44-48, <b>GD1-GD8</b> on pages 50-56 and <b>OG1-OG8</b> on pages 58-66. <b>W1-W8</b> from page 69 are formal only. Satisfying one profile does not silently complete another.'),
+        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38, <b>PX1-PX8</b> on pages 39-43, <b>HP1-HP8</b> on pages 44-48, <b>GD1-GD8</b> on pages 50-56 and <b>OG1-OG8</b> on pages 58-66. <b>W1-W8</b> begin on page 69, with measured evidence on pages 82-83. Satisfying one profile does not silently complete another.'),
         small('Original property cross-reference: P1 replay is I1 on p.22; P2 FIFO and P3 regeneration are R1/R2 on p.18; P4 mirror preservation is on p.8; P5 representation independence is the adapter/refinement contract on pp.16,23.'),
         small('Historical vocabulary: mosTADPOLE(thegreenone) names the source input/output lineage; TPVM is Topological Fixed-Point Virtual Machine. Det-0 names reproducibility with complete dependencies. Generative Topological Fabric, Packed Topological FIFO Matrix and Uniform Packed Operator Paradigm are successive functional views. REW expands to Reverse Electronic Warfare in the WElip source. f8’s “BVH replacement / S2 superseder” is an intended indexing/comparison role, not a measured replacement result.'),
         small('A complete manifest may reference immutable versioned rule tables rather than embedding every algorithm in a packet. No “infallible” designation waives a missing binding. A profile is executable only once all choices that affect its outputs are single-valued and finitely evaluable.')
@@ -620,7 +623,7 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box(f'<b>Revision 11 status.</b> Historical HP retains {hp_tests} tests/{hp_checks} checks; GD retains {gd_tests}/{gd_checks}. OG at f125a76 retains {og_tests} tests, {og_device_tests} actual-device methods and {og_checks} checks. W1-W8 are formal only. Distinct finite captures do not establish whole-architecture completion.')
+        box(f"<b>Revision 12 status.</b> Historical HP retains {hp_tests} tests/{hp_checks} checks; GD retains {gd_tests}/{gd_checks}; OG at f125a76 retains {og_tests}/{og_checks}. W captures {W_VERIFICATION['tests']['passed']} tests, {sum(W_VERIFICATION['tests']['actual_device_methods'].values())} actual-device methods and {W_VERIFICATION['conformance_checks_passed']} checks. Distinct finite captures do not establish whole-architecture completion.")
     )
     page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
@@ -1133,8 +1136,8 @@ for tick in admitted_finite_budget:
 
 
 def build_w_content():
-    page('WElip forward-time binding', 'APPENDIX MAP | W1-W8 | FORMAL ONLY',
-        box('Revision 11 binds W1-W8 before implementation. The independent reference supplies expected finite results. No W runtime, GPU, durability or throughput result is claimed. Historical FI/PX/HP/GD/OG evidence retains its original scope.'),
+    page('WElip forward-time binding', 'APPENDIX MAP | W1-W8 | VERIFIED FINITE PROFILE',
+        box('Revision 11 bound W1-W8 before implementation at 74e00f4. Revision 12 preserves those numerical definitions and adds the source-bound CPU/GPU capture on pages 82-83. Independent reference vectors remain mathematical expectations; prior FI/PX/HP/GD/OG evidence retains its original scope.'),
         p('One separate W public interface owns the same existing Tomigidt field agent. It supports FI, HP, GD and OG, defaults to OG and preserves their numerical semantics and canonical agent archives. The five forward operations add an explicit clock, lifecycle, typed record and durable admission boundary around that individual.'),
         table(['Page','Complete section'],[
             ['<link href="#p70" color="#007D83">70</link>','W1-W2: immutable configuration, clock and request context'],
@@ -1148,13 +1151,13 @@ def build_w_content():
             ['<link href="#p78" color="#007D83">78</link>','W8: JSONL transport and complete response schemas'],
             ['<link href="#p79" color="#007D83">79</link>','W8: validation order and exact error classes'],
             ['<link href="#p80" color="#007D83">80</link>','Independent preimplementation W reference vectors'],
-            ['<link href="#p81" color="#007D83">81</link>','W8 acceptance obligations and remaining architecture'],
+            ['<link href="#p81" color="#007D83">81</link><br/><link href="#p82" color="#007D83">82</link> / <link href="#p83" color="#007D83">83</link>','W8 acceptance obligations; measured implementation and recovery evidence'],
         ],[.12,.88]),
         h('Source authority and new numerical choices'),
         p('Original p.4 requires retained output-affecting inputs and clock epochs; p.8 identifies the WElip 16+16+32 carrier; p.14 separates record identity, integrity, admission and reproduction; p.15 defines the five-event forward alphabet, local invalidation and controlled R/W separation. The exact schemas, finite bounds, codec, clock cadence and retry protocol below are declared realization choices.'),
         small('All old policies, live sessions and CLI commands retain their meanings. W is an API/profile boundary, not OS isolation or issuer authentication. Its finite clock and retained ledger do not establish indefinite time or constant total memory.')
     )
-    page('W configuration and independent clocks', 'FORMAL ONLY | W1-W2 | STRICT INPUT AND TIME DOMAINS',
+    page('W configuration and independent clocks', 'FINITE CONTRACT | W1-W2 | STRICT INPUT AND TIME DOMAINS',
         code('protocol = "welip-field-agent-v1"\nconfig = {format,agent,producer,producer_epoch,\n          clock_origin,max_events,initial_capacity}\nformat = "welip-field-config-v1"'),
         table(['Field','Exact binding'],[
             ['agent','Existing FieldAgentManifest schema, with one of the four policies listed below; default OG.'],
@@ -1173,7 +1176,7 @@ def build_w_content():
         code('{protocol,op,producer,producer_epoch,seq,clock_epoch,\n tick16,agent_cycle,geometry_epoch}'),
         p('Add only page 71\'s operation fields. seq is 1..max_events+1; a new operation requires seq=n+1 and clock=clock_origin+seq. clock_epoch is u32; tick16 is u16; agent_cycle is 0..agent.max_cycles; geometry_epoch is 0..policy.max_epochs, or 0 for FI/HP. Cycle/generation describe the current preoperation owner and are both 0 for initial IGNITE. At n=max_events only exact latest retry is allowed. Static schema/source checks precede retry classification; current-state checks follow it.')
     )
-    page('The five forward operations', 'FORMAL ONLY | W3 | ONE OWNER, EXPLICIT LOCAL EFFECTS',
+    page('The five forward operations', 'FINITE CONTRACT | W3 | ONE OWNER, EXPLICIT LOCAL EFFECTS',
         h('IGNITE: add {payload}'),
         p('payload is uppercase, even-length hexadecimal encoding 0..4,096 bytes. Only seq=1 before ignition is valid. Retain those literal bytes with the configured baseline and initial owner clock/phase context. They do not replace the initial RP32 state or become instructions. Emit raw payload record 0 followed by actual owner-state record 1. Empty payload still emits record 0 with zero fragments.'),
         h('ADVANCE: add {position,observations}'),
@@ -1187,7 +1190,7 @@ def build_w_content():
         h('EMIT: no additional fields'),
         p('Emit actual current owner-state record 0 and advance W time, without an agent step, energy debit or cache access. After agent COMPLETE, EMIT/RESIZE/INVALIDATE remain available within the W budget; ADVANCE and a new IGNITE reject. Before IGNITE every other operation rejects. Every operation uses the same owner; cache controls never spawn or reseed it.')
     )
-    page('Forward boundary and latest retry', 'FORMAL ONLY | W4 | NO PUBLIC HISTORICAL PAYLOAD',
+    page('Forward boundary and latest retry', 'FINITE CONTRACT | W4 | NO PUBLIC HISTORICAL PAYLOAD',
         h('Explicit public alphabet and reverse-lock predicate'),
         p('Only IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT are public W operations. Explicit op names READ, HISTORY, REPLAY and REGENERATE reject as BACKWARD_READ. Other names and extra selectors are invalid requests. There is no public historical archive, derive_epoch, legacy inspect/status or raw-owner accessor through W. Ready/next admission metadata is transport context, not another W operation.'),
         box('Detection is explicit at this interface. Rejected requests leave admitted clock, history and cache unchanged. They do not automatically invalidate memory, change parity or authenticate the producer. Controlled private R recovery is defined on page 76.'),
@@ -1204,7 +1207,7 @@ def build_w_content():
         h('Acknowledgment loss and delivery meaning'),
         p('A lost current-state observation can be replaced by a new forward EMIT at a new clock. This is not recovery of the old record. EMIT does not reproduce IGNITE\'s raw bytes: lost raw ignition output has no public recovery operation, although admitted bytes remain available to private R. No physical exactly-once actuation is implied.')
     )
-    page('WElip carrier and exact state decoding', 'FORMAL ONLY | W5 | TYPED 16+16+32 WORDS',
+    page('WElip carrier and exact state decoding', 'FINITE CONTRACT | W5 | TYPED 16+16+32 WORDS',
         code('word_profile = "welip-16-16-32-v1"'),
         eq('W64 = payload32 | (phase16 << 32) | (tick16 << 48)\nphase16 = intrinsic_phase8 << 8\nintrinsic_phase8 = (-R if eta else R) mod 256'),
         p('All integer fields are strict. Canonical transport words contain exactly 16 uppercase hexadecimal digits. tick16 and phase16 are unsigned 16-bit values; payload32 is unsigned 32-bit. State phase has zero low eight bits: it represents the same angle in 1/65,536-turn units at the existing 8-bit resolution. This binding introduces no additional phase precision.'),
@@ -1217,7 +1220,7 @@ def build_w_content():
         p('State decoding additionally verifies each RP32 parity, the full mirror relation, legal STEP or EMIT metadata and agreement of the phase header with the left owner channel. Admission requires exact equality of the full owned pair, including orientation/opcode, plus energy and context. Mirror-swapping channels yields a different owned pair even when the representation remains legal.'),
         box('Word ordering and parity are representation checks. Coordinated payload changes can create another legal record; actual owner/context equality is a separate admission check. Neither the carrier nor a hash supplies issuer authentication or a spatial seed.')
     )
-    page('LUS envelope and derivation identity', 'FORMAL ONLY | W5 | COMPLETE RECORD SCHEMA',
+    page('LUS envelope and derivation identity', 'FINITE CONTRACT | W5 | COMPLETE RECORD SCHEMA',
         code('record = {format,word_profile,payload_profile,baseline_id,\n producer,producer_epoch,clock_epoch,tick16,phase16,\n operation_seq,record_seq,kind,agent_cycle,geometry_epoch,\n energy,byte_length,fragment_count,words,status}\nformat = "welip-lus-v1"'),
         table(['Field group','Exact domain and meaning'],[
             ['Profiles','word_profile is welip-16-16-32-v1. payload_profile is bytes-v1 or RP32-relational-sdf-v2.'],
@@ -1234,7 +1237,7 @@ def build_w_content():
         p('This identity is interpreted under the fixed retained configuration and original ignition input. Producer namespace allocation is a declared responsibility, not a theorem of global uniqueness. Retain literal original inputs; no hash seeds phase. Equality of identity, equality of bytes, successful private reproduction, representation integrity and origin/admission are separate claims.'),
         small('The 64-bit carrier does not contain the whole envelope. Finite ordered uniform words carry payload fragments; explicit surrounding metadata carries the full clock epoch, energy, profiles, byte length and derivation identity.')
     )
-    page('Durable W ownership and archive', 'FORMAL ONLY | W6 | COMPLETE PRIVATE STATE',
+    page('Durable W ownership and archive', 'FINITE CONTRACT | W6 | COMPLETE PRIVATE STATE',
         h('One protected path and serialized owner'),
         p('Acquire canonical-path OS StateLock, then the session RLock, then existing Tomigidt operation and cache/device locks in that order. Hold admission, execution, save and result construction inside one ownership boundary. Opening a new file binds configuration and creates the existing agent without implicitly igniting it. Persist genesis with an empty W ledger.'),
         p('Initial capacity belongs to configuration. Reopen rejects supplied configuration mismatch or a constructor capacity override. Recover the mutable current capacity by replaying retained RESIZE operations from initial_capacity; current capacity may legitimately differ from that initial value. Backend and storage index binding may change on reopen, preserving admitted semantics.'),
@@ -1250,7 +1253,7 @@ def build_w_content():
         ],[.2,.8]),
         small('Archive parsing validates all exact types/shapes and bounds. Baselines, recipe inputs, private records, observations, planner state and journal are additional to the active pair FIFO; this profile makes no total constant-memory claim.')
     )
-    page('Private recovery and operation atomicity', 'FORMAL ONLY | W6 | DURABLE COMMIT AND FAILURE SCOPE',
+    page('Private recovery and operation atomicity', 'FINITE CONTRACT | W6 | DURABLE COMMIT AND FAILURE SCOPE',
         h('Controlled internal R behind the W boundary'),
         p('Recreate the same agent at initial capacity and replay W operations in order, interleaving original ADVANCE observations with RESIZE and INVALIDATE. Verify every resulting record, owner state and cache witness, then the complete final canonical agent archive and expected W context. Restoring only the agent archive at final capacity is insufficient.'),
         p('Recovery may recompute on CPU or actual GPU. It emits no public records, receipts or new durable operations. Device computation may repeat; physical exactly-once actuation is not claimed. No eager historical packed-world arena or public old-epoch read is introduced. Original agent-cycle time and GROW prefixes remain unchanged by intervening W operations.'),
@@ -1267,7 +1270,7 @@ def build_w_content():
         p('The admitted semantic prestate includes all owner state: pair, energy, cycle, history, recipe, generation, target, decision, planning and observations; cache order/counters; W clock/ledger and configuration. Ephemeral emission scratch bytes are excluded. Emission may be validated before mutating a cache control. Unchanged GPU state across emission alone does not prove a preceding ADVANCE was unchanged.'),
         small('Unexpected postmutation failure closes the owner. Closed/poisoned embedded owners refuse further requests without mutation or emission. Exact latest retry classification precedes budget, terminal and current-context tests only while a valid owner is open.')
     )
-    page('Actual device W emission', 'FORMAL ONLY | W7 | CANONICAL STATE, READ-ONLY OUTPUT',
+    page('Actual device W emission', 'FINITE CONTRACT | W7 | CANONICAL STATE, READ-ONLY OUTPUT',
         p('For GPU FI/HP/GD/OG owners, state W words shall be produced from the canonical device [left,right,energy,ticks], including terminal EMIT owners. Upload only the requested tick16/context, never a host replacement pair or phase. The shader reads canonical state, checks parity, full mirror, legal STEP/EMIT, G/B and energy, then computes intrinsic phase16 and both W headers.'),
         h('Fixed scratch interface'),
         code('upload = [tick16, 0]  # existing scratch buffer\nheader = (tick16 << 16) | phase16\noutput = [left,header,right,header,energy,device_ticks,ok,0]\n# eight u32; ok=1 only for valid canonical state'),
@@ -1281,9 +1284,9 @@ def build_w_content():
             ['Complete malformed emission','Nonfatal only under W6\'s whole-operation prestate rule; after semantic mutation, poison unless fully restored.'],
         ],[.31,.69]),
         p('The host codec may wrap raw IGNITE bytes and assemble explicit LUS metadata. It may not substitute CPU-produced state words for the GPU result. Existing GPU compiler/producer guards remain active through ADVANCE, GROW and private recovery. CPU reference values certify outputs rather than replacing the device producer.'),
-        box('This page specifies required device work. Revision 11 reports no W GPU run, cache-residency measurement, occupancy, throughput or physical-energy advantage.')
+        box('Revision 11 specified this device work before implementation. Revision 12 records the actual-device capture on pages 82-83. Cache residency, occupancy, throughput and physical-energy advantage remain unmeasured.')
     )
-    page('W transport and exact responses', 'FORMAL ONLY | W8 | CURRENT ADMISSION METADATA',
+    page('W transport and exact responses', 'FINITE CONTRACT | W8 | CURRENT ADMISSION METADATA',
         p('Provide JSONL endpoint <font name="Mono">agent welip</font> with --state, --config, --backend and existing storage index options. Config generator <font name="Mono">agent welip-config</font> uses --profile field/hadamard/growth/organogram, default organogram, mapping to page 70\'s policies. No W inspect/status/history command is provided.'),
         p('Maximum request line length is 65,536 characters. Require unique JSON keys and finite numbers. An oversized line is fatal; do not parse its tail. EOF or transport failure closes the owner and releases its lock. COMPLETE still permits allowed controls/emission. W budget exhaustion disables new operations; the endpoint stays open for exact latest retries until EOF or close.'),
         h('Common response and current head'),
@@ -1298,7 +1301,7 @@ def build_w_content():
         ],[.23,.77]),
         small('Startup failure before a valid owner exists terminates with stderr/nonzero exit and no READY. Error messages are human-readable diagnostics, not retained canonical history or archive dumps. On transport write failure the owner closes; no response is assured. Current cursor metadata is an explicit forward admission interface, not a public historical read.')
     )
-    page('W admission order and rejection classes', 'FORMAL ONLY | W8 | DETERMINISTIC VALIDATION BOUNDARY',
+    page('W admission order and rejection classes', 'FINITE CONTRACT | W8 | DETERMINISTIC VALIDATION BOUNDARY',
         h('Classification order'),
         table(['Stage','Required checks before proceeding'],[
             ['1. Transport','Reject malformed/oversized transport; require protocol/op syntax.'],
@@ -1321,7 +1324,7 @@ def build_w_content():
 
 
 def build_w_reference_pages():
-    page('Independent W reference vectors', 'FORMAL ONLY | MATHEMATICAL EXPECTATIONS BEFORE RUNTIME',
+    page('Independent W reference vectors', 'INDEPENDENT REFERENCE | MATHEMATICAL EXPECTATIONS BEFORE RUNTIME',
         p('The independent reference in docs/evidence/welip-v1/ uses frozen OG mathematical owner transitions and separate integer codec/cache logic, with no solvefinite import or device execution. Its main fixture uses producer welip-reference, producer_epoch 7, clock_origin 65,530, max_events 64 and initial capacity 3, around the nine-cycle OG mission on page 65.'),
         h('Complete lifecycle schedule'),
         code('I, A1, E, R1, X, A2, A3, A4, E, A5/GROW, R4, A6, A7, X, A8, A9, E'),
@@ -1338,7 +1341,7 @@ def build_w_reference_pages():
 
 
 def build_w_acceptance_page():
-    page('W acceptance and architectural scope', 'FORMAL ONLY | W8 | REQUIRED IMPLEMENTATION EVIDENCE',
+    page('W acceptance and architectural scope', 'FINITE CONTRACT | W8 | REQUIRED IMPLEMENTATION EVIDENCE',
         p('A separate source-bound implementation capture shall demonstrate the complete finite contract. Passing carrier examples alone does not establish durable lifecycle, device refinement or forward-only admission. The independent reference precedes runtime work; actual implementation evidence must retain its original inputs and versions.'),
         table(['Obligation','Required acceptance scope'],[
             ['Codec and metadata','Raw lengths 0,1,5,9 and 4,096; exact padding/count/header checks; full parity/mirror; ordered owner channels; energy metadata, wrong actual owner/context and coordinated legal-but-wrong payload rejection.'],
@@ -1350,8 +1353,45 @@ def build_w_acceptance_page():
             ['Durability / ownership','One OS-held owner and serialized calls; immutable configuration/path; before/after replacement failures, unread acknowledgment, post-ADVANCE/cache emission failure, save uncertainty, EOF/oversized/transport failure and fresh CPU/GPU process recovery.'],
             ['Prior profiles','FI/PX/HP/GD/OG schemas, numerical contracts and canonical reference archives remain unchanged. Existing live retry/history APIs keep their separate R semantics.'],
         ],[.25,.75]),
-        box('Revision 11 status: FORMAL ONLY. No W test count, actual-device execution, durable continuation result or resource measurement is claimed. A later measured edition must identify source/report hashes and test the full acceptance scope.'),
+        box('Revision 11 fixed these acceptance obligations before implementation. Revision 12 records the source-bound capture on pages 82-83, including actual-device execution, durable recovery and unchanged agent archives. Numerical definitions and reference vectors retain their original meanings.'),
         small('Remaining architecture includes general primitive/graph productions, broader spectral choices, physical adapters, universality and comparative hardware measurements. This finite W binding is not indefinite time, global authentication, exactly-once physical actuation or total constant memory.')
+    )
+    build_w_measured_pages()
+
+
+def build_w_measured_pages():
+    tests = W_VERIFICATION['tests']
+    methods = sum(tests['actual_device_methods'].values())
+    checks = W_VERIFICATION['conformance_checks_passed']
+    adapter = W_CONFORMANCE['adapter']
+    page('Measured W clock and continuation', 'IMPLEMENTATION CAPTURE | W1-W8 | 26 SEPTEMBER 2026',
+        box(f"The source-bound capture passes {tests['passed']} tests with zero skips, including {methods} actual-device GPU methods, and all {checks} W conformance checks. This is finite clock, carrier and same-owner continuation evidence under the numerical contract committed at 74e00f4."),
+        p(f"Device: {escape(adapter['device'])}, {escape(adapter['backend_type'])}. All three frozen 17-operation lifecycles execute on CPU and GPU. Each produces the exact 18 records and 37 carrier words, with identical complete private W archives across backends. All four field policies retain terminal emission."),
+        h('Time and identity remain separate'),
+        table(['Checkpoint','Observed result in the default fixture'],[
+            ['Operation 6','W clock carries to (1,0); agent cycle 2, energy 93.'],
+            ['Operation 10','GROW reaches cycle 5 and geometry epoch 1; a new cache and executor counter start at zero. Global cycle and energy do not reset.'],
+            ['Operation 17','W clock (1,11); cycle 9, geometry epoch 1, pair 860006BA16000646 and energy 76.'],
+            ['Capacity variant','Capacity eight changes final cache hits/regenerations to 4/3 from 0/7, preserving every agent transition.'],
+        ],[.24,.76]),
+        h('Actual device production'),
+        p('The W shader reads the current canonical pair, energy and action counter. Only tick16 and a reserved zero are uploaded. Both ordered fragments are read from device output and checked against a separate full canonical read. The host state encoder and earlier CPU geometry producers are disabled during GPU conformance, including fresh GPU recovery. Emission introduces no replacement owner or reseeding.'),
+        p('One exact latest retry returns a current cursor and sequence receipt, with no earlier records, state payload, device emission or save. A new EMIT can produce the current state after completion. Every cache removal preserves complete pairs and unaffected FIFO order; private recovery repeats lifecycle events alongside the original agent steps.'),
+        small('These results establish the declared finite W implementation. They do not measure texture-cache saturation, throughput, physical energy or an advantage over a conventional architecture. GPU execution still uses host admission, verification and durable journaling.')
+    )
+    page('W recovery, evidence and remaining work', 'MEASURED RECOVERY | SOURCE IDENTITIES | ARCHITECTURAL CONTINUATION',
+        h('Failures resolve through the durable prefix'),
+        p('Complete malformed device output is nonfatal only before any working-state mutation and after unchanged canonical state is established. Output failure after ADVANCE, uncertain dispatch and uncertain save close the owner. A successful replacement followed by a lost acknowledgement reconstructs as the latest duplicate; an unsaved transition reconstructs from the preceding prefix.'),
+        p('Three fresh endpoint processes execute GPU, CPU and GPU with distinct storage indexes. They reconstruct the complete original W ledger and FIFO witnesses around clock carry and geometry growth. Session tests additionally cover interruption during mutation/save, before/after atomic replacement, unread acknowledgement, concurrent duplicate admission, strict archive corruption rejection and transport closure.'),
+        p('Incomplete observations, deferred search and fresh observations after temporary energy failure retain the same individual. UNREACHABLE uses an injected planner outcome; the supported Klein graphs are connected. Clock exhaustion removes the next cursor but retains the latest exact retry. Mission or cycle completion stops ADVANCE while permitting controls and emission within the W budget.'),
+        h('Reproducible evidence and preservation'),
+        code('python -m unittest discover -s tests -v\npython -m examples.welip_conformance --output w-recheck.json\npython tools/capture_welip_evidence.py\npython tools/build_formal_spec.py'),
+        small('Capture files: docs/evidence/welip-v1/verification.json, conformance.json and full-tests.txt. Source hashes use LF-normalized bytes; the capture checks identical source inventories before and after execution. The formal builder verifies those sources, reports, formal chronology, frozen reference, full lifecycle rows, device evidence and archive identities.'),
+        small('Canonical W archive SHA-256: '+W_CONFORMANCE['welip_archive_sha256']),
+        small('Unchanged historical OG agent archive SHA-256: '+W_CONFORMANCE['canonical_agent_archive_sha256']),
+        h('Next source obligation'),
+        p('Original specification p.7 requires a geometry-to-field map for every declared primitive. The present parameterized organogram generates intrinsic balls; directional pyramid/cone boundaries and general graph production remain unfinished. A further realization must explicitly bind its geometry, phase/Psi relation, seam behavior and exact redistancing before implementation. Broader spectral choices, physical adapters, universality and comparative hardware evidence also remain open.'),
+        small('The three original PDFs and separate Tom/Jitske ELI5 booklet remain byte-identical. This measured milestone advances the architecture; it does not establish the full paradigm or exactly-once physical actuation.')
     )
 
 
@@ -1359,7 +1399,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 11')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 12')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -1392,7 +1432,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 11')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 12')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -1400,7 +1440,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 11')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 12')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -1921,6 +1961,126 @@ def verify_retained_inputs():
             or historical['source_sha256'] != measured['report_sha256_lf']['conformance.json']):
         raise ValueError('W horizon or separately labelled historical OG preservation expectation disagrees')
     W_REFERENCE = w
+    verify_w_capture(w, expected_hashes)
+
+
+def verify_w_capture(reference, protected_sources):
+    global W_VERIFICATION, W_CONFORMANCE
+    measured = json.loads((WELIP_EVIDENCE/'verification.json').read_text(encoding='utf-8'))
+    formal_commit = '74e00f4af54a341815c64e47f7f58334adda5709'
+    formal_pdf = subprocess.check_output(['git','show',
+        formal_commit+':output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf'], cwd=ROOT)
+    if (measured['format'] != 'welip-verification-v1'
+            or measured['formal_binding_commit'] != formal_commit
+            or measured['base_commit'] != OG_CAPTURE_COMMIT
+            or measured['preimplementation_formal_pdf_sha256'] != hashlib.sha256(formal_pdf).hexdigest()
+            or hashlib.sha256(formal_pdf).hexdigest() != '24b180ebdf91b56ca01502171d1617178c97371a9ddfb56f459a36c00b9fb865'
+            or measured['actual_GPU_capture'] is not True or measured['partial'] is not False
+            or measured['source_manifest_unchanged_during_capture'] is not True):
+        raise ValueError('W measured chronology or full hardware-capture scope disagrees')
+    sources = {path.relative_to(ROOT).as_posix() for directory in ('solvefinite','tests','examples')
+               for path in (ROOT/directory).rglob('*')
+               if path.is_file() and path.suffix in ('.py','.wgsl','.json')}
+    sources.add('tools/capture_welip_evidence.py')
+    sources.update('docs/evidence/'+directory+'/'+name
+                   for directory in ('welip-v1','organogram-v1','growth-v1')
+                   for name in ('reference-builder.py','formal-reference.json'))
+    if set(measured['source_sha256_lf']) != sources:
+        raise ValueError('W capture requires the complete current source inventory')
+    for name, expected in measured['source_sha256_lf'].items():
+        if hashlib.sha256((ROOT/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != expected:
+            raise ValueError('W capture source changed: '+name)
+    if set(measured['report_sha256_lf']) != {'full-tests.txt','conformance.json'}:
+        raise ValueError('W capture requires full tests and complete conformance')
+    for name, expected in measured['report_sha256_lf'].items():
+        if hashlib.sha256((WELIP_EVIDENCE/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != expected:
+            raise ValueError('W capture report changed: '+name)
+    log = (WELIP_EVIDENCE/'full-tests.txt').read_text(encoding='utf-8')
+    match = re.search(r'Ran (\d+) tests in ([0-9.]+)s',log)
+    tests = measured['tests']
+    if (match is None or (int(match[1]),float(match[2])) != (tests['passed'],tests['elapsed_seconds'])
+            or tests['skipped'] != 0 or tests['complete_suite'] is not True
+            or sum(tests['module_counts'].values()) != tests['passed']
+            or tests['actual_device_methods'].get('WelipGpuTests') != 9
+            or not log.rstrip().endswith('OK') or '... skipped' in log or 'skipped=' in log):
+        raise ValueError('W displayed counts require a complete zero-skip suite log')
+    for module, count in tests['module_counts'].items():
+        if len(re.findall(r'\('+re.escape(module)+r'\.',log)) != count:
+            raise ValueError('W test module count disagrees: '+module)
+    for name, count in tests['actual_device_methods'].items():
+        if len(re.findall(r'\(\w+\.'+re.escape(name)+r'\.',log)) != count:
+            raise ValueError('W GPU test class count disagrees: '+name)
+    captured = json.loads((WELIP_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    if (captured['format'] != 'welip-conformance-v1' or captured['formal_commit'] != formal_commit
+            or captured['formal_reference_sha256_lf'] != '0ec46f6668867eb176285d821666de7e0fb3b71c5fac462d9a0e61973c71e210'
+            or captured['partial'] is not False or captured['actual_GPU_capture'] is not True
+            or len(captured['checks']) != 14 or measured['conformance_checks_passed'] != 14
+            or any(value is not True for value in captured['checks'].values())
+            or len(captured['disabled_legacy_CPU_compilers']) != 11
+            or len(captured['disabled_OG_CPU_producers']) != 6
+            or captured['disabled_state_producer'] != 'solvefinite.welip.encode_state'
+            or captured['adapter'] != measured['environment']['adapter']
+            or captured['adapter']['adapter_type'] not in ('DiscreteGPU','IntegratedGPU')):
+        raise ValueError('W conformance scope, hardware or CPU-producer guards disagree')
+
+    def canonical(value):
+        return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':'),
+                                        ensure_ascii=True,allow_nan=False).encode('ascii')).hexdigest()
+
+    for name in ('main_lifecycle','mirrored_lifecycle','capacity8_lifecycle'):
+        expected = reference[name]
+        cpu = captured['CPU']['lifecycles'][name]
+        gpu = captured['GPU']['lifecycles'][name]
+        if (cpu['archive'] != gpu['archive'] or gpu['archive']['operations'] != expected['operations']
+                or gpu['archive']['config'] != expected['config'] or gpu['archive']['expected'] != expected['expected']
+                or gpu['results'] != expected['results'] or cpu['results'] != expected['results']
+                or cpu['latest_retry_receipts'] != expected['latest_retry_receipts']
+                or gpu['latest_retry_receipts'] != expected['latest_retry_receipts']):
+            raise ValueError('W full literal lifecycle disagrees: '+name)
+        for case in (cpu,gpu):
+            if (case['welip_archive_sha256'] != canonical(case['archive'])
+                    or case['agent_archive_sha256'] != canonical(case['archive']['agent'])
+                    or case['operation_transcript_sha256'] != expected['operation_transcript_sha256']
+                    or (case['record_count'],case['fragment_count']) != (18,37)):
+                raise ValueError('W literal counts or archive identities disagree: '+name)
+    for profile in ('field','hadamard','growth','organogram'):
+        cpu = captured['CPU']['policies'][profile]
+        gpu = captured['GPU']['policies'][profile]
+        if (cpu['archive'] != gpu['archive'] or gpu['archive']['agent']['expected']['status'] != 'COMPLETE'
+                or gpu['terminal_response']['agent_status'] != 'COMPLETE'
+                or gpu['growth_count'] != int(profile in ('growth','organogram'))):
+            raise ValueError('W all-policy terminal preservation disagrees: '+profile)
+    main = captured['GPU']['lifecycles']['main_lifecycle']['archive']
+    if (canonical(main) != captured['welip_archive_sha256']
+            or canonical(main) != measured['welip_archive_sha256']
+            or canonical(main['agent']) != captured['canonical_agent_archive_sha256']
+            or canonical(main['agent']) != measured['canonical_agent_archive_sha256']
+            or canonical(main['agent']) != 'e2834ba2cc6b4d51f2b23f274cd9f2a0db8a4e88754ed9d2aadc76c074f134df'
+            or measured['final_state'] != main['agent']['expected']
+            or measured['final_W_state'] != main['expected']):
+        raise ValueError('W canonical history or historical OG identity changed')
+    fresh = captured['fresh_process_recovery']
+    if ([row['backend'] for row in fresh['captures']] != ['gpu','cpu','gpu']
+            or measured['fresh_process_backends'] != ['gpu','cpu','gpu']
+            or fresh['final_archive_sha256'] != canonical(main)
+            or fresh['captures'][-1]['welip_archive_sha256'] != canonical(main)
+            or len({tuple(row['index_arguments']) for row in fresh['captures']}) != 3):
+        raise ValueError('W fresh-process/index continuation disagrees')
+    expected_faults = {'complete_output_before_mutation','complete_output_after_advance',
+                       'uncertain_dispatch','save_replaced_before_error'}
+    if set(captured['session_faults']) != expected_faults or set(measured['session_fault_cases']) != expected_faults:
+        raise ValueError('W actual-device session failure coverage is incomplete')
+    for name, case in captured['session_faults'].items():
+        pure = name == 'complete_output_before_mutation'
+        if case['error']['fatal'] is not (not pure) or case['recovered_response']['type'] != (
+                'DUPLICATE' if name in ('complete_output_before_mutation','save_replaced_before_error') else 'RESULT'):
+            raise ValueError('W failure and recovery result disagrees: '+name)
+    if (measured['original_source_sha256'] != protected_sources
+            or measured['eli5_pdf_unchanged_sha256'] != '06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0'
+            or measured['eli5_pdf_unchanged_sha256'] != hashlib.sha256(
+                (ROOT/'output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf').read_bytes()).hexdigest()):
+        raise ValueError('W changed an original source PDF or the separate ELI5 booklet')
+    W_VERIFICATION, W_CONFORMANCE = measured, captured
 
 
 if __name__=='__main__':

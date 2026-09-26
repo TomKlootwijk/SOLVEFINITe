@@ -377,11 +377,11 @@ Arbitrary cone/pyramid and graph productions, global spectral choices,
 WElip/clock continuation, physical adapters and comparative hardware evidence
 remain obligations of the broader architecture.
 
-## Formal next step: WElip
+## WElip clock and forward interface
 
 Revision 11 of the existing consolidated
 [formal PDF](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf)
-binds W1-W8 before implementation. It defines a separate forward interface
+bound W1-W8 before implementation. The implementation provides a forward interface
 around the same field agent: IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT.
 The 16-bit time field carries into an explicit epoch; agent cycles, geometry
 generations and device counters keep their existing meanings. Current-state
@@ -392,11 +392,40 @@ its earlier payload. Private recovery replays cache controls in their original
 order alongside agent steps. Failures after working-state mutation close the
 owner until recovery establishes the durable prefix.
 
-The [independent W reference](docs/evidence/welip-v1/README.md) specifies carrier
-arithmetic, clock boundaries, invalid fragments and a lifecycle around the
-existing nine-cycle organogram mission. These are mathematical expectations;
-the W interface and GPU emission are **formal only**. The 623-test OG capture
-remains historical evidence for commit `f125a76`, not a W implementation result.
+```sh
+python -m solvefinite agent welip-config --profile organogram --output output/welip/config.json
+python -m solvefinite agent welip --config output/welip/config.json --state output/welip/session.json --backend gpu
+```
+
+The endpoint prints a `READY` JSON line with its current `head` and admitted
+`next` context. Each request copies the producer namespace and next clock,
+agent cycle and geometry epoch. A new default session starts with this line:
+
+```json
+{"protocol":"welip-field-agent-v1","op":"IGNITE","producer":"sensor","producer_epoch":0,"seq":1,"clock_epoch":0,"tick16":1,"agent_cycle":0,"geometry_epoch":0,"payload":"0102"}
+```
+
+`IGNITE` records the supplied bytes and current state. `ADVANCE` adds current
+`position` and local `observations`; the agent chooses its own action. `RESIZE`
+adds `capacity`. `INVALIDATE` adds sorted unique active `paths` and a `cause`.
+`EMIT` adds no operation-specific fields and also works after mission completion.
+Use each response's new context for the next request. Closing stdin releases
+ownership; restarting the command reconstructs the saved state. `--backend cpu`
+selects CPU execution, including when reopening a GPU-created archive.
+
+GPU state words come directly from the canonical device state. Emission uploads
+only the requested tick and a reserved zero, preserves the device action counter,
+and checks the complete returned owner. Cache controls preserve the agent's
+history and energy; their ordered effects are part of private recovery.
+
+The [W reference and implementation evidence](docs/evidence/welip-v1/README.md)
+distinguish frozen mathematical expectations from executed conformance. The
+earlier 623-test OG capture remains historical evidence for commit `f125a76`.
+The W capture passes **698 tests with zero skips**, including **145 actual-device
+GPU methods**, and all **14 conformance checks**. CPU and GPU reproduce all
+three frozen lifecycles, the same complete W archives, and the unchanged
+historical nine-cycle OG agent archive. Revision 12 records this evidence on
+pages 82-83 of the same consolidated PDF.
 
 ## GPU texture execution
 
@@ -501,6 +530,8 @@ flowchart LR
 | [solvefinite/tomigidt.py](solvefinite/tomigidt.py) | One agent's local model, versioned autonomous policy and replayable decisions. |
 | [solvefinite/session.py](solvefinite/session.py) | Simulated sensing, exclusive session ownership and per-cycle persistence. |
 | [solvefinite/live.py](solvefinite/live.py) | Live sensor admission, ordered durable results and duplicate recovery. |
+| [solvefinite/welip.py](solvefinite/welip.py) | Finite W clock, exact carrier encoding and typed state records. |
+| [solvefinite/welip_session.py](solvefinite/welip_session.py) | Forward W admission, minimal latest retry and private ordered recovery. |
 | [solvefinite/runtime.py](solvefinite/runtime.py) | Typed event admission, deterministic planning, energy accounting and replay from retained inputs. |
 | [solvefinite/__main__.py](solvefinite/__main__.py) | Runnable experiment and independent journal recovery. |
 

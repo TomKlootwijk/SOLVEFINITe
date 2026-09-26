@@ -1,0 +1,1404 @@
+{
+  "format": "welip-runtime-preservation-v1",
+  "formal_commit": "74e00f4af54a341815c64e47f7f58334adda5709",
+  "scope": "Independent AST, extracted-text, PDF structure and immutable-source preservation. Visual layout remains a separate rendered review.",
+  "checks": {
+    "previous_35_66_page_ast_exact": true,
+    "welip_70_80_normative_body_ast_exact": true,
+    "welip_81_acceptance_body_ast_exact": true,
+    "three_source_pdfs_and_eli5_byte_identical": true,
+    "protected_pdf_text_exact": true,
+    "page_count_83": true,
+    "bookmarks_complete": true,
+    "a4_pages": true,
+    "internal_links_resolve": true,
+    "annotation_bounds_clear": true,
+    "character_bounds_clear": true,
+    "independent_rebuild_byte_identical": true,
+    "main_pdf_and_layout_unchanged_by_rebuild": true,
+    "reviewed_final_pages_visually_clear": true
+  },
+  "baseline_pdf_sha256": "24b180ebdf91b56ca01502171d1617178c97371a9ddfb56f459a36c00b9fb865",
+  "baseline_builder_sha256_lf": "f7f131e59b586773d8d32af82670efd5c086e17fd75c6d0cb7244b3d3810e1aa",
+  "current_builder_sha256_lf": "64c1bd5b7c19a6e1d62d8b01256c66d75a6864a48a2e60ed3ace4e2c0f9bff54",
+  "source_expression_comparison": {
+    "previous_pages_35_66": [
+      {
+        "page": 35,
+        "title": "One field-guided Tomigidt",
+        "page_call_ast_exact": true,
+        "before_sha256": "cde332feb7cc47914b13e1aeeb4e956af008bacb5b1d2a0b328807de2e5e9e83",
+        "after_sha256": "cde332feb7cc47914b13e1aeeb4e956af008bacb5b1d2a0b328807de2e5e9e83"
+      },
+      {
+        "page": 36,
+        "title": "Observe, plan and transport",
+        "page_call_ast_exact": true,
+        "before_sha256": "6d1c800d67237a8d9c7afdbb2ad9e5e60f24a1d881772455655e28f6266cbca1",
+        "after_sha256": "6d1c800d67237a8d9c7afdbb2ad9e5e60f24a1d881772455655e28f6266cbca1"
+      },
+      {
+        "page": 37,
+        "title": "Regeneration and device admission",
+        "page_call_ast_exact": true,
+        "before_sha256": "239f4ffc8419f76fb9178261bbed2611b7afb9b4f757cdf52a39a6e9bfa520c9",
+        "after_sha256": "239f4ffc8419f76fb9178261bbed2611b7afb9b4f757cdf52a39a6e9bfa520c9"
+      },
+      {
+        "page": 38,
+        "title": "Integrated replay and acceptance",
+        "page_call_ast_exact": true,
+        "before_sha256": "fc4fbe976521077c73010d404fe8ce7e364b4df2985713e01a6bc6a3b5bec764",
+        "after_sha256": "fc4fbe976521077c73010d404fe8ce7e364b4df2985713e01a6bc6a3b5bec764"
+      },
+      {
+        "page": 39,
+        "title": "Local SDF-derived Psi binding",
+        "page_call_ast_exact": true,
+        "before_sha256": "bab8cdc9815550384e99a7806f047c7fa9ba008cb18086e69f798a355ab577db",
+        "after_sha256": "bab8cdc9815550384e99a7806f047c7fa9ba008cb18086e69f798a355ab577db"
+      },
+      {
+        "page": 40,
+        "title": "Canonical index identity and key",
+        "page_call_ast_exact": true,
+        "before_sha256": "0650c0bd913bc36c03a2b3654b0b6b0c3c59d19577c2047d2d0f5d936cf76d44",
+        "after_sha256": "0650c0bd913bc36c03a2b3654b0b6b0c3c59d19577c2047d2d0f5d936cf76d44"
+      },
+      {
+        "page": 41,
+        "title": "Middle-out tree and executable lookup",
+        "page_call_ast_exact": true,
+        "before_sha256": "47855f1711a130f921a2a61aad4296914fc49552d1663a6104f6efd11ecb2304",
+        "after_sha256": "47855f1711a130f921a2a61aad4296914fc49552d1663a6104f6efd11ecb2304"
+      },
+      {
+        "page": 42,
+        "title": "Atomic rebuild and semantic preservation",
+        "page_call_ast_exact": true,
+        "before_sha256": "5b04e3b03482cc7a9741fb887f412e3cd2c1e2cfd0c3d265882f252cabc096df",
+        "after_sha256": "5b04e3b03482cc7a9741fb887f412e3cd2c1e2cfd0c3d265882f252cabc096df"
+      },
+      {
+        "page": 43,
+        "title": "Psi-index reference and acceptance",
+        "page_call_ast_exact": true,
+        "before_sha256": "24c44cf20aa269e67299333405e21a8eec672b7890c2d67603bd190566a8cc64",
+        "after_sha256": "24c44cf20aa269e67299333405e21a8eec672b7890c2d67603bd190566a8cc64"
+      },
+      {
+        "page": 44,
+        "title": "Typed Hadamard routing policy",
+        "page_call_ast_exact": true,
+        "before_sha256": "fff06e4a319dbc5bee4d5ba58234eb8950c1e0717796c196227b92eb121461bf",
+        "after_sha256": "fff06e4a319dbc5bee4d5ba58234eb8950c1e0717796c196227b92eb121461bf"
+      },
+      {
+        "page": 45,
+        "title": "Phase-state planning and admitted action",
+        "page_call_ast_exact": true,
+        "before_sha256": "fa528cec93e26d0b86deb75a08bb139f85ed347e54c49c966fa0f20edf32d3d7",
+        "after_sha256": "fa528cec93e26d0b86deb75a08bb139f85ed347e54c49c966fa0f20edf32d3d7"
+      },
+      {
+        "page": 46,
+        "title": "Routing atlas and certified export",
+        "page_call_ast_exact": true,
+        "before_sha256": "95dc82c2958b6baa76094e754602fd3678f0bc455b6b1af7808a9f1b180556f9",
+        "after_sha256": "95dc82c2958b6baa76094e754602fd3678f0bc455b6b1af7808a9f1b180556f9"
+      },
+      {
+        "page": 47,
+        "title": "Hadamard rebuild and resource contract",
+        "page_call_ast_exact": true,
+        "before_sha256": "eaaf6bec625eecde1c724a2622af90f450b6fdb2c8cefa00c22164165f1694d4",
+        "after_sha256": "eaaf6bec625eecde1c724a2622af90f450b6fdb2c8cefa00c22164165f1694d4"
+      },
+      {
+        "page": 48,
+        "title": "Hadamard reference and acceptance",
+        "page_call_ast_exact": true,
+        "before_sha256": "fef20324cd5ccb8f7f25988d82fd14267b74e827e4027bbf4bcaebd95090218e",
+        "after_sha256": "fef20324cd5ccb8f7f25988d82fd14267b74e827e4027bbf4bcaebd95090218e"
+      },
+      {
+        "page": 49,
+        "title": "Measured Hadamard implementation",
+        "page_call_ast_exact": true,
+        "before_sha256": "b7f1005e20d86b344cc01aae7335835b0dc43fd15757bb30d8c8b403d84d5608",
+        "after_sha256": "b7f1005e20d86b344cc01aae7335835b0dc43fd15757bb30d8c8b403d84d5608"
+      },
+      {
+        "page": 50,
+        "title": "Autonomous growth binding",
+        "page_call_ast_exact": true,
+        "before_sha256": "afd763306b315bf3062f92280a02c88afa7ed53fb93f6fc152fa1ba879e3b1d1",
+        "after_sha256": "afd763306b315bf3062f92280a02c88afa7ed53fb93f6fc152fa1ba879e3b1d1"
+      },
+      {
+        "page": 51,
+        "title": "Dyadic geometry and active scale",
+        "page_call_ast_exact": true,
+        "before_sha256": "1b7bc0b78731ce3ee0dc6a5ed4373982a63e4c15dcf8c7a65a29feadeaee8c38",
+        "after_sha256": "1b7bc0b78731ce3ee0dc6a5ed4373982a63e4c15dcf8c7a65a29feadeaee8c38"
+      },
+      {
+        "page": 52,
+        "title": "Subgoals, growth and energy reserve",
+        "page_call_ast_exact": true,
+        "before_sha256": "765a57108cf116da092ee56f794170397552ebacd9f8d94a3958cdbc1778e613",
+        "after_sha256": "765a57108cf116da092ee56f794170397552ebacd9f8d94a3958cdbc1778e613"
+      },
+      {
+        "page": 53,
+        "title": "State-selected next target",
+        "page_call_ast_exact": true,
+        "before_sha256": "b6dcc0eaf54421174bb9d385f35996f23f56a45866949fff3721900fe4ab27f1",
+        "after_sha256": "b6dcc0eaf54421174bb9d385f35996f23f56a45866949fff3721900fe4ab27f1"
+      },
+      {
+        "page": 54,
+        "title": "Atomic growth and device mapping",
+        "page_call_ast_exact": true,
+        "before_sha256": "ce8a1bfe55f59b02a2057b48a00bf78fb8ec7a519c07e7d4c7bc6e62a4ca1fec",
+        "after_sha256": "ce8a1bfe55f59b02a2057b48a00bf78fb8ec7a519c07e7d4c7bc6e62a4ca1fec"
+      },
+      {
+        "page": 55,
+        "title": "Epoch-aware replay and regeneration",
+        "page_call_ast_exact": true,
+        "before_sha256": "7e9272b04c6bd13126459497d756b61e13a0bf5444faade48248702d1d2eb2e5",
+        "after_sha256": "7e9272b04c6bd13126459497d756b61e13a0bf5444faade48248702d1d2eb2e5"
+      },
+      {
+        "page": 56,
+        "title": "Growth reference and acceptance",
+        "page_call_ast_exact": true,
+        "before_sha256": "258133dc127cd4b5a1f202360472806ca448ea7834dc13cd127ae45a9fc2b4dc",
+        "after_sha256": "258133dc127cd4b5a1f202360472806ca448ea7834dc13cd127ae45a9fc2b4dc"
+      },
+      {
+        "page": 57,
+        "title": "Measured autonomous geometry growth",
+        "page_call_ast_exact": true,
+        "before_sha256": "84ce6b23aee31bdc978b52d72c2dd2c71def8e597ae694d800087fe62c965a27",
+        "after_sha256": "84ce6b23aee31bdc978b52d72c2dd2c71def8e597ae694d800087fe62c965a27"
+      },
+      {
+        "page": 58,
+        "title": "Parameterized branching organogram",
+        "page_call_ast_exact": true,
+        "before_sha256": "21bd1276636a77e7be88ccd1ae2665dd166959436bd761ce44ff5af9dc82fe12",
+        "after_sha256": "21bd1276636a77e7be88ccd1ae2665dd166959436bd761ce44ff5af9dc82fe12"
+      },
+      {
+        "page": 59,
+        "title": "Parameters, productions and finite tape",
+        "page_call_ast_exact": true,
+        "before_sha256": "15a58d5e9f939c4ae627cf64891cbafe0b58023a1e3b6897c1aa8547ed8b2351",
+        "after_sha256": "15a58d5e9f939c4ae627cf64891cbafe0b58023a1e3b6897c1aa8547ed8b2351"
+      },
+      {
+        "page": 60,
+        "title": "Prior-field interpreter and branch context",
+        "page_call_ast_exact": true,
+        "before_sha256": "b9fd76cd7f4a0b924f868a3447cc6a055d074f0fd754c76ef99f99b8719a72e4",
+        "after_sha256": "b9fd76cd7f4a0b924f868a3447cc6a055d074f0fd754c76ef99f99b8719a72e4"
+      },
+      {
+        "page": 61,
+        "title": "Intrinsic ball union and exact new field",
+        "page_call_ast_exact": true,
+        "before_sha256": "06fd058ea843c82915c7fc2b787639d1711514da7b2b8adaf0921b3fd5072529",
+        "after_sha256": "06fd058ea843c82915c7fc2b787639d1711514da7b2b8adaf0921b3fd5072529"
+      },
+      {
+        "page": 62,
+        "title": "The same individual admits a generated world",
+        "page_call_ast_exact": true,
+        "before_sha256": "138e29a81608505343e9941aded0868d77a0d51ca28a859f17bc967ec4f88ec3",
+        "after_sha256": "138e29a81608505343e9941aded0868d77a0d51ca28a859f17bc967ec4f88ec3"
+      },
+      {
+        "page": 63,
+        "title": "Original recipes, transcripts and replay",
+        "page_call_ast_exact": true,
+        "before_sha256": "432a7e5d07dbc740327c715723733818786008e384d4a725f2f8aecb98974478",
+        "after_sha256": "432a7e5d07dbc740327c715723733818786008e384d4a725f2f8aecb98974478"
+      },
+      {
+        "page": 64,
+        "title": "Device production and atomic admission",
+        "page_call_ast_exact": true,
+        "before_sha256": "b48569c3b83bc5b77b17da3b680414825cdc4d120dd2f246ff1a7b2d656992fd",
+        "after_sha256": "b48569c3b83bc5b77b17da3b680414825cdc4d120dd2f246ff1a7b2d656992fd"
+      },
+      {
+        "page": 65,
+        "title": "Independent organogram reference",
+        "page_call_ast_exact": true,
+        "before_sha256": "ca8b5231fe10ec0ce9336b703dc6bcbef2b0bdffe18844d1d121b9d4c95dca44",
+        "after_sha256": "ca8b5231fe10ec0ce9336b703dc6bcbef2b0bdffe18844d1d121b9d4c95dca44"
+      },
+      {
+        "page": 66,
+        "title": "Organogram acceptance obligations",
+        "page_call_ast_exact": true,
+        "before_sha256": "697d2a543fc5e3d202d88c5fe9c68fa9b29df203480520110029cdd2b32aa447",
+        "after_sha256": "697d2a543fc5e3d202d88c5fe9c68fa9b29df203480520110029cdd2b32aa447"
+      }
+    ],
+    "welip_pages_70_80": [
+      {
+        "page": 70,
+        "title": "W configuration and independent clocks",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "b28a22eefc032db47327b4cd066f413848ecaae84f71a2fc75c9d15808ac57dc",
+        "after_sha256": "b28a22eefc032db47327b4cd066f413848ecaae84f71a2fc75c9d15808ac57dc"
+      },
+      {
+        "page": 71,
+        "title": "The five forward operations",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "53e46c6bc7e9ee48c986b190ea71086028ed995b4f666191ad9ebceab49f8934",
+        "after_sha256": "53e46c6bc7e9ee48c986b190ea71086028ed995b4f666191ad9ebceab49f8934"
+      },
+      {
+        "page": 72,
+        "title": "Forward boundary and latest retry",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "e41b61961368371b77edd086d6a7dc0b29870fe07764b313e2d2208f6d37f8fe",
+        "after_sha256": "e41b61961368371b77edd086d6a7dc0b29870fe07764b313e2d2208f6d37f8fe"
+      },
+      {
+        "page": 73,
+        "title": "WElip carrier and exact state decoding",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "cbe49b9dbadb8641b961ac0d2188f96a5da5c62b6843a4ec0c3d67962225a452",
+        "after_sha256": "cbe49b9dbadb8641b961ac0d2188f96a5da5c62b6843a4ec0c3d67962225a452"
+      },
+      {
+        "page": 74,
+        "title": "LUS envelope and derivation identity",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "1c63979e5433741909a523f9fa013dfdb42421f54220ee8280bd3beabe38c3fd",
+        "after_sha256": "1c63979e5433741909a523f9fa013dfdb42421f54220ee8280bd3beabe38c3fd"
+      },
+      {
+        "page": 75,
+        "title": "Durable W ownership and archive",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "8a93cbecb76343e0ee5d80f62911a1d48b4c55c0e78c1cd32f5b0cafe32e51f6",
+        "after_sha256": "8a93cbecb76343e0ee5d80f62911a1d48b4c55c0e78c1cd32f5b0cafe32e51f6"
+      },
+      {
+        "page": 76,
+        "title": "Private recovery and operation atomicity",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "fc1bad84a2c4eff787ff78ed1ae3cc30e77fe53dafa16d1af56f930ace09b2e4",
+        "after_sha256": "fc1bad84a2c4eff787ff78ed1ae3cc30e77fe53dafa16d1af56f930ace09b2e4"
+      },
+      {
+        "page": 77,
+        "title": "Actual device W emission",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": false,
+        "status_box_excluded": true,
+        "before_sha256": "039cb1f27fe0c003187eb18bc2fb3e9cc7d08260855020b23f973298e7138e02",
+        "after_sha256": "039cb1f27fe0c003187eb18bc2fb3e9cc7d08260855020b23f973298e7138e02"
+      },
+      {
+        "page": 78,
+        "title": "W transport and exact responses",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "55996318da6a0b0d6a0747db744559e56bbb3a9ad275dd3e0e86ae32ebe1f4ac",
+        "after_sha256": "55996318da6a0b0d6a0747db744559e56bbb3a9ad275dd3e0e86ae32ebe1f4ac"
+      },
+      {
+        "page": 79,
+        "title": "W admission order and rejection classes",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "b3e9e9f186c68984d239740240fcaf66afe5e7577e09b389fe09146a47885f65",
+        "after_sha256": "b3e9e9f186c68984d239740240fcaf66afe5e7577e09b389fe09146a47885f65"
+      },
+      {
+        "page": 80,
+        "title": "Independent W reference vectors",
+        "title_ast_exact": true,
+        "normative_body_ast_exact": true,
+        "complete_body_ast_exact": true,
+        "status_box_excluded": false,
+        "before_sha256": "87f4daebec4b919442cfcf8034bcf3227f77ef5657215bdbde164648b644db93",
+        "after_sha256": "87f4daebec4b919442cfcf8034bcf3227f77ef5657215bdbde164648b644db93"
+      }
+    ],
+    "welip_acceptance_81": {
+      "page": 81,
+      "title_ast_exact": true,
+      "body_except_measured_status_box_exact": true,
+      "table_ast_exact": true
+    }
+  },
+  "immutable_documents": [
+    {
+      "path": "Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf",
+      "before_sha256": "8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647",
+      "after_sha256": "8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647",
+      "byte_identical": true
+    },
+    {
+      "path": "sources/solus-ion-ad-infinitum.pdf",
+      "before_sha256": "a2ace794138bcad68463d1ce2ba4a6e9954540bb4f2f29e4090d68d6e0440489",
+      "after_sha256": "a2ace794138bcad68463d1ce2ba4a6e9954540bb4f2f29e4090d68d6e0440489",
+      "byte_identical": true
+    },
+    {
+      "path": "sources/solipsism.pdf",
+      "before_sha256": "1091e0435aa1648b4ede127837e66ddbf2c5dbd0a67f49cbb7a7ae134ee547e7",
+      "after_sha256": "1091e0435aa1648b4ede127837e66ddbf2c5dbd0a67f49cbb7a7ae134ee547e7",
+      "byte_identical": true
+    },
+    {
+      "path": "output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf",
+      "before_sha256": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0",
+      "after_sha256": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0",
+      "byte_identical": true
+    }
+  ],
+  "explicit_allowances": [
+    "Revision headers and page totals",
+    "W page subtitles/status labels",
+    "W77 historical status box only",
+    "W81 revised measured-status box only"
+  ],
+  "pdf_sha256": "64ce7f7189cd94b28959a7245b9c7a4989d03cb5ad360a8b8e041e0195b64840",
+  "extracted_text_comparison": [
+    {
+      "page": 35,
+      "body_text_exact": true,
+      "before_sha256": "ded95f802748c980e0f4e36e86180b16979edd399877779eee8d6bbece18bd94",
+      "after_sha256": "ded95f802748c980e0f4e36e86180b16979edd399877779eee8d6bbece18bd94"
+    },
+    {
+      "page": 36,
+      "body_text_exact": true,
+      "before_sha256": "05fe2db79448c1cc05f6c04a80d10cf6a08563df6d6f49a75cdd8132901265b0",
+      "after_sha256": "05fe2db79448c1cc05f6c04a80d10cf6a08563df6d6f49a75cdd8132901265b0"
+    },
+    {
+      "page": 37,
+      "body_text_exact": true,
+      "before_sha256": "f648b1f244da5aab2a4df0f6fefa3c0b1826f93a7671f988ca57e254b3307f40",
+      "after_sha256": "f648b1f244da5aab2a4df0f6fefa3c0b1826f93a7671f988ca57e254b3307f40"
+    },
+    {
+      "page": 38,
+      "body_text_exact": true,
+      "before_sha256": "f98d24ccc2a5bf8e628ebe3a2a4c5fb6bd6c60847416443f70585c6bf1be47ca",
+      "after_sha256": "f98d24ccc2a5bf8e628ebe3a2a4c5fb6bd6c60847416443f70585c6bf1be47ca"
+    },
+    {
+      "page": 39,
+      "body_text_exact": true,
+      "before_sha256": "f75012b662f63f5a2c2fa0d774ac8e428a67ecc2a312b944f760a67242cf96f9",
+      "after_sha256": "f75012b662f63f5a2c2fa0d774ac8e428a67ecc2a312b944f760a67242cf96f9"
+    },
+    {
+      "page": 40,
+      "body_text_exact": true,
+      "before_sha256": "44dd66afcf9419d8c4c1863e7779a98c323bf60f26fecb353d6f0239ff34d5ba",
+      "after_sha256": "44dd66afcf9419d8c4c1863e7779a98c323bf60f26fecb353d6f0239ff34d5ba"
+    },
+    {
+      "page": 41,
+      "body_text_exact": true,
+      "before_sha256": "493a175136dde133a98a2f40a417f01387b028e1e1f735bd8d43a94c7eb52257",
+      "after_sha256": "493a175136dde133a98a2f40a417f01387b028e1e1f735bd8d43a94c7eb52257"
+    },
+    {
+      "page": 42,
+      "body_text_exact": true,
+      "before_sha256": "f069e6645e3bfe70fd9a91dedd923f2926414ecdb39dc32390856beb7429b03e",
+      "after_sha256": "f069e6645e3bfe70fd9a91dedd923f2926414ecdb39dc32390856beb7429b03e"
+    },
+    {
+      "page": 43,
+      "body_text_exact": true,
+      "before_sha256": "6803529b1622233a9a49710142062a8e878ce4a69bfec51b52320c607bf7e4c6",
+      "after_sha256": "6803529b1622233a9a49710142062a8e878ce4a69bfec51b52320c607bf7e4c6"
+    },
+    {
+      "page": 44,
+      "body_text_exact": true,
+      "before_sha256": "61c98e441d6d87191fa2f239cc6e4ac4ea4b15d4407f09fa5633d9245429eb95",
+      "after_sha256": "61c98e441d6d87191fa2f239cc6e4ac4ea4b15d4407f09fa5633d9245429eb95"
+    },
+    {
+      "page": 45,
+      "body_text_exact": true,
+      "before_sha256": "6e010a5e67f3cbf9784f2b0137b26fa72bdba254a32fc2579035397953373f07",
+      "after_sha256": "6e010a5e67f3cbf9784f2b0137b26fa72bdba254a32fc2579035397953373f07"
+    },
+    {
+      "page": 46,
+      "body_text_exact": true,
+      "before_sha256": "02e25aadbf288d5bf700ea9b241f46cfae13dc60d2c5bad267198c5618da18a1",
+      "after_sha256": "02e25aadbf288d5bf700ea9b241f46cfae13dc60d2c5bad267198c5618da18a1"
+    },
+    {
+      "page": 47,
+      "body_text_exact": true,
+      "before_sha256": "bb22b94494eb07088065a393ecb52718e1ff40f2d7cecca93b730adc55d30b53",
+      "after_sha256": "bb22b94494eb07088065a393ecb52718e1ff40f2d7cecca93b730adc55d30b53"
+    },
+    {
+      "page": 48,
+      "body_text_exact": true,
+      "before_sha256": "597c414e2e2116055ac4d53c7d3b5d3acb9adec028de11be4071957b9ca35b50",
+      "after_sha256": "597c414e2e2116055ac4d53c7d3b5d3acb9adec028de11be4071957b9ca35b50"
+    },
+    {
+      "page": 49,
+      "body_text_exact": true,
+      "before_sha256": "92933e413e4168507563c64d5db1f5a4f628088c216c3387876c5b069ebcae00",
+      "after_sha256": "92933e413e4168507563c64d5db1f5a4f628088c216c3387876c5b069ebcae00"
+    },
+    {
+      "page": 50,
+      "body_text_exact": true,
+      "before_sha256": "a57053dc20df8035a88f30af3d4a9cbf1446ba60cab93eb36771b8609287fd6e",
+      "after_sha256": "a57053dc20df8035a88f30af3d4a9cbf1446ba60cab93eb36771b8609287fd6e"
+    },
+    {
+      "page": 51,
+      "body_text_exact": true,
+      "before_sha256": "017b713ec7db42b90626c16a0f862566b6d7712c3dbc575725a01d436810ed7e",
+      "after_sha256": "017b713ec7db42b90626c16a0f862566b6d7712c3dbc575725a01d436810ed7e"
+    },
+    {
+      "page": 52,
+      "body_text_exact": true,
+      "before_sha256": "d389ee7a42149a91477bf0e53dba35b3b4fc54e5569e4e2f141a09f0956a6416",
+      "after_sha256": "d389ee7a42149a91477bf0e53dba35b3b4fc54e5569e4e2f141a09f0956a6416"
+    },
+    {
+      "page": 53,
+      "body_text_exact": true,
+      "before_sha256": "c69a9e6ac36a60a39db32575fad6b2232f02a0ae7a0092e5155c0c860f31dde0",
+      "after_sha256": "c69a9e6ac36a60a39db32575fad6b2232f02a0ae7a0092e5155c0c860f31dde0"
+    },
+    {
+      "page": 54,
+      "body_text_exact": true,
+      "before_sha256": "2dd03a3025c120e3a92b1691a943de943088097fe5e16a5a904e56e19e6f7887",
+      "after_sha256": "2dd03a3025c120e3a92b1691a943de943088097fe5e16a5a904e56e19e6f7887"
+    },
+    {
+      "page": 55,
+      "body_text_exact": true,
+      "before_sha256": "e5c011f7bcbbbc9dcf98df236d917e3a87475749cd7580aef448d389833baa15",
+      "after_sha256": "e5c011f7bcbbbc9dcf98df236d917e3a87475749cd7580aef448d389833baa15"
+    },
+    {
+      "page": 56,
+      "body_text_exact": true,
+      "before_sha256": "24c99e32ef6c74175f99772dce5a4b649af1dc68a625eaaa05a494f09133cee6",
+      "after_sha256": "24c99e32ef6c74175f99772dce5a4b649af1dc68a625eaaa05a494f09133cee6"
+    },
+    {
+      "page": 57,
+      "body_text_exact": true,
+      "before_sha256": "564dbcae1832072b725e2fa7c7ed4d8461fc1faf9ef0e8bc3c4ed3b9601c52b0",
+      "after_sha256": "564dbcae1832072b725e2fa7c7ed4d8461fc1faf9ef0e8bc3c4ed3b9601c52b0"
+    },
+    {
+      "page": 58,
+      "body_text_exact": true,
+      "before_sha256": "3a5fda2bb499a037b8471f0b08a54a47af36da05269e25897935f55f468ef253",
+      "after_sha256": "3a5fda2bb499a037b8471f0b08a54a47af36da05269e25897935f55f468ef253"
+    },
+    {
+      "page": 59,
+      "body_text_exact": true,
+      "before_sha256": "86f89aa25f6df524a9a7050cf9343bf64a811dd42eff931d7ce657476b523a37",
+      "after_sha256": "86f89aa25f6df524a9a7050cf9343bf64a811dd42eff931d7ce657476b523a37"
+    },
+    {
+      "page": 60,
+      "body_text_exact": true,
+      "before_sha256": "84f76931896539f09ea54e2e86ff144d75dead26d3094b0e371566b520940c9c",
+      "after_sha256": "84f76931896539f09ea54e2e86ff144d75dead26d3094b0e371566b520940c9c"
+    },
+    {
+      "page": 61,
+      "body_text_exact": true,
+      "before_sha256": "b60c6039f1d657c651216e1edf454811b2cc9553c36653ff7bc8fcf501089ada",
+      "after_sha256": "b60c6039f1d657c651216e1edf454811b2cc9553c36653ff7bc8fcf501089ada"
+    },
+    {
+      "page": 62,
+      "body_text_exact": true,
+      "before_sha256": "b47b2ce65eeaecf939d69ffb463e9b2052cf9694bff811814a929ab5c176764d",
+      "after_sha256": "b47b2ce65eeaecf939d69ffb463e9b2052cf9694bff811814a929ab5c176764d"
+    },
+    {
+      "page": 63,
+      "body_text_exact": true,
+      "before_sha256": "c8a7e3abf65123df0ecbe9ca8a1cda00a8c2e9a00a3c667e9eae740131364b03",
+      "after_sha256": "c8a7e3abf65123df0ecbe9ca8a1cda00a8c2e9a00a3c667e9eae740131364b03"
+    },
+    {
+      "page": 64,
+      "body_text_exact": true,
+      "before_sha256": "2840b1c9edc47a2f53242d4fa19d5b69d0592f0a0a8313322803e74c783fb015",
+      "after_sha256": "2840b1c9edc47a2f53242d4fa19d5b69d0592f0a0a8313322803e74c783fb015"
+    },
+    {
+      "page": 65,
+      "body_text_exact": true,
+      "before_sha256": "3bdee9fd788c019958deebea4f4bb10a438425dfd262fb433e56d9866abd832a",
+      "after_sha256": "3bdee9fd788c019958deebea4f4bb10a438425dfd262fb433e56d9866abd832a"
+    },
+    {
+      "page": 66,
+      "body_text_exact": true,
+      "before_sha256": "3b6d3df875a4a3ace305175ceffa5aaf2f896f69b250c382103112e7d248f99a",
+      "after_sha256": "3b6d3df875a4a3ace305175ceffa5aaf2f896f69b250c382103112e7d248f99a"
+    },
+    {
+      "page": 70,
+      "body_text_exact": true,
+      "before_sha256": "6cc584f6990e65298b9c7a74b37117d36f745590b98768dfccac7233e85fa544",
+      "after_sha256": "6cc584f6990e65298b9c7a74b37117d36f745590b98768dfccac7233e85fa544"
+    },
+    {
+      "page": 71,
+      "body_text_exact": true,
+      "before_sha256": "8e6819e858138c072620acacf3f7c3f7d9285fbca16db165a5670b4a81cf9f86",
+      "after_sha256": "8e6819e858138c072620acacf3f7c3f7d9285fbca16db165a5670b4a81cf9f86"
+    },
+    {
+      "page": 72,
+      "body_text_exact": true,
+      "before_sha256": "cfae855fc8d875404fdbaf1f5d5cf2f5db034160d3c31046b13464719e893ac4",
+      "after_sha256": "cfae855fc8d875404fdbaf1f5d5cf2f5db034160d3c31046b13464719e893ac4"
+    },
+    {
+      "page": 73,
+      "body_text_exact": true,
+      "before_sha256": "7a8ffa19aead0a93d3cd020c483d1391a75d77eb1466526b8c197bd7cd5892b8",
+      "after_sha256": "7a8ffa19aead0a93d3cd020c483d1391a75d77eb1466526b8c197bd7cd5892b8"
+    },
+    {
+      "page": 74,
+      "body_text_exact": true,
+      "before_sha256": "f8509813186f83ca0c4a1d30aa45680cddccb14c5f4db5dca8b2ecd91058d962",
+      "after_sha256": "f8509813186f83ca0c4a1d30aa45680cddccb14c5f4db5dca8b2ecd91058d962"
+    },
+    {
+      "page": 75,
+      "body_text_exact": true,
+      "before_sha256": "cb0de0bc174de2d7ba3ca55e8de6fb7ee11869a00eb89434885ec83995e79acb",
+      "after_sha256": "cb0de0bc174de2d7ba3ca55e8de6fb7ee11869a00eb89434885ec83995e79acb"
+    },
+    {
+      "page": 76,
+      "body_text_exact": true,
+      "before_sha256": "0a647b4c355274d4d5ade2f689ae3193636514da9716a0d7776a9cc28ca5753f",
+      "after_sha256": "0a647b4c355274d4d5ade2f689ae3193636514da9716a0d7776a9cc28ca5753f"
+    },
+    {
+      "page": 77,
+      "body_text_exact": true,
+      "before_sha256": "ce0b98650ca91f3d25ddd10acc1a9d2960b783bc23d8bcb33f6a72412e168d1a",
+      "after_sha256": "ce0b98650ca91f3d25ddd10acc1a9d2960b783bc23d8bcb33f6a72412e168d1a"
+    },
+    {
+      "page": 78,
+      "body_text_exact": true,
+      "before_sha256": "0707a755492c8bb5c27f7416213843138ab58ebbd8468a29e142bd19096be3b4",
+      "after_sha256": "0707a755492c8bb5c27f7416213843138ab58ebbd8468a29e142bd19096be3b4"
+    },
+    {
+      "page": 79,
+      "body_text_exact": true,
+      "before_sha256": "94218d0b97fee0f2298441b43f41948dd131560ade31af3f55198c546d015ab3",
+      "after_sha256": "94218d0b97fee0f2298441b43f41948dd131560ade31af3f55198c546d015ab3"
+    },
+    {
+      "page": 80,
+      "body_text_exact": true,
+      "before_sha256": "9a4d30846b3ae1617adeadcf274441acdfcfd5be91adb7abe064f2bf25f08dd6",
+      "after_sha256": "9a4d30846b3ae1617adeadcf274441acdfcfd5be91adb7abe064f2bf25f08dd6"
+    },
+    {
+      "page": 81,
+      "body_text_exact": true,
+      "before_sha256": "613e7fba00976c8d512fbf8ffbb32800dab0ad873a969c442de3e31156459890",
+      "after_sha256": "613e7fba00976c8d512fbf8ffbb32800dab0ad873a969c442de3e31156459890"
+    }
+  ],
+  "pdf_structure": {
+    "page_count": 83,
+    "outline_count": 83,
+    "outlines": [
+      {
+        "title": "The Infallible Contract",
+        "page": 1
+      },
+      {
+        "title": "Edition and authority",
+        "page": 2
+      },
+      {
+        "title": "Contents",
+        "page": 3
+      },
+      {
+        "title": "Paradigm charter and vocabulary",
+        "page": 4
+      },
+      {
+        "title": "State, admission and transition",
+        "page": 5
+      },
+      {
+        "title": "Log-polar phase and lookup closure",
+        "page": 6
+      },
+      {
+        "title": "Uniform carrier and RP32",
+        "page": 7
+      },
+      {
+        "title": "Packing, mirror and exact vectors",
+        "page": 8
+      },
+      {
+        "title": "One individual, observations and time",
+        "page": 9
+      },
+      {
+        "title": "Generative organogram",
+        "page": 10
+      },
+      {
+        "title": "Psi, f8 and typed field operators",
+        "page": 11
+      },
+      {
+        "title": "Relations define the field world",
+        "page": 12
+      },
+      {
+        "title": "Exact finite SDF profile",
+        "page": 13
+      },
+      {
+        "title": "Independent geometric certificate",
+        "page": 14
+      },
+      {
+        "title": "Field-governed executable words",
+        "page": 15
+      },
+      {
+        "title": "Exact GPU realization",
+        "page": 16
+      },
+      {
+        "title": "Archives, footprints and admission",
+        "page": 17
+      },
+      {
+        "title": "FIFO, regeneration and finite resources",
+        "page": 18
+      },
+      {
+        "title": "Finite Klein quotient",
+        "page": 19
+      },
+      {
+        "title": "Orientation cover and seam action",
+        "page": 20
+      },
+      {
+        "title": "Intrinsic ball and v2 profile",
+        "page": 21
+      },
+      {
+        "title": "The infallible contract",
+        "page": 22
+      },
+      {
+        "title": "Proof boundary and implementation refinement",
+        "page": 23
+      },
+      {
+        "title": "Typed zero, XOR and integrity",
+        "page": 24
+      },
+      {
+        "title": "Sensory adapters and physical meaning",
+        "page": 25
+      },
+      {
+        "title": "Implementation map and integration",
+        "page": 26
+      },
+      {
+        "title": "Retained PX verification and field trace",
+        "page": 27
+      },
+      {
+        "title": "Progress against the architecture: I",
+        "page": 28
+      },
+      {
+        "title": "Progress against the architecture: II",
+        "page": 29
+      },
+      {
+        "title": "Conformance and performance scope",
+        "page": 30
+      },
+      {
+        "title": "Executable default and archive schema",
+        "page": 31
+      },
+      {
+        "title": "Required bindings and stable obligations",
+        "page": 32
+      },
+      {
+        "title": "Source concordance and provenance",
+        "page": 33
+      },
+      {
+        "title": "Notation and technical references",
+        "page": 34
+      },
+      {
+        "title": "One field-guided Tomigidt",
+        "page": 35
+      },
+      {
+        "title": "Observe, plan and transport",
+        "page": 36
+      },
+      {
+        "title": "Regeneration and device admission",
+        "page": 37
+      },
+      {
+        "title": "Integrated replay and acceptance",
+        "page": 38
+      },
+      {
+        "title": "Local SDF-derived Psi binding",
+        "page": 39
+      },
+      {
+        "title": "Canonical index identity and key",
+        "page": 40
+      },
+      {
+        "title": "Middle-out tree and executable lookup",
+        "page": 41
+      },
+      {
+        "title": "Atomic rebuild and semantic preservation",
+        "page": 42
+      },
+      {
+        "title": "Psi-index reference and acceptance",
+        "page": 43
+      },
+      {
+        "title": "Typed Hadamard routing policy",
+        "page": 44
+      },
+      {
+        "title": "Phase-state planning and admitted action",
+        "page": 45
+      },
+      {
+        "title": "Routing atlas and certified export",
+        "page": 46
+      },
+      {
+        "title": "Hadamard rebuild and resource contract",
+        "page": 47
+      },
+      {
+        "title": "Hadamard reference and acceptance",
+        "page": 48
+      },
+      {
+        "title": "Measured Hadamard implementation",
+        "page": 49
+      },
+      {
+        "title": "Autonomous growth binding",
+        "page": 50
+      },
+      {
+        "title": "Dyadic geometry and active scale",
+        "page": 51
+      },
+      {
+        "title": "Subgoals, growth and energy reserve",
+        "page": 52
+      },
+      {
+        "title": "State-selected next target",
+        "page": 53
+      },
+      {
+        "title": "Atomic growth and device mapping",
+        "page": 54
+      },
+      {
+        "title": "Epoch-aware replay and regeneration",
+        "page": 55
+      },
+      {
+        "title": "Growth reference and acceptance",
+        "page": 56
+      },
+      {
+        "title": "Measured autonomous geometry growth",
+        "page": 57
+      },
+      {
+        "title": "Parameterized branching organogram",
+        "page": 58
+      },
+      {
+        "title": "Parameters, productions and finite tape",
+        "page": 59
+      },
+      {
+        "title": "Prior-field interpreter and branch context",
+        "page": 60
+      },
+      {
+        "title": "Intrinsic ball union and exact new field",
+        "page": 61
+      },
+      {
+        "title": "The same individual admits a generated world",
+        "page": 62
+      },
+      {
+        "title": "Original recipes, transcripts and replay",
+        "page": 63
+      },
+      {
+        "title": "Device production and atomic admission",
+        "page": 64
+      },
+      {
+        "title": "Independent organogram reference",
+        "page": 65
+      },
+      {
+        "title": "Organogram acceptance obligations",
+        "page": 66
+      },
+      {
+        "title": "Measured organogram continuation",
+        "page": 67
+      },
+      {
+        "title": "Organogram device and retention evidence",
+        "page": 68
+      },
+      {
+        "title": "WElip forward-time binding",
+        "page": 69
+      },
+      {
+        "title": "W configuration and independent clocks",
+        "page": 70
+      },
+      {
+        "title": "The five forward operations",
+        "page": 71
+      },
+      {
+        "title": "Forward boundary and latest retry",
+        "page": 72
+      },
+      {
+        "title": "WElip carrier and exact state decoding",
+        "page": 73
+      },
+      {
+        "title": "LUS envelope and derivation identity",
+        "page": 74
+      },
+      {
+        "title": "Durable W ownership and archive",
+        "page": 75
+      },
+      {
+        "title": "Private recovery and operation atomicity",
+        "page": 76
+      },
+      {
+        "title": "Actual device W emission",
+        "page": 77
+      },
+      {
+        "title": "W transport and exact responses",
+        "page": 78
+      },
+      {
+        "title": "W admission order and rejection classes",
+        "page": 79
+      },
+      {
+        "title": "Independent W reference vectors",
+        "page": 80
+      },
+      {
+        "title": "W acceptance and architectural scope",
+        "page": 81
+      },
+      {
+        "title": "Measured W clock and continuation",
+        "page": 82
+      },
+      {
+        "title": "W recovery, evidence and remaining work",
+        "page": 83
+      }
+    ],
+    "one_bookmark_per_page": true,
+    "all_pages_a4": true,
+    "internal_links": [
+      {
+        "source_page": 3,
+        "target_page": 2
+      },
+      {
+        "source_page": 3,
+        "target_page": 4
+      },
+      {
+        "source_page": 3,
+        "target_page": 5
+      },
+      {
+        "source_page": 3,
+        "target_page": 6
+      },
+      {
+        "source_page": 3,
+        "target_page": 7
+      },
+      {
+        "source_page": 3,
+        "target_page": 8
+      },
+      {
+        "source_page": 3,
+        "target_page": 9
+      },
+      {
+        "source_page": 3,
+        "target_page": 10
+      },
+      {
+        "source_page": 3,
+        "target_page": 11
+      },
+      {
+        "source_page": 3,
+        "target_page": 12
+      },
+      {
+        "source_page": 3,
+        "target_page": 13
+      },
+      {
+        "source_page": 3,
+        "target_page": 14
+      },
+      {
+        "source_page": 3,
+        "target_page": 15
+      },
+      {
+        "source_page": 3,
+        "target_page": 16
+      },
+      {
+        "source_page": 3,
+        "target_page": 17
+      },
+      {
+        "source_page": 3,
+        "target_page": 18
+      },
+      {
+        "source_page": 3,
+        "target_page": 19
+      },
+      {
+        "source_page": 3,
+        "target_page": 20
+      },
+      {
+        "source_page": 3,
+        "target_page": 21
+      },
+      {
+        "source_page": 3,
+        "target_page": 22
+      },
+      {
+        "source_page": 3,
+        "target_page": 23
+      },
+      {
+        "source_page": 3,
+        "target_page": 24
+      },
+      {
+        "source_page": 3,
+        "target_page": 25
+      },
+      {
+        "source_page": 3,
+        "target_page": 26
+      },
+      {
+        "source_page": 3,
+        "target_page": 27
+      },
+      {
+        "source_page": 3,
+        "target_page": 28
+      },
+      {
+        "source_page": 3,
+        "target_page": 29
+      },
+      {
+        "source_page": 3,
+        "target_page": 30
+      },
+      {
+        "source_page": 3,
+        "target_page": 31
+      },
+      {
+        "source_page": 3,
+        "target_page": 32
+      },
+      {
+        "source_page": 3,
+        "target_page": 33
+      },
+      {
+        "source_page": 3,
+        "target_page": 34
+      },
+      {
+        "source_page": 3,
+        "target_page": 35
+      },
+      {
+        "source_page": 3,
+        "target_page": 36
+      },
+      {
+        "source_page": 3,
+        "target_page": 37
+      },
+      {
+        "source_page": 3,
+        "target_page": 38
+      },
+      {
+        "source_page": 3,
+        "target_page": 39
+      },
+      {
+        "source_page": 3,
+        "target_page": 40
+      },
+      {
+        "source_page": 3,
+        "target_page": 41
+      },
+      {
+        "source_page": 3,
+        "target_page": 42
+      },
+      {
+        "source_page": 3,
+        "target_page": 43
+      },
+      {
+        "source_page": 3,
+        "target_page": 44
+      },
+      {
+        "source_page": 3,
+        "target_page": 45
+      },
+      {
+        "source_page": 3,
+        "target_page": 46
+      },
+      {
+        "source_page": 3,
+        "target_page": 47
+      },
+      {
+        "source_page": 3,
+        "target_page": 48
+      },
+      {
+        "source_page": 3,
+        "target_page": 49
+      },
+      {
+        "source_page": 3,
+        "target_page": 50
+      },
+      {
+        "source_page": 3,
+        "target_page": 51
+      },
+      {
+        "source_page": 3,
+        "target_page": 52
+      },
+      {
+        "source_page": 3,
+        "target_page": 53
+      },
+      {
+        "source_page": 3,
+        "target_page": 54
+      },
+      {
+        "source_page": 3,
+        "target_page": 55
+      },
+      {
+        "source_page": 3,
+        "target_page": 56
+      },
+      {
+        "source_page": 3,
+        "target_page": 57
+      },
+      {
+        "source_page": 3,
+        "target_page": 58
+      },
+      {
+        "source_page": 3,
+        "target_page": 59
+      },
+      {
+        "source_page": 3,
+        "target_page": 60
+      },
+      {
+        "source_page": 3,
+        "target_page": 61
+      },
+      {
+        "source_page": 3,
+        "target_page": 62
+      },
+      {
+        "source_page": 3,
+        "target_page": 63
+      },
+      {
+        "source_page": 3,
+        "target_page": 64
+      },
+      {
+        "source_page": 3,
+        "target_page": 65
+      },
+      {
+        "source_page": 3,
+        "target_page": 66
+      },
+      {
+        "source_page": 3,
+        "target_page": 67
+      },
+      {
+        "source_page": 3,
+        "target_page": 68
+      },
+      {
+        "source_page": 3,
+        "target_page": 69
+      },
+      {
+        "source_page": 69,
+        "target_page": 70
+      },
+      {
+        "source_page": 69,
+        "target_page": 71
+      },
+      {
+        "source_page": 69,
+        "target_page": 72
+      },
+      {
+        "source_page": 69,
+        "target_page": 73
+      },
+      {
+        "source_page": 69,
+        "target_page": 74
+      },
+      {
+        "source_page": 69,
+        "target_page": 75
+      },
+      {
+        "source_page": 69,
+        "target_page": 76
+      },
+      {
+        "source_page": 69,
+        "target_page": 77
+      },
+      {
+        "source_page": 69,
+        "target_page": 78
+      },
+      {
+        "source_page": 69,
+        "target_page": 79
+      },
+      {
+        "source_page": 69,
+        "target_page": 80
+      },
+      {
+        "source_page": 69,
+        "target_page": 81
+      },
+      {
+        "source_page": 69,
+        "target_page": 82
+      },
+      {
+        "source_page": 69,
+        "target_page": 83
+      }
+    ],
+    "external_links": [
+      {
+        "source_page": 34,
+        "uri": "https://www.w3.org/TR/WGSL/#textureload"
+      },
+      {
+        "source_page": 34,
+        "uri": "https://docs.nvidia.com/cuda/archive/12.8.0/cuda-c-best-practices-guide/"
+      },
+      {
+        "source_page": 34,
+        "uri": "https://docs.nvidia.com/nsight-compute/ProfilingGuide/"
+      },
+      {
+        "source_page": 34,
+        "uri": "https://math.mit.edu/~lurie/937notes/937Lecture33.pdf"
+      },
+      {
+        "source_page": 34,
+        "uri": "https://pi.math.cornell.edu/~hatcher/AT/AT.pdf"
+      },
+      {
+        "source_page": 34,
+        "uri": "https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html"
+      },
+      {
+        "source_page": 34,
+        "uri": "https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/"
+      }
+    ],
+    "invalid_internal_links": [],
+    "annotation_bounds_violations": [],
+    "text_bounds_violations": []
+  },
+  "independent_rebuild": {
+    "command": "python tools/build_formal_spec.py --output tmp/pdfs/w-r12-preservation/rebuild.pdf",
+    "pdf_sha256": "64ce7f7189cd94b28959a7245b9c7a4989d03cb5ad360a8b8e041e0195b64840",
+    "main_pdf_byte_identical": true,
+    "shared_layout_byte_identical": true,
+    "builder_guard_result": {
+      "output": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\tmp\\pdfs\\w-r12-preservation\\rebuild.pdf",
+      "pages": 83,
+      "sha256": "64ce7f7189cd94b28959a7245b9c7a4989d03cb5ad360a8b8e041e0195b64840",
+      "lowest_content_y": 60.49
+    }
+  },
+  "visual_review": {
+    "pages": [
+      23,
+      29,
+      32,
+      34,
+      77,
+      81,
+      82,
+      83
+    ],
+    "render_directory": "tmp/pdfs/welip-r12",
+    "result": "No clipping, overlap, missing glyphs or table collisions observed in the reviewed final-page PNGs; all-page rendered review is separately owned by the root agent.",
+    "render_sha256": {
+      "23": "1df50e80e3407baf280fee721a95bef595cba93b405db08fa741986b86f4d12a",
+      "29": "a3569430f7a2ea542f1b4f40e2ec066e69c8b5ff06e06e2d3a25bee09e3e9087",
+      "32": "de3588a9556e6bb048678b0a13e3dca96d57ae1af686663e3aaa0c42d6ba3186",
+      "34": "a2d9dd61ef687c4ac95cdb9c27961f36de52367a963f2eccf2fd889916404f10",
+      "77": "f3c39adfc072aa602962a0a555794d6b286ecd5afa153cd19ab04b29e8104c90",
+      "81": "e7f680e27c86e261146e5155b1335c65f97c5dc86c23a04c81e3d447c3572a2e",
+      "82": "1905a20a823702f3be72e6da034daa093681a2a0f6ec82752adceed44b2f4944",
+      "83": "a28df6134bbda36007d231e02555b119d30c86a51aa6bff88388f6ea25e3c89d"
+    }
+  }
+}

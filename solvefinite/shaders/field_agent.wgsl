@@ -369,6 +369,31 @@ fn repair() {
     emit(0u, state[0], cost, state[2], 0u);
 }
 
+// W7: jobs[0] contains only [requested tick16, reserved zero]. The payload
+// comes from this owner's canonical state, including retained terminal EMIT.
+// No canonical state, energy or admitted-action counter is written here.
+@compute @workgroup_size(1)
+fn emit_welip() {
+    let word = state[0];
+    let mirrored = state[1];
+    let node = (word >> 8u) & 255u;
+    let metadata = (word >> 24u) & 127u;
+    let phase = word & 255u;
+    let intrinsic = select(phase, (256u - phase) & 255u, (metadata & 16u) != 0u);
+    let header = (jobs[0].x << 16u) | (intrinsic << 8u);
+    var valid = jobs[0].x <= 65535u && jobs[0].y == 0u
+        && (countOneBits(word) & 1u) == 0u && (countOneBits(mirrored) & 1u) == 0u
+        && mirrored == mirror_rp32(word)
+        && (metadata == 1u || metadata == 17u || metadata == 6u || metadata == 22u)
+        && state[2] <= 2147483647u && node < config[0];
+    if node < config[0] {
+        valid = valid && signed_field(word) == fields[node]
+            && fields[node] >= -127 && fields[node] <= 127;
+    }
+    output[0] = vec4<u32>(word, header, mirrored, header);
+    output[1] = vec4<u32>(state[2], state[3], select(0u, 1u, valid), 0u);
+}
+
 // GD5: jobs contain the admitted old pair, energy/height, count/cost,
 // signed old field/new height. Read only source data; write candidate state.
 @compute @workgroup_size(1)
