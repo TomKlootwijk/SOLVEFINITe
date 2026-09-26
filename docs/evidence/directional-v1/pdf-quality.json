@@ -1,0 +1,51 @@
+{
+  "format": "tk-lplut-directional-pdf-quality-v1",
+  "revision": "TK-LPLUT-2.0 revision 13",
+  "scope": "Formal-only DP contract, independent arithmetic and document preservation; no new runtime conformance claim.",
+  "pdf": "output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf",
+  "pdf_sha256": "b11d6ab9037578dc2d46fe806dc45502ab0002d23ca8d79f044ef94edb29bd77",
+  "builder_sha256_lf": "a5dc9086501423d0e72707635221060ddfb92ea6a57bb37cea1738bdb1160aa9",
+  "pages": 97,
+  "bookmarks": 97,
+  "resolved_internal_links": 95,
+  "rendering": {
+    "all_pages_rendered": true,
+    "long_edge_pixels": 1100,
+    "contact_sheets_reviewed": 7,
+    "detail_review_pages": [
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      1,
+      2,
+      3
+    ],
+    "review": "All pages checked in contact sheets; new appendix, cover, edition and contents inspected at detail resolution."
+  },
+  "layout": {
+    "minimum_content_y_points": 60.49,
+    "main_contents_bottom_points": 71.89,
+    "clipping": false,
+    "overlap": false,
+    "broken_glyphs": false,
+    "glyph_and_link_bounds_verified": true
+  },
+  "preservation_report_sha256_lf": "11835b3cba538a6d2aab8d6e6f798f055acfd2ebcbaee676594f572abaf5bd44",
+  "reference_sha256_lf": "06bea44766da9d10f404c74750c5a7e1696fd54d67e5a2b0927e40d19c91200d",
+  "geometry_audit_sha256_lf": "5dbde73fbfcc99e98cd9461c4201f6b0cd610d4df944e35f191e8552496e630c",
+  "runtime_sources_unchanged": 106,
+  "runtime_capture_commit": "1ea93207ae8545a5c5d344677cb73a5c459dc91c",
+  "runtime_tests": "Not rerun: all 106 prior runtime/reference identities are unchanged; the retained 698-test capture is historical.",
+  "result": "PASS"
+}

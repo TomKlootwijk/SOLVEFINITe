@@ -33,6 +33,13 @@ boundaries that become the same individual's next field. The
 independent arithmetic reference from measured CPU/GPU execution.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
+Revision 13 adds the **formal-only DP1-DP10 directional taper contract** on
+pages 84-97 of the same PDF. It defines direct projected sections, exact union
+boundaries, original-context regeneration and explicit Wv2 continuation before
+runtime implementation. The [independent directional reference](docs/evidence/directional-v1/README.md)
+retains numerical expectations and a separate geometry audit. Earlier measured
+CPU/GPU counts remain tied to their historical implementations.
+
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
 21 actual-device GPU methods. CPU/GPU field traces and resumed execution agree.
 [Evidence and reproduction details](docs/evidence/formal-edition-2026-09-25/README.md)

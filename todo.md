@@ -676,10 +676,61 @@ transverse metric, finite extent/slope, phase/Psi context and seam behavior,
 followed by exact redistancing and same-owner continuation. Merely expanding a
 new shape name into the existing balls would not establish a new geometry.
 
-- [ ] Bind the next directional primitive family and independent reference
+- [x] Bind the next directional primitive family and independent reference
   in the same consolidated PDF before runtime changes.
 - [ ] Implement and certify that geometry through the existing CPU/GPU
   generation, regeneration and W continuation, preserving old profiles.
 - [ ] Continue the broader unresolved graph, spectral, physical-adapter,
   universality and comparative hardware obligations; this milestone does
   not redefine the overall goal as complete.
+
+## 2026-09-26: direct directional geometry before runtime implementation
+
+The previous implementation goal turn made progress through the committed W
+runtime and its evidence at `1ea9320`. The intervening ELI5 request verified
+the already-pushed names and made no architecture change. This continuation
+rechecked the current worktree and source corpus before resuming directional
+geometry; the complete original objective remains active.
+
+Original page 5's two-dimensional sweep and page 7's local-shaft primitive
+requirements, together with the addenda's side views, support a finite axial
+section. DP1-DP10 define `TAPER(h,p,q)` with an explicit field/phase-selected
+shaft, extent and slope. The complete projected occupancy determines its
+inner vertex boundary, then exact graph distance determines the signed field.
+This is one new directional field family. Distinct three-dimensional cone and
+pyramid volumes still need their own geometry and metric.
+
+- [x] Bind projected coordinates, canonical shaft selection and transported
+  frames, complete branch context, finite site budgets and checked integer
+  arithmetic in the consolidated PDF.
+- [x] Declare separate policy, grammar, instruction, recipe, derivation and
+  receipt types, with explicit Wv2 admission and original-context recovery.
+- [x] Freeze and independently verify numerical references and geometry checks;
+  render/review the full PDF and verify original source/contract preservation.
+- [x] Commit and push the formal baseline before changing runtime code.
+- [ ] Implement and certify DP1-DP10 on CPU and GPU in the same individual,
+  including regeneration, pending planning and Wv2 continuation.
+
+The default independent mixed-shape mission currently completes 11 cycles at
+energy 69; its two-epoch continuation completes 17 cycles at energy 55. These
+are preimplementation arithmetic expectations, not measured runtime results.
+An 8-by-8 taper's zero vertex with no negative neighbor supplies a concrete
+proof that its field cannot equal an old positive-radius ball-union field.
+The prior 698-test W capture remains historical at `1ea9320`; the builder now
+verifies that commit's complete source inventory before citing those counts.
+
+The frozen reference rebuilt byte-for-byte identically. The separate geometry
+audit passes 20,616 deck comparisons, 109,952 transported sample endpoints,
+6,872 mirror comparisons and 13,475 checked-arithmetic cases. It also compares
+six literal reference geometries and their overlap field using separate
+projection, Floyd-Warshall and orientation-cover calculations. The reference
+retains 31 rejection vectors and three complete Wv2 lifecycle expectations.
+
+Revision 13 contains **97 pages**, all rendered and visually reviewed, with
+97 bookmarks and 95 resolved internal links. An independent rebuild is
+byte-identical. Previous page bodies and page-call ASTs 4-83, all 106 sources
+behind the historical W capture, the original three PDFs and the Tom/Jitske
+ELI5 booklet are unchanged. The formal PDF, arithmetic reference, separate
+geometry audit and document-preservation reports form this committed and
+pushed milestone. Runtime implementation remains the next required work;
+broader three-dimensional, spectral, physical and hardware claims stay open.

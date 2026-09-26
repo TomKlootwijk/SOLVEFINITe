@@ -1,0 +1,2136 @@
+{
+  "artifact_sha256_lf": {
+    "docs/evidence/directional-v1/formal-reference.json": "06bea44766da9d10f404c74750c5a7e1696fd54d67e5a2b0927e40d19c91200d",
+    "docs/evidence/directional-v1/geometry-audit.json": "5dbde73fbfcc99e98cd9461c4201f6b0cd610d4df944e35f191e8552496e630c",
+    "docs/evidence/directional-v1/geometry-audit.py": "0ffd914f68e9979c338bccedc85fd8bf319e1babadd101636281cc2541ebdeaf",
+    "docs/evidence/directional-v1/reference-builder.py": "4ad6499883fea68636c7dea9c511960d1ab0bae7e5724d9f06e7700fff4b3c26",
+    "tools/build_formal_spec.py": "a5dc9086501423d0e72707635221060ddfb92ea6a57bb37cea1738bdb1160aa9"
+  },
+  "auditor_sha256_lf": "bf341aae0be6085fd099daa8d0f8f7ed2504630cea94016a01b55b35ef340dbc",
+  "baseline_commit": "1ea93207ae8545a5c5d344677cb73a5c459dc91c",
+  "baseline_pdf_sha256": "64ce7f7189cd94b28959a7245b9c7a4989d03cb5ad360a8b8e041e0195b64840",
+  "changed_old_page_calls": [
+    2
+  ],
+  "format": "directional-formal-preservation-audit-v1",
+  "historical_W_source_count": 106,
+  "historical_W_source_sha256_lf": {
+    "docs/evidence/growth-v1/formal-reference.json": "689bf2814a878612f85f095b33460b92733c8533cb0d5a04c997d428b5b37c6a",
+    "docs/evidence/growth-v1/reference-builder.py": "b9be4e73dcfd81eb3daa7507f6a991208c1ba82abc3c009d4a2193cda75c1d7d",
+    "docs/evidence/organogram-v1/formal-reference.json": "21df28af479fbae2c70a7390a71b0baf9322fcbf38de3ce9db8ff5e5f3b4a6fe",
+    "docs/evidence/organogram-v1/reference-builder.py": "987c0adced856312fc3581d921ec1badaec236c0230c63f25ef6f024959f32d8",
+    "docs/evidence/welip-v1/formal-reference.json": "0ec46f6668867eb176285d821666de7e0fb3b71c5fac462d9a0e61973c71e210",
+    "docs/evidence/welip-v1/reference-builder.py": "369c4f4f9d81cdbf5e897c20a06a08fd0d9949deadefb6f9c42975c9063c7eb7",
+    "examples/field_agent_conformance.py": "60db27132ea22ee67012210b493294b1b844aafe2a188d40e6c01ca10e575f66",
+    "examples/field_conformance.py": "1a4b219427055b6833886b8905d153d2fa4d69f80702f7245eded8f5384d6d12",
+    "examples/gpu_benchmark.py": "41e553445b9d5a68f84350fcb0e4f33578d9ade5605fc8339aa74d06f6d2f6e2",
+    "examples/growth_conformance.py": "83dbc8bc5fee5d4cfeb9136fe75ee6eecd9c8e4ca41e38475ba5b1649d299d05",
+    "examples/hadamard_conformance.py": "40d79706ea80073d7f68bc8a24dd00a93bfb0546e42ae7270cef44dd4c5f3825",
+    "examples/klein_conformance.py": "f84cd90461078ee5c2b69da72188733b8f52e1c9d5d8d95a8557b450534b5bf0",
+    "examples/live_sensor_demo.py": "636ca080d18241be58cdb3f37511bfc8a1aaac7381746687cca1adf0521c586b",
+    "examples/organogram_conformance.py": "9fad861ffeb627d4eca02b3ef341f21743bf964787d9c952c6cb45bd121af438",
+    "examples/psi_f8_conformance.py": "b4fd66f1ddd2ef26f6675cdac59d1b515b2b982b272c0f10831e263aef4b86e6",
+    "examples/relational-sdf-v1.json": "975d160ebb708c231fd5680b35915f3033e0b5f7ad80ebc75ba19fad5ccb93cc",
+    "examples/relational-sdf-v2.json": "9dbe45507d7c23fa69ad5c8eeb98029fcbed1f87e8805b56e83e3b7bdf1e36c1",
+    "examples/tomigidt-colony.json": "848cb2196bf326ef050342070b134121a0f3e303d1f502e182507b23a562e28c",
+    "examples/tomigidt-field-live.json": "7a2120350f447d4c8d3af8c3ec0a4a007270867c6d39671249f6addf5974780a",
+    "examples/tomigidt-field.json": "66b8708a03635329371da4bb71a5d4c4f256d519d0307f9e369093227b421e9b",
+    "examples/tomigidt-hadamard.json": "24dd5e3b2d63be38829d6c7c4ffba2b61fceaad362f955a2cb738654f06ffb7b",
+    "examples/tomigidt-incremental.json": "ae791bba1cc5537eba2a8e4463a029c42a4cc8bca1e6603d71b8debfceb345a9",
+    "examples/tomigidt-live.json": "73e9ce732187a6d0523fe44c120302c2de6d33ca93f4c96d5ffa3371cce3893e",
+    "examples/welip_conformance.py": "d778f1e9311d8c9b58ec1471457248270e01590f7770804e630b6b57297b4db1",
+    "solvefinite/__init__.py": "b3c2d34b93ee298fd2dd900a85b57cb550f456fe56fec13e885ff6bc6315f889",
+    "solvefinite/__main__.py": "1ee85e46b264d0a3ee00c45501b088cacd0bf3fee691c5443bc7a8be86f21d60",
+    "solvefinite/f8.py": "f3db90140ec6ea2b051c23a3c934b80f387b57a86f5b15f0e556b59f02cbb73a",
+    "solvefinite/field.py": "8960d29bb6893ff63f7c74f8f3153428b277c942b4593673e0035dc4ec20589d",
+    "solvefinite/field_agent.py": "bdc75a4cfd998c135afe8daca325acd2186fd0a8d8230daa8e94a2e052f957eb",
+    "solvefinite/field_agent_gpu.py": "e2bcb1b5e8875b180fc73f423b610084ed4e3216d2937757fc1399236eec93b7",
+    "solvefinite/field_cli.py": "a9532e03ca1b76b5f51dac139f82fdfd728e6eab1761629b9df88178deab1779",
+    "solvefinite/field_world.py": "2e610102f531de173926a8fe270cb9ead8b9411028d72d52e15fddbdb323aad2",
+    "solvefinite/gpu.py": "b899ad08fce5db1d3defcfe5093fc638318671846c2b26fdf39d69b813a86744",
+    "solvefinite/growth.py": "8e76cd7b52da464bb42e9818bffd6c76b15beaec1b5f86c0d47418f70d445398",
+    "solvefinite/hadamard.py": "78cb848760d58a0aa99837db9bbcf976491a1e29592ba7432a7d272580434f33",
+    "solvefinite/hadamard_navigation.py": "b401c6fa4863f24ada0b99c6ea51b4ef6528a69aeb5f9b10b3e49b5abcc3f6f1",
+    "solvefinite/klein.py": "7f75a857d5ad4d19d37806a51e9cde905211d5390d01c9ef3965d9c38c33f6db",
+    "solvefinite/live.py": "897c81516457d5354394911a05ddd60dbfd0d23e8683c8aac64513a1fdbd8546",
+    "solvefinite/motion.py": "6b65b1836be618f3bbc426e0f983f2493bea3716ad9235e5da8b77b5e72b9762",
+    "solvefinite/navigation.py": "3f82bcf963ebca3141b6a3a6c44c38bd2887346a59d5160c621bd085028eb98f",
+    "solvefinite/organogram.py": "0e84c9374c86eba7d0389731becb93f1e68ab249d20a156873d636494fcf03cb",
+    "solvefinite/organogram_gpu.py": "1bbe6bcb53a7a225488ce8ed17463074062c4eeddffdae603d0ac1ba5b3378fb",
+    "solvefinite/psi.py": "3017e168a94c3afd376eb98d4783757a789ad186791c8b7b01ce95e0b59c54e4",
+    "solvefinite/rp32.py": "bdee9105693db443641b64f0062707aaa76af5c74b5ed3106eaf66fe954444ad",
+    "solvefinite/runtime.py": "532a0adc9d5655ac642426cfb0b2ab95d41933695e840576eb738dcfcf6bedb4",
+    "solvefinite/sdf_gpu.py": "6d109ca4a5932c8375baf568c807373716d1bdb1341533f6c31947c5bebe43ae",
+    "solvefinite/session.py": "963d63dbb159951fcc2cbcc7e94c00a177e7adf6a7035e4afa6e32b7f930598f",
+    "solvefinite/shaders/field.wgsl": "189b8926a582cc1e40483c5ccc41ff76d0a693469c142919b57a258714559384",
+    "solvefinite/shaders/field_agent.wgsl": "13f050852623981e1f9f3a317d4301ceda3db8ad030026479f9119e90a844eba",
+    "solvefinite/shaders/organogram.wgsl": "0825f2e56ce9722886864de33c95f37d5285b877bc8ba7e56172207e898dc785",
+    "solvefinite/shaders/packed.wgsl": "76250a5ea0560df53ecb082554282742ce888fc2f346ca7cfa5eebf4700ff5b3",
+    "solvefinite/tomigidt.py": "82d906ca0d8fc88c45fa2c951090126487faf550928639c934396c25fdad269f",
+    "solvefinite/welip.py": "31cfa8c5bb3a7cd7e09ad8026f7cfcba5b611c6c3f86f0a58b008fc63be5e5bf",
+    "solvefinite/welip_session.py": "7091d46f1161b541cc54aa977c98dfdd6cf18cf54bfe02f037979f9a94072a9a",
+    "solvefinite/world.py": "c60e02783a4f0ac348e16aa755c9c1847f5993ce9bc6db862c6c46a60fa24c63",
+    "tests/fixtures/tomigidt_v1_default_session.json": "9fb8782903d96589f559317382d3a91a2df1429dfac3c61c4c3990797c3a0d3e",
+    "tests/fixtures/tomigidt_v1_deferred_session.json": "551c0e892ff9befad0cac16cfd7b60a8b9cb1be6f5e4331c06e6a3d3d6886cb1",
+    "tests/fixtures/tomigidt_v1_waiting_agent.json": "abd7605b7c81a834c83bd2313f7fd1f2d091749a149f559c1b0cc85cfd74c8cd",
+    "tests/test_agent_cli.py": "ce3bac7ea8ecca94cd32359543a0e0ec3eecc98638c11f28f97f03101cfafb4b",
+    "tests/test_backend_plumbing.py": "031095d5206f6d817d7379dad168cb7bb58f17c5ebba15890ceb3dc9016cb2ab",
+    "tests/test_cli.py": "04a2fe906f031f16a8cedc70098973469ca172d426fb6fc3b91e46e31c045f92",
+    "tests/test_f8.py": "c9d1dc1c875ecab32189b7633eefe592c979884b38cc9af806d06c18a2b175a1",
+    "tests/test_f8_agent.py": "2f319328ad394c7d09ee6ba9c62229b221f5880b1970568655356bd5d93df09b",
+    "tests/test_f8_gpu.py": "f7f080d95f12170f875d019ec62c6bbdb1f0e80fad716a24f1496ba66a91d0c9",
+    "tests/test_field.py": "3043598c649a5ab6e53b907aea4b01551e54aed659d61956d8ae6326111e1d49",
+    "tests/test_field_agent.py": "a0dab25a1ecb86f9e014f98cfd18376c0449a7aab42aef9cb66b18a719d8f495",
+    "tests/test_field_agent_cli.py": "e51fba551603407fb8ca5ade2fd8781a1c3d581d10b33459459f30c3a2064eaf",
+    "tests/test_field_agent_gpu.py": "60bc38bbbb7f2168ccf20508c41722df261ace592af25112bd46379729cdf675",
+    "tests/test_field_cli.py": "0d0189513908c1b86fb9ca479e27db4334465941861f85aa889cab6ed06cd304",
+    "tests/test_field_v2.py": "e12edd8358616b35fc63f362330b058e0ed288810a056b4310003376a5076281",
+    "tests/test_field_world.py": "ad358f9f78a898b598105a130e671ae9c2f92782385a60755c3d907ce094562f",
+    "tests/test_gpu.py": "1e114edf14b023d5a86f5b7463cac990aeaae90a2126ef834382f86829179b7b",
+    "tests/test_growth.py": "dd3eae8b10a85bf324ac75f6eb88eb175cc5da59e1b9418900aac3b8f3940a64",
+    "tests/test_growth_agent.py": "7b1323abd33228080d852adc1b92300d7896d7400596a383eb708d4c0e90ad12",
+    "tests/test_growth_gpu.py": "e38486180cc85003cf2664defde9f6701bd7218c2175c0f94b1a695e074458cb",
+    "tests/test_growth_session.py": "8f88bb87ea78ded56224860d1931525c1d28eacc041e724ef44ecd7e50783729",
+    "tests/test_hadamard.py": "299d9949ed8cc97cda02728f8c0938e6cef290b71bcfaa7b9cd1708d198a33a5",
+    "tests/test_hadamard_agent.py": "6ee4cc4bfa719dd7a798f7fb3f08521fd416a3b424202d2c3c10674d6f4e118f",
+    "tests/test_hadamard_gpu.py": "81e059060d6c1703bd1687bd0cea196560190914e9011e56b9dd386991d857cd",
+    "tests/test_hadamard_navigation.py": "f0d32798a7aed0e08aea1e382e8e1b6debdddc075e1626428fa5cefc7b6dadaa",
+    "tests/test_incremental_agent.py": "4faf231f1e7880d33f2aeeee51a83b2e33e5b81f0fa9245b13d9cdc78bcb6adb",
+    "tests/test_incremental_navigation.py": "c19404d2129ae1e08ef9dd685714a5641ccea63208a0077471e7a16070a9cb95",
+    "tests/test_klein.py": "7bd55d61186d17584d70e7a5b2808a32549680bab9761a2cdc3458c701e5c63a",
+    "tests/test_klein_gpu.py": "e36d50268db7be7a62cc99e3f0f3113081cecd3e3480680f0e45294bbad590b5",
+    "tests/test_live.py": "24586fbfcdc1f5792e5f862958eb09b3ebc4ea2c8bf0a52fd9db34f1e73a2f1c",
+    "tests/test_live_cli.py": "b0d825bdfb59bcecffc8a4b85e200e7a8a24ce660f16a984ef7b925d5573ebbc",
+    "tests/test_motion.py": "8c2c0292d0c8858787188f97a5e03548d90b4ccb950ac7b92a1b654b092f98bd",
+    "tests/test_navigation.py": "2850b5df3f870a45cbf12c6f7125ca7b69c9d3fc305449e5309def48b8f56a4f",
+    "tests/test_organogram.py": "f82c4c6ae97905983d2285cbdaa895237ec8700c7c36d256cfb1ae2c289a238c",
+    "tests/test_organogram_agent.py": "78c8c9110f61132c98ad367fdec15f2357b58bf383ad9281599e3fa9080fe46b",
+    "tests/test_organogram_gpu.py": "5126199b85eb09027028772dd192b98f95262610ef01aadf844642e661f98f1c",
+    "tests/test_organogram_session.py": "8969d8acf49c7d0d23c460e1231aadb32c8934974ae69a696869a7c26631c5ab",
+    "tests/test_psi.py": "58ea1663dd9e3ec074921a5e61e7f7b39ab9aab4a06a9df30f59386bcef16e09",
+    "tests/test_relational_navigation.py": "602389c71fbc42723f04d2e21c89747730f63e21c55d1534b29847937bf8227e",
+    "tests/test_rp32.py": "434949666c98da29dbed40756ec9399ce67ef0ee1a2001d0384d259630c4d902",
+    "tests/test_runtime.py": "a7947278a895f78876c387d0ac507960b6df4b0f233b87db2dd2c16d8e042350",
+    "tests/test_sdf_gpu.py": "167dc1b16f626a3b5417d3911cc6f4002ed9d677165ff201568d0c4657e61f1a",
+    "tests/test_session.py": "298693be37985dc8ad3eb8ad7fed20ca84ac5c8e508b9e3e5023333b4d4e8964",
+    "tests/test_tomigidt.py": "08b8a056433bbb5df798948bfbce46f28f5326a61521f1fca80fe6facfb87366",
+    "tests/test_welip.py": "a0b97ad6206a80ecc1bc39bc93a6e47d91487cdaf3fcc9a62901f95687eb3418",
+    "tests/test_welip_cache.py": "daebe387edaaa18e2304a64136d1f55ad8017751bfedda2f15de53e51b867e9e",
+    "tests/test_welip_cli.py": "edce72e1b3d4836124f6a340b71c200683356750a567ccd52aecd04b901516ea",
+    "tests/test_welip_gpu.py": "95a28e80ff4668a248f5f9a456e2deb644a0794ad845f00c1a6f04fae556cc79",
+    "tests/test_welip_session.py": "77694ac0cbe617f8287f9f6ef9044e4b38eb3d3be370b3c35d9c81056bb7e1af",
+    "tests/test_world.py": "b37bd556d90b96f80dda9c38f31fc1ce32ebacd58a8a0ff5d0b630141c085583",
+    "tools/capture_welip_evidence.py": "e54f7aded96ebe547a86e3732ba41218e415fef400dbc877f2d02a61a5290106"
+  },
+  "pdf": {
+    "automated_layout_scope": "Page and glyph bounds plus link rectangles; visual review remains separate.",
+    "bookmarks": 97,
+    "external_links": [
+      "https://www.w3.org/TR/WGSL/#textureload",
+      "https://docs.nvidia.com/cuda/archive/12.8.0/cuda-c-best-practices-guide/",
+      "https://docs.nvidia.com/nsight-compute/ProfilingGuide/",
+      "https://math.mit.edu/~lurie/937notes/937Lecture33.pdf",
+      "https://pi.math.cornell.edu/~hatcher/AT/AT.pdf",
+      "https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html",
+      "https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/"
+    ],
+    "internal_links": [
+      {
+        "from": 3,
+        "to": 2
+      },
+      {
+        "from": 3,
+        "to": 4
+      },
+      {
+        "from": 3,
+        "to": 5
+      },
+      {
+        "from": 3,
+        "to": 6
+      },
+      {
+        "from": 3,
+        "to": 7
+      },
+      {
+        "from": 3,
+        "to": 8
+      },
+      {
+        "from": 3,
+        "to": 9
+      },
+      {
+        "from": 3,
+        "to": 10
+      },
+      {
+        "from": 3,
+        "to": 11
+      },
+      {
+        "from": 3,
+        "to": 12
+      },
+      {
+        "from": 3,
+        "to": 13
+      },
+      {
+        "from": 3,
+        "to": 14
+      },
+      {
+        "from": 3,
+        "to": 15
+      },
+      {
+        "from": 3,
+        "to": 16
+      },
+      {
+        "from": 3,
+        "to": 17
+      },
+      {
+        "from": 3,
+        "to": 18
+      },
+      {
+        "from": 3,
+        "to": 19
+      },
+      {
+        "from": 3,
+        "to": 20
+      },
+      {
+        "from": 3,
+        "to": 21
+      },
+      {
+        "from": 3,
+        "to": 22
+      },
+      {
+        "from": 3,
+        "to": 23
+      },
+      {
+        "from": 3,
+        "to": 24
+      },
+      {
+        "from": 3,
+        "to": 25
+      },
+      {
+        "from": 3,
+        "to": 26
+      },
+      {
+        "from": 3,
+        "to": 27
+      },
+      {
+        "from": 3,
+        "to": 28
+      },
+      {
+        "from": 3,
+        "to": 29
+      },
+      {
+        "from": 3,
+        "to": 30
+      },
+      {
+        "from": 3,
+        "to": 31
+      },
+      {
+        "from": 3,
+        "to": 32
+      },
+      {
+        "from": 3,
+        "to": 33
+      },
+      {
+        "from": 3,
+        "to": 34
+      },
+      {
+        "from": 3,
+        "to": 35
+      },
+      {
+        "from": 3,
+        "to": 36
+      },
+      {
+        "from": 3,
+        "to": 37
+      },
+      {
+        "from": 3,
+        "to": 38
+      },
+      {
+        "from": 3,
+        "to": 39
+      },
+      {
+        "from": 3,
+        "to": 40
+      },
+      {
+        "from": 3,
+        "to": 41
+      },
+      {
+        "from": 3,
+        "to": 42
+      },
+      {
+        "from": 3,
+        "to": 43
+      },
+      {
+        "from": 3,
+        "to": 44
+      },
+      {
+        "from": 3,
+        "to": 45
+      },
+      {
+        "from": 3,
+        "to": 46
+      },
+      {
+        "from": 3,
+        "to": 47
+      },
+      {
+        "from": 3,
+        "to": 48
+      },
+      {
+        "from": 3,
+        "to": 49
+      },
+      {
+        "from": 3,
+        "to": 50
+      },
+      {
+        "from": 3,
+        "to": 51
+      },
+      {
+        "from": 3,
+        "to": 52
+      },
+      {
+        "from": 3,
+        "to": 53
+      },
+      {
+        "from": 3,
+        "to": 54
+      },
+      {
+        "from": 3,
+        "to": 55
+      },
+      {
+        "from": 3,
+        "to": 56
+      },
+      {
+        "from": 3,
+        "to": 57
+      },
+      {
+        "from": 3,
+        "to": 58
+      },
+      {
+        "from": 3,
+        "to": 59
+      },
+      {
+        "from": 3,
+        "to": 60
+      },
+      {
+        "from": 3,
+        "to": 61
+      },
+      {
+        "from": 3,
+        "to": 62
+      },
+      {
+        "from": 3,
+        "to": 63
+      },
+      {
+        "from": 3,
+        "to": 64
+      },
+      {
+        "from": 3,
+        "to": 65
+      },
+      {
+        "from": 3,
+        "to": 66
+      },
+      {
+        "from": 3,
+        "to": 67
+      },
+      {
+        "from": 3,
+        "to": 68
+      },
+      {
+        "from": 3,
+        "to": 69
+      },
+      {
+        "from": 3,
+        "to": 84
+      },
+      {
+        "from": 69,
+        "to": 70
+      },
+      {
+        "from": 69,
+        "to": 71
+      },
+      {
+        "from": 69,
+        "to": 72
+      },
+      {
+        "from": 69,
+        "to": 73
+      },
+      {
+        "from": 69,
+        "to": 74
+      },
+      {
+        "from": 69,
+        "to": 75
+      },
+      {
+        "from": 69,
+        "to": 76
+      },
+      {
+        "from": 69,
+        "to": 77
+      },
+      {
+        "from": 69,
+        "to": 78
+      },
+      {
+        "from": 69,
+        "to": 79
+      },
+      {
+        "from": 69,
+        "to": 80
+      },
+      {
+        "from": 69,
+        "to": 81
+      },
+      {
+        "from": 69,
+        "to": 82
+      },
+      {
+        "from": 69,
+        "to": 83
+      },
+      {
+        "from": 84,
+        "to": 85
+      },
+      {
+        "from": 84,
+        "to": 86
+      },
+      {
+        "from": 84,
+        "to": 87
+      },
+      {
+        "from": 84,
+        "to": 88
+      },
+      {
+        "from": 84,
+        "to": 89
+      },
+      {
+        "from": 84,
+        "to": 90
+      },
+      {
+        "from": 84,
+        "to": 91
+      },
+      {
+        "from": 84,
+        "to": 92
+      },
+      {
+        "from": 84,
+        "to": 93
+      },
+      {
+        "from": 84,
+        "to": 94
+      },
+      {
+        "from": 84,
+        "to": 95
+      },
+      {
+        "from": 84,
+        "to": 96
+      },
+      {
+        "from": 84,
+        "to": 97
+      }
+    ],
+    "pages": 97,
+    "path": "output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf",
+    "sha256": "b11d6ab9037578dc2d46fe806dc45502ab0002d23ca8d79f044ef94edb29bd77",
+    "text_and_page_bounds": [
+      {
+        "page": 1,
+        "text_bounds_points": [
+          47.667,
+          108.315,
+          428.27,
+          772.784
+        ]
+      },
+      {
+        "page": 2,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 3,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 4,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 5,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 6,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 7,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 8,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 9,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 10,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 11,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 12,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 13,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 14,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 15,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 16,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 17,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 18,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 19,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 20,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 21,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 22,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 23,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 24,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 25,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 26,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 27,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 28,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 29,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 30,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 31,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 32,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 33,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 34,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 35,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 36,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 37,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 38,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 39,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 40,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 41,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 42,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 43,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 44,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 45,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 46,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 47,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 48,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 49,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 50,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 51,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 52,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 53,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 54,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 55,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 56,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 57,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 58,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 59,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 60,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 61,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 62,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 63,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 64,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 65,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 66,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 67,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 68,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 69,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 70,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 71,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 72,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 73,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 74,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 75,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 76,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 77,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 78,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 79,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 80,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 81,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 82,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 83,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 84,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 85,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 86,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 87,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 88,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 89,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 90,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 91,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 92,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 93,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 94,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 95,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 96,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      },
+      {
+        "page": 97,
+        "text_bounds_points": [
+          51.0,
+          35.289,
+          544.276,
+          811.573
+        ]
+      }
+    ],
+    "unchanged_rendered_page_bodies": [
+      {
+        "body_text_sha256": "2443ddb63a37b73f7c218aef03c6a3f43c053e424dbec94cb2be7dd4f4f19094",
+        "page": 4
+      },
+      {
+        "body_text_sha256": "b5414466bda872ea62522360aa9a958ee147bf13292e108a2cebec5cfb349ea1",
+        "page": 5
+      },
+      {
+        "body_text_sha256": "db15c6321092b9d1c96f7f005cacc9bbfb4afc4f6fcf4a090ae8f34f5f3de689",
+        "page": 6
+      },
+      {
+        "body_text_sha256": "1826b5080b2baa90d495dfb55869f5c0265b8090ab45d3a753640f7a6ddfefe3",
+        "page": 7
+      },
+      {
+        "body_text_sha256": "0d1a03e7af28e6fe873a6c78d1fa8320bbdf639b05d4f0804f134bc6c0416650",
+        "page": 8
+      },
+      {
+        "body_text_sha256": "80701baaa42b0bd94606ed2c052e123600009eda0d4ec05652c4d55fc8eef102",
+        "page": 9
+      },
+      {
+        "body_text_sha256": "3c3e284cda34a490efee54e39b335bf19763470f23e3b98bc282eed59cb40899",
+        "page": 10
+      },
+      {
+        "body_text_sha256": "a2e5b0c049298c4c01157e3ab22034741267d6ec90e971c44c6abe51f1b1a078",
+        "page": 11
+      },
+      {
+        "body_text_sha256": "0a17b92bdb42baf009b9bc02abefb7bc0766604cdbe0b0e6930c17d7e1379acc",
+        "page": 12
+      },
+      {
+        "body_text_sha256": "5b95a48fc2f338117da2bc671dd165dc3e16d135caacd5102348015510d2c3fd",
+        "page": 13
+      },
+      {
+        "body_text_sha256": "ee7f1a2291f5c55a2a327b46d616dad93ed5e3b41954d4c84c2ebace528c4aa9",
+        "page": 14
+      },
+      {
+        "body_text_sha256": "3843dde3ef7536d8f126cc488659df618e69ddc8c1f96cf5954f52b767c3cb2e",
+        "page": 15
+      },
+      {
+        "body_text_sha256": "f35d7d63698540b62e096af72044a74124b4f6901bcc6f9a73fa8f817e53af30",
+        "page": 16
+      },
+      {
+        "body_text_sha256": "04672f5a2f9f18af44bb209c9594d2e877970a15036d013406a612e0918099be",
+        "page": 17
+      },
+      {
+        "body_text_sha256": "6ecc8e70cee2c553e1fbfb56b22ed4be1d23ee75f444f2e89587ffc4fd847275",
+        "page": 18
+      },
+      {
+        "body_text_sha256": "1894ae7e34b5798434c04319ee6ecf19c09dade5fee82026f1009f045c3dc0f7",
+        "page": 19
+      },
+      {
+        "body_text_sha256": "d38525e69981bae9a6a361bb4e3383626a0d9660a5ff53fcbf3a1776f46a97f9",
+        "page": 20
+      },
+      {
+        "body_text_sha256": "bd6319602d3bca2073aaa3a747f8ff28becfe2795bfea460461f2c2b79263176",
+        "page": 21
+      },
+      {
+        "body_text_sha256": "163b78c3083d9acfa7c83e949f6abd39c1fe2e35a5cdb55f5b24bed8466bc37b",
+        "page": 22
+      },
+      {
+        "body_text_sha256": "9b748558d007646360c4161268b115a6d717a5e376fa522c3e1e95572dc1f778",
+        "page": 23
+      },
+      {
+        "body_text_sha256": "44f90eaee51b947060adb747eabd502d55b80e5ec80401418de7787125c90281",
+        "page": 24
+      },
+      {
+        "body_text_sha256": "5ab588ad1aa5c5df672198c643bd4b0321d0f6f0b47df9eacc12f1dc0ed22348",
+        "page": 25
+      },
+      {
+        "body_text_sha256": "bfe513af58b1ecee1247dde0a50a82f38e8c8f18b279995a2f3d331b86bad2c9",
+        "page": 26
+      },
+      {
+        "body_text_sha256": "1777e1c2f6d2dfdfe98ce36aee88fd38ac74993bbc74c78737e0c977a29857ff",
+        "page": 27
+      },
+      {
+        "body_text_sha256": "8af39d354cf39559db3a41285d60274f5d36f3ee4d96b346b46c41900ebb2196",
+        "page": 28
+      },
+      {
+        "body_text_sha256": "e955a6a1d007a52cc50086c89c206ae6f41571d34136cd5157e9aa32cc461156",
+        "page": 29
+      },
+      {
+        "body_text_sha256": "7aa274ecafc07141787dd6af970658af49506b9520a698fbafef4ff75696dfc1",
+        "page": 30
+      },
+      {
+        "body_text_sha256": "8d35530d29a1e240adb6f20c1229d250f9a0d10d90f331cd3e5d02d9a6f9a5e2",
+        "page": 31
+      },
+      {
+        "body_text_sha256": "49d1a5fd3d7b1a98e58e68258a9bdf2de7c2b3cee31dcf66655d0f173690a36c",
+        "page": 32
+      },
+      {
+        "body_text_sha256": "38058bde9b4aaed7ff6ebd3750a80a2c546c6a279aeb4b7a979320b6171a5f05",
+        "page": 33
+      },
+      {
+        "body_text_sha256": "4088a47050282e3fa73f76457af94a13b2180ec314793a914f8911322a686576",
+        "page": 34
+      },
+      {
+        "body_text_sha256": "ef83f84991bf53eba6d38ccdf6f1dd8b1991cdb60423fdb2ec92cfc782288d14",
+        "page": 35
+      },
+      {
+        "body_text_sha256": "98df4b1993f4be8b5345de77084c63ee55bb8a5984f6d91aa62dfeacdb2a44d5",
+        "page": 36
+      },
+      {
+        "body_text_sha256": "876767a360fd653e5ed58a8a2e38ae6e45376e328301de1c82448694953e0497",
+        "page": 37
+      },
+      {
+        "body_text_sha256": "b2b2acb81f5ab7e3739b44d017cbe5ff58a4777c2801572493a6852e5c2d895b",
+        "page": 38
+      },
+      {
+        "body_text_sha256": "6fc51aa54d4231839eb9a44f3a6360bddffdb04f8ce384ff25ea95fbf358bdbf",
+        "page": 39
+      },
+      {
+        "body_text_sha256": "0020cbb2196248f2e1130deef1436d671df2a30abf1aefe31ebc4181c3d4dc19",
+        "page": 40
+      },
+      {
+        "body_text_sha256": "f44bec5e4f2c7ad07227364f66ee27005942e1bc11b1739bef8fa6777b366ba6",
+        "page": 41
+      },
+      {
+        "body_text_sha256": "5b559640e8f645333a379f7f0c7a046a87d356d8e6b6e905eae701f1aa124d8b",
+        "page": 42
+      },
+      {
+        "body_text_sha256": "33c557a62ff6a10647f60caa2bece956e6a5c8417582abef38b2c4e60942dfaf",
+        "page": 43
+      },
+      {
+        "body_text_sha256": "7be0dcef2e15bd4eb4d0693ef535678ff102e91478b74cd16e4056bb4d079c22",
+        "page": 44
+      },
+      {
+        "body_text_sha256": "32fe9b2d5c79cadbaa0e0d6837d39925e724f5d60a1959a1a35d05af7abbda42",
+        "page": 45
+      },
+      {
+        "body_text_sha256": "148d12d13918f65a8a60aef16718a194de19891fb6fbe5dfe5e2ef6c34f84658",
+        "page": 46
+      },
+      {
+        "body_text_sha256": "cb1f5b5ae4858b530de891dff8b2677fbb66fbbbccc25d98cceaf3ee18c2c87f",
+        "page": 47
+      },
+      {
+        "body_text_sha256": "c9218c716e1812b0853d81a161f56ced7d43ac0dc3974725fd3a4e4b0325e109",
+        "page": 48
+      },
+      {
+        "body_text_sha256": "b7588ab468a9b4ff6778b516e1574d2eeddbce83b7d01e7d16f3af870b949639",
+        "page": 49
+      },
+      {
+        "body_text_sha256": "0f3540f40c0c9a629f743309c113899146b577203e98cac3c1b7e67591f57449",
+        "page": 50
+      },
+      {
+        "body_text_sha256": "e909e47b40c7bcfe77cdea144289d193a18159779583f96c7a8c358de9890e64",
+        "page": 51
+      },
+      {
+        "body_text_sha256": "d931b301253b24defa11cc0635ffaa2d0718ade131a48aa20b15b4fc4f9d574b",
+        "page": 52
+      },
+      {
+        "body_text_sha256": "4cc6daca6be7bd97b3dba19d2f7f836d50c353fa2df2b35c06e835d54654acc8",
+        "page": 53
+      },
+      {
+        "body_text_sha256": "e40a01b227ba397c0e8a355588ea524416c2da7b1220374b26c5616830c834f1",
+        "page": 54
+      },
+      {
+        "body_text_sha256": "7ed45097da10b428e42c6af3a471a75a79c4e1f52182feb7e5cbe3ad712491c1",
+        "page": 55
+      },
+      {
+        "body_text_sha256": "bb0618fcfe08d04a8031a871bf2be8b3f3eb7fbc60fb720a1a9bda27437c8618",
+        "page": 56
+      },
+      {
+        "body_text_sha256": "61243858e22af0f85abad12c9b89e8af3855df97af1909b88937c67a43e49ed4",
+        "page": 57
+      },
+      {
+        "body_text_sha256": "990b13d6a49c52956f5f3962121f9ee49247e6b898fe38f13c80e257cd9367fe",
+        "page": 58
+      },
+      {
+        "body_text_sha256": "d1ee0b7e1d54d5dc1c1637b0eec1ffcd563cc3e7505f2f9df7541c9c88cd4a44",
+        "page": 59
+      },
+      {
+        "body_text_sha256": "dcfb57bc9da504360adc61f9c3ef2fcf10f1f0ae7434cd49d6babd1c59919986",
+        "page": 60
+      },
+      {
+        "body_text_sha256": "a92af6a993308d076e128fe192907c5999722a8160df9688da6774bbcd7800dc",
+        "page": 61
+      },
+      {
+        "body_text_sha256": "68e0cbe5e056721f72de667261a25cb457b14907b39861619a8c72f5d1590dda",
+        "page": 62
+      },
+      {
+        "body_text_sha256": "ca832a6055c7cf6df793e32819cba45741617e8eaff4aceca57306e4c57534c4",
+        "page": 63
+      },
+      {
+        "body_text_sha256": "dacc95f70ad2092969443c220dec02c94b2134672dd79c43cd15f403faccba54",
+        "page": 64
+      },
+      {
+        "body_text_sha256": "c92854136fd2bad680cb32302c691b3db12b4c0e8e3de82ee48b6ec4c91395dc",
+        "page": 65
+      },
+      {
+        "body_text_sha256": "5f1c7d580103a1b2f52ab19b10488c3f258d078138910f3c325b9f166e7f58d3",
+        "page": 66
+      },
+      {
+        "body_text_sha256": "f2562889ff2b4c0c0cd942c76c18646a9564da9992c01462523ce422d33c716e",
+        "page": 67
+      },
+      {
+        "body_text_sha256": "31dbf9800593600605cfb60509f03ae2974edf3d6de2135993293caf96f52e1b",
+        "page": 68
+      },
+      {
+        "body_text_sha256": "f82e384cfd0a9c4b0182ac612d6470689ab64377bc1e1a4c0c3f3fc43abe75cd",
+        "page": 69
+      },
+      {
+        "body_text_sha256": "7ae7f98b084179b1b91727eb46bf22e381e69e194caf84de6d07b8029694742c",
+        "page": 70
+      },
+      {
+        "body_text_sha256": "93b09c1d604805957a7cb1cebb59ebd1808b8160f86ad151f0daed98006d9526",
+        "page": 71
+      },
+      {
+        "body_text_sha256": "0caaf81c25c057b79c6382afa719b968cc07dc7edf871795ca5c92020fd3c50a",
+        "page": 72
+      },
+      {
+        "body_text_sha256": "3094be24dc3be12824b9389732b683104dffc13e591fb3e3070353d84846b52d",
+        "page": 73
+      },
+      {
+        "body_text_sha256": "77942c96cfb89974d4006b5d1d65994ca2453980aac403410eeffea9b1ff470d",
+        "page": 74
+      },
+      {
+        "body_text_sha256": "c0a4fcf93b0f379765ce8bfd6a54a55977af254b571e3fb8866a4eada6013a77",
+        "page": 75
+      },
+      {
+        "body_text_sha256": "93fe48d49fb905d2758ce69aa8b181a06102affef6da4686d07df464caac7890",
+        "page": 76
+      },
+      {
+        "body_text_sha256": "26f7ac42666a14ef59a6907d9f843c38803544922babe595d2c413c8a42b9de3",
+        "page": 77
+      },
+      {
+        "body_text_sha256": "890b84d72919010e78c8a6a0c9cd5d60be9c9af68fe88c48e808b9ef14df8c91",
+        "page": 78
+      },
+      {
+        "body_text_sha256": "b9019203843cdb7ef43f54203c71bc78e5e6e8765847c26538d79715823e133a",
+        "page": 79
+      },
+      {
+        "body_text_sha256": "23e36a3f8b21c31683db4c92a32253538e621957836c051647f609cef84b7156",
+        "page": 80
+      },
+      {
+        "body_text_sha256": "9650346fd5f6182dedcdf14fe26d03eb5f659aa5ffee10caee47fb67cddc5d38",
+        "page": 81
+      },
+      {
+        "body_text_sha256": "673aca2230ba5c5411fe24bfa4a799cf01bd53817645cc84c1955808e06b70e8",
+        "page": 82
+      },
+      {
+        "body_text_sha256": "8bb5ae8e1bce2ff4ea2ec7f68fd4fb1e13d0142899f2b687de3bd299b3b01d16",
+        "page": 83
+      }
+    ]
+  },
+  "permitted_document_changes": "Cover, edition page 2, generated contents page 3, running revision/count furniture, and appended pages 84-97.",
+  "protected_pdf_sha256": {
+    "Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf": "8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647",
+    "output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0",
+    "sources/solipsism.pdf": "1091e0435aa1648b4ede127837e66ddbf2c5dbd0a67f49cbb7a7ae134ee547e7",
+    "sources/solus-ion-ad-infinitum.pdf": "a2ace794138bcad68463d1ce2ba4a6e9954540bb4f2f29e4090d68d6e0440489"
+  },
+  "rebuild": {
+    "byte_identical": true,
+    "command": "python tools/build_formal_spec.py --output <temporary.pdf>",
+    "sha256": "b11d6ab9037578dc2d46fe806dc45502ab0002d23ca8d79f044ef94edb29bd77"
+  },
+  "scope": "Independent document/source preservation; no directional runtime or GPU execution.",
+  "status": "PASS",
+  "unchanged_page_call_ast": [
+    {
+      "page": 4,
+      "page_call_ast_sha256": "3f9912e215a86bf1c3cb8818978ac373237938dbf51bf10b81e8573e9d114b9f",
+      "title": "Paradigm charter and vocabulary"
+    },
+    {
+      "page": 5,
+      "page_call_ast_sha256": "5dd4b85defc80a99f64284564db211a2982949e3e6653417a50a93cfbf973653",
+      "title": "State, admission and transition"
+    },
+    {
+      "page": 6,
+      "page_call_ast_sha256": "73453afa5e25463fb22e57d3b7212330a8a57342083ff9222249aac0fdd991e9",
+      "title": "Log-polar phase and lookup closure"
+    },
+    {
+      "page": 7,
+      "page_call_ast_sha256": "d677621c3f57c24d2dcb12482fad9949b707e4bc1cf8092c8d68027756715951",
+      "title": "Uniform carrier and RP32"
+    },
+    {
+      "page": 8,
+      "page_call_ast_sha256": "ba8e6f91646c5b743e339fdd6e9bc0eb158d31121fbf3c77701880ed969967c2",
+      "title": "Packing, mirror and exact vectors"
+    },
+    {
+      "page": 9,
+      "page_call_ast_sha256": "8820a62eb7a6d504562ba0c29b2fb48d6e3b1b9b5db48d9a375e59e5f99a08d1",
+      "title": "One individual, observations and time"
+    },
+    {
+      "page": 10,
+      "page_call_ast_sha256": "a88968f9982619d129e585d0831abec9c1f45a87ce636d7493cbe519f12321e5",
+      "title": "Generative organogram"
+    },
+    {
+      "page": 11,
+      "page_call_ast_sha256": "c1d7bd5e79b9077d4a0686d3c2ed1aa2bd399a5f3bc93648da387d6976f154c3",
+      "title": "Psi, f8 and typed field operators"
+    },
+    {
+      "page": 12,
+      "page_call_ast_sha256": "2f0d5f22234cef5627d0d0ff6ca8ddc5b4a04e3ff6eee0005256b84c2459d001",
+      "title": "Relations define the field world"
+    },
+    {
+      "page": 13,
+      "page_call_ast_sha256": "ef68672f09c8a0243f297920e2f384da2c6402ffc5371cd50d5dc7a9a6a35ee4",
+      "title": "Exact finite SDF profile"
+    },
+    {
+      "page": 14,
+      "page_call_ast_sha256": "150fccc23c47be4d0db66ca022611ddafce9050e8ab3af41ab81c86c1fe44ae3",
+      "title": "Independent geometric certificate"
+    },
+    {
+      "page": 15,
+      "page_call_ast_sha256": "3ff884dfb831c1559a5430c11d8937c08bf157c49f9d1892e33d144011cb344b",
+      "title": "Field-governed executable words"
+    },
+    {
+      "page": 16,
+      "page_call_ast_sha256": "2a65c0301782d3f3e3db7a3b646735eba9c191a4346782ba30ac443fefcee249",
+      "title": "Exact GPU realization"
+    },
+    {
+      "page": 17,
+      "page_call_ast_sha256": "2c308cf84b8edd5d8e4caee68a2bfe0caafb9d4201aacd5cea4d9d5268f00651",
+      "title": "Archives, footprints and admission"
+    },
+    {
+      "page": 18,
+      "page_call_ast_sha256": "0740abdaa2f6181027ba9a4de6a1b271418a1ab28088527e6ddde2dcea6425a0",
+      "title": "FIFO, regeneration and finite resources"
+    },
+    {
+      "page": 19,
+      "page_call_ast_sha256": "cc112865eaedadb5504b3cc5f39b9a52127e9193a5c756b67112aa2b4eb13145",
+      "title": "Finite Klein quotient"
+    },
+    {
+      "page": 20,
+      "page_call_ast_sha256": "f99bf8ba8cc598a85d64875d5ae7a1dd9ac939e139b0e0cec77f890666c67e58",
+      "title": "Orientation cover and seam action"
+    },
+    {
+      "page": 21,
+      "page_call_ast_sha256": "3bc632188ab413a7834e72b66ee0c5088344a2c23e4466267da71306bb078ef2",
+      "title": "Intrinsic ball and v2 profile"
+    },
+    {
+      "page": 22,
+      "page_call_ast_sha256": "f56d71cd38f62c48882ef3cec2e709420ac2e2aaef7ceb2bb5e00858cf3f2e50",
+      "title": "The infallible contract"
+    },
+    {
+      "page": 23,
+      "page_call_ast_sha256": "1644875c4961aa33ad026d8dd765b06f3152ea655f0ee0fad82209517f73ba43",
+      "title": "Proof boundary and implementation refinement"
+    },
+    {
+      "page": 24,
+      "page_call_ast_sha256": "f57ac4205a6f71e0d748bdf991cb03aba80642c2f19b873155dbafeeb6fa39c8",
+      "title": "Typed zero, XOR and integrity"
+    },
+    {
+      "page": 25,
+      "page_call_ast_sha256": "4a63a6e146b77d95473273bccecc4bf78414bd87e24acade89f4734958144190",
+      "title": "Sensory adapters and physical meaning"
+    },
+    {
+      "page": 26,
+      "page_call_ast_sha256": "e46780661308c5e00e4344ef5208109a9a760c5092babecf8f15acb75bd16cf7",
+      "title": "Implementation map and integration"
+    },
+    {
+      "page": 27,
+      "page_call_ast_sha256": "19cfa82901a19789ca786f090d27ed276c82eaabbc22ca8fff46b72aa19b4548",
+      "title": "Retained PX verification and field trace"
+    },
+    {
+      "page": 28,
+      "page_call_ast_sha256": "9183363b8649f604114119d85fc1a3be9cb98726999e71ed45d837465fd9d99c",
+      "title": "Progress against the architecture: I"
+    },
+    {
+      "page": 29,
+      "page_call_ast_sha256": "73a88b24b6609019f48ae13860ccb44d55af905993a57cb6445b86f2b1348407",
+      "title": "Progress against the architecture: II"
+    },
+    {
+      "page": 30,
+      "page_call_ast_sha256": "ec3b65b84e819acd4c3c7d5726411efb0593d39d2c8b1d880c2404d5095dd1ca",
+      "title": "Conformance and performance scope"
+    },
+    {
+      "page": 31,
+      "page_call_ast_sha256": "cab038ef167dfbc2baf8dbccfd8a8da7bbd5d2dbbc1713d82022a2cd7af222e9",
+      "title": "Executable default and archive schema"
+    },
+    {
+      "page": 32,
+      "page_call_ast_sha256": "243b8420d2d2c153b43c85d3c8fa077959ae27ad4b2e7a1c84e3c41dea5d8102",
+      "title": "Required bindings and stable obligations"
+    },
+    {
+      "page": 33,
+      "page_call_ast_sha256": "9152523444403bd740fe23422ae28fcf6e4142c9037c94addcc70affb0473e7a",
+      "title": "Source concordance and provenance"
+    },
+    {
+      "page": 34,
+      "page_call_ast_sha256": "5f3749761ce7de292489e7a7389ef675c4e77d7ba0ceb54c0d14733b0d62591b",
+      "title": "Notation and technical references"
+    },
+    {
+      "page": 35,
+      "page_call_ast_sha256": "cde332feb7cc47914b13e1aeeb4e956af008bacb5b1d2a0b328807de2e5e9e83",
+      "title": "One field-guided Tomigidt"
+    },
+    {
+      "page": 36,
+      "page_call_ast_sha256": "6d1c800d67237a8d9c7afdbb2ad9e5e60f24a1d881772455655e28f6266cbca1",
+      "title": "Observe, plan and transport"
+    },
+    {
+      "page": 37,
+      "page_call_ast_sha256": "239f4ffc8419f76fb9178261bbed2611b7afb9b4f757cdf52a39a6e9bfa520c9",
+      "title": "Regeneration and device admission"
+    },
+    {
+      "page": 38,
+      "page_call_ast_sha256": "fc4fbe976521077c73010d404fe8ce7e364b4df2985713e01a6bc6a3b5bec764",
+      "title": "Integrated replay and acceptance"
+    },
+    {
+      "page": 39,
+      "page_call_ast_sha256": "bab8cdc9815550384e99a7806f047c7fa9ba008cb18086e69f798a355ab577db",
+      "title": "Local SDF-derived Psi binding"
+    },
+    {
+      "page": 40,
+      "page_call_ast_sha256": "0650c0bd913bc36c03a2b3654b0b6b0c3c59d19577c2047d2d0f5d936cf76d44",
+      "title": "Canonical index identity and key"
+    },
+    {
+      "page": 41,
+      "page_call_ast_sha256": "47855f1711a130f921a2a61aad4296914fc49552d1663a6104f6efd11ecb2304",
+      "title": "Middle-out tree and executable lookup"
+    },
+    {
+      "page": 42,
+      "page_call_ast_sha256": "5b04e3b03482cc7a9741fb887f412e3cd2c1e2cfd0c3d265882f252cabc096df",
+      "title": "Atomic rebuild and semantic preservation"
+    },
+    {
+      "page": 43,
+      "page_call_ast_sha256": "24c44cf20aa269e67299333405e21a8eec672b7890c2d67603bd190566a8cc64",
+      "title": "Psi-index reference and acceptance"
+    },
+    {
+      "page": 44,
+      "page_call_ast_sha256": "fff06e4a319dbc5bee4d5ba58234eb8950c1e0717796c196227b92eb121461bf",
+      "title": "Typed Hadamard routing policy"
+    },
+    {
+      "page": 45,
+      "page_call_ast_sha256": "fa528cec93e26d0b86deb75a08bb139f85ed347e54c49c966fa0f20edf32d3d7",
+      "title": "Phase-state planning and admitted action"
+    },
+    {
+      "page": 46,
+      "page_call_ast_sha256": "95dc82c2958b6baa76094e754602fd3678f0bc455b6b1af7808a9f1b180556f9",
+      "title": "Routing atlas and certified export"
+    },
+    {
+      "page": 47,
+      "page_call_ast_sha256": "eaaf6bec625eecde1c724a2622af90f450b6fdb2c8cefa00c22164165f1694d4",
+      "title": "Hadamard rebuild and resource contract"
+    },
+    {
+      "page": 48,
+      "page_call_ast_sha256": "fef20324cd5ccb8f7f25988d82fd14267b74e827e4027bbf4bcaebd95090218e",
+      "title": "Hadamard reference and acceptance"
+    },
+    {
+      "page": 49,
+      "page_call_ast_sha256": "b7f1005e20d86b344cc01aae7335835b0dc43fd15757bb30d8c8b403d84d5608",
+      "title": "Measured Hadamard implementation"
+    },
+    {
+      "page": 50,
+      "page_call_ast_sha256": "afd763306b315bf3062f92280a02c88afa7ed53fb93f6fc152fa1ba879e3b1d1",
+      "title": "Autonomous growth binding"
+    },
+    {
+      "page": 51,
+      "page_call_ast_sha256": "1b7bc0b78731ce3ee0dc6a5ed4373982a63e4c15dcf8c7a65a29feadeaee8c38",
+      "title": "Dyadic geometry and active scale"
+    },
+    {
+      "page": 52,
+      "page_call_ast_sha256": "765a57108cf116da092ee56f794170397552ebacd9f8d94a3958cdbc1778e613",
+      "title": "Subgoals, growth and energy reserve"
+    },
+    {
+      "page": 53,
+      "page_call_ast_sha256": "b6dcc0eaf54421174bb9d385f35996f23f56a45866949fff3721900fe4ab27f1",
+      "title": "State-selected next target"
+    },
+    {
+      "page": 54,
+      "page_call_ast_sha256": "ce8a1bfe55f59b02a2057b48a00bf78fb8ec7a519c07e7d4c7bc6e62a4ca1fec",
+      "title": "Atomic growth and device mapping"
+    },
+    {
+      "page": 55,
+      "page_call_ast_sha256": "7e9272b04c6bd13126459497d756b61e13a0bf5444faade48248702d1d2eb2e5",
+      "title": "Epoch-aware replay and regeneration"
+    },
+    {
+      "page": 56,
+      "page_call_ast_sha256": "258133dc127cd4b5a1f202360472806ca448ea7834dc13cd127ae45a9fc2b4dc",
+      "title": "Growth reference and acceptance"
+    },
+    {
+      "page": 57,
+      "page_call_ast_sha256": "84ce6b23aee31bdc978b52d72c2dd2c71def8e597ae694d800087fe62c965a27",
+      "title": "Measured autonomous geometry growth"
+    },
+    {
+      "page": 58,
+      "page_call_ast_sha256": "21bd1276636a77e7be88ccd1ae2665dd166959436bd761ce44ff5af9dc82fe12",
+      "title": "Parameterized branching organogram"
+    },
+    {
+      "page": 59,
+      "page_call_ast_sha256": "15a58d5e9f939c4ae627cf64891cbafe0b58023a1e3b6897c1aa8547ed8b2351",
+      "title": "Parameters, productions and finite tape"
+    },
+    {
+      "page": 60,
+      "page_call_ast_sha256": "b9fd76cd7f4a0b924f868a3447cc6a055d074f0fd754c76ef99f99b8719a72e4",
+      "title": "Prior-field interpreter and branch context"
+    },
+    {
+      "page": 61,
+      "page_call_ast_sha256": "06fd058ea843c82915c7fc2b787639d1711514da7b2b8adaf0921b3fd5072529",
+      "title": "Intrinsic ball union and exact new field"
+    },
+    {
+      "page": 62,
+      "page_call_ast_sha256": "138e29a81608505343e9941aded0868d77a0d51ca28a859f17bc967ec4f88ec3",
+      "title": "The same individual admits a generated world"
+    },
+    {
+      "page": 63,
+      "page_call_ast_sha256": "432a7e5d07dbc740327c715723733818786008e384d4a725f2f8aecb98974478",
+      "title": "Original recipes, transcripts and replay"
+    },
+    {
+      "page": 64,
+      "page_call_ast_sha256": "b48569c3b83bc5b77b17da3b680414825cdc4d120dd2f246ff1a7b2d656992fd",
+      "title": "Device production and atomic admission"
+    },
+    {
+      "page": 65,
+      "page_call_ast_sha256": "ca8b5231fe10ec0ce9336b703dc6bcbef2b0bdffe18844d1d121b9d4c95dca44",
+      "title": "Independent organogram reference"
+    },
+    {
+      "page": 66,
+      "page_call_ast_sha256": "697d2a543fc5e3d202d88c5fe9c68fa9b29df203480520110029cdd2b32aa447",
+      "title": "Organogram acceptance obligations"
+    },
+    {
+      "page": 67,
+      "page_call_ast_sha256": "063a0f29dab135f2407275b644997884e31ad562b6b35dc005a0be2e6d49c3e6",
+      "title": "Measured organogram continuation"
+    },
+    {
+      "page": 68,
+      "page_call_ast_sha256": "bfbd8e00f4f967a2f5454223fc45c5ad152049fc251fe9f5403e399911a2585e",
+      "title": "Organogram device and retention evidence"
+    },
+    {
+      "page": 69,
+      "page_call_ast_sha256": "2a7bd986ab5c6ade9762d40283b8f6864db61afda4a69746c7005d49ca938c13",
+      "title": "WElip forward-time binding"
+    },
+    {
+      "page": 70,
+      "page_call_ast_sha256": "7715305932975e547e42723091d8956dbe139e8f4c013ddf0083244bd6cd3e36",
+      "title": "W configuration and independent clocks"
+    },
+    {
+      "page": 71,
+      "page_call_ast_sha256": "e2bf9c0e09fa9c9c5c0ecb2a5d18167448f348ac7c10a630d9e559f9b9830b8a",
+      "title": "The five forward operations"
+    },
+    {
+      "page": 72,
+      "page_call_ast_sha256": "fe2442f595694f4d748c7cde26ceed8e2adddcd7c67d42c316d43c79c81f3fb7",
+      "title": "Forward boundary and latest retry"
+    },
+    {
+      "page": 73,
+      "page_call_ast_sha256": "ce4135ead8a626238f84ec7b15d728716f3db9383226844f92195596e4ab4dbb",
+      "title": "WElip carrier and exact state decoding"
+    },
+    {
+      "page": 74,
+      "page_call_ast_sha256": "d00665408b9a50b9e35315b57d31ae420ea6e7869a21ef6af48eb504990dde7a",
+      "title": "LUS envelope and derivation identity"
+    },
+    {
+      "page": 75,
+      "page_call_ast_sha256": "a3fdf128b45e35a4bf8e49aece96badde4474e72ad7df137eae58a8a2a0465ce",
+      "title": "Durable W ownership and archive"
+    },
+    {
+      "page": 76,
+      "page_call_ast_sha256": "3e9aceeb8fe62ea4f30605ff3376e267e9b7742fb1ffd287766ce89cd0b746cc",
+      "title": "Private recovery and operation atomicity"
+    },
+    {
+      "page": 77,
+      "page_call_ast_sha256": "e81841c1f28f0cd4504e86e6d6c34a55dab67c951b2f714b5994d5eb2da26214",
+      "title": "Actual device W emission"
+    },
+    {
+      "page": 78,
+      "page_call_ast_sha256": "d92d251f6864a99d50a94e77730fce9c30e0119f56f3fca2ea085b7f8be04eba",
+      "title": "W transport and exact responses"
+    },
+    {
+      "page": 79,
+      "page_call_ast_sha256": "1562f73596c159470a26511a823875d8841a07ec9224e74f59a714357cb0c5c9",
+      "title": "W admission order and rejection classes"
+    },
+    {
+      "page": 80,
+      "page_call_ast_sha256": "c76c2d100510aa3fae5a01f9c3ea3a5e9794748b709b7d95ce9acebb26065ce7",
+      "title": "Independent W reference vectors"
+    },
+    {
+      "page": 81,
+      "page_call_ast_sha256": "c2b6207a955d57cd8d5e2acee347b8ed64e411d8501414bbe2f0dcf7220a9c51",
+      "title": "W acceptance and architectural scope"
+    },
+    {
+      "page": 82,
+      "page_call_ast_sha256": "7545194ce7cc784e971b05bdd00e0e8a61b3ff2f630739adb8f1e9abbbfd2064",
+      "title": "Measured W clock and continuation"
+    },
+    {
+      "page": 83,
+      "page_call_ast_sha256": "2a58b7db93b0466cc0fdc4f5911f2fb0ccc90c0655d31c9cfa069c26d999e8bd",
+      "title": "W recovery, evidence and remaining work"
+    }
+  ]
+}

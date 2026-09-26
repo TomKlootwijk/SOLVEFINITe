@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 12. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 13. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -16,7 +16,7 @@ from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle
-from reportlab.platypus import Paragraph, Table, TableStyle, Spacer, Preformatted
+from reportlab.platypus import Paragraph, Table, TableStyle, Spacer, Preformatted, Flowable
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from pypdf import PdfReader
@@ -31,7 +31,10 @@ HADAMARD_EVIDENCE = ROOT / 'docs/evidence/hadamard-v1'
 GROWTH_EVIDENCE = ROOT / 'docs/evidence/growth-v1'
 ORGANOGRAM_EVIDENCE = ROOT / 'docs/evidence/organogram-v1'
 WELIP_EVIDENCE = ROOT / 'docs/evidence/welip-v1'
+DIRECTIONAL_EVIDENCE = ROOT / 'docs/evidence/directional-v1'
 OG_CAPTURE_COMMIT = 'f125a76b75052c3611c39557779c08e4553e620a'
+W_CAPTURE_COMMIT = '1ea93207ae8545a5c5d344677cb73a5c459dc91c'
+DP_REFERENCE = None
 HP_VERIFICATION = None
 GD_VERIFICATION = None
 GD_CONFORMANCE = None
@@ -110,11 +113,50 @@ def page(title, subtitle, *items):
     PAGES.append((title, subtitle, list(items)))
 
 
+class TaperWitness(Flowable):
+    """Vector rendering of DP5's literal quotient vertex set, not a 3D solid."""
+    def __init__(self):
+        super().__init__()
+        self.width, self.height = CONTENT_W, 188
+
+    def draw(self):
+        c = self.canv
+        occupied = {11, 18, 19, 20, 25, 26, 27, 28, 29, 32, 33, 34, 35, 36, 37, 38}
+        interior = {19, 26, 27, 28}
+        c.setFont('Body', 7.5)
+        for u in range(8):
+            c.setFillColor(MUTED); c.drawCentredString(28+u*21, 6, str(u))
+            for v in range(8):
+                x, y, node = 28+u*21, 24+v*21, u*8+v
+                c.setStrokeColor(TEAL if node in occupied else RULE)
+                c.setFillColor(INK if node in interior else GOLD if node in occupied else colors.white)
+                c.circle(x, y, 4, fill=1, stroke=1)
+        for v in range(8):
+            c.setFillColor(MUTED); c.drawRightString(14, 21+v*21, str(v))
+        c.setFont('Bold', 8); c.setFillColor(TEAL)
+        c.drawString(190, 7, 'u'); c.drawString(7, 182, 'v')
+        c.setFont('Bold', 10); c.setFillColor(INK)
+        c.drawString(235, 167, 'Closed taper section on an 8 by 8 chart')
+        c.setFont('Body', 9)
+        labels = [(GOLD, '12 boundary vertices: field 0'),
+                  (INK, '4 interior vertices: negative field'),
+                  (colors.white, '48 outside vertices: positive field')]
+        for offset, (fill, label) in enumerate(labels):
+            y = 140-offset*22
+            c.setFillColor(fill); c.setStrokeColor(TEAL if offset < 2 else RULE)
+            c.circle(241, y, 4, fill=1, stroke=1)
+            c.setFillColor(INK); c.drawString(255, y-3, label)
+        c.setFillColor(MUTED)
+        c.drawString(235, 59, 'Apex (1,3); shaft u+; extent 3; slope 1.')
+        c.drawString(235, 43, 'The cap is at u=4. All vertices are shown.')
+        c.drawString(235, 27, 'No seam is crossed in this witness.')
+
+
 def build_content():
     if any(value is None for value in (HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE,
                                        OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE,
                                        W_VERIFICATION, W_CONFORMANCE)):
-        raise ValueError('Verify historical HP/GD/OG evidence and the W capture before revision 12')
+        raise ValueError('Verify historical HP/GD/OG/W evidence before revision 13')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
@@ -135,7 +177,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 12. FI/PX/HP contracts remain on pages 35-48; HP evidence at 5a304bc is on page 49. GD contracts/evidence at 94f86c7 remain on pages 50-57. OG contracts remain on pages 58-66, with the historical f125a76 capture on pages 67-68. W1-W8 were bound before implementation at 74e00f4; their definitions remain on pages 69-81, with measured results on pages 82-83.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 13. FI/PX/HP contracts remain on pages 35-48; HP evidence at 5a304bc is on page 49. GD contracts/evidence at 94f86c7 remain on pages 50-57. OG contracts remain on pages 58-66, with the historical f125a76 capture on pages 67-68. W1-W8 remain on pages 69-81, with historical 1ea9320 measurements on pages 82-83. The directional taper contract and independent arithmetic begin on page 84; their runtime implementation remains pending.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -1395,11 +1437,207 @@ def build_w_measured_pages():
     )
 
 
+def build_directional_content():
+    """DP is a formal-first extension; its reference is not hardware evidence."""
+    if DP_REFERENCE is None:
+        raise ValueError('Verify the independent directional reference before rendering DP')
+    page('Directional geometry: taper sections', 'APPENDIX MAP | DP1-DP10 | FORMAL ONLY',
+        box('This contract supplies a new directional geometry-to-field map before runtime implementation. It preserves the original three source PDFs, all previous numerical profiles and the separate ELI5 booklet. The independent reference proves specific arithmetic expectations; it does not count as executed CPU/GPU conformance.'),
+        table(['Section','Definition and obligation','Page'],[
+            ['DP1','Source scope, new identities and exact manifest', '<link href="#p85">85</link>'],
+            ['DP2','Parameterized grammar and exact tape', '<link href="#p86">86</link>'],
+            ['DP2','Instruction decoding and rejection', '<link href="#p87">87</link>'],
+            ['DP3','Prior-field shaft and complete branch context', '<link href="#p88">88</link>'],
+            ['DP4','Projected footprint and transported frame', '<link href="#p89">89</link>'],
+            ['DP5','Union boundary, exact distance and proof', '<link href="#p90">90</link>'],
+            ['DP6','Finite work and checked arithmetic', '<link href="#p91">91</link>'],
+            ['DP7','Original recipes and canonical derivations', '<link href="#p92">92</link>'],
+            ['DP8','Same individual, target, energy and epochs', '<link href="#p93">93</link>'],
+            ['DP8','Explicit W version and continuation', '<link href="#p94">94</link>'],
+            ['DP9','Device construction, certificates and ownership', '<link href="#p95">95</link>'],
+            ['DP10','Independent numerical reference', '<link href="#p96">96</link>'],
+            ['DP10','Required runtime acceptance and remaining scope', '<link href="#p97">97</link>'],
+        ],[.12,.76,.12]),
+        small('Historical implementation baseline: 1ea9320, with 698 passing tests, 145 actual-device GPU methods and 14 W conformance checks. Those counts apply to the prior W/OG implementation only. No directional runtime result is asserted by revision 13.')
+    )
+    page('Source scope and explicit new profile', 'FORMAL ONLY | DP1 | A DIRECTIONAL BOUNDARY FAMILY',
+        p('Original p.5 describes a two-dimensional radial sweep. Original p.7 requires each primitive to declare a metric, boundary, units, sign and geometry-to-field map, and relates pyramid/cone slope and extent to a local shaft or Psi. Solus pp.3-4 and solipsism p.13 discuss side views. They supply no unique cone/pyramid equation or three-dimensional metric. DP chooses the following finite axial section.'),
+        eq('TAPER(h,p,q): 0 <= s <= h*2^scale, q*abs(t) <= p*s'),
+        p('Here s and t count local unit edges; p/q is transverse extent per axial step. SCALE multiplies extent, not slope. The apex is the current grammar cursor. A field/phase-selected shaft orients the section. A closed cap occurs at its finite extent. Projection onto the existing Klein quotient can wrap and self-overlap. Rasterization, boundary convention, bounds and versions are declared realization choices.'),
+        box('A cone and an appropriately aligned pyramid can have the same triangular axial section. This is one directional section family, not a claim of two distinct three-dimensional solids. Full volumetric cone/pyramid geometry remains an architectural obligation.'),
+        code('policy = "tomigidt-field-taper-plan-act-v1"\nbinding = "klein-taper-organogram-v1"\nrecipe = "klein-taper-world-v1"\nderivation = "klein-taper-derivation-v1"\nreceipt = "klein-taper-growth-v1"\ninstruction_profile = "TP-TAPE32-v1"'),
+        h('Exact manifest extension'),
+        p('Retain FI/HP common manifest keys identity, target, world, initial_node, initial_phase, initial_orientation, initial_energy, repair_cost, max_search_expansions, max_hops, max_cycles, policy, word_profile and perspective. Add exactly routing and taper for this policy. taper is DP2\'s immutable binding; routing retains HP. No growth or organogram key is accepted. word_profile remains RP32-relational-sdf-v2 and perspective remains local-observation-v1.'),
+        p('world is the original KleinFieldRecipe with W,H at least 3 and N=W*H at most 256. Existing manifest domains, departure turns, exact signed-code range, word mirror/parity and finite mission bounds remain in force. Every listed key is required; extras and Boolean/float substitutions for integers are rejected.'),
+        small('Coordinates are canonical labels for the declared quotient, not a physical origin. Index sign, phase origin and tree row order cannot select geometry. DP does not change graph dimension, add a global scale, prove universal computation or measure bandwidth reduction.')
+    )
+    page('Parameterized taper grammar', 'FORMAL ONLY | DP2 | COMPLETE FINITE INPUT',
+        code('taper = {format,max_epochs,cost,symbols,axiom,rules,\n         generations,limits}\nformat = "klein-taper-organogram-v1"\nlimits = {max_symbols,max_steps,max_primitives,\n          max_stack,max_primitive_sites}'),
+        p('Inherit OG1-OG2\'s exact symbol, axiom, rule, affine-expression, signed-i32, guard, generation and permanent-address rules on pages 58-59. Add reserved terminal TAPER with arity 3. The fixed arities are F:1, +:1, -:1, [:0, ]:0, R:1, S:0, SCALE:1, TAPER:3. Nonterminal declarations cannot reuse any terminal. max_epochs remains 0..4, cost 1..127 and generations 0..8.'),
+        table(['Input','Exact interpretation'],[
+            ['TAPER(h,p,q)','Strict integers h,p,q in 1..65535; gcd(p,q)=1. h is unscaled extent; p/q is slope. DP6 adds effective-work and arithmetic checks.'],
+            ['F, +, -, R, SCALE','Existing bounds: F 1..256; signed-turn magnitude 1..16; R 1..127; SCALE 0..4. F length and primitive extent/radius multiply by 2^scale. S effective radius must remain at most 127.'],
+            ['max_symbols / max_steps','Strict 1..1024 logical symbols at every generation / 1..4096 total effective F substeps.'],
+            ['max_primitives / max_stack','Strict 1..64 ball or taper emissions / 0..32 saved frames. Every admitted final tape emits at least one primitive.'],
+            ['max_primitive_sites','Strict 1..16777216 (2^24); default example budget 1048576. DP6 counts complete tested rectangles, including rejected sites, and N sites per ball.'],
+        ],[.30,.70]),
+        h('Single-valued rewrite and preflight'),
+        p('Read the previous generation only; first matching rule wins, empty RHS erases, unmatched symbols pass. Reject a final nonterminal. Preserve ordered immutable arguments and OG addresses for all passes and replacements. Check every intermediate word and every final instruction. Validate brackets and restore radius/scale during preflight; reject underflow or a nonempty final stack.'),
+        p('TAPER emits at the current cursor without advancing it or consuming a turn. S emits a closed intrinsic ball. Their union semantics are DP5, including for a tape containing only S. No inequality residual or collection of old OG spheres substitutes for the directional footprint.'),
+        small('This new profile deliberately changes primitive composition. OG-TAPE32-v1, klein-branch-organogram-v1 and existing OG archives retain their original minimum-margin boundary. A profile tag must be checked before decoding or certifying data.')
+    )
+    page('Typed instruction words and decoding', 'FORMAL ONLY | DP2 | TP-TAPE32-v1',
+        eq('raw = operand + 2^24*code\nword = raw + 2^31*(popcount(raw) mod 2)\noperand = word & 0xFFFF; code = (word >> 24) & 15\nrequire (word & 0x70FF0000)==0 and even popcount'),
+        table(['Code(s)','Logical instruction and required words'],[
+            ['0..7','F,+,-,[,],R,S,SCALE in that order. One word; operand is the argument or exactly zero for [, ], S. Numerical old-word encodings remain the same under this new profile.'],
+            ['8,9,10','One TAPER(h,p,q) is exactly three consecutive words: code 8 carries h, code 9 carries p, code 10 carries q. Each independently has even parity and zero reserved bits.'],
+            ['11..15','Always invalid. Codes 9 and 10 cannot begin a logical instruction.'],
+        ],[.18,.82]),
+        p('Decode in order. A code 8 requires both continuation words with exactly the prescribed codes, then advances by three texels. Reject truncation, wrong order, isolated continuations, invalid operands, wrong arity, nonzero no-argument operands, reserved bits and parity errors. Decoding shall yield exactly the declared logical tape and arguments; no trailing ignored words are allowed.'),
+        eq('offset(0)=0\noffset(i+1)=offset(i)+(3 if symbol_i==TAPER else 1)\ntexels = logical_instructions + 2*taper_count <= 1152'),
+        p('The offset map is a deterministic derivative of the logical tape. Trace and branch identities use logical terminal addresses, never continuation-word offsets. The bound follows from at most 1024 logical symbols and at most 64 primitives. Fetch exact r32uint texels with integer textureLoad in tape order and without filtering.'),
+        h('Carrier type is part of the meaning'),
+        p('The four-bit instruction opcode is a property of TP-TAPE32-v1 only. It changes neither RP32 state layout nor the eight old OG opcodes. These instruction words are not state pairs, have no spatial node or signed distance lane and assert no full-mirror relation. The same immutable tape acts on mirrored cursor pairs.'),
+        small('All integer domains, preflight counts and decoded terminal identities shall also be checked on device before interpretation. Host parsing alone does not certify an uploaded instruction texture. A malformed candidate cannot advance the live owner or alter the durable history.')
+    )
+    page('The prior field chooses the shaft', 'FORMAL ONLY | DP3 | CANONICAL SELECTION, TRANSPORTED FRAME',
+        p('Use one prior certified field for the complete stage. Begin at the original repaired EMIT pair, repacked as STEP, with radius 1, scale 0 and empty branch path. OG3\'s F, phase turns, complete PUSH/POP and per-terminal trace rules remain in force. The emitted geometry does not feed back into this same stage\'s cursor decisions.'),
+        eq('tau = (-1)^eta * R mod 256; bank=floor(tau/64)\ng=(phi(u+)-phi(u-), phi(v+)-phi(v-))\nPsi=g/gcd(abs(g_u),abs(g_v)), or (1,0) if g=(0,0)\nz_i=gains[bank][i]*(1+Psi_i^2)*g_i'),
+        p('At a TAPER terminal, compute exactly the OG F direction at that canonical node: maximize z dot e over e=(1,0),(0,1),(-1,0),(0,-1). Break ties with this list rotated left by bank. Store the selected direction code 0..3 as shaft. Do not take the F step, update phase, modify radius/scale or change the owner. The current pair remains a prior-field STEP pair.'),
+        eq('e = selected canonical shaft\nf = (-1)^eta * (-e_v,e_u)'),
+        p('The pair (e,f) is the local axial/transverse frame at emission. Mirror the complete RP32 pair: R changes sign and eta toggles, so tau and the chosen e are unchanged while f changes sign. Because the footprint includes both signs of t, its projected occupancy is identical. Transcript pairs remain full mirrors, not byte-identical left views.'),
+        h('Selection and chart transport are different operations'),
+        p('Select e once using the canonical quotient chart and its specified tie priority. An equivalent covering-space representative must transport that already selected e and f as DP4 declares. Re-running the unchanged cyclic tie priority in an arbitrarily reflected chart is invalid: at zero gradient, bank 1 would select v+ again instead of the transported v-. The rule does not claim to be invariant under such an untransported re-selection.'),
+        p('PUSH/POP restores the complete pair, radius, scale and enclosing branch path, including a nested seam crossing. No independent persistent heading is added: the prior field and restored pair determine the next shaft. Program position, emitted primitives, transcript, work counters, energy and history never rewind.'),
+        small('Changing a declared initial phase, routing gain, original tick or grammar parameter may change geometry. Changing cache capacity or f8 storage descriptors must not. These are distinct semantic and storage operations.')
+    )
+    page('Project the complete local footprint', 'FORMAL ONLY | DP4 | COVERING SPACE AND EDGE TRANSPORT',
+        p('Let quotient dimensions be W,H and canonical apex be (a,b), with a in 0..W-1, b in 0..H-1. Use L=h*2^scale for the effective axial extent and reduced p/q for slope. The local closed lattice footprint is finite:'),
+        eq('D = {(s,t) in Z^2 : 0<=s<=L, q*abs(t)<=p*s}\n(X,Y) = (a,b) + s*e + t*f\nk=floor(X/W); u=X-k*W\nP(X,Y) = (u, ((-1)^k*Y) mod H)'),
+        p('Floor division and modulo are mathematical, including negative X or Y; modulo returns 0..H-1. Numeric node ID is u*H+v. Occupancy is the set of all P(X,Y) for (s,t) in D. Deduplicate projected nodes by set union. Do not keep only a nearest lift, clamp a wrap, fill an axis-aligned bounding box, or replace the section with balls.'),
+        h('Theorem DP-A: equivalent representatives agree'),
+        eq('A_(m,n)(X,Y)=(X+m*W,(-1)^m*Y+n*H)\nJ_m=diag(1,(-1)^m)\napex\'=A_(m,n)(apex); e\'=J_m*e; f\'=J_m*f'),
+        p('The transformed local point is exactly A_(m,n)(apex+s*e+t*f). Its horizontal quotient is k+m; reducing the vertical component gives (-1)^k*Y plus an integer multiple of H. Therefore P(A_(m,n)(X,Y))=P(X,Y), for every integer m,n. This proves covariance when the selected frame is transported as well as the apex.'),
+        h('Equivalent local edge construction'),
+        p('Take s unit steps along e, then abs(t) along sign(t)*f. At each reversing u seam, negate the v component of both retained frame vectors before continuing. Projecting every intermediate lift yields the same endpoint as the formula. This supplies an independent edge-walk checker and relates the coordinate formula to the declared local transport.'),
+        p('Every vertical column at fixed s includes t=0; each accepted t has its neighboring t toward zero. The axial t=0 chain connects these columns. Its projection is connected, although different primitives may form a disconnected union. Multiple wraps and self-overlap are admissible if the final union has a boundary.'),
+        small('A physical rotation, arbitrary change of graph or distinct three-dimensional cone/pyramid surface is not a deck change. Those extensions require their own metric and transport declarations. No stored f8 axis or row order enters this footprint.')
+    )
+    page('Union first, then exact signed distance', 'FORMAL ONLY | DP5 | INNER VERTEX BOUNDARY',
+        p('Each S contributes the closed intrinsic ball {v:d_K(v,center)<=radius}. Each TAPER contributes DP4\'s projected closed lattice set. Let X be the union of these occupied vertices on the fixed connected undirected unit-edge graph K. Duplicated primitive records remain in the transcript; occupancy ignores multiplicity.'),
+        eq('Z = {v in X : some neighbor of v is not in X}\nsigma(v) = 0 if v in Z, -1 if v in X\\Z, +1 otherwise\nphi_new(v)=sigma(v)*min_(z in Z) d_K(v,z)'),
+        p('Reject empty X or X equal to all vertices; equivalently this connected finite graph would have no Z. A thin nonempty footprint is legal: all its occupied vertices may be boundary and it may have no negative interior. Reject any exact field outside -127..127. Distances use graph unit edges; slope and inequality residual are not distance units.'),
+        h('Theorem DP-B: separation and exact field'),
+        p('An occupied vertex adjacent to an unoccupied one is in Z by definition, so no edge joins negative and positive signs. Distance to nonempty Z is integer-valued and 1-Lipschitz. On an edge with equal signs its signed difference is at most one; on an edge incident to Z the other endpoint is at distance at most one; opposite nonzero signs cannot occur. Thus phi_new is an exact signed boundary distance and is 1-Lipschitz on every edge.'),
+        p('A boundary hidden by another primitive is removed before redistancing. The new S-only profile can therefore differ from old OG at cut loci or overlaps. This is deliberate, declared by the new policy/binding/recipe versions. Neither old minimum sphere margins nor per-primitive signed distances define DP\'s final signs.'),
+        h('A new field family, not renamed old balls'),
+        p('On an 8 by 8 quotient, apex (1,3), shaft u+, extent 3 and slope 1 produce 16 occupied vertices. The interior is {19,26,27,28}. Boundary vertex 38 has no negative neighbor. For any old OG ball union with positive integer radii, a zero-margin vertex has distance r to a minimizing ball center; stepping toward that center gives distance r-1 and a strictly negative union margin. Every old zero therefore has a negative neighbor. This DP field cannot equal any old OG ball-union field.'),
+        small('This witness distinguishes the defined discrete field families. It is not a proof of general computational power or physical superiority. Independent reference data retain the complete occupancy, boundary, signs, field and quotient neighbors for the witness.')
+    )
+    page('Bound work before constructing geometry', 'FORMAL ONLY | DP6 | FINITE, CHECKED INTEGER ARITHMETIC',
+        p('Preflight the rewritten tape with exact mathematical integer arithmetic. Restore radius and scale on POP. For each TAPER let L=h*2^scale and B=floor(p*L/q). B may be zero. Bound the full rectangle of tested lattice sites, not only occupied or distinct projected vertices:'),
+        eq('K_taper=(L+1)*(2*B+1)\nK_ball=N\nK_total=sum K_primitive <= max_primitive_sites <= 2^24'),
+        p('Enumerate s=0..L and t=-B..B for this accounting; accept the point iff q*abs(t)<=p*s. The valid endpoints could equivalently be generated column by column, but the declared rectangle bound remains the admission rule. A ball tests all N quotient vertices. Zero-length tapes and no-primitive results are rejected.'),
+        table(['Check','Required range or rule'],[
+            ['Operands / local context','h,p,q 1..65535; gcd(p,q)=1; scale 0..4; existing R/S/F bounds remain unchanged.'],
+            ['Products','L and p*L are positive and at most 2147483647; q*B is nonnegative and at most that value.'],
+            ['Lifted coordinates','W-1+L+B and H-1+L+B at most 2147483647. This bounds the absolute canonical-apex coordinates for every cardinal e,f and every tested rectangle site.'],
+            ['Aggregate work','Primitive count 1..max_primitives; effective F steps <=max_steps; stack high water <=max_stack; each generation <=max_symbols; encoded texels <=1152.'],
+            ['Geometry acceptance','The occupied union is proper and nonempty; exact new signed distance and every derived field/routing/index certificate are valid.'],
+        ],[.25,.75]),
+        h('No arithmetic wrap as a control path'),
+        p('Reject a failing product or sum before dispatch/allocation for candidate construction. On device, check nonnegative products with a<=floor(limit/b) before multiplying; check sums with a<=limit-b. Derive B only after p*L is safe. Check 2*B+1 and K against the remaining site budget before evaluating them. Use division/remainder implementing mathematical floor and nonnegative modulo when projecting negative coordinates.'),
+        p('Finite grammar generations, bounded F work and finite primitive sites establish termination of this stage. Geometry rejection never becomes a partial GROW or grammar DEFER. The agent\'s separate bounded planner retains DEFER. Resource budgets express executable limits, not physical energy measurements.'),
+        small('Shader redistance and derived atlas/index preparation remain finite under N<=256. Report actual peak resource payloads and allocations when implemented; a work count alone is not a memory or speed claim.')
+    )
+    page('Recipes retain original shape context', 'FORMAL ONLY | DP7 | REPRODUCIBLE DERIVATION',
+        code('recipe = {format,base,taper,routing,stages}\nformat = "klein-taper-world-v1"\nstage = {epoch,tick,start_pair,prefix_sha256}\nderivation = {format,context,tape,trace,segments,primitives,\n              final_context}\nformat = "klein-taper-derivation-v1"'),
+        p('Apply OG6\'s canonical JSON and stage domains: original base, immutable taper/routing, stages 1..max_epochs, contiguous epochs, strictly increasing original positive ticks, complete valid EMIT start pairs and lowercase SHA-256 of events before this GROW. Epoch zero uses the original base type. Validate each start pair against its reconstructed prior field. Never substitute current time, mutable grammar or current observations.'),
+        table(['Record','Exact keys'],[
+            ['context / tape','Original stage / ordered {address,symbol,args}. Logical addresses retain OG replacement/pass rules.'],
+            ['trace','{address,branch_path,pair,radius,scale} after every terminal.'],
+            ['segments','{address,branch_path,step,pair} after each effective F substep.'],
+            ['ball primitive','{kind,address,branch_path,center,radius,pair}; kind is ball, center is numeric node, radius is effective.'],
+            ['taper primitive','{kind,address,branch_path,apex,height,numerator,denominator,shaft,pair}; kind is taper; apex is numeric node, height=L, numerator=p, denominator=q, shaft=0..3.'],
+            ['final_context','{branch_path,pair,radius,scale}; branch_path is empty after a balanced tape.'],
+        ],[.25,.75]),
+        p('All transcript pairs are complete current prior-field STEP pairs as 16 uppercase hex characters. branch_path lists enclosing PUSH addresses outermost first. Keep primitive order and duplicates. radius in trace/final_context is unscaled. The transverse frame is derived from shaft and pair orientation. Its mirrored sign need not be an extra field. Reject unknown record keys, wrong kinds or types and inconsistent descriptor values.'),
+        eq('derivation_sha256=SHA256(canonical(derivation))'),
+        p('A descriptor is a checked output, not an independently editable input. Reconstruct the tape and cursor, certify every descriptor and derive the occupancy from it. A retained hash binds the original transcript; it is neither authentication nor a geometry seed. The certificate must bind the exact immutable recipe and original contexts.'),
+        small('Recorded historical field samples retain the original admission sequence and event-prefix identity under GD/OG rules. Cache eviction discards residency, not recipe dependencies. Rebuilds in a fresh process reconstruct every necessary stage with its original context.')
+    )
+    page('Admit geometry in the same individual', 'FORMAL ONLY | DP8 | EPOCHS, SUBGOALS AND RESOURCE STATE',
+        p('Apply the existing OG5 lifecycle with taper.cost and taper.max_epochs. REPAIR below the final epoch enters GROWTH_PENDING. The next complete fresh local observation frame admits one GROW transition. Sensor frames supply local observations, not shape coordinates, shafts, targets or actions. The hypothesis cursor is not a replacement individual.'),
+        eq('reserve(k)=repair_cost\n          +(max_epochs-k)*(taper.cost+repair_cost)\nG_new=G_old; R_new=R_old; eta_new=eta_old\nB_new=certified phi_new(G_old); opcode_new=STEP\nenergy_new=energy_old-taper.cost'),
+        p('Apply the inherited reserve bounds before admission. A successful GROW increments the global cycle once and epoch once; energy is debited once. Repack both mirrors and parity. Topology, dimensions, node names, departure turns and baseline index anchor are unchanged. The live owner continues over the new field.'),
+        eq('C0=all nodes except owner G\nC1=argmin_(v in C0) abs(phi_new(v))\nC2=argmax_(v in C1) unweighted_hops(G,v)\nnew_target=sorted_numeric(C2)[tau mod len(C2)]'),
+        p('This is the OG state-selected target rule. It does not use the final grammar cursor, primitive order, cache or index row order. Planning and action costs subsequently use the certified new field, PX and HP descriptors. With max_epochs=0, complete the initial mission without generating geometry.'),
+        code('event = {seq,input,decision,output,energy,\n         geometry_epoch,growth}\nreceipt = {format,from_epoch,to_epoch,mapped_node,\n           target,recipe,derivation_sha256}\nreceipt.format = "klein-taper-growth-v1"'),
+        p('geometry_epoch is the pre-cycle epoch; growth is null except at GROW. mapped_node is the unchanged canonical owner name. Snapshot adds geometry_epoch and current_recipe, with no global scale_exponent. Preserve the existing input identity, status, journal, energy and pending-search schemas under the new manifest policy. Reject a receipt or recipe from another production profile.'),
+        p('Successful GROW clears effective observations, pending planner state and active FIFO, and resets the replacement world\'s cache counters as in OG/W. The complete journal and global cycle/energy remain. Cache capacity/reindex operations preserve semantic state and do not advance cycles. Old observations and retries retain their original epoch, locality and admitting sequence; original duplicates cannot be reinterpreted against a later shape.'),
+        small('Same-owner conformance requires a complete changing-field mission, not merely matching detached primitive vectors. Final repair terminates only the declared finite mission; it does not complete the broader architecture objective.')
+    )
+    page('A declared W version for the new geometry', 'FORMAL ONLY | DP8 | FORWARD CONTINUATION',
+        code('protocol = "welip-field-agent-v2"\nconfig.format = "welip-field-config-v2"\narchive.format = "welip-field-session-v2"'),
+        p('Version 2 config retains exactly W1\'s keys format, agent, producer, producer_epoch, clock_origin, max_events and initial_capacity. For this binding its agent policy must be tomigidt-field-taper-plan-act-v1. Version 1 retains its existing four-policy domain and formats. Reject a cross-version protocol/config/archive combination before owner allocation or file replacement; never silently upgrade an old archive.'),
+        table(['Inherited W1-W8 behavior','Exact DP extension'],[
+            ['Five operations and clock','IGNITE, ADVANCE, RESIZE, INVALIDATE, EMIT; same strict clock origin, event bound, epoch carry, operation/record sequence, current cursor and retry rules. No historical-read operation is added.'],
+            ['Words and records','Retain welip-16-16-32-v1, welip-lus-v1, bytes-v1 and RP32-relational-sdf-v2. Record schema and packing equations are unchanged; no geometry discriminator is inserted into payload lanes.'],
+            ['Typed identity','The unchanged record baseline_id is only the original base recipe label. Scope record comparison and admission to the retained protocol and exact canonical config, including DP manifest. Bare words or baseline_id alone do not identify the geometry profile.'],
+            ['Private recovery','Replay original DP geometry contexts and the full W operation/cache sequence before READY. Compare typed canonical rows and expected state. Resume CPU or GPU with independent storage index choices.'],
+            ['Atomicity and retries','Retain W1-W8 durability, latest-only exact retry and uncertain-outcome failure rules. No second emission or action is admitted for a duplicate.'],
+        ],[.30,.70]),
+        p('The canonical GPU W emitter reads the actual admitted owner pair, separate energy and device cycle counter, including after GROW. Host-supplied current owner words or CPU state encoding cannot substitute. Clock/tick headers remain the W projection; they do not supply geometry or replace original agent GROW tick.'),
+        p('Endpoint agent welip dispatches explicitly on config/archive version. agent welip-config --profile taper creates v2; existing profile names and the default organogram continue to create v1. Version 1 shall explicitly reject taper even if a shared agent-manifest parser recognizes it. Keep the other W arguments and error/result fields, replacing the protocol value where applicable. Never compare or reuse records across different protocol/config namespaces merely because payload words, producer, epoch or clock coincide.'),
+        small('A failure after possible state/cache mutation or durable replacement poisons the live endpoint; hold its ownership lock until close and recover from the saved prefix in a fresh session. A provably complete rejection before mutation preserves the live owner. Exactly-once physical actuation is not established by this software protocol.')
+    )
+    page('Device construction and independent admission', 'FORMAL ONLY | DP9 | PRODUCTION, CERTIFICATES, OWNERSHIP',
+        p('The host may strictly parse, expand and preflight immutable tapes. Explicit GPU execution shall derive cursor motion, phase, shaft selection, primitive descriptors, occupancy, boundary, signs and exact distance on the device from retained prior certified geometry and actual original state. Uploading host-produced centers, shafts, occupancy or final distances is not a conforming GPU producer.'),
+        h('A finite construction with bounded storage'),
+        p('An implementation may enumerate the bounded rectangle sites in parallel, test each inequality with checked integer arithmetic, project accepted sites and OR occupancy bits. Ball membership may use the OG metric already checked against quotient BFS. Synchronize completion of the entire occupied union before computing its inner boundary; then redistance and build the candidate field, PX, HP and f8 resources. Equivalent algorithms must satisfy the same observable contract and work admission.'),
+        p('The derivative tape-offset map and site scheduling do not alter logical order or descriptor identities. Allocate only bounded resource arrays. A full per-site transcript is not required; retain the canonical per-terminal, per-segment and per-primitive derivation. Count and report actual live/peak device resource payloads when implementing this stage.'),
+        h('An independent certificate for the new profile'),
+        p('A sealed DP certificate shall independently reconstruct original grammar/context, trajectory and branch restores; recompute each shaft score and tie from its apex pair and prior field; check ordered descriptors and bounds; recompute occupancy using a separate construction, detecting both missing and extra sites; compare inner boundary/signs; and certify exact graph distances, seam transport, pair mirror/parity, derived PX/HP/index data and recipe identity. Do not use the old OG minimum-margin certifier for DP.'),
+        p('The checker may run on the host, but it cannot become the production path. CPU and GPU producers and the checker must not share the new geometry-producing helper. Test by disabling CPU producer/compiler paths during actual GPU construction, regeneration, owner GROW and private W recovery. Complete readback/certificate rejection and unknown device completion are distinct outcomes.'),
+        h('Transactional candidate ownership'),
+        p('Keep the old live owner, history, energy, field, atlas/index, cache and pending search until the complete candidate is certified and admission succeeds. Reject a complete invalid candidate and release all its resources. On success, install all matching resources together and retire the old set once. If state mutation, dispatch completion, cleanup after commit or saving is uncertain, retain the inherited fatal/poison/recovery semantics; do not resume from an assumed old state.'),
+        small('Exercise actual GPU seams, multiple wraps, original-context reconstruction, DEFER continuation, allocation failures and durable reopen boundaries. Texture residency alone supplies no proof of GPU saturation, latency improvement, throughput, measured energy advantage or elimination of physical memory traffic.')
+    )
+    page('Independent directional reference', 'FORMAL ONLY | DP10 | LITERAL EXPECTATIONS BEFORE RUNTIME',
+        p('docs/evidence/directional-v1/formal-reference.json and its reference-builder.py retain the independently computed grammar, tape, primitive, field, owner and W expectations. The generator imports pinned independent OG/GD/W arithmetic helpers and no solvefinite module. Its events are mathematical reference events; their prefix digests are not claims of existing runtime archives.'),
+        h('Distinct geometry and seam witness'),
+        TaperWitness(),
+        p('Direct covering projection is checked against a separate transported edge walk, including negative coordinates, multiple wraps, reflected representatives and full-pair mirrors. Overlapping primitives must remove hidden boundaries; narrow positive slopes may have no negative interior; whole-quotient occupancy rejects. Each retained vector carries its complete expected occupancy, signs and exact field.'),
+        h('Whole-history expectations'),
+        table(['Mission','Cycles','Energy','Final full pair'],[
+            [label, DP_REFERENCE[key]['cycles'], DP_REFERENCE[key]['final']['energy'],
+             '<font name="Mono">'+DP_REFERENCE[key]['final']['pair']+'</font>']
+            for label,key in [('One epoch','default_mission'),('Full mirror','mirrored_default_mission'),
+                              ('Two epochs','two_epoch_mission'),('Zero epochs','zero_epoch_mission')]
+        ],[.27,.13,.13,.47]),
+        p('The mixed default stage emits two tapers and one ball: 19 logical instructions, 23 texels, 7 F substeps and 41 primitive sites. Its Wv2 lifecycle contains 19 operations, 20 records and 41 words, ending at clock epoch 1, tick 13. Original tick/phase/parameter mutations, branch restoration, malformed inputs and limits have separate literal vectors.'),
+        small('The builder verifies source identities, helper identities and retained reference hashes before including this appendix. The historical 1ea9320 W capture is bound to its own 106 source/reference identities; new runtime changes cannot inherit its 698-test or hardware claims.')
+    )
+    page('Runtime acceptance and remaining obligations', 'FORMAL ONLY | DP10 | IMPLEMENTATION STILL REQUIRED',
+        table(['Required evidence','Conformance scope'],[
+            ['Exact construction','CPU and actual-device GPU agree with frozen tape, descriptors, occupancy, boundary, signs, exact distances and mirrors. Cover all shaft directions, both orientations, caps, thin sections, seams, repeated wraps and mixed/overlapping primitives.'],
+            ['Strict input and work','Reject schema/type/arity/rational/tape errors, i32 overflow, excess symbols/steps/primitives/sites/stack, underflow, incomplete triples, empty/full occupancy and bad field certificates before admission. Boundary cases at each limit are exercised.'],
+            ['State changes matter','Demonstrate slope, extent, original phase and original tick changes that affect geometry. Verify full branch restores after nested reversing seams and scaled primitives. Prove f8 descriptor/capacity changes cannot alter semantic output.'],
+            ['Same-owner continuation','Match complete one-/two-epoch, mirrored and zero-epoch missions, generated-world planning including DEFER, target/energy transitions and historical regeneration under original contexts.'],
+            ['Wv2 recovery','Frozen carry/cache/GROW/terminal projection; fresh GPU to CPU to GPU endpoint continuation with different indexes; strict v1/v2 mismatch rejection, duplicate no-op and uncertain/save-failure recovery.'],
+            ['Producer independence','Run actual GPU paths with CPU geometry, field, index, routing and state-emission producers disabled. Independently validate output and resource ownership; inject complete and uncertain candidate failures.'],
+            ['Historical compatibility','All old policies, instruction schemas, recipe/archive identities and Wv1 lifecycles retain their contracts. Complete suite and source-bound capture have zero unexplained skips.'],
+        ],[.27,.73]),
+        p('After implementation, retain full commands, test counts, device identity, source inventories before/after capture, original formal commit, archived histories and allocation evidence. Update measured status in this same PDF only after the conformance evidence exists.'),
+        small('The full architecture objective remains open: distinct three-dimensional primitive volumes, broader graph and production families, global spectral choices, physical adapters, wider continuation, computational universality and comparative hardware evidence. The source claims about bypassing bottlenecks and saturating hardware remain hypotheses requiring appropriately scoped measurements.')
+    )
+
+
 def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 12')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 13')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -1432,7 +1670,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 12')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 13')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -1440,7 +1678,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 12')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 13')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -1453,7 +1691,7 @@ def render(output):
             items=[]
             for pg,(t,s,_) in enumerate(PAGES,2):
                 if t=='Contents': continue
-                if pg > 69: continue  # The W appendix supplies its own complete section map.
+                if pg > 69 and pg != 84: continue  # Each later appendix supplies its own section map.
                 items.append((pg,t))
             column_width = (CONTENT_W-22)/2
             split = (len(items)+1)//2
@@ -1978,18 +2216,22 @@ def verify_w_capture(reference, protected_sources):
             or measured['actual_GPU_capture'] is not True or measured['partial'] is not False
             or measured['source_manifest_unchanged_during_capture'] is not True):
         raise ValueError('W measured chronology or full hardware-capture scope disagrees')
-    sources = {path.relative_to(ROOT).as_posix() for directory in ('solvefinite','tests','examples')
-               for path in (ROOT/directory).rglob('*')
-               if path.is_file() and path.suffix in ('.py','.wgsl','.json')}
+    historical_paths = subprocess.check_output(
+        ['git','ls-tree','-r','--name-only','-z',W_CAPTURE_COMMIT,
+         '--','solvefinite','tests','examples'], cwd=ROOT).decode('utf-8').split('\0')
+    sources = {path for path in historical_paths
+               if path and Path(path).suffix in ('.py','.wgsl','.json')}
     sources.add('tools/capture_welip_evidence.py')
     sources.update('docs/evidence/'+directory+'/'+name
                    for directory in ('welip-v1','organogram-v1','growth-v1')
                    for name in ('reference-builder.py','formal-reference.json'))
     if set(measured['source_sha256_lf']) != sources:
-        raise ValueError('W capture requires the complete current source inventory')
+        raise ValueError('W capture requires the complete historical 1ea9320 source inventory')
     for name, expected in measured['source_sha256_lf'].items():
-        if hashlib.sha256((ROOT/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != expected:
-            raise ValueError('W capture source changed: '+name)
+        source = subprocess.check_output(
+            ['git','show',W_CAPTURE_COMMIT+':'+name], cwd=ROOT).replace(b'\r\n',b'\n')
+        if hashlib.sha256(source).hexdigest() != expected:
+            raise ValueError('Historical W capture source identity changed: '+name)
     if set(measured['report_sha256_lf']) != {'full-tests.txt','conformance.json'}:
         raise ValueError('W capture requires full tests and complete conformance')
     for name, expected in measured['report_sha256_lf'].items():
@@ -2083,12 +2325,78 @@ def verify_w_capture(reference, protected_sources):
     W_VERIFICATION, W_CONFORMANCE = measured, captured
 
 
+def verify_directional_inputs():
+    global DP_REFERENCE
+    expected = {
+        'reference-builder.py': '4ad6499883fea68636c7dea9c511960d1ab0bae7e5724d9f06e7700fff4b3c26',
+        'formal-reference.json': '06bea44766da9d10f404c74750c5a7e1696fd54d67e5a2b0927e40d19c91200d',
+        'geometry-audit.py': '0ffd914f68e9979c338bccedc85fd8bf319e1babadd101636281cc2541ebdeaf',
+        'geometry-audit.json': '5dbde73fbfcc99e98cd9461c4201f6b0cd610d4df944e35f191e8552496e630c',
+    }
+    for filename, identity in expected.items():
+        actual = hashlib.sha256((DIRECTIONAL_EVIDENCE/filename).read_bytes().replace(b'\r\n',b'\n')).hexdigest()
+        if actual != identity:
+            raise ValueError('Directional formal input identity changed: '+filename)
+    reference = json.loads((DIRECTIONAL_EVIDENCE/'formal-reference.json').read_text(encoding='utf-8'))
+    audit = json.loads((DIRECTIONAL_EVIDENCE/'geometry-audit.json').read_text(encoding='utf-8'))
+    if (reference['format'] != 'directional-independent-formal-reference-v1'
+            or reference['generator_sha256_lf'] != expected['reference-builder.py']
+            or audit['format'] != 'solvefinite-directional-geometry-audit-v1'
+            or audit['provenance']['generator_sha256_lf'] != expected['geometry-audit.py']
+            or not all(audit['checks'].values())):
+        raise ValueError('Directional reference or separate geometry audit scope disagrees')
+    for path, identity in reference['independent_source_sha256_lf'].items():
+        if hashlib.sha256((ROOT/path).read_bytes().replace(b'\r\n',b'\n')).hexdigest() != identity:
+            raise ValueError('Directional independent helper identity changed: '+path)
+    for name, cycles, energy, pair in (
+            ('default_mission',11,69,'16000534060005CC'),
+            ('mirrored_default_mission',11,69,'060005CC16000534'),
+            ('two_epoch_mission',17,55,'0600111E960011E2'),
+            ('zero_epoch_mission',4,86,'06011145160111BB')):
+        mission = reference[name]
+        if (mission['cycles'],mission['final']['energy'],mission['final']['pair']) != (cycles,energy,pair):
+            raise ValueError('Displayed directional mission disagrees: '+name)
+        for stage in mission['stages']:
+            result = stage['result']
+            encoded = json.dumps(result['document'], sort_keys=True, separators=(',',':'),
+                                 ensure_ascii=True, allow_nan=False).encode('utf-8')
+            if hashlib.sha256(encoded).hexdigest() != result['derivation_sha256']:
+                raise ValueError('Directional derivation fingerprint disagrees: '+name)
+    preflight = reference['default_mission']['stages'][0]['result']['preflight']
+    if preflight != {'effective_steps':7,'primitives':3,'primitive_sites':41,
+                     'stack_high_water':2,'logical_instructions':19,'texels':23}:
+        raise ValueError('Displayed directional work counts disagree')
+    lifecycle = reference['w_v2_lifecycle']
+    if (len(lifecycle['operations']),lifecycle['record_count'],lifecycle['fragment_count'],
+            lifecycle['expected']['clock_epoch'],lifecycle['expected']['tick16']) != (19,20,41,1,13):
+        raise ValueError('Displayed directional W projection disagrees')
+    if (lifecycle['config']['format'] != 'welip-field-config-v2'
+            or lifecycle['config']['agent']['policy'] != 'tomigidt-field-taper-plan-act-v1'
+            or lifecycle['session_format'] != 'welip-field-session-v2'):
+        raise ValueError('Directional W projection lost its declared version')
+    for row in lifecycle['operations']:
+        if row['request']['protocol'] != 'welip-field-agent-v2':
+            raise ValueError('Directional W request has an unbound protocol')
+    witness = next(case for case in reference['geometry_vectors']['fixtures'] if case['name']=='unwrapped')
+    if (witness['occupancy'] != [11,18,19,20,25,26,27,28,29,32,33,34,35,36,37,38]
+            or witness['interior'] != [19,26,27,28] or len(witness['boundary']) != 12
+            or 38 not in witness['zero_without_negative_neighbor']):
+        raise ValueError('Directional vector figure or separation witness disagrees')
+    if (audit['representative_change_checks'],audit['transported_walk_endpoint_checks'],
+            audit['mirror_occupancy_checks'],audit['budget_arithmetic']['guarded_vs_bigint_cases']) != (
+                20616,109952,6872,13475):
+        raise ValueError('Independent directional geometry coverage disagrees')
+    DP_REFERENCE = reference
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--output',type=Path,default=OUTPUT)
     parser.add_argument('--font-dir',default='C:/Windows/Fonts')
     args=parser.parse_args()
     verify_retained_inputs()
+    verify_directional_inputs()
     register_fonts(args.font_dir)
     build_content()
+    build_directional_content()
     render(args.output)
