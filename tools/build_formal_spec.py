@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 4. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 5. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -99,7 +99,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 25 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 4. The implemented field formats are <font name="Mono">relational-sdf-v1</font> and <font name="Mono">relational-sdf-v2</font>. Measured FI1-FI8 integration remains on pages 35-38. This revision records implemented local SDF-derived Psi and storage indexing against the unchanged formal-first PX1-PX8 contract, pages 39-43.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 5. Measured FI1-FI8 integration and PX1-PX8 indexing remain on pages 35-43. This revision adds phase-directed Hadamard routing as HP1-HP8, pages 44-48, before runtime implementation. Existing relational-sdf-v1/v2, field-agent and index contracts retain their meanings.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -229,7 +229,7 @@ def build_content():
         eq('H_f(u,v)_i = clip(round_nu(u_i*v_i / 2^f))\nq = H_f(DecodeVector(W), Gradient_nu(phi))\nnext = SelectNeighbor_nu(node, q, topology)\nDelta_a^2 phi(x) = phi(x+a)-2*phi(x)+phi(x-a)\nDelta_T^2 phi_T = phi_(T+1)-2*phi_T+phi_(T-1)'),
         p('Hadamard multiplication applies to decoded numerical lanes with declared fixed-point scale, widened products, rounding and clipping. Opcode, continuation and parity bits are not vector components. The gradient/stencil, neighbor admissibility, ties, stop and fallback rules must be supplied.'),
         p('Spatial and temporal second differences are different operators. On a graph, x+a means the selected adjacent sample in a declared stencil, not an undeclared external coordinate. Spacing and units are required for divided differences.'),
-        small('Current status: typed arithmetic, SDF bounds, the PX local eigen-operator and canonical f8 median index have CPU/GPU checks. The implemented Psi role is storage indexing. Global eigenmode traversal and Hadamard routing remain separate obligations; no route-quality claim follows from index conformance.')
+        small('Current status: typed arithmetic, SDF bounds, local PX eigenstructure and f8 indexing have CPU/GPU checks. HP1-HP8 now bind phase-directed Hadamard routing before runtime coding. Global eigenmode traversal remains separate; no route-quality claim follows from index conformance.')
     )
     page('Relations define the field world', 'GEOMETRIC INTERPRETATION | SOLUS PP.3-6; SOLIPSISM PP.12-13',
         eq('phi(x) = sigma(x) * inf { d(x,b) : b in Boundary }'),
@@ -463,13 +463,13 @@ def build_content():
             ['Exact intrinsic SDF','<b>Verified subset.</b> Weighted graph distance, declared separating boundary, units, certificate and field-governed traces work. Continuous primitives and physical calibration are separate.'],
             ['C4: Klein geometry','<b>Verified finite profile.</b> Quotient cells, nonorientability, connected orientable cover, torus maps, intrinsic ball and CPU/GPU seam transport are audited.'],
             ['Local Psi / traversal','<b>Verified local index role.</b> Exact SDF eigen-operator, primitive axis, sign/zero tie and chart transport work. Global eigenmode traversal and behavioral routing remain separate.'],
-            ['Hadamard / Delta-Delta','<b>Partly formal.</b> Typed arithmetic and field bounds are defined; second-difference bounds are checked. A geometric Hadamard routing profile is not implemented.'],
+            ['Hadamard / Delta-Delta','<b>Formal pending.</b> HP1-HP8 bind typed phase-directed routing; runtime is not yet implemented. Existing second-difference bounds remain checked.'],
             ['f8 middle-out index','<b>Verified finite binding.</b> Canonical five-component keys, lower-median preorder, actual CPU/GPU lookup and atomic versioned rebuild work for scalar base descriptors.'],
         ],[.3,.7]),
         h('What the tests establish'),
         p('The implemented graph profile has exact arithmetic and a field certificate, and its tested CPU/GPU realizations agree. These are substantial completed components. They do not establish every named architectural layer by association with the same word carrier.'),
         h('What will count as progress next'),
-        p('FI1-FI8 preserve field-guided planning, local replanning and sample regeneration. PX1-PX8 add exact local eigenstructure and index-governed lookup without changing those histories. Next bindings concern global Psi/Hadamard routing, geometry-changing growth, active scale transitions and wider continuation.'),
+        p('FI1-FI8 and PX1-PX8 preserve field-guided planning, regeneration and exact indexed lookup. HP1-HP8 next require implemented phase-directed Hadamard planning against their new formal contract. Global Psi, growth, active scale transitions and wider continuation remain separate obligations.'),
         small('The requirements matrix continues on page 29. No percentage is assigned because architectural obligations differ in size and some remain unbound; counting passing tests would produce a misleading completion estimate.')
     )
     page('Progress against the architecture: II', 'CAPABILITY STATUS | INTEGRATION AND APPLICATIONS',
@@ -483,7 +483,7 @@ def build_content():
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
         h('Continuation after the integrated field agent'),
-        p('FI1-FI8 join retained geometry to the existing individual; PX1-PX8 add an interchangeable verified index. Legacy fixtures remain preserved. Remaining work binds global traversal/Hadamard operators, geometry-changing growth and wider continuation. Each stage requires its own evidence.'),
+        p('FI1-FI8 join retained geometry to the existing individual; PX1-PX8 add an interchangeable verified index. Legacy fixtures remain preserved. HP1-HP8 bind the next routing implementation; global traversal, geometry-changing growth and wider continuation still require separate work and evidence.'),
         small('The measured integration is finite and profile-scoped. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present profiles.')
     )
     page('Conformance and performance scope', 'ACCEPTANCE CRITERIA | ORIGINAL T1-T10',
@@ -587,7 +587,7 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box('<b>Revision 4 status.</b> SDF, Klein, FI1-FI8 and PX1-PX8 have measured finite evidence. The local eigen-axis and storage index now govern actual lookup and preserve the existing agent history across rebuilds. Prior captures remain identifiable. Global traversal, Hadamard routing and the wider architecture remain separately scoped.')
+        box('<b>Revision 5 status.</b> SDF, Klein, FI1-FI8 and PX1-PX8 retain their measured finite evidence: 421 passing tests, 55 device methods and 20 PX checks. HP1-HP8 on pages 44-48 are FORMAL PENDING before runtime coding. These earlier counts establish no HP implementation result.')
     )
     page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
@@ -714,13 +714,87 @@ for tick in admitted_finite_budget:
         box('<b>Revision 4 acceptance status: VERIFIED FINITE PROFILE.</b> All 20 PX conformance checks pass. The complete suite has 421 passing tests, 55 actual-device methods and zero skips. Four FI8-cycle rebuilds and 41 DEFER-cycle rebuilds preserve the prior canonical archive, energy, FIFO and retained search.'),
         small('This finite binding supplies local SDF-derived eigenstructure and a canonical middle-out storage index. It does not complete global Psi traversal, Hadamard routing, geometry-changing growth, active scale transitions, physical adapters or indefinite continuation.')
     )
+    page('Typed Hadamard routing policy', 'FORMAL PENDING | HP1-HP2 | NEW BEHAVIORAL BINDING',
+        h('HP1. Explicit semantic policy and schema'),
+        p('FieldAgentManifest gains the distinct policy tomigidt-field-hadamard-plan-act-v1. Only this policy requires the additional JSON key routing; its exact routing keys are format and gains. Format is hadamard-klein-routing-v1. Gains are an immutable 4 by 2 table of strict integers in [-4,4]; reject Boolean integers, missing/unknown keys and malformed shapes. Defaults are shown below.'),
+        code('routing = {"format":"hadamard-klein-routing-v1",\n           "gains":[[1,1],[-1,1],[-1,-1],[1,-1]]}'),
+        p('Existing field policy, manifest schema, FI/PX contracts and legacy archives remain unchanged. Live words retain RP32-relational-sdf-v2 with B=phi, canonical G and separate energy. This new routing object belongs to semantic identity; storage IndexBinding remains deployment metadata.'),
+        h('HP2. Exact local product and movement cost'),
+        p('Use PX field-derived g and primitive Psi in the canonical Klein frame. Use the live intrinsic phase t, never the index derivation phase or index phase_origin. Direction e is exclusively one of the four unit cardinal quotient directions from the source to an adjacent geometric node; diagonal or tree-edge moves are not admitted.'),
+        eq('t = (-1)^eta * r mod 256; bank = floor(t/64)\nd_i = gains[bank][i] * (1 + Psi_i^2)\nq = d Hadamard g; M = max(abs(q_u),abs(q_v))\npenalty(source,dest,t) = M - dot(q,e)\ncost = 1 + abs(phi(dest)) + hazard(dest) + penalty'),
+        p('This is fixed-point f=0 with widened signed i32 products/sums and no rounding or clipping. Each q component is in [-40,40], penalty in 0..80 and cost in 1..335. A route of at most 255 hops costs at most 85,425. Zero g gives q=0 and zero penalties. These are integer application costs, not calibrated physical energy.'),
+        eq('J = diag(1,-1); g_prime=J*g; Psi_prime=J*Psi\nd_prime=d; q_prime=J*q; e_prime=J*e\ndot(q_prime,e_prime)=dot(q,e)'),
+        p('Squared Psi components make both the local chart transformation and IndexBinding sign irrelevant to d. Costs are chart-covariant, and changing index phase_origin changes no routing bank. The complete mirror also preserves t. K8 live transport remains responsible for eta, parity and the full mirrored pair.'),
+        small('Source basis: original pp.5,7,10,11,16,18; Solus pp.3-4; solipsism pp.5,13,16. These motivate qualitative field/operator/traversal roles. HP is an explicit numerical choice, not a uniquely implied source formula, global eigenmode or speed claim.')
+    )
+    page('Phase-state planning and admitted action', 'FORMAL PENDING | HP3-HP4 | FINITE LIFTED SEARCH',
+        h('HP3. Immutable phase-state Dijkstra search'),
+        p('Use labels (G,t,hops), with canonical node G, intrinsic phase t in 0..255 and hop count in 0..max_hops. All geometric adjacencies remain admissible and every edge has positive cost. Node-only labels, or labels omitting t, may merge arrivals with different future costs and are unsound. Revisits are permitted because phase changes can improve subsequent directional costs.'),
+        eq('label = (G,t,hops)\nt_next = (t + turns[class(phi(G))]) mod 256\nhops_next = hops + 1\npriority = (total cost, lexical route, G, t, hops)'),
+        p('Hop bound remains a strict integer in 1..255; per-cycle search quantum remains 1..65,536 expansions. Preserve global lexical canonical-name route ties. Use reverse unweighted hop distance to the target to prune labels that cannot finish within the remaining hop budget. Count an expansion only for a non-stale, non-target popped label whose outgoing edges are inspected. Reaching the target ends a candidate route; do not continue through it.'),
+        p('Dominance applies only to the exact (G,t,hops) label. Evaluate entry weights once in lexical canonical-name order. The immutable context includes position, live pair/phase, energy, routing binding, weights and directional model. Retain the complete frontier, best costs, route ties and progress through DEFER. Changed effective hazards invalidate the cursor; invalid input preserves it and all canonical state.'),
+        h('HP4. Observation, reserve and receding planning'),
+        p('Fresh complete local frames still precede MOVE or REPAIR. Sensors supply only admitted local hazards; unseen distant nodes retain the zero-hazard hypothesis. Search, rather than the sensor, selects a route. Forecast its full K8 packed/energy sequence; admit one adjacent action and debit that first edge’s HP2 cost. Require the whole known route cost plus repair reserve to fit available energy.'),
+        p('At the freshly observed target, retain FI4 REPAIR semantics. No planner action bypasses the target check. Under unchanged effective weights, after following the first edge of an optimal route, its remainder is still feasible within the next full hop budget. The next optimal cost is therefore at most the previous optimal cost minus that strictly positive edge cost. Receding optimal value strictly falls despite possible phase cycles.'),
+        eq('V_H(G_next,t_next) <= V_H(G,t) - cost(G,G_next,t)\n                                < V_H(G,t)'),
+        p('This decrease assumes an unchanged model and successful admitted movement; new observations may change its value. Full RP32 execution applies the existing source-field increment, seam reflection and eta XOR. The resulting intrinsic phase obeys t_next above independently of seam/orientation, while R and eta still follow K8.'),
+        small('The finite label bound is N*256*(max_hops+1), not a constant-memory search guarantee. Search/history/object overhead remains separate from active world-pair FIFO capacity.')
+    )
+    page('Routing atlas and certified export', 'FORMAL PENDING | HP5-HP6 | DEVICE-PRODUCED PLANNING MODEL',
+        h('HP5. Movement and cost in one exact atlas'),
+        p('The HP GPU operator atlas is an r32uint texture of width 24 and height 4N. Within each source, neighbor slots are sorted by numeric canonical destination ID. Its row is selected through the actual f8 tree walk; the row is storage, while source/destination G remain geometric identities.'),
+        eq('y = bank*N + f8_row(source)\nx = 6*numeric_neighbor_slot + 2*field_class\natlas[x,y]   = existing RP32 movement operator\natlas[x+1,y] = pack(bank,source,penalty,DATA)'),
+        p('There are four banks, four neighbor slots and three field-class copies: 48 movement/cost pairs per node. The movement word retains the existing delta, destination, exact destination phi and relative seam metadata. The cost word has R=bank, G=source and B=penalty. Recompute valid parity; no operator-only seam bit may leak into live metadata.'),
+        p('The shader obtains bank from the persistent live pair for actual actions and from the evolving scratch pair for forecasts. Actual tree lookup governs the atlas row in both paths. Compile the atlas from certified device field, g and Psi together with the immutable gains; no host-compiled replacement may stand in for explicit GPU construction.'),
+        h('HP6. Export the admitted table, then search on host'),
+        p('An export_routing pass reads the actual atlas and validates all 48 movement/cost pairs for each node: parity, complete movement/cost payload, source/bank/destination, class increment and all three repeated penalty copies. It exports exactly 16N penalties and N source increments. A malformed unselected bank or class is still invalid.'),
+        eq('routing model = 16*N penalties + N source increments\nentry_weight(j) = 1 + abs(phi(j)) + hazard(j)\nedge_cost(i,j,t) = entry_weight(j) + penalty[i,bank(t),j]'),
+        p('An independent host certificate checks the exported table against the exact field-derived HP2 equations and semantic routing binding. CPU routing derives its equivalent model independently. The host Dijkstra heap consumes the certified device-produced table; it shall not run a host routing compiler as GPU fallback or perform a GPU dispatch for each expansion.'),
+        p('The retained semantic model contains those 17N integers and effective entry weights, not a CPU scalar-field arena. Geometry and field samples remain recipe-derived under their existing contracts. CPU/GPU costs, forecasts, choices and admitted histories must agree for the same HP manifest and observations.'),
+        small('For HP owners, the complete atlas and routing-table certificate extends FI6/PX6 admission. Existing persistent-action ownership, no-fallback and uncertain-outcome closure requirements remain binding.')
+    )
+    page('Hadamard rebuild and resource contract', 'FORMAL PENDING | HP7 | ONE COMPLETE ADMITTED BUNDLE',
+        h('HP7. Atomic index replacement with routing resources'),
+        p('An HP index rebuild prepares a complete candidate index, tree, routing atlas, exported routing tables and bind groups. Certify the whole candidate before a serialized atomic swap. Preserve the full semantic routing object; a storage rebuild cannot silently change gains, costs or policy.'),
+        table(['Outcome','Required result'],[
+            ['Invalid input / complete certificate rejection','Old index/atlas/model remains usable. Preserve canonical history, energy, FIFO contents/order/counters and the exact pending search.'],
+            ['Uncertain dispatch or readback','Close the owner with the last admitted history unchanged. Reconstruct from durable admitted history before more work.'],
+            ['Successful complete-bundle swap','Install the new storage version while retaining identical semantic costs, samples, state and search cursor.'],
+            ['Post-swap cleanup failure','Report a committed cleanup failure, not rejected replacement. Account for and attempt cleanup of retained resources.'],
+        ],[.32,.68]),
+        p('Index sign and index phase_origin do not change q or t. Thus PX version changes preserve every HP planning label, comparison, cost, expansion quantum, pair, energy value and event. FIFO residency is also preserved. Replay may select a different certified storage index while retaining the same semantic manifest and observation history.'),
+        h('Explicit allocation and peak accounting'),
+        eq('routing atlas = 24 * (4*N) * 4 = 384*N bytes\nexported routing table = 17*N*4 = 68*N bytes\nretained host routing table = 68*N bytes\ngains table = 4*2*4 = 32 bytes'),
+        p('These are logical payload sizes for the declared atlas/table/gains resources, not total process memory. Track all additional host/device index metadata, field/geometry buffers, entry weights, scratch buffers, bind groups and runtime allocations. Rebuild peaks include complete old and candidate bundles together, rather than counting only their difference.'),
+        eq('M_peak includes old(index,atlas,tables,bind groups)\n              + candidate(index,atlas,tables,bind groups)\n              + retained fields, geometry, FIFO and runtime'),
+        p('The world-pair FIFO retains its 8C-byte payload bound and actual regeneration obligation. Search may have N*256*(max_hops+1) labels. Frontier/routes, routing tables, observations and journal memory remain outside the FIFO bound.'),
+        small('No throughput, speedup, saturation or physical-energy claim follows from these allocations. A comparative performance result would require the separate measurement protocol on page 30.')
+    )
+    page('Hadamard reference and acceptance', 'FORMAL PENDING | HP8 | INDEPENDENT REFERENCE VECTORS',
+        h('HP8. Default phase-directed mission'),
+        p('Use the FI8 4 by 5 recipe and local hazard change, with the HP1 default gains, initial phase 250, eta 0, energy 100 and repair cost 5. Initial pair is 91FE000601FE00FA. The independent reference uses quotient arithmetic, BFS, phase-state Dijkstra and a layered-DP cross-check; it imports no solvefinite runtime module.'),
+        table(['Cycle / action','Route; known cost; expansions','Actual pair / energy'],[
+            ['1 / MOVE','[4,3,17]; 7; 23','11FF04FB01FF0405 / 98'],
+            ['2 / seam MOVE','[16,17]; 7; 6','81001010910010F0 / 93'],
+            ['3 / MOVE','[17]; 2; 2','81011145910111BB / 91'],
+            ['4 / REPAIR','[]; repair 5; 0','06011145160111BB / 86'],
+        ],[.2,.38,.42]),
+        p('From cycle 2, hazard 70 at node 3 changes the route after entering node 4. Geometry and packed seam transport remain the FI8 values, but HP2 adds directional costs. Zero gains recover the old edge costs and final energy 90. With only initial phase changed to 192, the first route is [5,10,11,12,17], cost 12; completion takes six cycles, final pair 960111E38601111D and energy 83.'),
+        h('Why the search state must contain phase'),
+        p('At start node 0, target 10, intrinsic phase 128 and max_hops 12, correct labels (G,t,hops) select [1,6,5,10], cost 10. Incorrect merging by (G,hops) selects [5,10], cost 11. This is a literal finite counterexample to phase-free state compression, not a performance comparison.'),
+        h('Required independent conformance'),
+        p('Require strict new-policy schema with exact legacy preservation; integer bounds, zero gains, all banks/signs/frames, chart covariance and mirror invariance; independent lifted-search/DP route and cost oracles, revisits, hop/quantum limits, stale-model invalidation and DEFER replay. Sensor inputs shall not supply routes or actions.'),
+        p('Require real GPU atlas compilation and all 48-pair payload checks, certified exported tables, no CPU compiler fallback, actual indexed action/forecast bank selection, corruption in unselected copies, resource peaks, pure rejection, uncertain-outcome closure and committed cleanup failures. Capacity/rebuild changes preserve FIFO, cursors and archives; fresh-process cross-backend/live continuation remains exact.'),
+        box('<b>Revision 5 acceptance status: FORMAL PENDING.</b> HP1-HP8 are bound before runtime coding. The prior 421 passing tests, 55 actual-device methods and 20 PX checks remain evidence for their existing profiles; they establish no HP implementation result.'),
+        small('Retained reference: docs/evidence/hadamard-v1/formal-reference.json and independent reference-builder.py. The equations and vectors are a declared finite routing binding, not global Psi, physical energy calibration, a speed claim or whole-architecture completion.')
+    )
 
 
 def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 4')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 5')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -753,7 +827,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 4')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 5')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 25 September 2026')
     count=len(PAGES)+1
@@ -761,7 +835,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 4')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 5')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  25 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -780,7 +854,7 @@ def render(output):
                 c.drawString(LEFT,y,t); c.setFont('Bold',9.5); c.setFillColor(TEAL)
                 c.drawRightString(WIDTH-RIGHT,y,str(pg))
                 c.linkRect('',f'p{pg}',(LEFT,y-3,WIDTH-RIGHT,y+12),relative=0,thickness=0)
-                y-=14.1
+                y-=13.0
             if y < 59: raise ValueError(f'Contents overflow: bottom={y:.1f}')
         else:
             for item in items:
@@ -893,6 +967,10 @@ def verify_retained_inputs():
             allocation['host_index_payload_bytes'], allocation['peak_rebuild_host_index_payload_bytes'],
             allocation['retained_world_node_pair_count']) != (49160, 51528, 1296, 2592, 0):
         raise ValueError('Retained PX allocation accounting disagrees with revision 4')
+    hp_reference = ROOT/'docs/evidence/hadamard-v1/formal-reference.json'
+    hp_reference_bytes = hp_reference.read_bytes().replace(b'\r\n', b'\n')
+    if hashlib.sha256(hp_reference_bytes).hexdigest() != '89e93219e8266b22c9aa080c580a1ae7da296a989464452bc1d85ab68597ab66':
+        raise ValueError('Retained HP formal reference identity changed')
 
 
 if __name__=='__main__':

@@ -1,0 +1,1732 @@
+{
+  "format": "hadamard-independent-formal-reference-v1",
+  "provenance": "Independent quotient arithmetic, BFS, integer lane operations, phase-state Dijkstra, layered-DP cross-check; imports no solvefinite module.",
+  "recipe": {
+    "width": 4,
+    "height": 5,
+    "center": 0,
+    "radius": 2,
+    "turns": [
+      11,
+      53,
+      137
+    ]
+  },
+  "binding": {
+    "format": "hadamard-klein-routing-v1",
+    "gains": [
+      [
+        1,
+        1
+      ],
+      [
+        -1,
+        1
+      ],
+      [
+        -1,
+        -1
+      ],
+      [
+        1,
+        -1
+      ]
+    ]
+  },
+  "field": [
+    -2,
+    -1,
+    0,
+    0,
+    -1,
+    -1,
+    0,
+    1,
+    1,
+    0,
+    0,
+    1,
+    2,
+    2,
+    1,
+    -1,
+    0,
+    1,
+    1,
+    0
+  ],
+  "gradient": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      0,
+      -2
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      -1
+    ],
+    [
+      2,
+      -2
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      0,
+      -2
+    ],
+    [
+      -2,
+      0
+    ],
+    [
+      -2,
+      2
+    ],
+    [
+      -2,
+      1
+    ],
+    [
+      -2,
+      -1
+    ],
+    [
+      -2,
+      -2
+    ]
+  ],
+  "psi": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      -1
+    ],
+    [
+      1,
+      -1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      0,
+      -1
+    ],
+    [
+      -1,
+      0
+    ],
+    [
+      -1,
+      1
+    ],
+    [
+      -2,
+      1
+    ],
+    [
+      -2,
+      -1
+    ],
+    [
+      -1,
+      -1
+    ]
+  ],
+  "mission": {
+    "initial": {
+      "node": 0,
+      "phase": 250,
+      "orientation": 0,
+      "pair": "91FE000601FE00FA",
+      "energy": 100
+    },
+    "events": [
+      {
+        "cycle": 1,
+        "kind": "MOVE",
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:4": 0,
+          "k:1:0": 0,
+          "k:3:0": 0
+        },
+        "route": [
+          4,
+          3,
+          17
+        ],
+        "paths": [
+          "k:0:4",
+          "k:0:3",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 23,
+        "action": {
+          "phase": 250,
+          "sector": 3,
+          "g": [
+            0,
+            0
+          ],
+          "psi": [
+            1,
+            0
+          ],
+          "gain": [
+            1,
+            -1
+          ],
+          "diagonal": [
+            2,
+            -1
+          ],
+          "q": [
+            0,
+            0
+          ],
+          "direction": [
+            0,
+            -1
+          ],
+          "maximum": 0,
+          "penalty": 0,
+          "cost": 2
+        },
+        "node": 4,
+        "phase": 5,
+        "orientation": 0,
+        "pair": "11FF04FB01FF0405",
+        "energy": 98,
+        "forecast": [
+          "11FF04FB01FF0405",
+          "110003F001000310",
+          "81011145910111BB"
+        ]
+      },
+      {
+        "cycle": 2,
+        "kind": "MOVE",
+        "input": {
+          "k:0:0": 0,
+          "k:0:3": 70,
+          "k:0:4": 0,
+          "k:1:4": 0,
+          "k:3:1": 0
+        },
+        "route": [
+          16,
+          17
+        ],
+        "paths": [
+          "k:3:1",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 6,
+        "action": {
+          "phase": 5,
+          "sector": 0,
+          "g": [
+            0,
+            -2
+          ],
+          "psi": [
+            0,
+            -1
+          ],
+          "gain": [
+            1,
+            1
+          ],
+          "diagonal": [
+            1,
+            2
+          ],
+          "q": [
+            0,
+            -4
+          ],
+          "direction": [
+            -1,
+            0
+          ],
+          "maximum": 4,
+          "penalty": 4,
+          "cost": 5
+        },
+        "node": 16,
+        "phase": 240,
+        "orientation": 1,
+        "pair": "81001010910010F0",
+        "energy": 93,
+        "forecast": [
+          "81001010910010F0",
+          "81011145910111BB"
+        ]
+      },
+      {
+        "cycle": 3,
+        "kind": "MOVE",
+        "input": {
+          "k:0:4": 0,
+          "k:2:1": 0,
+          "k:3:0": 0,
+          "k:3:1": 0,
+          "k:3:2": 0
+        },
+        "route": [
+          17
+        ],
+        "paths": [
+          "k:3:2"
+        ],
+        "cost": 2,
+        "expansions": 2,
+        "action": {
+          "phase": 16,
+          "sector": 0,
+          "g": [
+            -2,
+            2
+          ],
+          "psi": [
+            -1,
+            1
+          ],
+          "gain": [
+            1,
+            1
+          ],
+          "diagonal": [
+            2,
+            2
+          ],
+          "q": [
+            -4,
+            4
+          ],
+          "direction": [
+            0,
+            1
+          ],
+          "maximum": 4,
+          "penalty": 0,
+          "cost": 2
+        },
+        "node": 17,
+        "phase": 187,
+        "orientation": 1,
+        "pair": "81011145910111BB",
+        "energy": 91,
+        "forecast": [
+          "81011145910111BB"
+        ]
+      },
+      {
+        "cycle": 4,
+        "kind": "REPAIR",
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "route": [],
+        "cost": 5,
+        "node": 17,
+        "phase": 187,
+        "orientation": 1,
+        "pair": "06011145160111BB",
+        "energy": 86
+      }
+    ],
+    "final": {
+      "kind": "REPAIR",
+      "node": 17,
+      "phase": 187,
+      "orientation": 1,
+      "pair": "06011145160111BB",
+      "energy": 86
+    }
+  },
+  "phase_ablations": {
+    "0": {
+      "initial": {
+        "node": 0,
+        "phase": 0,
+        "orientation": 0,
+        "pair": "91FE000001FE0000",
+        "energy": 100
+      },
+      "events": [
+        {
+          "cycle": 1,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:1": 0,
+            "k:0:4": 0,
+            "k:1:0": 0,
+            "k:3:0": 0
+          },
+          "route": [
+            4,
+            3,
+            17
+          ],
+          "paths": [
+            "k:0:4",
+            "k:0:3",
+            "k:3:2"
+          ],
+          "cost": 7,
+          "expansions": 23,
+          "action": {
+            "phase": 0,
+            "sector": 0,
+            "g": [
+              0,
+              0
+            ],
+            "psi": [
+              1,
+              0
+            ],
+            "gain": [
+              1,
+              1
+            ],
+            "diagonal": [
+              2,
+              1
+            ],
+            "q": [
+              0,
+              0
+            ],
+            "direction": [
+              0,
+              -1
+            ],
+            "maximum": 0,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 4,
+          "phase": 11,
+          "orientation": 0,
+          "pair": "91FF04F581FF040B",
+          "energy": 98,
+          "forecast": [
+            "91FF04F581FF040B",
+            "910003EA01000316",
+            "0101114B110111B5"
+          ]
+        },
+        {
+          "cycle": 2,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:3": 70,
+            "k:0:4": 0,
+            "k:1:4": 0,
+            "k:3:1": 0
+          },
+          "route": [
+            16,
+            17
+          ],
+          "paths": [
+            "k:3:1",
+            "k:3:2"
+          ],
+          "cost": 7,
+          "expansions": 6,
+          "action": {
+            "phase": 11,
+            "sector": 0,
+            "g": [
+              0,
+              -2
+            ],
+            "psi": [
+              0,
+              -1
+            ],
+            "gain": [
+              1,
+              1
+            ],
+            "diagonal": [
+              1,
+              2
+            ],
+            "q": [
+              0,
+              -4
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "maximum": 4,
+            "penalty": 4,
+            "cost": 5
+          },
+          "node": 16,
+          "phase": 234,
+          "orientation": 1,
+          "pair": "81001016110010EA",
+          "energy": 93,
+          "forecast": [
+            "81001016110010EA",
+            "0101114B110111B5"
+          ]
+        },
+        {
+          "cycle": 3,
+          "kind": "MOVE",
+          "input": {
+            "k:0:4": 0,
+            "k:2:1": 0,
+            "k:3:0": 0,
+            "k:3:1": 0,
+            "k:3:2": 0
+          },
+          "route": [
+            17
+          ],
+          "paths": [
+            "k:3:2"
+          ],
+          "cost": 2,
+          "expansions": 2,
+          "action": {
+            "phase": 22,
+            "sector": 0,
+            "g": [
+              -2,
+              2
+            ],
+            "psi": [
+              -1,
+              1
+            ],
+            "gain": [
+              1,
+              1
+            ],
+            "diagonal": [
+              2,
+              2
+            ],
+            "q": [
+              -4,
+              4
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "maximum": 4,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 17,
+          "phase": 181,
+          "orientation": 1,
+          "pair": "0101114B110111B5",
+          "energy": 91,
+          "forecast": [
+            "0101114B110111B5"
+          ]
+        },
+        {
+          "cycle": 4,
+          "kind": "REPAIR",
+          "input": {
+            "k:0:3": 70,
+            "k:2:2": 0,
+            "k:3:1": 0,
+            "k:3:2": 0,
+            "k:3:3": 0
+          },
+          "route": [],
+          "cost": 5,
+          "node": 17,
+          "phase": 181,
+          "orientation": 1,
+          "pair": "8601114B960111B5",
+          "energy": 86
+        }
+      ],
+      "final": {
+        "kind": "REPAIR",
+        "node": 17,
+        "phase": 181,
+        "orientation": 1,
+        "pair": "8601114B960111B5",
+        "energy": 86
+      }
+    },
+    "64": {
+      "initial": {
+        "node": 0,
+        "phase": 64,
+        "orientation": 0,
+        "pair": "91FE00C081FE0040",
+        "energy": 100
+      },
+      "events": [
+        {
+          "cycle": 1,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:1": 0,
+            "k:0:4": 0,
+            "k:1:0": 0,
+            "k:3:0": 0
+          },
+          "route": [
+            4,
+            3,
+            17
+          ],
+          "paths": [
+            "k:0:4",
+            "k:0:3",
+            "k:3:2"
+          ],
+          "cost": 7,
+          "expansions": 17,
+          "action": {
+            "phase": 64,
+            "sector": 1,
+            "g": [
+              0,
+              0
+            ],
+            "psi": [
+              1,
+              0
+            ],
+            "gain": [
+              -1,
+              1
+            ],
+            "diagonal": [
+              -2,
+              1
+            ],
+            "q": [
+              0,
+              0
+            ],
+            "direction": [
+              0,
+              -1
+            ],
+            "maximum": 0,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 4,
+          "phase": 75,
+          "orientation": 0,
+          "pair": "11FF04B501FF044B",
+          "energy": 98,
+          "forecast": [
+            "11FF04B501FF044B",
+            "110003AA81000356",
+            "0101118B11011175"
+          ]
+        },
+        {
+          "cycle": 2,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:3": 70,
+            "k:0:4": 0,
+            "k:1:4": 0,
+            "k:3:1": 0
+          },
+          "route": [
+            16,
+            17
+          ],
+          "paths": [
+            "k:3:1",
+            "k:3:2"
+          ],
+          "cost": 7,
+          "expansions": 5,
+          "action": {
+            "phase": 75,
+            "sector": 1,
+            "g": [
+              0,
+              -2
+            ],
+            "psi": [
+              0,
+              -1
+            ],
+            "gain": [
+              -1,
+              1
+            ],
+            "diagonal": [
+              -1,
+              2
+            ],
+            "q": [
+              0,
+              -4
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "maximum": 4,
+            "penalty": 4,
+            "cost": 5
+          },
+          "node": 16,
+          "phase": 170,
+          "orientation": 1,
+          "pair": "01001056910010AA",
+          "energy": 93,
+          "forecast": [
+            "01001056910010AA",
+            "0101118B11011175"
+          ]
+        },
+        {
+          "cycle": 3,
+          "kind": "MOVE",
+          "input": {
+            "k:0:4": 0,
+            "k:2:1": 0,
+            "k:3:0": 0,
+            "k:3:1": 0,
+            "k:3:2": 0
+          },
+          "route": [
+            17
+          ],
+          "paths": [
+            "k:3:2"
+          ],
+          "cost": 2,
+          "expansions": 2,
+          "action": {
+            "phase": 86,
+            "sector": 1,
+            "g": [
+              -2,
+              2
+            ],
+            "psi": [
+              -1,
+              1
+            ],
+            "gain": [
+              -1,
+              1
+            ],
+            "diagonal": [
+              -2,
+              2
+            ],
+            "q": [
+              4,
+              4
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "maximum": 4,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 17,
+          "phase": 117,
+          "orientation": 1,
+          "pair": "0101118B11011175",
+          "energy": 91,
+          "forecast": [
+            "0101118B11011175"
+          ]
+        },
+        {
+          "cycle": 4,
+          "kind": "REPAIR",
+          "input": {
+            "k:0:3": 70,
+            "k:2:2": 0,
+            "k:3:1": 0,
+            "k:3:2": 0,
+            "k:3:3": 0
+          },
+          "route": [],
+          "cost": 5,
+          "node": 17,
+          "phase": 117,
+          "orientation": 1,
+          "pair": "8601118B96011175",
+          "energy": 86
+        }
+      ],
+      "final": {
+        "kind": "REPAIR",
+        "node": 17,
+        "phase": 117,
+        "orientation": 1,
+        "pair": "8601118B96011175",
+        "energy": 86
+      }
+    },
+    "128": {
+      "initial": {
+        "node": 0,
+        "phase": 128,
+        "orientation": 0,
+        "pair": "11FE008081FE0080",
+        "energy": 100
+      },
+      "events": [
+        {
+          "cycle": 1,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:1": 0,
+            "k:0:4": 0,
+            "k:1:0": 0,
+            "k:3:0": 0
+          },
+          "route": [
+            4,
+            3,
+            17
+          ],
+          "paths": [
+            "k:0:4",
+            "k:0:3",
+            "k:3:2"
+          ],
+          "cost": 15,
+          "expansions": 59,
+          "action": {
+            "phase": 128,
+            "sector": 2,
+            "g": [
+              0,
+              0
+            ],
+            "psi": [
+              1,
+              0
+            ],
+            "gain": [
+              -1,
+              -1
+            ],
+            "diagonal": [
+              -2,
+              -1
+            ],
+            "q": [
+              0,
+              0
+            ],
+            "direction": [
+              0,
+              -1
+            ],
+            "maximum": 0,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 4,
+          "phase": 139,
+          "orientation": 0,
+          "pair": "11FF047501FF048B",
+          "energy": 98,
+          "forecast": [
+            "11FF047501FF048B",
+            "1100036A81000396",
+            "810111CB91011135"
+          ]
+        },
+        {
+          "cycle": 2,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:3": 70,
+            "k:0:4": 0,
+            "k:1:4": 0,
+            "k:3:1": 0
+          },
+          "route": [
+            16,
+            17
+          ],
+          "paths": [
+            "k:3:1",
+            "k:3:2"
+          ],
+          "cost": 15,
+          "expansions": 71,
+          "action": {
+            "phase": 139,
+            "sector": 2,
+            "g": [
+              0,
+              -2
+            ],
+            "psi": [
+              0,
+              -1
+            ],
+            "gain": [
+              -1,
+              -1
+            ],
+            "diagonal": [
+              -1,
+              -2
+            ],
+            "q": [
+              0,
+              4
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "maximum": 4,
+            "penalty": 4,
+            "cost": 5
+          },
+          "node": 16,
+          "phase": 106,
+          "orientation": 1,
+          "pair": "010010969100106A",
+          "energy": 93,
+          "forecast": [
+            "010010969100106A",
+            "810111CB91011135"
+          ]
+        },
+        {
+          "cycle": 3,
+          "kind": "MOVE",
+          "input": {
+            "k:0:4": 0,
+            "k:2:1": 0,
+            "k:3:0": 0,
+            "k:3:1": 0,
+            "k:3:2": 0
+          },
+          "route": [
+            17
+          ],
+          "paths": [
+            "k:3:2"
+          ],
+          "cost": 10,
+          "expansions": 40,
+          "action": {
+            "phase": 150,
+            "sector": 2,
+            "g": [
+              -2,
+              2
+            ],
+            "psi": [
+              -1,
+              1
+            ],
+            "gain": [
+              -1,
+              -1
+            ],
+            "diagonal": [
+              -2,
+              -2
+            ],
+            "q": [
+              4,
+              -4
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "maximum": 4,
+            "penalty": 8,
+            "cost": 10
+          },
+          "node": 17,
+          "phase": 53,
+          "orientation": 1,
+          "pair": "810111CB91011135",
+          "energy": 83,
+          "forecast": [
+            "810111CB91011135"
+          ]
+        },
+        {
+          "cycle": 4,
+          "kind": "REPAIR",
+          "input": {
+            "k:0:3": 70,
+            "k:2:2": 0,
+            "k:3:1": 0,
+            "k:3:2": 0,
+            "k:3:3": 0
+          },
+          "route": [],
+          "cost": 5,
+          "node": 17,
+          "phase": 53,
+          "orientation": 1,
+          "pair": "060111CB16011135",
+          "energy": 78
+        }
+      ],
+      "final": {
+        "kind": "REPAIR",
+        "node": 17,
+        "phase": 53,
+        "orientation": 1,
+        "pair": "060111CB16011135",
+        "energy": 78
+      }
+    },
+    "192": {
+      "initial": {
+        "node": 0,
+        "phase": 192,
+        "orientation": 0,
+        "pair": "11FE004001FE00C0",
+        "energy": 100
+      },
+      "events": [
+        {
+          "cycle": 1,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:0:1": 0,
+            "k:0:4": 0,
+            "k:1:0": 0,
+            "k:3:0": 0
+          },
+          "route": [
+            5,
+            10,
+            11,
+            12,
+            17
+          ],
+          "paths": [
+            "k:1:0",
+            "k:2:0",
+            "k:2:1",
+            "k:2:2",
+            "k:3:2"
+          ],
+          "cost": 12,
+          "expansions": 61,
+          "action": {
+            "phase": 192,
+            "sector": 3,
+            "g": [
+              0,
+              0
+            ],
+            "psi": [
+              1,
+              0
+            ],
+            "gain": [
+              1,
+              -1
+            ],
+            "diagonal": [
+              2,
+              -1
+            ],
+            "q": [
+              0,
+              0
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "maximum": 0,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 5,
+          "phase": 203,
+          "orientation": 0,
+          "pair": "11FF053501FF05CB",
+          "energy": 98,
+          "forecast": [
+            "11FF053501FF05CB",
+            "91000A2A01000AD6",
+            "11010BF501010B0B",
+            "91020C6C81020C94",
+            "110111E30101111D"
+          ]
+        },
+        {
+          "cycle": 2,
+          "kind": "MOVE",
+          "input": {
+            "k:0:0": 0,
+            "k:1:0": 0,
+            "k:1:1": 0,
+            "k:1:4": 0,
+            "k:2:0": 0
+          },
+          "route": [
+            10,
+            11,
+            12,
+            17
+          ],
+          "paths": [
+            "k:2:0",
+            "k:2:1",
+            "k:2:2",
+            "k:3:2"
+          ],
+          "cost": 10,
+          "expansions": 33,
+          "action": {
+            "phase": 203,
+            "sector": 3,
+            "g": [
+              2,
+              0
+            ],
+            "psi": [
+              1,
+              0
+            ],
+            "gain": [
+              1,
+              -1
+            ],
+            "diagonal": [
+              2,
+              -1
+            ],
+            "q": [
+              4,
+              0
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "maximum": 4,
+            "penalty": 0,
+            "cost": 1
+          },
+          "node": 10,
+          "phase": 214,
+          "orientation": 0,
+          "pair": "91000A2A01000AD6",
+          "energy": 97,
+          "forecast": [
+            "91000A2A01000AD6",
+            "11010BF501010B0B",
+            "91020C6C81020C94",
+            "110111E30101111D"
+          ]
+        },
+        {
+          "cycle": 3,
+          "kind": "MOVE",
+          "input": {
+            "k:1:0": 0,
+            "k:2:0": 0,
+            "k:2:1": 0,
+            "k:2:4": 0,
+            "k:3:0": 0
+          },
+          "route": [
+            11,
+            12,
+            17
+          ],
+          "paths": [
+            "k:2:1",
+            "k:2:2",
+            "k:3:2"
+          ],
+          "cost": 9,
+          "expansions": 30,
+          "action": {
+            "phase": 214,
+            "sector": 3,
+            "g": [
+              0,
+              0
+            ],
+            "psi": [
+              1,
+              0
+            ],
+            "gain": [
+              1,
+              -1
+            ],
+            "diagonal": [
+              2,
+              -1
+            ],
+            "q": [
+              0,
+              0
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "maximum": 0,
+            "penalty": 0,
+            "cost": 2
+          },
+          "node": 11,
+          "phase": 11,
+          "orientation": 0,
+          "pair": "11010BF501010B0B",
+          "energy": 95,
+          "forecast": [
+            "11010BF501010B0B",
+            "91020C6C81020C94",
+            "110111E30101111D"
+          ]
+        },
+        {
+          "cycle": 4,
+          "kind": "MOVE",
+          "input": {
+            "k:1:1": 0,
+            "k:2:0": 0,
+            "k:2:1": 0,
+            "k:2:2": 0,
+            "k:3:1": 0
+          },
+          "route": [
+            12,
+            17
+          ],
+          "paths": [
+            "k:2:2",
+            "k:3:2"
+          ],
+          "cost": 7,
+          "expansions": 8,
+          "action": {
+            "phase": 11,
+            "sector": 0,
+            "g": [
+              0,
+              2
+            ],
+            "psi": [
+              0,
+              1
+            ],
+            "gain": [
+              1,
+              1
+            ],
+            "diagonal": [
+              1,
+              2
+            ],
+            "q": [
+              0,
+              4
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "maximum": 4,
+            "penalty": 0,
+            "cost": 3
+          },
+          "node": 12,
+          "phase": 148,
+          "orientation": 0,
+          "pair": "91020C6C81020C94",
+          "energy": 92,
+          "forecast": [
+            "91020C6C81020C94",
+            "110111E30101111D"
+          ]
+        },
+        {
+          "cycle": 5,
+          "kind": "MOVE",
+          "input": {
+            "k:1:2": 0,
+            "k:2:1": 0,
+            "k:2:2": 0,
+            "k:2:3": 0,
+            "k:3:2": 0
+          },
+          "route": [
+            17
+          ],
+          "paths": [
+            "k:3:2"
+          ],
+          "cost": 4,
+          "expansions": 3,
+          "action": {
+            "phase": 148,
+            "sector": 2,
+            "g": [
+              0,
+              1
+            ],
+            "psi": [
+              0,
+              1
+            ],
+            "gain": [
+              -1,
+              -1
+            ],
+            "diagonal": [
+              -1,
+              -2
+            ],
+            "q": [
+              0,
+              -2
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "maximum": 2,
+            "penalty": 2,
+            "cost": 4
+          },
+          "node": 17,
+          "phase": 29,
+          "orientation": 0,
+          "pair": "110111E30101111D",
+          "energy": 88,
+          "forecast": [
+            "110111E30101111D"
+          ]
+        },
+        {
+          "cycle": 6,
+          "kind": "REPAIR",
+          "input": {
+            "k:0:3": 70,
+            "k:2:2": 0,
+            "k:3:1": 0,
+            "k:3:2": 0,
+            "k:3:3": 0
+          },
+          "route": [],
+          "cost": 5,
+          "node": 17,
+          "phase": 29,
+          "orientation": 0,
+          "pair": "960111E38601111D",
+          "energy": 83
+        }
+      ],
+      "final": {
+        "kind": "REPAIR",
+        "node": 17,
+        "phase": 29,
+        "orientation": 0,
+        "pair": "960111E38601111D",
+        "energy": 83
+      }
+    }
+  },
+  "zero_gain_ablation": {
+    "initial": {
+      "node": 0,
+      "phase": 250,
+      "orientation": 0,
+      "pair": "91FE000601FE00FA",
+      "energy": 100
+    },
+    "events": [
+      {
+        "cycle": 1,
+        "kind": "MOVE",
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:4": 0,
+          "k:1:0": 0,
+          "k:3:0": 0
+        },
+        "route": [
+          4,
+          3,
+          17
+        ],
+        "paths": [
+          "k:0:4",
+          "k:0:3",
+          "k:3:2"
+        ],
+        "cost": 5,
+        "expansions": 26,
+        "action": {
+          "phase": 250,
+          "sector": 3,
+          "g": [
+            0,
+            0
+          ],
+          "psi": [
+            1,
+            0
+          ],
+          "gain": [
+            0,
+            0
+          ],
+          "diagonal": [
+            0,
+            0
+          ],
+          "q": [
+            0,
+            0
+          ],
+          "direction": [
+            0,
+            -1
+          ],
+          "maximum": 0,
+          "penalty": 0,
+          "cost": 2
+        },
+        "node": 4,
+        "phase": 5,
+        "orientation": 0,
+        "pair": "11FF04FB01FF0405",
+        "energy": 98,
+        "forecast": [
+          "11FF04FB01FF0405",
+          "110003F001000310",
+          "81011145910111BB"
+        ]
+      },
+      {
+        "cycle": 2,
+        "kind": "MOVE",
+        "input": {
+          "k:0:0": 0,
+          "k:0:3": 70,
+          "k:0:4": 0,
+          "k:1:4": 0,
+          "k:3:1": 0
+        },
+        "route": [
+          16,
+          17
+        ],
+        "paths": [
+          "k:3:1",
+          "k:3:2"
+        ],
+        "cost": 3,
+        "expansions": 10,
+        "action": {
+          "phase": 5,
+          "sector": 0,
+          "g": [
+            0,
+            -2
+          ],
+          "psi": [
+            0,
+            -1
+          ],
+          "gain": [
+            0,
+            0
+          ],
+          "diagonal": [
+            0,
+            0
+          ],
+          "q": [
+            0,
+            0
+          ],
+          "direction": [
+            -1,
+            0
+          ],
+          "maximum": 0,
+          "penalty": 0,
+          "cost": 1
+        },
+        "node": 16,
+        "phase": 240,
+        "orientation": 1,
+        "pair": "81001010910010F0",
+        "energy": 97,
+        "forecast": [
+          "81001010910010F0",
+          "81011145910111BB"
+        ]
+      },
+      {
+        "cycle": 3,
+        "kind": "MOVE",
+        "input": {
+          "k:0:4": 0,
+          "k:2:1": 0,
+          "k:3:0": 0,
+          "k:3:1": 0,
+          "k:3:2": 0
+        },
+        "route": [
+          17
+        ],
+        "paths": [
+          "k:3:2"
+        ],
+        "cost": 2,
+        "expansions": 4,
+        "action": {
+          "phase": 16,
+          "sector": 0,
+          "g": [
+            -2,
+            2
+          ],
+          "psi": [
+            -1,
+            1
+          ],
+          "gain": [
+            0,
+            0
+          ],
+          "diagonal": [
+            0,
+            0
+          ],
+          "q": [
+            0,
+            0
+          ],
+          "direction": [
+            0,
+            1
+          ],
+          "maximum": 0,
+          "penalty": 0,
+          "cost": 2
+        },
+        "node": 17,
+        "phase": 187,
+        "orientation": 1,
+        "pair": "81011145910111BB",
+        "energy": 95,
+        "forecast": [
+          "81011145910111BB"
+        ]
+      },
+      {
+        "cycle": 4,
+        "kind": "REPAIR",
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "route": [],
+        "cost": 5,
+        "node": 17,
+        "phase": 187,
+        "orientation": 1,
+        "pair": "06011145160111BB",
+        "energy": 90
+      }
+    ],
+    "final": {
+      "kind": "REPAIR",
+      "node": 17,
+      "phase": 187,
+      "orientation": 1,
+      "pair": "06011145160111BB",
+      "energy": 90
+    }
+  },
+  "phase_state_counterexample": {
+    "start": 0,
+    "target": 10,
+    "initial_intrinsic_phase": 128,
+    "max_hops": 12,
+    "correct_state_key": [
+      "node",
+      "intrinsic_phase",
+      "hops"
+    ],
+    "incorrect_state_key": [
+      "node",
+      "hops"
+    ],
+    "correct": {
+      "route": [
+        1,
+        6,
+        5,
+        10
+      ],
+      "paths": [
+        "k:0:1",
+        "k:1:1",
+        "k:1:0",
+        "k:2:0"
+      ],
+      "cost": 10,
+      "expansions": 19
+    },
+    "incorrect": {
+      "route": [
+        5,
+        10
+      ],
+      "paths": [
+        "k:1:0",
+        "k:2:0"
+      ],
+      "cost": 11,
+      "expansions": 17
+    }
+  },
+  "covariance": {
+    "local_product_direction_checks": 8100,
+    "phase_mirror_cases": 512,
+    "phase_transport_cases": 262144,
+    "all_signed_gains": true,
+    "all_bounded_gradients": true
+  },
+  "expansion_rule": "Count every non-stale, non-target popped (node,t,hops) label whose outgoing edges are inspected; reverse hop-distance pruning; lexicographic canonical-name route ties."
+}

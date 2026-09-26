@@ -329,3 +329,39 @@ The full architecture objective remains active. The implemented local Psi/f8
 binding leaves general spectral and Hadamard routing, geometry-changing growth,
 physical scale and cone/pyramid bindings, continuing semantic epochs, physical
 adapters and comparative hardware measurements as explicit next work.
+
+## 2026-09-25: packed-state-selected Hadamard routing
+
+The preceding goal turn made verified progress: `4b8fa89` implements exact
+local Psi and canonical f8 storage. The next source obligation is behavioral:
+the original specification, page 11, calls for typed numerical Hadamard
+evaluation of the field gradient followed by geometric neighbor selection.
+Its page 5 makes the resulting packed state an input to the next lookup.
+
+The numerical routing contract must be explicit. Two tangent vectors multiplied
+componentwise do not form a tangent vector under Klein reflection. The next
+binding uses orientation-even diagonal gains decoded from intrinsic phase,
+multiplies them by the local gradient, and prices actual adjacent movement by
+the resulting directional response. Squared Psi components supply anisotropy
+without making interchangeable f8 index signs alter behavior.
+
+- [x] Commit HP1-HP8 and independent literal vectors in the same consolidated
+  formal PDF before changing runtime behavior. Preserve all FI/PX clauses.
+- [ ] Implement a strict immutable routing binding, exact Hadamard operator
+  model and independent certificate; keep the previous field policy unchanged.
+- [ ] Plan over node, intrinsic phase and hop count, retaining the full frontier
+  across DEFER. Verify a concrete failure of collapsing distinct phase states.
+- [ ] Add the new semantic policy to the same Tomigidt, including observations,
+  resource accounting, field forecasts, actual actions, sessions and live replay.
+- [ ] Compile and certify the routing atlas from device fields. Use packed live
+  phase and actual f8 lookup to select movement/cost words on the GPU; host
+  search must consume the GPU-produced model without a CPU operator fallback.
+- [ ] Verify phase and gain ablations, covariance, zero gradients, route ties,
+  energy reserve, retained planning, index-rebuild transparency, corrupted
+  operators, ownership failures and fresh-process CPU/GPU continuation.
+- [ ] Capture source-bound evidence, revise the consolidated PDF's measured
+  status, commit and push. Keep the complete architecture objective active.
+
+The proposed phase gain table, penalty and route selector are declared choices
+within the source's unbound numerical role. They do not establish a global
+physical eigenmode, geometry growth or a hardware-performance advantage.
