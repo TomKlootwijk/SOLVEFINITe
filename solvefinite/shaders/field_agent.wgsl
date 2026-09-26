@@ -1,6 +1,6 @@
 // FI1-FI8: one SDF individual, separate energy and scratch route forecasts.
 // config = [count, forecast_hops, destination, hazard_or_repair_cost,
-//           negative_turn, zero_turn, positive_turn, reserved,
+//           negative_turn, zero_turn, positive_turn, hadamard_enabled,
 //           signed_psi_sign, phase_origin, maximum_tree_visits, center].
 // neighbors are four sorted canonical indices per node; seams are undirected
 // row bitsets. The 12xN texture holds three field classes per neighbor slot.
@@ -15,7 +15,8 @@ struct Geometry {
     directions: vec4<u32>,
     parent: u32,
     depth: u32,
-    reserved: vec2<u32>,
+    // x: four geometric seam flags in numeric-neighbor order; y: reserved.
+    seam_flags: vec2<u32>,
 }
 struct Record { head: vec4<u32>, tail: vec4<u32> }
 @group(0) @binding(2) var<storage, read> geometry: array<Geometry>;
@@ -28,6 +29,8 @@ struct Record { head: vec4<u32>, tail: vec4<u32> }
 @group(0) @binding(11) var<storage, read_write> records: array<Record>;
 @group(0) @binding(12) var<storage, read_write> tree: array<Record>;
 @group(0) @binding(13) var<storage, read_write> build_status: array<u32>;
+@group(0) @binding(14) var<storage, read> routing_gains: array<i32>;
+@group(0) @binding(15) var<storage, read_write> routing_table: array<u32>;
 
 fn key_compare(left: Record, right: Record) -> i32 {
     for (var component = 0u; component < 4u; component += 1u) {
@@ -153,6 +156,43 @@ fn emit(index: u32, word: u32, cost: u32, energy: u32, status: u32) {
     output[2u * index + 1u] = vec4<u32>(status, 0u, 0u, 0u);
 }
 
+fn valid_movement(word: u32, source: u32, destination: u32, column: u32) -> bool {
+    var slot = 4u;
+    for (var index = 0u; index < 4u; index += 1u) {
+        if geometry[source].neighbors[index] == destination { slot = index; }
+    }
+    if slot == 4u { return false; }
+    let tau = (geometry[source].seam_flags.x >> slot) & 1u;
+    // Decode each numerical/metadata lane independently of the pack helper.
+    return (countOneBits(word) & 1u) == 0u
+        && (word & 255u) == config[4u + column]
+        && ((word >> 8u) & 255u) == destination
+        && signed_field(word) == fields[destination]
+        && ((word >> 24u) & 127u) == (1u | (tau << 6u));
+}
+
+fn valid_cost(word: u32, source: u32, bank: u32) -> bool {
+    return (countOneBits(word) & 1u) == 0u
+        && (word & 255u) == bank && ((word >> 8u) & 255u) == source
+        && ((word >> 24u) & 127u) == 0u
+        && signed_field(word) >= 0 && signed_field(word) <= 80;
+}
+
+fn directional_penalty(source: u32, destination: u32, bank: u32) -> i32 {
+    let record = records[source];
+    let gradient = vec2<i32>(i32(record.tail.z) - 2, i32(record.tail.w) - 2);
+    let psi = vec2<i32>(i32(record.head.x) - 2, i32(record.head.y) - 2);
+    let gains = vec2<i32>(routing_gains[2u * bank], routing_gains[2u * bank + 1u]);
+    let response = gains * (vec2<i32>(1) + psi * psi) * gradient;
+    let directions = geometry[source].directions;
+    var projection = 0;
+    if destination == directions.x { projection = response.x; }
+    else if destination == directions.y { projection = -response.x; }
+    else if destination == directions.z { projection = response.y; }
+    else if destination == directions.w { projection = -response.y; }
+    return max(abs(response.x), abs(response.y)) - projection;
+}
+
 // Return [next word, cost, status, reserved], without touching either state.
 fn transition(word: u32, destination: u32, hazard: u32) -> vec4<u32> {
     let source = (word >> 8u) & 255u;
@@ -168,17 +208,29 @@ fn transition(word: u32, destination: u32, hazard: u32) -> vec4<u32> {
     if row >= config[0] { return vec4<u32>(word, 0u, 3u, 0u); }
     let b = signed_field(word);
     let column = select(select(1u, 2u, b > 0), 0u, b < 0);
-    let op = textureLoad(operators, vec2<i32>(i32(3u * slot + column), i32(row)), 0).r;
-    if ((op >> 8u) & 255u) != destination { return vec4<u32>(word, 0u, 3u, 0u); }
     let phase = word & 255u;
-    let delta = op & 255u;
     let eta = (word >> 28u) & 1u;
+    let intrinsic = select(phase, (256u - phase) & 255u, eta != 0u);
+    let bank = intrinsic / 64u;
+    var penalty = 0u;
+    var x = 3u * slot + column;
+    var y = row;
+    if config[7] != 0u { x = 2u * x; y += bank * config[0]; }
+    let op = textureLoad(operators, vec2<i32>(i32(x), i32(y)), 0).r;
+    if ((op >> 8u) & 255u) != destination { return vec4<u32>(word, 0u, 3u, 0u); }
+    if config[7] != 0u {
+        let cost_word = textureLoad(operators, vec2<i32>(i32(x + 1u), i32(y)), 0).r;
+        if !valid_movement(op, source, destination, column)
+            || !valid_cost(cost_word, source, bank) { return vec4<u32>(word, 0u, 4u, 0u); }
+        penalty = u32(signed_field(cost_word));
+    }
+    let delta = op & 255u;
     let tau = (op >> 30u) & 1u;
     let departure = select(phase + delta, phase + 256u - delta, eta != 0u) & 255u;
     let next_phase = select(departure, (256u - departure) & 255u, tau != 0u);
     let next_word = pack_rp32(next_phase, (op >> 8u) & 255u, signed_field(op),
                               1u | ((eta ^ tau) << 4u));
-    return vec4<u32>(next_word, 1u + u32(abs(signed_field(op))) + hazard, 0u, 0u);
+    return vec4<u32>(next_word, 1u + u32(abs(signed_field(op))) + hazard + penalty, 0u, 0u);
 }
 
 @compute @workgroup_size(64)
@@ -196,6 +248,62 @@ fn compile_neighbors(@builtin(global_invocation_id) id: vec3<u32>) {
             let word = pack_rp32(config[4u + column], destination, fields[destination], 1u | (tau << 6u));
             textureStore(operator_target, vec2<i32>(i32(3u * slot + column), i32(row)),
                          vec4<u32>(word, 0u, 0u, 0u));
+        }
+    }
+}
+
+@compute @workgroup_size(64)
+fn compile_hadamard(@builtin(global_invocation_id) id: vec3<u32>) {
+    if id.x >= config[0] { return; }
+    let source = id.x;
+    let row = resolve_row(source);
+    build_status[source] = select(3u, 0u, row < config[0]);
+    if row >= config[0] { return; }
+    let stride = (config[0] + 31u) / 32u;
+    for (var bank = 0u; bank < 4u; bank += 1u) {
+        for (var slot = 0u; slot < 4u; slot += 1u) {
+            let destination = geometry[source].neighbors[slot];
+            let tau = (seams[source * stride + destination / 32u] >> (destination % 32u)) & 1u;
+            let penalty = directional_penalty(source, destination, bank);
+            for (var column = 0u; column < 3u; column += 1u) {
+                let location = vec2<i32>(i32(6u * slot + 2u * column), i32(bank * config[0] + row));
+                let movement = pack_rp32(config[4u + column], destination, fields[destination], 1u | (tau << 6u));
+                let cost_word = pack_rp32(bank, source, penalty, 0u);
+                textureStore(operator_target, location, vec4<u32>(movement, 0u, 0u, 0u));
+                textureStore(operator_target, location + vec2<i32>(1, 0), vec4<u32>(cost_word, 0u, 0u, 0u));
+            }
+        }
+    }
+}
+
+@compute @workgroup_size(64)
+fn export_routing(@builtin(global_invocation_id) id: vec3<u32>) {
+    if id.x >= config[0] { return; }
+    let source = id.x;
+    let row = resolve_row(source);
+    if row >= config[0] { build_status[source] = 3u; return; }
+    let source_field = fields[source];
+    let source_class = select(select(1u, 2u, source_field > 0), 0u, source_field < 0);
+    for (var bank = 0u; bank < 4u; bank += 1u) {
+        for (var slot = 0u; slot < 4u; slot += 1u) {
+            let destination = geometry[source].neighbors[slot];
+            let expected = directional_penalty(source, destination, bank);
+            var first_penalty = 0;
+            for (var column = 0u; column < 3u; column += 1u) {
+                let location = vec2<i32>(i32(6u * slot + 2u * column), i32(bank * config[0] + row));
+                let movement = textureLoad(operators, location, 0).r;
+                let cost_word = textureLoad(operators, location + vec2<i32>(1, 0), 0).r;
+                if !valid_movement(movement, source, destination, column)
+                    || !valid_cost(cost_word, source, bank) || signed_field(cost_word) != expected {
+                    build_status[source] = 4u; return;
+                }
+                if column == 0u { first_penalty = signed_field(cost_word); }
+                else if signed_field(cost_word) != first_penalty { build_status[source] = 4u; return; }
+                if bank == 0u && slot == 0u && column == source_class {
+                    routing_table[16u * config[0] + source] = movement & 255u;
+                }
+            }
+            routing_table[16u * source + 4u * bank + slot] = u32(first_penalty);
         }
     }
 }

@@ -10,9 +10,9 @@ It explains the idea in everyday language and shows which pieces already work.
 
 The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
-This single, self-contained 43-page PDF integrates the original specification,
+This single, self-contained 49-page PDF integrates the original specification,
 both supplied addenda, the exact SDF contract, the Klein extension and
-implementation evidence for the SDF, Klein, field-agent and Psi/f8 profiles. It defines
+implementation evidence for the SDF, Klein, field-agent, Psi/f8 and Hadamard profiles. It defines
 conditional infallibility through explicit deterministic execution and
 invariant-preservation obligations.
 The documentation detour is complete. The subsequent implementation now supports
@@ -21,6 +21,8 @@ and orientation transport. The same autonomous agent now plans over that geometr
 evicted field samples. FI1-FI8 were committed in the consolidated PDF at
 `5ccc022` before implementation. PX1-PX8 were likewise committed at `d8de349`
 before adding exact local eigenvectors and an executable canonical index.
+HP1-HP8 were committed at `0c862c3` before adding phase-directed Hadamard
+movement, phase-aware search and the certified GPU routing atlas.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
@@ -203,7 +205,7 @@ The owner prepares and certifies a replacement before swapping it. This changes
 storage without changing events, observations, energy, retained search or FIFO
 residency. Replay can select another index version and reproduce the same archive.
 
-Current verification passes **421 tests, zero skipped**, including **55
+The retained PX capture passes **421 tests, zero skipped**, including **55
 actual-device GPU methods**, plus 20 conformance checks. The
 [Psi/f8 evidence](docs/evidence/psi-f8-v1/README.md) records independent
 geometry and eigenvector checks, actual device tree use, rebuild failures and
@@ -211,6 +213,55 @@ replay. Default steady device payload is 49,160 bytes, rising to 51,528 while
 old and candidate bundles coexist. Logical host index payload is 1,296 bytes,
 or 2,592 for both versions. These figures exclude Python/driver overhead and
 compiler temporaries; the `8 * capacity` FIFO covers only active sample pairs.
+
+## Phase-directed Hadamard movement
+
+The `hadamard` profile connects the agent's live packed phase to geometric
+planning. Four declared gain pairs select a diagonal response to the local
+signed-distance gradient, weighted by squared primitive Psi components.
+Each adjacent move costs its existing field/hazard cost plus the directional
+penalty. HP1-HP8 in the consolidated PDF commit this numerical choice before
+its implementation; the earlier field profile retains its original behavior.
+
+```sh
+python -m solvefinite agent scenario --profile hadamard --output output/hadamard/scenario.json
+python -m solvefinite agent run --scenario output/hadamard/scenario.json --state output/hadamard/session.json --backend gpu --steps 2
+python -m solvefinite agent run --state output/hadamard/session.json --backend cpu --index-sign -1 --index-phase-origin 192
+python -m solvefinite agent inspect output/hadamard/session.json --backend gpu
+python -m solvefinite agent live-config --profile hadamard --output output/hadamard/live-config.json
+python -m examples.hadamard_conformance
+```
+
+Search retains `(node, intrinsic phase, hop count)` labels and the entire
+unfinished frontier across `DEFER`. Phase changes future edge costs, so
+merging different phases at one node can discard the best route. The
+independent reference includes a cost-10 route that such merging misses,
+and tests include an optimal route that revisits a node at a different phase.
+
+The GPU compiles a `24 x 4N` integer texture and validates all 48 movement/cost
+pairs per node, including unused banks and field classes. Host search consumes
+the device-produced, independently certified table. Forecast and actual
+action select the texture bank from evolving packed state and resolve the
+row through the f8 tree. Rebuilding that tree preserves costs, pending search,
+observations, FIFO residency and canonical history.
+
+The default mission finishes with energy **86**. Changing only initial phase
+to 192 changes the first route and finishes with energy **83**. Zero gains
+restore the earlier field profile's movement costs and final energy **90**.
+These are declared integer application costs. They do not measure physical
+energy, throughput, cache saturation or a hardware speedup.
+
+The routing atlas uses `384N` bytes and each host/device routing table uses
+`68N` bytes of logical payload, outside the world sample FIFO. Search can
+retain up to `N * 256 * (max_hops + 1)` labels, plus route/frontier overhead.
+See [Hadamard evidence and reproduction](docs/evidence/hadamard-v1/README.md)
+for the measured implementation and its limits.
+
+The complete verification capture passes **479 tests with zero skips**,
+including **77 actual-device GPU methods**, and all **15 HP conformance checks**.
+The default device payload is **57,272 bytes**, with a **67,752-byte** rebuild
+peak. Reproduce the source-bound capture with
+`python tools/capture_hadamard_evidence.py`.
 
 ## GPU texture execution
 

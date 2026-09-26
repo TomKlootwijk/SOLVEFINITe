@@ -347,21 +347,49 @@ without making interchangeable f8 index signs alter behavior.
 
 - [x] Commit HP1-HP8 and independent literal vectors in the same consolidated
   formal PDF before changing runtime behavior. Preserve all FI/PX clauses.
-- [ ] Implement a strict immutable routing binding, exact Hadamard operator
+- [x] Implement a strict immutable routing binding, exact Hadamard operator
   model and independent certificate; keep the previous field policy unchanged.
-- [ ] Plan over node, intrinsic phase and hop count, retaining the full frontier
+- [x] Plan over node, intrinsic phase and hop count, retaining the full frontier
   across DEFER. Verify a concrete failure of collapsing distinct phase states.
-- [ ] Add the new semantic policy to the same Tomigidt, including observations,
+- [x] Add the new semantic policy to the same Tomigidt, including observations,
   resource accounting, field forecasts, actual actions, sessions and live replay.
-- [ ] Compile and certify the routing atlas from device fields. Use packed live
+- [x] Compile and certify the routing atlas from device fields. Use packed live
   phase and actual f8 lookup to select movement/cost words on the GPU; host
   search must consume the GPU-produced model without a CPU operator fallback.
-- [ ] Verify phase and gain ablations, covariance, zero gradients, route ties,
+- [x] Verify phase and gain ablations, covariance, zero gradients, route ties,
   energy reserve, retained planning, index-rebuild transparency, corrupted
   operators, ownership failures and fresh-process CPU/GPU continuation.
-- [ ] Capture source-bound evidence, revise the consolidated PDF's measured
+- [x] Capture source-bound evidence, revise the consolidated PDF's measured
   status, commit and push. Keep the complete architecture objective active.
 
 The proposed phase gain table, penalty and route selector are declared choices
 within the source's unbound numerical role. They do not establish a global
 physical eigenmode, geometry growth or a hardware-performance advantage.
+
+## 2026-09-26: implemented phase-directed routing
+
+Resumed the architecture objective from the verified worktree, committed the
+pending formal contract as `0c862c3`, then implemented HP1-HP8. The preceding
+architecture goal turn made progress through PX implementation; the intervening
+ELI5 naming request was already committed and pushed. This continuation adds
+actual behavior to the same individual and preserves the complete objective.
+
+The source-bound capture passes 479 tests, zero skips, including 77 actual-device
+GPU methods and all 15 HP conformance checks. The phase-192 ablation changes
+the selected route; default energy is 86, phase-192 energy is 83, and zero gains
+recover energy 90. An independent DP and a bounded simple-path check establish
+both the phase-collapse counterexample and a beneficial phase revisit.
+
+Six GPU domains contain 830 nodes. Explicit GPU work passes with eleven CPU
+compiler paths disabled. The 32-cycle DEFER mission survives a rebuild each
+cycle without losing its cursor. Reversing-seam and DEFER histories continue
+across CPU/GPU processes, and live duplicate retries preserve durable state.
+The prior field policy's canonical archive hash is unchanged.
+
+Revision 6 consolidates the formal contract and measured HP evidence in 49
+visually checked PDF pages. The FI/PX and HP normative clauses remain unchanged;
+the three original sources and the Tom/Jitske ELI5 booklet are byte-identical.
+
+The complete architecture goal remains active. Global Psi traversal,
+geometry-changing growth, active scale transitions, continuing semantic epochs,
+physical adapters and comparative hardware evidence remain explicit work.

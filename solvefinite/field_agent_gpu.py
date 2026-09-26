@@ -14,6 +14,7 @@ import struct
 from threading import RLock
 
 from .f8 import F8Index, IndexBinding, build_geometry
+from .hadamard import HadamardBinding, RoutingModel
 from .motion import EnergyExhausted
 from .rp32 import Opcode, unpack, unpair
 from .runtime import _integer
@@ -28,7 +29,16 @@ def _serialized(method):
     @wraps(method)
     def locked(self, *args, **kwargs):
         with self._lock:
-            return method(self, *args, **kwargs)
+            try:
+                return method(self, *args, **kwargs)
+            except BaseException:
+                if (method.__name__ != "close" and getattr(self, "_routing", None) is not None
+                        and getattr(self, "_failed", False)):
+                    try:
+                        self.close()
+                    except Exception:
+                        pass
+                raise
     return locked
 
 
@@ -43,6 +53,7 @@ class _IndexBundle:
         self.buffers = []
         self.texture = None
         self.index = None
+        self.routing_model = None
         self.closed = False
 
     def close(self):
@@ -68,7 +79,7 @@ class GpuFieldAgentExecutor:
     be closed. Invalid public inputs are rejected before any device write.
     """
 
-    def __init__(self, recipe, index_binding=None):
+    def __init__(self, recipe, index_binding=None, *, routing=None):
         from .field_world import KleinFieldRecipe
 
         if type(recipe) is not KleinFieldRecipe:
@@ -77,7 +88,10 @@ class GpuFieldAgentExecutor:
             index_binding = IndexBinding()
         if type(index_binding) is not IndexBinding:
             raise ValueError("index_binding must be an IndexBinding")
+        if routing is not None and type(routing) is not HadamardBinding:
+            raise ValueError("routing must be a HadamardBinding")
         self._lock = RLock()
+        self._routing = routing
         self._initial_binding = index_binding
         self._recipe = recipe
         self._manifest = recipe.field_manifest()
@@ -97,6 +111,7 @@ class GpuFieldAgentExecutor:
         self._bundle = None
         self._peak_rebuild_device_payload_bytes = 0
         self._peak_rebuild_host_index_payload_bytes = 0
+        self._peak_rebuild_host_routing_payload_bytes = 0
         self._closed = False
         self._failed = False
         self._seeded = False
@@ -140,12 +155,17 @@ class GpuFieldAgentExecutor:
 
     @property
     @_serialized
+    def routing_model(self) -> RoutingModel | None:
+        return self._bundle.routing_model
+
+    @property
+    @_serialized
     def allocation_info(self) -> dict:
         buffers = sum(buffer.size for buffer in
                       self._buffers + self._geometry._buffers + self._bundle.buffers)
-        textures = (12 + 3) * len(self._nodes) * 4
+        textures = (384 if self._routing is not None else 48) * len(self._nodes) + 12 * len(self._nodes)
         index_payload = 64 * len(self._nodes) + 16
-        return {
+        result = {
             "device_buffer_bytes": buffers,
             "device_texture_bytes": textures,
             "device_payload_bytes": buffers + textures,
@@ -165,6 +185,21 @@ class GpuFieldAgentExecutor:
                 "No complete packed world-node arena is retained."
             ),
         }
+        if self._routing is not None:
+            result.update(
+                routing_atlas_bytes=384 * len(self._nodes),
+                device_routing_table_payload_bytes=68 * len(self._nodes),
+                host_routing_table_payload_bytes=68 * len(self._nodes),
+                host_routing_geometry_payload_bytes=16 * len(self._nodes),
+                device_routing_gains_payload_bytes=32,
+                host_routing_gains_payload_bytes=32,
+                peak_rebuild_host_routing_payload_bytes=self._peak_rebuild_host_routing_payload_bytes,
+                peak_rebuild_host_routing_geometry_payload_bytes=(
+                    16 * len(self._nodes) * (2 if self._peak_rebuild_host_routing_payload_bytes
+                                            > 68 * len(self._nodes) else 1)),
+                routing_binding=self._routing.to_dict(),
+            )
+        return result
 
     def _buffer(self, size, data=None, *, bundle=None):
         usage = self._wgpu.BufferUsage
@@ -190,9 +225,13 @@ class GpuFieldAgentExecutor:
     def _initialize(self):
         count = len(self._nodes)
         geometry = build_geometry(self.recipe)
+        seam_edges = frozenset(self._manifest.seams)
+        seam_flags = tuple(sum(1 << slot for slot, neighbor in enumerate(adjacent)
+                               if tuple(sorted((source, neighbor))) in seam_edges)
+                           for source, adjacent in enumerate(self._neighbors))
         words = tuple(word for node in range(count) for word in (
             *self._neighbors[node], *geometry.directions[node],
-            geometry.parents[node], geometry.distances[node], 0, 0))
+            geometry.parents[node], geometry.distances[node], seam_flags[node], 0))
         self._index_geometry = self._buffer(48 * count, struct.pack(f"<{len(words)}I", *words))
         stride = (count + 31) // 32
         words = [0] * (count * stride)
@@ -206,11 +245,14 @@ class GpuFieldAgentExecutor:
         self._output = self._buffer(32 * MAX_FORECAST_HOPS)
         shader = self._device.create_shader_module(code=Path(__file__).with_name(
             "shaders").joinpath("field_agent.wgsl").read_text(encoding="utf-8"))
+        entries = ("build_keys", "build_tree", "compile_neighbors", "lookup_node",
+                   "derive_node", "forecast", "advance_to", "repair")
+        if self._routing is not None:
+            entries += ("compile_hadamard", "export_routing")
         self._pipelines = {
             entry: self._device.create_compute_pipeline(
                 layout="auto", compute={"module": shader, "entry_point": entry})
-            for entry in ("build_keys", "build_tree", "compile_neighbors", "lookup_node",
-                          "derive_node", "forecast", "advance_to", "repair")
+            for entry in entries
         }
         self._adopt_bundle(self._prepare_bundle(self._initial_binding))
 
@@ -228,37 +270,69 @@ class GpuFieldAgentExecutor:
             candidate.records = self._buffer(32 * count, bundle=candidate)
             candidate.tree = self._buffer(32 * count, bundle=candidate)
             candidate.status = self._buffer(4 * count, bundle=candidate)
+            if self._routing is not None:
+                candidate.gains = self._buffer(32, bundle=candidate)
+                candidate.routing_table = self._buffer(68 * count, bundle=candidate)
+            atlas_bytes = (384 if self._routing is not None else 48) * count
             candidate.texture = self._device.create_texture(
-                size=(12, count, 1), format="r32uint",
-                usage=self._wgpu.TextureUsage.STORAGE_BINDING | self._wgpu.TextureUsage.TEXTURE_BINDING)
+                size=(24, 4 * count, 1) if self._routing is not None else (12, count, 1), format="r32uint",
+                usage=(self._wgpu.TextureUsage.STORAGE_BINDING | self._wgpu.TextureUsage.TEXTURE_BINDING
+                       | self._wgpu.TextureUsage.COPY_DST | self._wgpu.TextureUsage.COPY_SRC))
             self._bind_bundle(candidate)
             base = sum(buffer.size for buffer in self._buffers + self._geometry._buffers)
-            payload = base + 12 * count + sum(buffer.size for buffer in candidate.buffers) + 48 * count
+            payload = base + 12 * count + sum(buffer.size for buffer in candidate.buffers) + atlas_bytes
             host_payload = 64 * count + 16
+            routing_payload = 68 * count if self._routing is not None else 0
             if self._bundle is not None:
-                payload += sum(buffer.size for buffer in self._bundle.buffers) + 48 * count
+                payload += sum(buffer.size for buffer in self._bundle.buffers) + atlas_bytes
                 host_payload *= 2
+                routing_payload *= 2
             self._peak_rebuild_device_payload_bytes = max(self._peak_rebuild_device_payload_bytes, payload)
             self._peak_rebuild_host_index_payload_bytes = max(
                 self._peak_rebuild_host_index_payload_bytes, host_payload)
+            self._peak_rebuild_host_routing_payload_bytes = max(
+                self._peak_rebuild_host_routing_payload_bytes, routing_payload)
             device_work = self._failed = True
+            if self._routing is not None:
+                self._device.queue.write_buffer(candidate.gains, 0, struct.pack(
+                    "<8i", *(value for gain in self._routing.gains for value in gain)))
             self._device.queue.write_buffer(candidate.config, 0, struct.pack(
-                "<12I", count, 0, 0, 0, *self.recipe.turns, 0,
+                "<12I", count, 0, 0, 0, *self.recipe.turns, int(self._routing is not None),
                 binding.psi_sign & 0xffffffff, binding.phase_origin, count.bit_length(), self.recipe.center))
             for entry in ("build_keys", "build_tree"):
                 self._dispatch(self._pipelines[entry], candidate.groups[entry], (count + 63) // 64)
-            records = tuple(struct.iter_unpack("<8I", self._device.queue.read_buffer(candidate.records)))
-            rows = tuple(struct.iter_unpack("<8I", self._device.queue.read_buffer(candidate.tree)))
+            record_bytes = self._device.queue.read_buffer(candidate.records)
+            row_bytes = self._device.queue.read_buffer(candidate.tree)
+            if len(record_bytes) != 32 * count or len(row_bytes) != 32 * count:
+                raise ValueError("GPU returned incomplete candidate index metadata")
+            records = tuple(struct.iter_unpack("<8I", record_bytes))
+            rows = tuple(struct.iter_unpack("<8I", row_bytes))
             # This is an independent admission certificate, never a compiler.
             device_work = self._failed = False
             candidate.index = F8Index.certified(self.recipe, binding, records, rows, self.fields)
             device_work = self._failed = True
-            self._dispatch(self._pipelines["compile_neighbors"], candidate.groups["compile_neighbors"],
+            compiler = "compile_neighbors" if self._routing is None else "compile_hadamard"
+            self._dispatch(self._pipelines[compiler], candidate.groups[compiler],
                            (count + 63) // 64)
+            if self._routing is not None:
+                self._dispatch(self._pipelines["export_routing"], candidate.groups["export_routing"],
+                               (count + 63) // 64)
             status = struct.unpack(f"<{count}I", self._device.queue.read_buffer(candidate.status))
-            if any(status):
-                raise ValueError("GPU index rejected an operator texture row")
+            tables = None
+            if self._routing is not None:
+                tables = struct.unpack(f"<{17 * count}I", self._device.queue.read_buffer(candidate.routing_table))
+            # A complete result is known: any following rejection is pure.
             device_work = self._failed = False
+            if any(status):
+                raise ValueError("GPU index or routing atlas rejected an operator texture row")
+            if tables is not None:
+                candidate.routing_model = RoutingModel.certified(
+                    self.recipe, self._routing, tables[:16 * count], tables[16 * count:], self.fields)
+                if self._bundle is not None:
+                    if candidate.routing_model != self._bundle.routing_model:
+                        raise ValueError("Index replacement changed the semantic routing model")
+                    # A retained cursor and the current owner share one immutable model.
+                    candidate.routing_model = self._bundle.routing_model
             return candidate
         except BaseException:
             try:
@@ -304,6 +378,15 @@ class GpuFieldAgentExecutor:
                 0: config, 7: resource(self._canonical), 8: output,
             }),
         }
+        if self._routing is not None:
+            gains = resource(bundle.gains)
+            bundle.groups.update({
+                "compile_hadamard": self._group(self._pipelines["compile_hadamard"], {
+                    **index, 3: resource(self._seams), 4: view, 13: resource(bundle.status), 14: gains}),
+                "export_routing": self._group(self._pipelines["export_routing"], {
+                    **index, 5: view, 13: resource(bundle.status), 14: gains,
+                    15: resource(bundle.routing_table)}),
+            })
 
     @_serialized
     def reindex(self, *, psi_sign=None, phase_origin=None) -> F8Index:
@@ -411,7 +494,8 @@ class GpuFieldAgentExecutor:
     def forecast(self, agent_pair: int, route, hazards) -> tuple[tuple[int, ...], tuple[int, ...]]:
         """Forecast a caller-internal route; neither canonical pair nor energy changes."""
         self._check_open()
-        left, right, _, source, _ = self._live_pair(agent_pair)
+        left, right, phase, source, metadata = self._live_pair(agent_pair)
+        intrinsic = (-phase if metadata & 16 else phase) & 255
         if type(route) is not tuple or type(hazards) is not tuple:
             raise ValueError("Forecast route and hazards must be immutable tuples")
         if len(route) != len(hazards) or len(route) > MAX_FORECAST_HOPS:
@@ -423,7 +507,11 @@ class GpuFieldAgentExecutor:
             if destination not in self._neighbors[source]:
                 raise ValueError("Every forecast hop must follow an edge between distinct nodes")
             destinations.append(destination)
-            costs.append(1 + abs(self.fields[destination]) + hazard)
+            cost = 1 + abs(self.fields[destination]) + hazard
+            if self.routing_model is not None:
+                cost += self.routing_model.penalty(source, intrinsic, destination)
+                intrinsic = self.routing_model.next_phase(source, intrinsic)
+            costs.append(cost)
             source = destination
         if not destinations:
             return (), ()
@@ -450,12 +538,15 @@ class GpuFieldAgentExecutor:
     def advance_to(self, destination: str, hazard: int) -> tuple[int, int, int]:
         """Execute one neighboring move from the persistent device pair and energy."""
         self._ready()
-        _, _, _, source, _ = self._live_pair(self._pair)
+        _, _, phase, source, metadata = self._live_pair(self._pair)
         node = self._index(destination)
         _integer(hazard, 0, 127, "hazard")
         if node not in self._neighbors[source]:
             raise ValueError("Movement must follow an edge between distinct nodes")
         cost = 1 + abs(self.fields[node]) + hazard
+        if self.routing_model is not None:
+            intrinsic = (-phase if metadata & 16 else phase) & 255
+            cost += self.routing_model.penalty(source, intrinsic, node)
         if cost > self._energy:
             raise EnergyExhausted("Insufficient separate energy for the field move")
         self._failed = True

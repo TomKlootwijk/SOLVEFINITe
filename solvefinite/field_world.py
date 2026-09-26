@@ -16,6 +16,7 @@ from threading import RLock
 
 from .field import FieldManifest, evaluate_field
 from .f8 import F8Index, IndexBinding
+from .hadamard import HadamardBinding, RoutingModel
 from .klein import KleinDomain
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _keys
@@ -124,12 +125,15 @@ class FieldWorld:
     """
 
     def __init__(self, recipe: KleinFieldRecipe, capacity: int, executor=None, *,
-                 index_binding: IndexBinding | None = None):
+                 index_binding: IndexBinding | None = None,
+                 routing: HadamardBinding | None = None):
         if type(recipe) is not KleinFieldRecipe:
             raise ValueError("recipe must be a KleinFieldRecipe")
         capacity = _capacity(capacity)
         if index_binding is not None and type(index_binding) is not IndexBinding:
             raise ValueError("index_binding must be an IndexBinding")
+        if routing is not None and type(routing) is not HadamardBinding:
+            raise ValueError("routing must be a HadamardBinding")
         if executor is not None and (
                 getattr(executor, "recipe", None) != recipe
                 or not callable(getattr(executor, "derive_node", None))
@@ -138,12 +142,20 @@ class FieldWorld:
                 or executor.index.recipe != recipe
                 or (index_binding is not None and executor.index.binding != index_binding)):
             raise ValueError("Executor must derive and forecast the same field recipe")
+        if executor is not None:
+            model = getattr(executor, "routing_model", None)
+            if ((routing is None and model is not None) or
+                    (routing is not None and (type(model) is not RoutingModel or
+                     model.recipe != recipe or model.binding != routing))):
+                raise ValueError("Executor must implement the same routing binding")
         self._operation = RLock()
         self._config = recipe
         self._capacity = capacity
         self._executor = executor
         self._manifest = recipe.field_manifest()
         self._index = F8Index.build(recipe, index_binding) if executor is None else None
+        self._routing_model = (RoutingModel.build(recipe, routing)
+                               if executor is None and routing is not None else None)
         self._peak_index_payload = 64 * len(self._manifest.nodes) + 16
         neighbors = [set() for _ in self._manifest.nodes]
         for source, destination, _ in self._manifest.edges:
@@ -183,6 +195,29 @@ class FieldWorld:
     def index(self) -> F8Index:
         """One immutable version; GPU worlds borrow the owner's current bundle."""
         return self._index if self._executor is None else self._executor.index
+
+    @property
+    def routing_model(self) -> RoutingModel | None:
+        return (self._routing_model if self._executor is None else
+                getattr(self._executor, "routing_model", None))
+
+    @property
+    def routing_info(self) -> dict | None:
+        model = self.routing_model
+        if model is None:
+            return None
+        count = len(self._manifest.nodes)
+        return {"binding": model.binding.to_dict(), "phase_source": "live intrinsic phase",
+                "host_routing_table_payload_bytes": 68 * count,
+                "host_routing_geometry_payload_bytes": 16 * count,
+                "peak_rebuild_host_routing_table_payload_bytes": (
+                    68 * count if self._executor is None else self._executor.allocation_info[
+                        "peak_rebuild_host_routing_payload_bytes"]),
+                "gains_payload_bytes": 32,
+                "retained_cpu_scalar_field_count": 0,
+                "accounting": "Logical 16N penalties and N increments, plus eight gains. "
+                              "Geometry, search labels/routes, weights, Python objects and "
+                              "GPU field/table copies are separate."}
 
     @property
     def index_info(self) -> dict:
@@ -311,6 +346,9 @@ class FieldWorld:
         eta = (metadata >> 4) & 1
         outputs, costs = [], []
         for destination, hazard in zip(indices, hazards):
+            phase = (-r if eta else r) & 255
+            penalty = (0 if self.routing_model is None else
+                       self.routing_model.penalty(source, phase, destination))
             column = 0 if fields[source] < 0 else 1 if fields[source] == 0 else 2
             delta = self._manifest.turns[source][column]
             tau = self._manifest.seam(source, destination)
@@ -319,6 +357,6 @@ class FieldWorld:
             eta ^= tau
             outputs.append(pair(pack(r, destination, fields[destination],
                                      int(Opcode.STEP) | (eta << 4))))
-            costs.append(1 + abs(fields[destination]) + hazard)
+            costs.append(1 + abs(fields[destination]) + hazard + penalty)
             source = destination
         return tuple(outputs), tuple(costs)

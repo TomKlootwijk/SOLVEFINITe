@@ -1,10 +1,10 @@
 {
-  "bookmarks": 48,
+  "bookmarks": 49,
   "builder": "tools/build_formal_spec.py",
-  "builder_sha256_lf": "fcd6e31b40440fedd84a87e67784dc54cfe88c984bfdaca5afd83d3a622b858d",
+  "builder_sha256_lf": "510f11875f9a4c9f98a01e6379ffdf8200a68dea20c5bad696c9833b96d795c5",
   "formal_reference": {
     "path": "docs/evidence/hadamard-v1/formal-reference.json",
-    "role": "Independent mathematical reference only; not HP implementation evidence.",
+    "role": "Independent reference committed before runtime implementation; measured agreement separately captured.",
     "sha256_lf": "89e93219e8266b22c9aa080c580a1ae7da296a989464452bc1d85ab68597ab66"
   },
   "format": "tk-lplut-pdf-quality-v1",
@@ -15,37 +15,55 @@
     "overlap": false,
     "page_numbering_and_contents_correct": true,
     "required_minimum_points": 59,
+    "text_bounds_checks_passed": true,
     "width_and_height_checks_passed": true
   },
-  "pages": 48,
+  "pages": 49,
   "pdf": "output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf",
-  "pdf_sha256": "95cff1a044fe608d1169ba010e1ef35ac10d7df093b5b966d05f85f16b73e87a",
+  "pdf_sha256": "f82eccb6613ed67ca72ca2f25ce60f04fe91fea48fd8c4aeb99d3ddf21d41c62",
   "preservation": {
-    "all_existing_FI_PX_page_bodies_exact_from": "4b8fa89",
-    "earlier_normative_contracts_preserved": true,
+    "HP_changes": "Status subtitles and acceptance box only; measured evidence appended on page49.",
+    "all_FI_PX_pages_35_43_exact_builder_AST": true,
+    "all_HP_pages_44_48_normative_items_exact_builder_AST": true,
     "eli5_unchanged_sha256": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0",
+    "formal_binding_commit": "0c862c310a13b0baef82065efc2464f14c280f9d",
+    "historical_formal_pdf_quality": "docs/evidence/hadamard-v1/formal-pdf-quality.json",
+    "historical_formal_pdf_quality_sha256_lf": "c1069128544155ffcc746cebe4faee4541db0d8a16f3a2ab3456d05bc51e2f96",
+    "original_source_sha256": {
+      "Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf": "8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647",
+      "sources/solipsism.pdf": "1091e0435aa1648b4ede127837e66ddbf2c5dbd0a67f49cbb7a7ae134ee547e7",
+      "sources/solus-ion-ad-infinitum.pdf": "a2ace794138bcad68463d1ce2ba4a6e9954540bb4f2f29e4090d68d6e0440489"
+    },
     "original_three_pdf_source_hashes_verified": true,
-    "prior_page_edits": "Edition/status prose only, plus contents leading and revision headers. Pages 35-43 remain exact."
+    "prior_page_edits": "Edition/status/evidence prose, contents leading, date and revision headers."
   },
   "prior_runtime_evidence_preserved": {
+    "PX_actual_device_methods": 55,
     "PX_conformance_checks": 20,
-    "actual_device_methods": 55,
-    "counted_as_HP_runtime_evidence": false,
-    "skipped": 0,
-    "tests": 421
+    "PX_source_identity_checked_at": "4b8fa89ea68a98fe293c21b925a31cf5870e84c7",
+    "PX_tests": 421
   },
   "rendering": {
+    "contact_sheets_reviewed": 7,
     "detail_review_pages": [
+      2,
       3,
+      11,
+      26,
+      27,
+      28,
+      29,
+      34,
       44,
       45,
       46,
       47,
-      48
+      48,
+      49
     ],
     "dpi": 100,
     "engine": "Poppler pdftoppm",
-    "pages_rendered": 48,
+    "pages_rendered": 49,
     "pages_visually_reviewed": [
       1,
       2,
@@ -94,12 +112,22 @@
       45,
       46,
       47,
-      48
+      48,
+      49
     ]
   },
   "replacement_character_count": 0,
   "result": "PASS",
-  "reviewed_utc": "2026-09-25T13:04:27.052702+00:00",
-  "revision": "TK-LPLUT-2.0 revision 5",
-  "status": "FORMAL PENDING: HP runtime not implemented"
+  "reviewed_utc": "2026-09-26T04:42:55.856826+00:00",
+  "revision": "TK-LPLUT-2.0 revision 6",
+  "runtime_evidence": {
+    "HP_conformance_checks": 15,
+    "actual_device_methods": 77,
+    "current_source_and_report_hashes_verified_by_builder": true,
+    "skipped": 0,
+    "tests": 479,
+    "verification": "docs/evidence/hadamard-v1/verification.json",
+    "verification_sha256_lf": "de013ec91aaaf9ba0af426d4759301a416783af8bf0831fa814898b950cf4e45"
+  },
+  "status": "VERIFIED FINITE PROFILE: HP1-HP8 measured; broader architecture remains open"
 }

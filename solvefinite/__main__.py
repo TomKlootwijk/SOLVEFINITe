@@ -165,7 +165,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_inspect.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_scenario = agent_commands.add_parser("scenario", help="Write the default simulated environment")
     agent_scenario.add_argument("--output", type=Path, required=True)
-    agent_scenario.add_argument("--profile", choices=("binary", "field"), default="binary")
+    agent_scenario.add_argument("--profile", choices=("binary", "field", "hadamard"), default="binary")
     agent_serve = agent_commands.add_parser("serve", help="Keep one agent ready for live JSON-line sensor input")
     agent_serve.add_argument("--state", type=Path, default=Path("output/tomigidt/live.json"))
     agent_serve.add_argument("--capacity", type=int, default=2)
@@ -173,7 +173,7 @@ def main(argv: list[str] | None = None) -> int:
     agent_serve.add_argument("--backend", choices=("cpu", "gpu"), default="cpu")
     agent_live_config = agent_commands.add_parser("live-config", help="Write the default live agent configuration")
     agent_live_config.add_argument("--output", type=Path, required=True)
-    agent_live_config.add_argument("--profile", choices=("binary", "field"), default="binary")
+    agent_live_config.add_argument("--profile", choices=("binary", "field", "hadamard"), default="binary")
     agent_live_inspect = agent_commands.add_parser("live-inspect", help="Replay and inspect a retained live agent session")
     agent_live_inspect.add_argument("state", type=Path)
     agent_live_inspect.add_argument("--capacity", type=int, default=2)
@@ -213,7 +213,7 @@ def main(argv: list[str] | None = None) -> int:
                 result = {"manifest": str(args.output.resolve()), "profile": manifest.profile}
         else:
             from .session import Scenario, load_session, run_session
-            from .field_agent import FIELD_POLICY
+            from .field_agent import FIELD_POLICY, HADAMARD_POLICY
             options = {"backend": getattr(args, "backend", "cpu")}
             index_values = tuple(getattr(args, name, None) for name in
                                  ("index_epoch", "index_sign", "index_phase_origin"))
@@ -232,14 +232,15 @@ def main(argv: list[str] | None = None) -> int:
                 try:
                     result = {"verified": True, "state": agent.snapshot(),
                               "state_path": str(args.state.resolve()), "event_count": len(agent.events)}
-                    if args.backend == "gpu" or agent.manifest.policy == FIELD_POLICY:
+                    if args.backend == "gpu" or agent.manifest.policy in (FIELD_POLICY, HADAMARD_POLICY):
                         result["execution_info"] = agent.execution_info
                 finally:
                     agent.close()
             elif args.agent_command == "scenario":
-                if args.profile == "field":
+                if args.profile in ("field", "hadamard"):
                     from .field_agent import FieldAgentManifest
-                    scenario = Scenario(FieldAgentManifest(), changes=((2, "k:0:3", 70),))
+                    policy = HADAMARD_POLICY if args.profile == "hadamard" else FIELD_POLICY
+                    scenario = Scenario(FieldAgentManifest(policy=policy), changes=((2, "k:0:3", 70),))
                 else:
                     scenario = Scenario()
                 write_json(args.output, scenario.to_dict())
@@ -250,9 +251,10 @@ def main(argv: list[str] | None = None) -> int:
                 return 0
             elif args.agent_command == "live-config":
                 from .live import LiveConfig
-                if args.profile == "field":
+                if args.profile in ("field", "hadamard"):
                     from .field_agent import FieldAgentManifest
-                    config = LiveConfig(FieldAgentManifest())
+                    policy = HADAMARD_POLICY if args.profile == "hadamard" else FIELD_POLICY
+                    config = LiveConfig(FieldAgentManifest(policy=policy))
                 else:
                     config = LiveConfig()
                 write_json(args.output, config.to_dict())
@@ -265,7 +267,7 @@ def main(argv: list[str] | None = None) -> int:
                               "state_path": str(args.state.resolve()),
                               "event_count": len(agent.events),
                               "producer": config.producer, "epoch": config.epoch}
-                    if args.backend == "gpu" or agent.manifest.policy == FIELD_POLICY:
+                    if args.backend == "gpu" or agent.manifest.policy in (FIELD_POLICY, HADAMARD_POLICY):
                         result["execution_info"] = agent.execution_info
                 finally:
                     agent.close()

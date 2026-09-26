@@ -1,0 +1,60 @@
+{
+  "agent": {
+    "identity": "TOMIGIDt",
+    "initial_energy": 100,
+    "initial_node": "k:0:0",
+    "initial_orientation": 0,
+    "initial_phase": 250,
+    "max_cycles": 10000,
+    "max_hops": 255,
+    "max_search_expansions": 4096,
+    "perspective": "local-observation-v1",
+    "policy": "tomigidt-field-hadamard-plan-act-v1",
+    "repair_cost": 5,
+    "routing": {
+      "format": "hadamard-klein-routing-v1",
+      "gains": [
+        [
+          1,
+          1
+        ],
+        [
+          -1,
+          1
+        ],
+        [
+          -1,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    "target": "k:3:2",
+    "word_profile": "RP32-relational-sdf-v2",
+    "world": {
+      "baseline_id": "klein-field-world-v1",
+      "center": 0,
+      "format": "klein-ball-world-v1",
+      "height": 5,
+      "radius": 2,
+      "turns": [
+        11,
+        53,
+        137
+      ],
+      "width": 4
+    }
+  },
+  "changes": [
+    {
+      "cycle": 2,
+      "hazard": 70,
+      "path": "k:0:3"
+    }
+  ],
+  "format": "tomigidt-simulation-v1",
+  "hazards": {}
+}

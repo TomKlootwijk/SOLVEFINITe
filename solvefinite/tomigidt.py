@@ -19,7 +19,8 @@ from .navigation import NoRoute, RouteSearch, SearchBudgetExceeded, normalize_gr
 from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer, _json, _keys, write_json
 from .world import World, WorldConfig, _capacity
-from .field_agent import FIELD_POLICY, FIELD_WORD_PROFILE, FieldAgentManifest
+from .field_agent import FIELD_POLICY, HADAMARD_POLICY, FIELD_WORD_PROFILE, FieldAgentManifest
+from .hadamard_navigation import HadamardRouteSearch
 from .field_world import FieldWorld
 from .f8 import F8Index, IndexBinding
 
@@ -103,7 +104,7 @@ class AgentManifest:
 
     @classmethod
     def from_dict(cls, value: object) -> AgentManifest | FieldAgentManifest:
-        if type(value) is dict and value.get("policy") == FIELD_POLICY:
+        if type(value) is dict and value.get("policy") in (FIELD_POLICY, HADAMARD_POLICY):
             return FieldAgentManifest.from_dict(value)
         _keys(value, {
             "identity", "policy", "perspective", "word_profile", "target", "world",
@@ -151,7 +152,7 @@ class _Planning:
     position: str
     agent_pair: int
     weights: tuple[tuple[str, int], ...]
-    cursor: RouteSearch
+    cursor: RouteSearch | HadamardRouteSearch
     energy: int | None = None
 
     def matches(self, position: str, agent_pair: int, weights: tuple[tuple[str, int], ...],
@@ -176,6 +177,7 @@ class Tomigidt:
         if type(self._manifest) not in (AgentManifest, FieldAgentManifest):
             raise ValueError("manifest must be an AgentManifest or FieldAgentManifest")
         self._is_field = type(self._manifest) is FieldAgentManifest
+        self._is_hadamard = self._manifest.policy == HADAMARD_POLICY
         if index_binding is not None and (not self._is_field or type(index_binding) is not IndexBinding):
             raise ValueError("An IndexBinding requires a field-agent manifest")
         self._graph = dict(self._manifest.graph)
@@ -188,11 +190,14 @@ class Tomigidt:
             try:
                 if backend == "gpu":
                     from .field_agent_gpu import GpuFieldAgentExecutor
-                    self._gpu = GpuFieldAgentExecutor(self._manifest.world, index_binding=index_binding)
+                    routing_options = {"routing": self._manifest.routing} if self._is_hadamard else {}
+                    self._gpu = GpuFieldAgentExecutor(self._manifest.world, index_binding=index_binding,
+                                                       **routing_options)
                     self.world = FieldWorld(self._manifest.world, capacity, executor=self._gpu,
-                                            index_binding=index_binding)
+                                            index_binding=index_binding, routing=self._manifest.routing)
                 else:
-                    self.world = FieldWorld(self._manifest.world, capacity, index_binding=index_binding)
+                    self.world = FieldWorld(self._manifest.world, capacity, index_binding=index_binding,
+                                            routing=self._manifest.routing)
                 _, node, signed, _ = unpack(unpair(self.world.derive(self._manifest.start).pair)[0])
                 self._pair = pair(pack(self._manifest.initial_phase, node, signed,
                                        int(Opcode.STEP) | (self._manifest.initial_orientation << 4)))
@@ -242,6 +247,12 @@ class Tomigidt:
                                           "edge-operator-compilation", "route-forecast", "actual-action"],
                               host_stages=["geometric-certificate", "psi-index-certificate", "observation-admission",
                                            "route-search", "action-admission", "journal"])
+            if self._is_hadamard:
+                result["routing"] = self.world.routing_info
+                result["search_state"] = "canonical node, intrinsic phase, hop count"
+                if self._gpu is not None:
+                    result["gpu_stages"].extend(["hadamard-atlas-compilation", "routing-table-export"])
+                    result["host_stages"].append("independent-routing-certificate")
             return result
         return {"backend": "cpu"} if self._gpu is None else {
             "backend": "gpu", "adapter": dict(self._gpu.adapter_info),
@@ -382,11 +393,18 @@ class Tomigidt:
                 planning = self._planning
                 if planning is None or not planning.matches(
                         self.position, self.agent_pair, weights, self._planning_energy):
-                    cursor = RouteSearch.start(self._graph, self.position, self.manifest.target,
-                                               dict(weights).__getitem__,
-                                               max_hops=self.manifest.max_hops if self._is_field else 32,
-                                               node_profile="relational-node-v1" if self._is_field
-                                               else "binary-path-v1")
+                    if self._is_hadamard:
+                        r, _, _, metadata = unpack(unpair(self.agent_pair)[0])
+                        phase = (-r if metadata & 16 else r) & 255
+                        cursor = HadamardRouteSearch.start(
+                            self.world.routing_model, self.position, self.manifest.target,
+                            dict(weights).__getitem__, self.manifest.max_hops, initial_phase=phase)
+                    else:
+                        cursor = RouteSearch.start(self._graph, self.position, self.manifest.target,
+                                                   dict(weights).__getitem__,
+                                                   max_hops=self.manifest.max_hops if self._is_field else 32,
+                                                   node_profile="relational-node-v1" if self._is_field
+                                                   else "binary-path-v1")
                 else:
                     cursor = planning.cursor
                 cursor, route = cursor.advance(self.manifest.max_search_expansions)
@@ -453,6 +471,11 @@ class Tomigidt:
         if self._is_field and decision.kind == "MOVE":
             next_path = decision.route[0]
             action_cost = self._entry_cost(next_path, unpack(frame[next_path])[2])
+            if self._is_hadamard:
+                r, source, _, metadata = unpack(unpair(self.agent_pair)[0])
+                phase = (-r if metadata & 16 else r) & 255
+                action_cost += self.world.routing_model.penalty(
+                    source, phase, self.manifest.world.index(next_path))
             next_energy -= action_cost
         elif self._is_field and decision.kind == "REPAIR":
             action_cost = self.manifest.repair_cost
@@ -514,7 +537,7 @@ class Tomigidt:
         }
         if self._is_field:
             snapshot.update(energy=self.energy, word_profile=FIELD_WORD_PROFILE)
-        if self.manifest.policy in (POLICY, FIELD_POLICY):
+        if self.manifest.policy in (POLICY, FIELD_POLICY, HADAMARD_POLICY):
             planning = self._planning
             snapshot["planning"] = None if planning is None else {
                 "position": planning.position, "target": self.manifest.target,

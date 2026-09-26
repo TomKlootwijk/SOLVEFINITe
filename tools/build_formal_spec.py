@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 5. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 6. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -26,6 +26,8 @@ EVIDENCE = ROOT / 'docs/evidence/formal-edition-2026-09-25'
 KLEIN_EVIDENCE = ROOT / 'docs/evidence/klein-field-v2'
 FIELD_AGENT_EVIDENCE = ROOT / 'docs/evidence/field-agent-v1'
 PSI_F8_EVIDENCE = ROOT / 'docs/evidence/psi-f8-v1'
+HADAMARD_EVIDENCE = ROOT / 'docs/evidence/hadamard-v1'
+HP_VERIFICATION = None
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -96,10 +98,16 @@ def page(title, subtitle, *items):
 
 
 def build_content():
-    page('Edition and authority', 'READING CONTRACT | 25 SEPTEMBER 2026',
+    if HP_VERIFICATION is None:
+        raise ValueError('Verify current Hadamard evidence before building revision 6')
+    hp_tests = HP_VERIFICATION['tests']['passed']
+    hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
+    hp_checks = HP_VERIFICATION['conformance_checks_passed']
+    hp_allocation = HP_VERIFICATION['allocation_info']
+    page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 5. Measured FI1-FI8 integration and PX1-PX8 indexing remain on pages 35-43. This revision adds phase-directed Hadamard routing as HP1-HP8, pages 44-48, before runtime implementation. Existing relational-sdf-v1/v2, field-agent and index contracts retain their meanings.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 6. FI1-FI8 and PX1-PX8 remain on pages 35-43. HP1-HP8 on pages 44-48 retain their formal-first contract; page 49 records the measured phase-directed routing implementation. Existing relational-sdf-v1/v2, field-agent and index contracts retain their meanings.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -229,7 +237,7 @@ def build_content():
         eq('H_f(u,v)_i = clip(round_nu(u_i*v_i / 2^f))\nq = H_f(DecodeVector(W), Gradient_nu(phi))\nnext = SelectNeighbor_nu(node, q, topology)\nDelta_a^2 phi(x) = phi(x+a)-2*phi(x)+phi(x-a)\nDelta_T^2 phi_T = phi_(T+1)-2*phi_T+phi_(T-1)'),
         p('Hadamard multiplication applies to decoded numerical lanes with declared fixed-point scale, widened products, rounding and clipping. Opcode, continuation and parity bits are not vector components. The gradient/stencil, neighbor admissibility, ties, stop and fallback rules must be supplied.'),
         p('Spatial and temporal second differences are different operators. On a graph, x+a means the selected adjacent sample in a declared stencil, not an undeclared external coordinate. Spacing and units are required for divided differences.'),
-        small('Current status: typed arithmetic, SDF bounds, local PX eigenstructure and f8 indexing have CPU/GPU checks. HP1-HP8 now bind phase-directed Hadamard routing before runtime coding. Global eigenmode traversal remains separate; no route-quality claim follows from index conformance.')
+        small('Current status: typed arithmetic, SDF bounds, local PX eigenstructure and f8 indexing have CPU/GPU checks. HP1-HP8 now have measured phase-directed Hadamard routing evidence on page 49. Global eigenmode traversal remains separate; no route-quality claim follows from index conformance.')
     )
     page('Relations define the field world', 'GEOMETRIC INTERPRETATION | SOLUS PP.3-6; SOLIPSISM PP.12-13',
         eq('phi(x) = sigma(x) * inf { d(x,b) : b in Boundary }'),
@@ -422,7 +430,7 @@ def build_content():
         p('The architecture can host deterministic simulation, regenerable world models, compact geometric controllers and device-independent continuation once their profiles and adapters are specified. Robotics, optical/FPGA execution, biological growth and physical autonomous construction require additional realizations. The current repository demonstrates software/GPU substrates and a simulated/live-observation individual.'),
         box('A complete application must identify what the field means, where its inputs come from, what action an output authorizes, and how the model is validated. The formal architecture supplies a common representation and execution discipline; it does not supply an absent sensor or actuator model.')
     )
-    page('Implementation map and integration', 'MEASURED PROFILES | FI1-FI8 AND PX1-PX8',
+    page('Implementation map and integration', 'MEASURED PROFILES | FI, PX AND HP',
         p('The field-agent policy joins recipe-derived Klein geometry to the existing individual. The module map identifies implemented scope; remaining architectural concepts retain their separate obligations.'),
         table(['Layer','Existing implementation','Scope'],[
             ['Packed core','rp32.py','Encoding, phase, parity, full mirror and pair.'],
@@ -438,10 +446,10 @@ def build_content():
         h('Profile meanings remain explicit'),
         p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and implement a field-agent policy with B=phi and separate integer energy. Shared encoding never permits an implicit role change.'),
         h('Measured integration'),
-        p('Tomigidt observes, plans and acts through Klein seams. Actual CPU/GPU tree lookup and versioned index rebuild preserve its canonical history, retained search and FIFO. Global Psi, Hadamard routing, growth and physical adapters remain distinct obligations.'),
-        small('Paths are relative to solvefinite/. Current source hashes and provenance: docs/evidence/psi-f8-v1/. Prior field-agent and Klein captures remain retained. Formal-first chronology is on page 33.')
+        p('Tomigidt observes, plans and acts through Klein seams. hadamard.py and hadamard_navigation.py add certified directional gains and phase-state planning. Indexed device actions and rebuilds preserve admitted history. Global Psi, growth and physical adapters remain separate.'),
+        small('Paths are relative to solvefinite/. Current source hashes: docs/evidence/hadamard-v1/. Earlier field-agent, Klein and PX captures remain retained. Formal-first chronology is on pages 33 and 49.')
     )
-    page('Fresh verification and field trace', 'OBSERVED RESULTS | 25 SEPTEMBER 2026',
+    page('Retained PX verification and field trace', 'HISTORICAL CAPTURE | 25 SEPTEMBER 2026',
         table(['Measurement','Observed result'],[
             ['Full integrated suite','421 tests passed in 44.997 s; zero skipped.'],
             ['Actual device coverage','55 GPU methods: the prior 41 plus 14 F8 methods.'],
@@ -455,21 +463,21 @@ def build_content():
         h('Reproduce the measured checks'),
         code('python -m unittest discover -s tests -v\npython -m examples.psi_f8_conformance --output psi.json\npython -m examples.field_agent_conformance --output agent.json\npython -m examples.klein_conformance --output klein.json\npython -m examples.field_conformance --output sdf.json'),
         p('Retained captures: SDF 262 tests/21 device methods, Klein 311/28 and field agent 368/41. PX rebuilds preserve the complete FI8 archive and all 41 DEFER-mission cycles. These counts describe tested finite profiles, not architectural completion.'),
-        small('Current evidence: docs/evidence/psi-f8-v1/. Prior captures remain in field-agent-v1/, klein-field-v2/ and formal-edition-2026-09-25/ under docs/evidence/. Logs, source hashes, adapter details and complete archives identify each observation.')
+        small('Historical PX evidence: docs/evidence/psi-f8-v1/. Earlier captures remain in field-agent-v1/, klein-field-v2/ and formal-edition-2026-09-25/. The new HP capture is on page 49. Logs, source hashes, adapter details and archives identify each observation.')
     )
     page('Progress against the architecture: I', 'CAPABILITY STATUS | FINITE REALIZATIONS',
         table(['Obligation','Measured status and remaining work'],[
             ['C1-C3: relational packed execution','<b>Verified subset.</b> RP32 and state-selected integer texture execution work. General active log-radius scale transitions and alternate historical carriers remain unbound.'],
             ['Exact intrinsic SDF','<b>Verified subset.</b> Weighted graph distance, declared separating boundary, units, certificate and field-governed traces work. Continuous primitives and physical calibration are separate.'],
             ['C4: Klein geometry','<b>Verified finite profile.</b> Quotient cells, nonorientability, connected orientable cover, torus maps, intrinsic ball and CPU/GPU seam transport are audited.'],
-            ['Local Psi / traversal','<b>Verified local index role.</b> Exact SDF eigen-operator, primitive axis, sign/zero tie and chart transport work. Global eigenmode traversal and behavioral routing remain separate.'],
-            ['Hadamard / Delta-Delta','<b>Formal pending.</b> HP1-HP8 bind typed phase-directed routing; runtime is not yet implemented. Existing second-difference bounds remain checked.'],
+            ['Local Psi / traversal','<b>Verified local roles.</b> Exact SDF eigen-operator, primitive axis and chart transport govern indexing and HP directional gains. Global eigenmode traversal remains separate.'],
+            ['Hadamard / Delta-Delta','<b>Verified finite routing profile.</b> HP1-HP8 implement phase-dependent directional costs, planning and device actions. Existing second-difference bounds remain checked.'],
             ['f8 middle-out index','<b>Verified finite binding.</b> Canonical five-component keys, lower-median preorder, actual CPU/GPU lookup and atomic versioned rebuild work for scalar base descriptors.'],
         ],[.3,.7]),
         h('What the tests establish'),
         p('The implemented graph profile has exact arithmetic and a field certificate, and its tested CPU/GPU realizations agree. These are substantial completed components. They do not establish every named architectural layer by association with the same word carrier.'),
         h('What will count as progress next'),
-        p('FI1-FI8 and PX1-PX8 preserve field-guided planning, regeneration and exact indexed lookup. HP1-HP8 next require implemented phase-directed Hadamard planning against their new formal contract. Global Psi, growth, active scale transitions and wider continuation remain separate obligations.'),
+        p('FI1-FI8, PX1-PX8 and HP1-HP8 implement field-guided planning, indexed lookup and phase-directed Hadamard routing. Global Psi, geometry-changing growth, active scale transitions and wider continuation remain separate obligations.'),
         small('The requirements matrix continues on page 29. No percentage is assigned because architectural obligations differ in size and some remain unbound; counting passing tests would produce a misleading completion estimate.')
     )
     page('Progress against the architecture: II', 'CAPABILITY STATUS | INTEGRATION AND APPLICATIONS',
@@ -483,7 +491,7 @@ def build_content():
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
         h('Continuation after the integrated field agent'),
-        p('FI1-FI8 join retained geometry to the existing individual; PX1-PX8 add an interchangeable verified index. Legacy fixtures remain preserved. HP1-HP8 bind the next routing implementation; global traversal, geometry-changing growth and wider continuation still require separate work and evidence.'),
+        p('FI1-FI8 join retained geometry to the existing individual; PX1-PX8 add an interchangeable verified index. HP1-HP8 make live phase and local eigenstructure affect directional costs and actual decisions. Legacy profiles remain preserved. Global traversal, geometry-changing growth and wider continuation require separate work and evidence.'),
         small('The measured integration is finite and profile-scoped. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present profiles.')
     )
     page('Conformance and performance scope', 'ACCEPTANCE CRITERIA | ORIGINAL T1-T10',
@@ -587,7 +595,7 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box('<b>Revision 5 status.</b> SDF, Klein, FI1-FI8 and PX1-PX8 retain their measured finite evidence: 421 passing tests, 55 device methods and 20 PX checks. HP1-HP8 on pages 44-48 are FORMAL PENDING before runtime coding. These earlier counts establish no HP implementation result.')
+        box(f'<b>Revision 6 status.</b> Earlier PX evidence retains 421 tests, 55 device methods and 20 checks. The new HP capture has {hp_tests} passing tests, {hp_device_tests} device methods and {hp_checks} conformance checks. Page 49 identifies this finite routing result; the wider architecture remains open.')
     )
     page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
@@ -714,7 +722,7 @@ for tick in admitted_finite_budget:
         box('<b>Revision 4 acceptance status: VERIFIED FINITE PROFILE.</b> All 20 PX conformance checks pass. The complete suite has 421 passing tests, 55 actual-device methods and zero skips. Four FI8-cycle rebuilds and 41 DEFER-cycle rebuilds preserve the prior canonical archive, energy, FIFO and retained search.'),
         small('This finite binding supplies local SDF-derived eigenstructure and a canonical middle-out storage index. It does not complete global Psi traversal, Hadamard routing, geometry-changing growth, active scale transitions, physical adapters or indefinite continuation.')
     )
-    page('Typed Hadamard routing policy', 'FORMAL PENDING | HP1-HP2 | NEW BEHAVIORAL BINDING',
+    page('Typed Hadamard routing policy', 'VERIFIED FINITE PROFILE | HP1-HP2 | BEHAVIORAL BINDING',
         h('HP1. Explicit semantic policy and schema'),
         p('FieldAgentManifest gains the distinct policy tomigidt-field-hadamard-plan-act-v1. Only this policy requires the additional JSON key routing; its exact routing keys are format and gains. Format is hadamard-klein-routing-v1. Gains are an immutable 4 by 2 table of strict integers in [-4,4]; reject Boolean integers, missing/unknown keys and malformed shapes. Defaults are shown below.'),
         code('routing = {"format":"hadamard-klein-routing-v1",\n           "gains":[[1,1],[-1,1],[-1,-1],[1,-1]]}'),
@@ -727,7 +735,7 @@ for tick in admitted_finite_budget:
         p('Squared Psi components make both the local chart transformation and IndexBinding sign irrelevant to d. Costs are chart-covariant, and changing index phase_origin changes no routing bank. The complete mirror also preserves t. K8 live transport remains responsible for eta, parity and the full mirrored pair.'),
         small('Source basis: original pp.5,7,10,11,16,18; Solus pp.3-4; solipsism pp.5,13,16. These motivate qualitative field/operator/traversal roles. HP is an explicit numerical choice, not a uniquely implied source formula, global eigenmode or speed claim.')
     )
-    page('Phase-state planning and admitted action', 'FORMAL PENDING | HP3-HP4 | FINITE LIFTED SEARCH',
+    page('Phase-state planning and admitted action', 'VERIFIED FINITE PROFILE | HP3-HP4 | FINITE LIFTED SEARCH',
         h('HP3. Immutable phase-state Dijkstra search'),
         p('Use labels (G,t,hops), with canonical node G, intrinsic phase t in 0..255 and hop count in 0..max_hops. All geometric adjacencies remain admissible and every edge has positive cost. Node-only labels, or labels omitting t, may merge arrivals with different future costs and are unsound. Revisits are permitted because phase changes can improve subsequent directional costs.'),
         eq('label = (G,t,hops)\nt_next = (t + turns[class(phi(G))]) mod 256\nhops_next = hops + 1\npriority = (total cost, lexical route, G, t, hops)'),
@@ -740,7 +748,7 @@ for tick in admitted_finite_budget:
         p('This decrease assumes an unchanged model and successful admitted movement; new observations may change its value. Full RP32 execution applies the existing source-field increment, seam reflection and eta XOR. The resulting intrinsic phase obeys t_next above independently of seam/orientation, while R and eta still follow K8.'),
         small('The finite label bound is N*256*(max_hops+1), not a constant-memory search guarantee. Search/history/object overhead remains separate from active world-pair FIFO capacity.')
     )
-    page('Routing atlas and certified export', 'FORMAL PENDING | HP5-HP6 | DEVICE-PRODUCED PLANNING MODEL',
+    page('Routing atlas and certified export', 'VERIFIED FINITE PROFILE | HP5-HP6 | CERTIFIED DEVICE MODEL',
         h('HP5. Movement and cost in one exact atlas'),
         p('The HP GPU operator atlas is an r32uint texture of width 24 and height 4N. Within each source, neighbor slots are sorted by numeric canonical destination ID. Its row is selected through the actual f8 tree walk; the row is storage, while source/destination G remain geometric identities.'),
         eq('y = bank*N + f8_row(source)\nx = 6*numeric_neighbor_slot + 2*field_class\natlas[x,y]   = existing RP32 movement operator\natlas[x+1,y] = pack(bank,source,penalty,DATA)'),
@@ -753,7 +761,7 @@ for tick in admitted_finite_budget:
         p('The retained semantic model contains those 17N integers and effective entry weights, not a CPU scalar-field arena. Geometry and field samples remain recipe-derived under their existing contracts. CPU/GPU costs, forecasts, choices and admitted histories must agree for the same HP manifest and observations.'),
         small('For HP owners, the complete atlas and routing-table certificate extends FI6/PX6 admission. Existing persistent-action ownership, no-fallback and uncertain-outcome closure requirements remain binding.')
     )
-    page('Hadamard rebuild and resource contract', 'FORMAL PENDING | HP7 | ONE COMPLETE ADMITTED BUNDLE',
+    page('Hadamard rebuild and resource contract', 'VERIFIED FINITE PROFILE | HP7 | ONE ADMITTED BUNDLE',
         h('HP7. Atomic index replacement with routing resources'),
         p('An HP index rebuild prepares a complete candidate index, tree, routing atlas, exported routing tables and bind groups. Certify the whole candidate before a serialized atomic swap. Preserve the full semantic routing object; a storage rebuild cannot silently change gains, costs or policy.'),
         table(['Outcome','Required result'],[
@@ -770,7 +778,7 @@ for tick in admitted_finite_budget:
         p('The world-pair FIFO retains its 8C-byte payload bound and actual regeneration obligation. Search may have N*256*(max_hops+1) labels. Frontier/routes, routing tables, observations and journal memory remain outside the FIFO bound.'),
         small('No throughput, speedup, saturation or physical-energy claim follows from these allocations. A comparative performance result would require the separate measurement protocol on page 30.')
     )
-    page('Hadamard reference and acceptance', 'FORMAL PENDING | HP8 | INDEPENDENT REFERENCE VECTORS',
+    page('Hadamard reference and acceptance', 'VERIFIED FINITE PROFILE | HP8 | INDEPENDENT VECTORS',
         h('HP8. Default phase-directed mission'),
         p('Use the FI8 4 by 5 recipe and local hazard change, with the HP1 default gains, initial phase 250, eta 0, energy 100 and repair cost 5. Initial pair is 91FE000601FE00FA. The independent reference uses quotient arithmetic, BFS, phase-state Dijkstra and a layered-DP cross-check; it imports no solvefinite runtime module.'),
         table(['Cycle / action','Route; known cost; expansions','Actual pair / energy'],[
@@ -785,8 +793,25 @@ for tick in admitted_finite_budget:
         h('Required independent conformance'),
         p('Require strict new-policy schema with exact legacy preservation; integer bounds, zero gains, all banks/signs/frames, chart covariance and mirror invariance; independent lifted-search/DP route and cost oracles, revisits, hop/quantum limits, stale-model invalidation and DEFER replay. Sensor inputs shall not supply routes or actions.'),
         p('Require real GPU atlas compilation and all 48-pair payload checks, certified exported tables, no CPU compiler fallback, actual indexed action/forecast bank selection, corruption in unselected copies, resource peaks, pure rejection, uncertain-outcome closure and committed cleanup failures. Capacity/rebuild changes preserve FIFO, cursors and archives; fresh-process cross-backend/live continuation remains exact.'),
-        box('<b>Revision 5 acceptance status: FORMAL PENDING.</b> HP1-HP8 are bound before runtime coding. The prior 421 passing tests, 55 actual-device methods and 20 PX checks remain evidence for their existing profiles; they establish no HP implementation result.'),
+        box(f'<b>Revision 6 acceptance status: VERIFIED FINITE PROFILE.</b> The new capture has {hp_tests} passing tests, {hp_device_tests} actual-device methods and {hp_checks} HP conformance checks. Earlier 421/55/20 PX counts retain their historical identity. Implementation evidence follows on page 49.'),
         small('Retained reference: docs/evidence/hadamard-v1/formal-reference.json and independent reference-builder.py. The equations and vectors are a declared finite routing binding, not global Psi, physical energy calibration, a speed claim or whole-architecture completion.')
+    )
+    page('Measured Hadamard implementation', 'REVISION 6 EVIDENCE | HP1-HP8 | FINITE PROFILE',
+        p('HP1-HP8 were committed before runtime coding at <font name="Mono">0c862c3</font>. The implementation extends the same Tomigidt individual. Its certified gradient and local Psi, together with its live intrinsic phase, now alter route costs and actual CPU/GPU actions.'),
+        table(['Capture','Measured result'],[
+            ['Complete regression suite', f'{hp_tests} passed; {HP_VERIFICATION["tests"]["skipped"]} skipped; {HP_VERIFICATION["tests"]["elapsed_seconds"]} seconds.'],
+            ['Actual-device coverage', f'{hp_device_tests} executed GPU methods; {HP_VERIFICATION["gpu_domains"]} domains, {HP_VERIFICATION["gpu_nodes"]} nodes and {HP_VERIFICATION["gpu_penalty_checks"]:,} penalty comparisons.'],
+            ['HP conformance', f'All {hp_checks} named checks passed. The one-expansion DEFER mission takes {HP_VERIFICATION["deferred_mission_cycles"]} cycles and preserves search across every rebuild.'],
+            ['Behavioral ablations', 'Default: four cycles, energy 86. Zero gains: energy 90. Initial phase 192: a different first route, six cycles, energy 83. Exact pairs and routes remain on page 48.'],
+            ['Device payload / rebuild peak', f'{hp_allocation["device_payload_bytes"]:,} / {hp_allocation["peak_rebuild_device_payload_bytes"]:,} bytes; complete old and candidate bundles are counted.'],
+            ['Routing allocations', f'Atlas {hp_allocation["routing_atlas_bytes"]:,} bytes; device/host tables {hp_allocation["device_routing_table_payload_bytes"]:,}/{hp_allocation["host_routing_table_payload_bytes"]:,} bytes. Geometry, runtime and Python-object memory remain additional.'],
+        ],[.32,.68]),
+        h('What changes the next action'),
+        p('Separate node/phase/hop labels preserve distinct futures. The device atlas holds four phase banks; export admission checks every bank/class copy. Forecasts and persistent actions use their current phase and actual f8 lookup. Storage changes preserve routing, search, FIFO and history. Continuation across CPU/GPU backends and failure cases are identified in the retained logs.'),
+        h('Reproduce and inspect the evidence'),
+        code('python -m unittest discover -s tests -v\npython -m examples.hadamard_conformance --output hp.json'),
+        small('Retained capture: docs/evidence/hadamard-v1/. verification.json binds current source/report hashes, formal chronology and measured counts. Earlier FI/PX captures retain their named commits and original counts.'),
+        small('<b>Remaining scope:</b> global eigenmodes, geometry-changing growth, active scale transitions, physical adapters and wider continuation. These finite measurements establish no GPU saturation, general speedup or calibrated physical-energy claim.'),
     )
 
 
@@ -794,7 +819,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 5')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 6')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -818,7 +843,7 @@ def cover(c, count):
     c.setFillColor(colors.white); c.setFont('Bold',14); c.drawString(LEFT,151,'Tom Klootwijk')
     c.setFont('Body',10); c.setFillColor(colors.HexColor('#CADBE2'))
     c.drawString(LEFT,131,'NL200678942  |  10-07-1990')
-    c.drawString(LEFT,105,'25 September 2026  |  Formalization with measured implementation progress')
+    c.drawString(LEFT,105,'26 September 2026  |  Formalization with measured implementation progress')
     c.setFont('Body',9); c.drawString(LEFT,71,'Original specification + Solus + Infallible addendum + current code evidence')
     c.bookmarkPage('cover'); c.addOutlineEntry('The Infallible Contract','cover',0)
     c.showPage()
@@ -827,16 +852,16 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 5')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 6')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
-    c.setSubject('Integrated formal specification and implementation evidence, 25 September 2026')
+    c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
     cover(c,count)
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 5')
-        c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  25 SEPTEMBER 2026')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 6')
+        c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
         title_p=Paragraph(title,title_style); tw,th=title_p.wrap(CONTENT_W,100)
@@ -854,7 +879,7 @@ def render(output):
                 c.drawString(LEFT,y,t); c.setFont('Bold',9.5); c.setFillColor(TEAL)
                 c.drawRightString(WIDTH-RIGHT,y,str(pg))
                 c.linkRect('',f'p{pg}',(LEFT,y-3,WIDTH-RIGHT,y+12),relative=0,thickness=0)
-                y-=13.0
+                y-=12.7
             if y < 59: raise ValueError(f'Contents overflow: bottom={y:.1f}')
         else:
             for item in items:
@@ -882,6 +907,7 @@ def render(output):
 
 
 def verify_retained_inputs():
+    global HP_VERIFICATION
     expected_hashes = {
         'Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf':
             '8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647',
@@ -949,7 +975,9 @@ def verify_retained_inputs():
             or px['base_commit'] != 'c8af71dbb5b526deb1dee97dc61ef5bbd47e6737'):
         raise ValueError('Retained PX chronology disagrees with revision 4')
     for relative, expected in px['source_sha256_lf'].items():
-        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        source = subprocess.check_output(
+            ['git', 'show', f'4b8fa89ea68a98fe293c21b925a31cf5870e84c7:{relative}'],
+            cwd=ROOT).replace(b'\r\n', b'\n')
         if hashlib.sha256(source).hexdigest() != expected:
             raise ValueError(f'PX evidence source identity changed: {relative}')
     for relative, expected in px['report_sha256_lf'].items():
@@ -971,6 +999,44 @@ def verify_retained_inputs():
     hp_reference_bytes = hp_reference.read_bytes().replace(b'\r\n', b'\n')
     if hashlib.sha256(hp_reference_bytes).hexdigest() != '89e93219e8266b22c9aa080c580a1ae7da296a989464452bc1d85ab68597ab66':
         raise ValueError('Retained HP formal reference identity changed')
+    hp = json.loads((HADAMARD_EVIDENCE/'verification.json').read_text(encoding='utf-8'))
+    if (hp['format'] != 'hadamard-verification-v1'
+            or hp['formal_binding_commit'] != '0c862c310a13b0baef82065efc2464f14c280f9d'
+            or hp['base_commit'] != '4b8fa89ea68a98fe293c21b925a31cf5870e84c7'):
+        raise ValueError('Retained HP chronology disagrees with revision 6')
+    tests = hp['tests']
+    if (type(tests['passed']) is not int or tests['passed'] <= 421
+            or tests['skipped'] != 0
+            or sum(tests['actual_device_methods'].values()) <= 55):
+        raise ValueError('HP requires its own complete passing implementation capture')
+    if not hp['source_sha256_lf'] or not hp['report_sha256_lf']:
+        raise ValueError('HP requires source and retained-report identities')
+    for relative, expected in hp['source_sha256_lf'].items():
+        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(source).hexdigest() != expected:
+            raise ValueError(f'HP evidence source identity changed: {relative}')
+    for relative, expected in hp['report_sha256_lf'].items():
+        report = (HADAMARD_EVIDENCE/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(report).hexdigest() != expected:
+            raise ValueError(f'HP evidence report identity changed: {relative}')
+    hp_conformance = json.loads((HADAMARD_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    if (hp_conformance['format'] != 'hadamard-conformance-v1'
+            or not hp_conformance['checks']
+            or len(hp_conformance['checks']) != hp['conformance_checks_passed']
+            or any(value is not True for value in hp_conformance['checks'].values())):
+        raise ValueError('HP conformance does not pass every named check')
+    if (hp['gpu_domains'] != len(hp_conformance['GPU_domains'])
+            or hp['gpu_nodes'] != sum(item['nodes'] for item in hp_conformance['GPU_domains'])
+            or hp['gpu_penalty_checks'] != sum(item['penalty_checks'] for item in hp_conformance['GPU_domains'])
+            or hp['deferred_mission_cycles'] != hp_conformance['GPU_deferred']['archive']['expected']['cycle']
+            or hp['canonical_archive_sha256'] != hp_conformance['canonical_archive_sha256']
+            or hp['allocation_info'] != hp_conformance['GPU']['execution_info']['allocation_info']
+            or hp['legacy_field_archive_sha256'] != integration['canonical_archive_sha256']):
+        raise ValueError('HP measurements disagree with their source reports')
+    log = (HADAMARD_EVIDENCE/'full-tests.txt').read_text(encoding='utf-8')
+    if f'Ran {tests["passed"]} tests in ' not in log or not log.rstrip().endswith('OK'):
+        raise ValueError('HP suite count is not backed by its complete passing log')
+    HP_VERIFICATION = hp
 
 
 if __name__=='__main__':

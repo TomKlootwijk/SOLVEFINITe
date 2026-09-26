@@ -1,0 +1,698 @@
+{
+  "archive_sha256": "ba3c7a5e2afb068f4648fd0033741bcac36e3db971362cd23b209557c0134467",
+  "commands": [
+    [
+      "-m",
+      "solvefinite",
+      "agent",
+      "scenario",
+      "--profile",
+      "hadamard",
+      "--output",
+      "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\scenario.json"
+    ],
+    [
+      "-m",
+      "solvefinite",
+      "agent",
+      "live-config",
+      "--profile",
+      "hadamard",
+      "--output",
+      "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\live.json"
+    ],
+    [
+      "-m",
+      "solvefinite",
+      "agent",
+      "run",
+      "--scenario",
+      "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\scenario.json",
+      "--state",
+      "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\session.json",
+      "--steps",
+      "2",
+      "--capacity",
+      "1",
+      "--backend",
+      "gpu",
+      "--index-sign",
+      "-1",
+      "--index-phase-origin",
+      "250"
+    ],
+    [
+      "-m",
+      "solvefinite",
+      "agent",
+      "run",
+      "--state",
+      "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\session.json",
+      "--steps",
+      "20",
+      "--capacity",
+      "3",
+      "--backend",
+      "cpu",
+      "--index-epoch",
+      "12",
+      "--index-phase-origin",
+      "192"
+    ],
+    [
+      "-m",
+      "solvefinite",
+      "agent",
+      "inspect",
+      "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\session.json",
+      "--backend",
+      "gpu",
+      "--index-sign",
+      "-1",
+      "--index-epoch",
+      "20",
+      "--index-phase-origin",
+      "64"
+    ]
+  ],
+  "inspection_kept_saved_bytes": true,
+  "outputs": [
+    {
+      "identity": "TOMIGIDt",
+      "scenario": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\scenario.json"
+    },
+    {
+      "config": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\live.json",
+      "identity": "TOMIGIDt"
+    },
+    {
+      "capacity_pairs": 1,
+      "cycle": 2,
+      "decisions": [
+        {
+          "cost": 7,
+          "expansions": 23,
+          "expected_pair": "11FF04FB01FF0405",
+          "forecast": [
+            "11FF04FB01FF0405",
+            "110003F001000310",
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:0:4",
+            "k:0:3",
+            "k:3:2"
+          ]
+        },
+        {
+          "cost": 7,
+          "expansions": 6,
+          "expected_pair": "81001010910010F0",
+          "forecast": [
+            "81001010910010F0",
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:3:1",
+            "k:3:2"
+          ]
+        }
+      ],
+      "executed_cycles": 2,
+      "execution_info": {
+        "accounting": "Active pair payload only; recipe, geometry, search, observations, journal and runtime overhead are separate.",
+        "active_pair_payload_capacity_bytes": 8,
+        "adapter": {
+          "adapter_type": "DiscreteGPU",
+          "architecture": "",
+          "backend_type": "Vulkan",
+          "description": "591.59",
+          "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+          "device_id": 12056,
+          "stackgroup_max_size": 128,
+          "stackgroup_min_size": 4,
+          "vendor": "NVIDIA",
+          "vendor_id": 4318
+        },
+        "allocation_info": {
+          "accounting": "Explicit scalar/table/state/scratch buffers and integer textures, including the composed field engine, are outside the observed FIFO. Host field codes and index/geometry metadata are logical integer payload; Python objects and driver allocations are excluded. Rebuild peaks include both complete bundles. No complete packed world-node arena is retained.",
+          "device_buffer_bytes": 49352,
+          "device_payload_bytes": 57272,
+          "device_routing_gains_payload_bytes": 32,
+          "device_routing_table_payload_bytes": 1360,
+          "device_texture_bytes": 7920,
+          "host_field_code_payload_bytes": 80,
+          "host_geometry_payload_bytes": 320,
+          "host_index_payload_bytes": 1296,
+          "host_routing_gains_payload_bytes": 32,
+          "host_routing_geometry_payload_bytes": 320,
+          "host_routing_table_payload_bytes": 1360,
+          "index_version": {
+            "binding": {
+              "epoch": 0,
+              "format": "f8-klein-sdf-v1",
+              "phase_origin": 250,
+              "psi_sign": -1
+            },
+            "recipe": {
+              "baseline_id": "klein-field-world-v1",
+              "center": 0,
+              "format": "klein-ball-world-v1",
+              "height": 5,
+              "radius": 2,
+              "turns": [
+                11,
+                53,
+                137
+              ],
+              "width": 4
+            }
+          },
+          "peak_rebuild_device_payload_bytes": 57272,
+          "peak_rebuild_host_index_payload_bytes": 1296,
+          "peak_rebuild_host_routing_geometry_payload_bytes": 320,
+          "peak_rebuild_host_routing_payload_bytes": 1360,
+          "retained_world_node_pair_count": 0,
+          "routing_atlas_bytes": 7680,
+          "routing_binding": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          }
+        },
+        "backend": "gpu",
+        "gpu_stages": [
+          "certified-field-construction",
+          "psi-key-construction",
+          "canonical-tree-construction",
+          "tree-lookup",
+          "sample-materialization",
+          "edge-operator-compilation",
+          "route-forecast",
+          "actual-action",
+          "hadamard-atlas-compilation",
+          "routing-table-export"
+        ],
+        "host_stages": [
+          "geometric-certificate",
+          "psi-index-certificate",
+          "observation-admission",
+          "route-search",
+          "action-admission",
+          "journal",
+          "independent-routing-certificate"
+        ],
+        "index": {
+          "accounting": "Logical u32 record/tree payload outside the sample FIFO. Peak counts complete old and candidate index bundles. Recipe, expanded geometry, temporary compiler work, Python objects and device copies are additional; CPU index stores no scalar field tuple or complete sample pairs.",
+          "descriptor_count": 20,
+          "host_binding_payload_bytes": 16,
+          "host_index_payload_bytes": 1296,
+          "host_record_payload_bytes": 640,
+          "host_tree_payload_bytes": 640,
+          "maximum_lookup_visits": 5,
+          "peak_rebuild_host_index_payload_bytes": 1296,
+          "retained_world_node_pair_count": 0,
+          "version": {
+            "binding": {
+              "epoch": 0,
+              "format": "f8-klein-sdf-v1",
+              "phase_origin": 250,
+              "psi_sign": -1
+            },
+            "recipe": {
+              "baseline_id": "klein-field-world-v1",
+              "center": 0,
+              "format": "klein-ball-world-v1",
+              "height": 5,
+              "radius": 2,
+              "turns": [
+                11,
+                53,
+                137
+              ],
+              "width": 4
+            }
+          }
+        },
+        "routing": {
+          "accounting": "Logical 16N penalties and N increments, plus eight gains. Geometry, search labels/routes, weights, Python objects and GPU field/table copies are separate.",
+          "binding": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          "gains_payload_bytes": 32,
+          "host_routing_geometry_payload_bytes": 320,
+          "host_routing_table_payload_bytes": 1360,
+          "peak_rebuild_host_routing_table_payload_bytes": 1360,
+          "phase_source": "live intrinsic phase",
+          "retained_cpu_scalar_field_count": 0
+        },
+        "search_state": "canonical node, intrinsic phase, hop count",
+        "word_profile": "RP32-relational-sdf-v2"
+      },
+      "identity": "TOMIGIDt",
+      "restored": false,
+      "state": {
+        "agent_pair": "81001010910010F0",
+        "cycle": 2,
+        "energy": 93,
+        "footprint": {
+          "agent": "TOMIGIDt",
+          "baseline": "klein-field-world-v1",
+          "derivation": "k:3:1",
+          "epoch": 0,
+          "profile": "tomigidt-agent-v1",
+          "sequence": 2
+        },
+        "identity": "TOMIGIDt",
+        "last_decision": {
+          "cost": 7,
+          "expansions": 6,
+          "expected_pair": "81001010910010F0",
+          "forecast": [
+            "81001010910010F0",
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:3:1",
+            "k:3:2"
+          ]
+        },
+        "observations": {
+          "k:0:0": "00000000",
+          "k:0:1": "80000100",
+          "k:0:3": "80460300",
+          "k:0:4": "80000400",
+          "k:1:0": "00000500",
+          "k:1:4": "00000900",
+          "k:3:0": "00000F00",
+          "k:3:1": "80001000"
+        },
+        "planning": null,
+        "position": "k:3:1",
+        "status": "ACTIVE",
+        "target": "k:3:2",
+        "word_profile": "RP32-relational-sdf-v2"
+      },
+      "state_path": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\session.json",
+      "status": "ACTIVE",
+      "stop_reason": "STEP_BUDGET_EXHAUSTED"
+    },
+    {
+      "capacity_pairs": 3,
+      "cycle": 4,
+      "decisions": [
+        {
+          "cost": 2,
+          "expansions": 2,
+          "expected_pair": "81011145910111BB",
+          "forecast": [
+            "81011145910111BB"
+          ],
+          "kind": "MOVE",
+          "reason": "Follow the least-cost route in the current internal model",
+          "route": [
+            "k:3:2"
+          ]
+        },
+        {
+          "cost": 5,
+          "expansions": 0,
+          "expected_pair": "06011145160111BB",
+          "forecast": [],
+          "kind": "REPAIR",
+          "reason": "Observed target reached",
+          "route": []
+        }
+      ],
+      "executed_cycles": 2,
+      "execution_info": {
+        "accounting": "Active pair payload only; recipe, geometry, search, observations, journal and runtime overhead are separate.",
+        "active_pair_payload_capacity_bytes": 24,
+        "backend": "cpu",
+        "index": {
+          "accounting": "Logical u32 record/tree payload outside the sample FIFO. Peak counts complete old and candidate index bundles. Recipe, expanded geometry, temporary compiler work, Python objects and device copies are additional; CPU index stores no scalar field tuple or complete sample pairs.",
+          "descriptor_count": 20,
+          "host_binding_payload_bytes": 16,
+          "host_index_payload_bytes": 1296,
+          "host_record_payload_bytes": 640,
+          "host_tree_payload_bytes": 640,
+          "maximum_lookup_visits": 5,
+          "peak_rebuild_host_index_payload_bytes": 1296,
+          "retained_world_node_pair_count": 0,
+          "version": {
+            "binding": {
+              "epoch": 12,
+              "format": "f8-klein-sdf-v1",
+              "phase_origin": 192,
+              "psi_sign": 1
+            },
+            "recipe": {
+              "baseline_id": "klein-field-world-v1",
+              "center": 0,
+              "format": "klein-ball-world-v1",
+              "height": 5,
+              "radius": 2,
+              "turns": [
+                11,
+                53,
+                137
+              ],
+              "width": 4
+            }
+          }
+        },
+        "routing": {
+          "accounting": "Logical 16N penalties and N increments, plus eight gains. Geometry, search labels/routes, weights, Python objects and GPU field/table copies are separate.",
+          "binding": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          "gains_payload_bytes": 32,
+          "host_routing_geometry_payload_bytes": 320,
+          "host_routing_table_payload_bytes": 1360,
+          "peak_rebuild_host_routing_table_payload_bytes": 1360,
+          "phase_source": "live intrinsic phase",
+          "retained_cpu_scalar_field_count": 0
+        },
+        "search_state": "canonical node, intrinsic phase, hop count",
+        "word_profile": "RP32-relational-sdf-v2"
+      },
+      "identity": "TOMIGIDt",
+      "restored": true,
+      "state": {
+        "agent_pair": "06011145160111BB",
+        "cycle": 4,
+        "energy": 86,
+        "footprint": {
+          "agent": "TOMIGIDt",
+          "baseline": "klein-field-world-v1",
+          "derivation": "k:3:2",
+          "epoch": 0,
+          "profile": "tomigidt-agent-v1",
+          "sequence": 4
+        },
+        "identity": "TOMIGIDt",
+        "last_decision": {
+          "cost": 5,
+          "expansions": 0,
+          "expected_pair": "06011145160111BB",
+          "forecast": [],
+          "kind": "REPAIR",
+          "reason": "Observed target reached",
+          "route": []
+        },
+        "observations": {
+          "k:0:0": "00000000",
+          "k:0:1": "80000100",
+          "k:0:3": "80460300",
+          "k:0:4": "80000400",
+          "k:1:0": "00000500",
+          "k:1:4": "00000900",
+          "k:2:1": "80000B00",
+          "k:2:2": "00000C00",
+          "k:3:0": "00000F00",
+          "k:3:1": "80001000",
+          "k:3:2": "00001100",
+          "k:3:3": "00001200"
+        },
+        "planning": null,
+        "position": "k:3:2",
+        "status": "COMPLETE",
+        "target": "k:3:2",
+        "word_profile": "RP32-relational-sdf-v2"
+      },
+      "state_path": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\session.json",
+      "status": "COMPLETE",
+      "stop_reason": "COMPLETE"
+    },
+    {
+      "event_count": 4,
+      "execution_info": {
+        "accounting": "Active pair payload only; recipe, geometry, search, observations, journal and runtime overhead are separate.",
+        "active_pair_payload_capacity_bytes": 16,
+        "adapter": {
+          "adapter_type": "DiscreteGPU",
+          "architecture": "",
+          "backend_type": "Vulkan",
+          "description": "591.59",
+          "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+          "device_id": 12056,
+          "stackgroup_max_size": 128,
+          "stackgroup_min_size": 4,
+          "vendor": "NVIDIA",
+          "vendor_id": 4318
+        },
+        "allocation_info": {
+          "accounting": "Explicit scalar/table/state/scratch buffers and integer textures, including the composed field engine, are outside the observed FIFO. Host field codes and index/geometry metadata are logical integer payload; Python objects and driver allocations are excluded. Rebuild peaks include both complete bundles. No complete packed world-node arena is retained.",
+          "device_buffer_bytes": 49352,
+          "device_payload_bytes": 57272,
+          "device_routing_gains_payload_bytes": 32,
+          "device_routing_table_payload_bytes": 1360,
+          "device_texture_bytes": 7920,
+          "host_field_code_payload_bytes": 80,
+          "host_geometry_payload_bytes": 320,
+          "host_index_payload_bytes": 1296,
+          "host_routing_gains_payload_bytes": 32,
+          "host_routing_geometry_payload_bytes": 320,
+          "host_routing_table_payload_bytes": 1360,
+          "index_version": {
+            "binding": {
+              "epoch": 20,
+              "format": "f8-klein-sdf-v1",
+              "phase_origin": 64,
+              "psi_sign": -1
+            },
+            "recipe": {
+              "baseline_id": "klein-field-world-v1",
+              "center": 0,
+              "format": "klein-ball-world-v1",
+              "height": 5,
+              "radius": 2,
+              "turns": [
+                11,
+                53,
+                137
+              ],
+              "width": 4
+            }
+          },
+          "peak_rebuild_device_payload_bytes": 57272,
+          "peak_rebuild_host_index_payload_bytes": 1296,
+          "peak_rebuild_host_routing_geometry_payload_bytes": 320,
+          "peak_rebuild_host_routing_payload_bytes": 1360,
+          "retained_world_node_pair_count": 0,
+          "routing_atlas_bytes": 7680,
+          "routing_binding": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          }
+        },
+        "backend": "gpu",
+        "gpu_stages": [
+          "certified-field-construction",
+          "psi-key-construction",
+          "canonical-tree-construction",
+          "tree-lookup",
+          "sample-materialization",
+          "edge-operator-compilation",
+          "route-forecast",
+          "actual-action",
+          "hadamard-atlas-compilation",
+          "routing-table-export"
+        ],
+        "host_stages": [
+          "geometric-certificate",
+          "psi-index-certificate",
+          "observation-admission",
+          "route-search",
+          "action-admission",
+          "journal",
+          "independent-routing-certificate"
+        ],
+        "index": {
+          "accounting": "Logical u32 record/tree payload outside the sample FIFO. Peak counts complete old and candidate index bundles. Recipe, expanded geometry, temporary compiler work, Python objects and device copies are additional; CPU index stores no scalar field tuple or complete sample pairs.",
+          "descriptor_count": 20,
+          "host_binding_payload_bytes": 16,
+          "host_index_payload_bytes": 1296,
+          "host_record_payload_bytes": 640,
+          "host_tree_payload_bytes": 640,
+          "maximum_lookup_visits": 5,
+          "peak_rebuild_host_index_payload_bytes": 1296,
+          "retained_world_node_pair_count": 0,
+          "version": {
+            "binding": {
+              "epoch": 20,
+              "format": "f8-klein-sdf-v1",
+              "phase_origin": 64,
+              "psi_sign": -1
+            },
+            "recipe": {
+              "baseline_id": "klein-field-world-v1",
+              "center": 0,
+              "format": "klein-ball-world-v1",
+              "height": 5,
+              "radius": 2,
+              "turns": [
+                11,
+                53,
+                137
+              ],
+              "width": 4
+            }
+          }
+        },
+        "routing": {
+          "accounting": "Logical 16N penalties and N increments, plus eight gains. Geometry, search labels/routes, weights, Python objects and GPU field/table copies are separate.",
+          "binding": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          "gains_payload_bytes": 32,
+          "host_routing_geometry_payload_bytes": 320,
+          "host_routing_table_payload_bytes": 1360,
+          "peak_rebuild_host_routing_table_payload_bytes": 1360,
+          "phase_source": "live intrinsic phase",
+          "retained_cpu_scalar_field_count": 0
+        },
+        "search_state": "canonical node, intrinsic phase, hop count",
+        "word_profile": "RP32-relational-sdf-v2"
+      },
+      "state": {
+        "agent_pair": "06011145160111BB",
+        "cycle": 4,
+        "energy": 86,
+        "footprint": {
+          "agent": "TOMIGIDt",
+          "baseline": "klein-field-world-v1",
+          "derivation": "k:3:2",
+          "epoch": 0,
+          "profile": "tomigidt-agent-v1",
+          "sequence": 4
+        },
+        "identity": "TOMIGIDt",
+        "last_decision": {
+          "cost": 5,
+          "expansions": 0,
+          "expected_pair": "06011145160111BB",
+          "forecast": [],
+          "kind": "REPAIR",
+          "reason": "Observed target reached",
+          "route": []
+        },
+        "observations": {
+          "k:0:0": "00000000",
+          "k:0:1": "80000100",
+          "k:0:3": "80460300",
+          "k:0:4": "80000400",
+          "k:1:0": "00000500",
+          "k:1:4": "00000900",
+          "k:2:1": "80000B00",
+          "k:2:2": "00000C00",
+          "k:3:0": "00000F00",
+          "k:3:1": "80001000",
+          "k:3:2": "00001100",
+          "k:3:3": "00001200"
+        },
+        "planning": null,
+        "position": "k:3:2",
+        "status": "COMPLETE",
+        "target": "k:3:2",
+        "word_profile": "RP32-relational-sdf-v2"
+      },
+      "state_path": "C:\\Users\\ietsm\\.codex\\worktrees\\aa5d\\SOLVEFINITe\\output\\hadamard\\cli\\20260926T043915835772\\session.json",
+      "verified": true
+    }
+  ],
+  "saved_bytes_sha256": "77e259d304d0d3704dd60f03fc6b68a6323d41861c514cf35a06cedb13161826"
+}
