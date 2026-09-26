@@ -1,0 +1,2074 @@
+{
+  "base_commit": "94f86c7ae84a6eee9b99d3101d3b531b7a307c17",
+  "canonical_archive_sha256": "e2834ba2cc6b4d51f2b23f274cd9f2a0db8a4e88754ed9d2aadc76c074f134df",
+  "capture_elapsed_seconds": 229.583,
+  "captured_utc": "2026-09-26T07:18:43.077500+00:00",
+  "commands": [
+    "python -m unittest discover -s tests -v",
+    "python -m examples.organogram_conformance --output docs/evidence/organogram-v1/conformance.json",
+    "Fresh process commands retained in cli-replay.json"
+  ],
+  "conformance_checks_passed": 15,
+  "conformance_elapsed_seconds": 17.037,
+  "eli5_pdf_unchanged_sha256": "06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0",
+  "environment": {
+    "adapter": {
+      "adapter_type": "DiscreteGPU",
+      "architecture": "",
+      "backend_type": "Vulkan",
+      "description": "591.59",
+      "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+      "device_id": 12056,
+      "stackgroup_max_size": 128,
+      "stackgroup_min_size": 4,
+      "vendor": "NVIDIA",
+      "vendor_id": 4318
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "wgpu": "0.32.0"
+  },
+  "execution_info": {
+    "accounting": "Active pair payload only; recipe, geometry, search, observations, journal and runtime overhead are separate.",
+    "active_pair_payload_capacity_bytes": 16,
+    "adapter": {
+      "adapter_type": "DiscreteGPU",
+      "architecture": "",
+      "backend_type": "Vulkan",
+      "description": "591.59",
+      "device": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+      "device_id": 12056,
+      "stackgroup_max_size": 128,
+      "stackgroup_min_size": 4,
+      "vendor": "NVIDIA",
+      "vendor_id": 4318
+    },
+    "allocation_info": {
+      "accounting": "Explicit scalar/table/state/scratch buffers and integer textures, including the composed field engine, are outside the observed FIFO. Host field codes and index/geometry metadata are logical integer payload; Python objects and driver allocations are excluded. Rebuild peaks include both complete bundles. No complete packed world-node arena is retained.",
+      "device_buffer_bytes": 52824,
+      "device_payload_bytes": 61140,
+      "device_routing_gains_payload_bytes": 32,
+      "device_routing_table_payload_bytes": 1360,
+      "device_texture_bytes": 8316,
+      "host_field_code_payload_bytes": 80,
+      "host_geometry_payload_bytes": 320,
+      "host_index_payload_bytes": 1296,
+      "host_routing_gains_payload_bytes": 32,
+      "host_routing_geometry_payload_bytes": 320,
+      "host_routing_table_payload_bytes": 1360,
+      "index_version": {
+        "binding": {
+          "epoch": 20,
+          "format": "f8-klein-sdf-v1",
+          "phase_origin": 0,
+          "psi_sign": -1
+        },
+        "recipe": {
+          "base": {
+            "baseline_id": "klein-field-world-v1",
+            "center": 0,
+            "format": "klein-ball-world-v1",
+            "height": 5,
+            "radius": 2,
+            "turns": [
+              11,
+              53,
+              137
+            ],
+            "width": 4
+          },
+          "format": "klein-organogram-world-v1",
+          "organogram": {
+            "axiom": [
+              {
+                "args": [
+                  {
+                    "add": 0,
+                    "context": "tick",
+                    "mul": 1
+                  }
+                ],
+                "symbol": "A"
+              },
+              {
+                "args": [],
+                "symbol": "D"
+              }
+            ],
+            "cost": 1,
+            "format": "klein-branch-organogram-v1",
+            "generations": 2,
+            "limits": {
+              "max_balls": 16,
+              "max_stack": 8,
+              "max_steps": 128,
+              "max_symbols": 128
+            },
+            "max_epochs": 1,
+            "rules": [
+              {
+                "guards": [
+                  {
+                    "arg": 0,
+                    "mask": 1,
+                    "op": "xor_eq",
+                    "value": 4
+                  }
+                ],
+                "rhs": [
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "+"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "SCALE"
+                  },
+                  {
+                    "args": [
+                      10
+                    ],
+                    "symbol": "-"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "-"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  }
+                ],
+                "symbol": "A"
+              },
+              {
+                "guards": [],
+                "rhs": [
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "-"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "SCALE"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "+"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "+"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  }
+                ],
+                "symbol": "A"
+              },
+              {
+                "guards": [
+                  {
+                    "arg": 0,
+                    "op": "eq",
+                    "value": 1
+                  }
+                ],
+                "rhs": [
+                  {
+                    "args": [
+                      {
+                        "add": 0,
+                        "arg": 0,
+                        "mul": 1
+                      }
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  }
+                ],
+                "symbol": "B"
+              },
+              {
+                "guards": [
+                  {
+                    "arg": 0,
+                    "op": "ge",
+                    "value": 1
+                  }
+                ],
+                "rhs": [
+                  {
+                    "args": [
+                      {
+                        "add": 0,
+                        "arg": 0,
+                        "mul": 1
+                      }
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "R"
+                  }
+                ],
+                "symbol": "B"
+              },
+              {
+                "guards": [],
+                "rhs": [],
+                "symbol": "D"
+              }
+            ],
+            "symbols": [
+              {
+                "arity": 1,
+                "name": "A"
+              },
+              {
+                "arity": 1,
+                "name": "B"
+              },
+              {
+                "arity": 0,
+                "name": "D"
+              }
+            ]
+          },
+          "routing": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          "stages": [
+            {
+              "epoch": 1,
+              "prefix_sha256": "82a488932b67287af70fc963d1fee96c15e7d4541fd1cf6745b3e2d411aaf6d3",
+              "start_pair": "06011145160111BB",
+              "tick": 5
+            }
+          ]
+        }
+      },
+      "organogram": {
+        "accounting": "Logical buffer, packed stack and canonical JSON payloads. Host stage peak includes all expanded tapes, raw output rows, prior/current fields and old/current transcript bytes. Python containers, validation temporaries and driver/compiler overhead are separate.",
+        "grammar_movement_texture_bytes": 320,
+        "grammar_private_stack_payload_bytes": 640,
+        "grammar_retained_recipe_bytes": 2043,
+        "grammar_retained_transcript_bytes": 4564,
+        "grammar_scratch_buffer_bytes": 3472,
+        "grammar_stage_count": 1,
+        "instruction_texture_bytes": 76,
+        "peak_grammar_host_stage_payload_bytes": 11379,
+        "peak_grammar_host_tape_metadata_bytes": 1007,
+        "peak_grammar_host_tape_word_bytes": 76
+      },
+      "peak_rebuild_device_payload_bytes": 61140,
+      "peak_rebuild_host_index_payload_bytes": 1296,
+      "peak_rebuild_host_routing_geometry_payload_bytes": 320,
+      "peak_rebuild_host_routing_payload_bytes": 1360,
+      "retained_world_node_pair_count": 0,
+      "routing_atlas_bytes": 7680,
+      "routing_binding": {
+        "format": "hadamard-klein-routing-v1",
+        "gains": [
+          [
+            1,
+            1
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            1,
+            -1
+          ]
+        ]
+      }
+    },
+    "backend": "gpu",
+    "gpu_stages": [
+      "certified-field-construction",
+      "psi-key-construction",
+      "canonical-tree-construction",
+      "tree-lookup",
+      "sample-materialization",
+      "edge-operator-compilation",
+      "route-forecast",
+      "actual-action",
+      "hadamard-atlas-compilation",
+      "routing-table-export",
+      "organogram-field-admission",
+      "integer-instruction-texture",
+      "branch-interpreter",
+      "generated-ball-signs",
+      "generated-field-distances"
+    ],
+    "growth": {
+      "accounting": "Old and candidate payloads coexist. Expanded topology, manifests, temporary compiler work, search, observations, history, Python objects and driver allocations are additional.",
+      "binding": {
+        "axiom": [
+          {
+            "args": [
+              {
+                "add": 0,
+                "context": "tick",
+                "mul": 1
+              }
+            ],
+            "symbol": "A"
+          },
+          {
+            "args": [],
+            "symbol": "D"
+          }
+        ],
+        "cost": 1,
+        "format": "klein-branch-organogram-v1",
+        "generations": 2,
+        "limits": {
+          "max_balls": 16,
+          "max_stack": 8,
+          "max_steps": 128,
+          "max_symbols": 128
+        },
+        "max_epochs": 1,
+        "rules": [
+          {
+            "guards": [
+              {
+                "arg": 0,
+                "mask": 1,
+                "op": "xor_eq",
+                "value": 4
+              }
+            ],
+            "rhs": [
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "+"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "SCALE"
+              },
+              {
+                "args": [
+                  10
+                ],
+                "symbol": "-"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "-"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              }
+            ],
+            "symbol": "A"
+          },
+          {
+            "guards": [],
+            "rhs": [
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "-"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "SCALE"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "+"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "+"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              }
+            ],
+            "symbol": "A"
+          },
+          {
+            "guards": [
+              {
+                "arg": 0,
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "rhs": [
+              {
+                "args": [
+                  {
+                    "add": 0,
+                    "arg": 0,
+                    "mul": 1
+                  }
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              }
+            ],
+            "symbol": "B"
+          },
+          {
+            "guards": [
+              {
+                "arg": 0,
+                "op": "ge",
+                "value": 1
+              }
+            ],
+            "rhs": [
+              {
+                "args": [
+                  {
+                    "add": 0,
+                    "arg": 0,
+                    "mul": 1
+                  }
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "R"
+              }
+            ],
+            "symbol": "B"
+          },
+          {
+            "guards": [],
+            "rhs": [],
+            "symbol": "D"
+          }
+        ],
+        "symbols": [
+          {
+            "arity": 1,
+            "name": "A"
+          },
+          {
+            "arity": 1,
+            "name": "B"
+          },
+          {
+            "arity": 0,
+            "name": "D"
+          }
+        ]
+      },
+      "current_recipe": {
+        "base": {
+          "baseline_id": "klein-field-world-v1",
+          "center": 0,
+          "format": "klein-ball-world-v1",
+          "height": 5,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ],
+          "width": 4
+        },
+        "format": "klein-organogram-world-v1",
+        "organogram": {
+          "axiom": [
+            {
+              "args": [
+                {
+                  "add": 0,
+                  "context": "tick",
+                  "mul": 1
+                }
+              ],
+              "symbol": "A"
+            },
+            {
+              "args": [],
+              "symbol": "D"
+            }
+          ],
+          "cost": 1,
+          "format": "klein-branch-organogram-v1",
+          "generations": 2,
+          "limits": {
+            "max_balls": 16,
+            "max_stack": 8,
+            "max_steps": 128,
+            "max_symbols": 128
+          },
+          "max_epochs": 1,
+          "rules": [
+            {
+              "guards": [
+                {
+                  "arg": 0,
+                  "mask": 1,
+                  "op": "xor_eq",
+                  "value": 4
+                }
+              ],
+              "rhs": [
+                {
+                  "args": [],
+                  "symbol": "["
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "R"
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "+"
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "B"
+                },
+                {
+                  "args": [],
+                  "symbol": "["
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "SCALE"
+                },
+                {
+                  "args": [
+                    10
+                  ],
+                  "symbol": "-"
+                },
+                {
+                  "args": [
+                    2
+                  ],
+                  "symbol": "F"
+                },
+                {
+                  "args": [],
+                  "symbol": "S"
+                },
+                {
+                  "args": [
+                    2
+                  ],
+                  "symbol": "R"
+                },
+                {
+                  "args": [],
+                  "symbol": "]"
+                },
+                {
+                  "args": [],
+                  "symbol": "]"
+                },
+                {
+                  "args": [],
+                  "symbol": "["
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "-"
+                },
+                {
+                  "args": [
+                    2
+                  ],
+                  "symbol": "B"
+                },
+                {
+                  "args": [],
+                  "symbol": "]"
+                }
+              ],
+              "symbol": "A"
+            },
+            {
+              "guards": [],
+              "rhs": [
+                {
+                  "args": [],
+                  "symbol": "["
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "R"
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "-"
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "B"
+                },
+                {
+                  "args": [],
+                  "symbol": "["
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "SCALE"
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "+"
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "F"
+                },
+                {
+                  "args": [],
+                  "symbol": "S"
+                },
+                {
+                  "args": [
+                    2
+                  ],
+                  "symbol": "R"
+                },
+                {
+                  "args": [],
+                  "symbol": "]"
+                },
+                {
+                  "args": [],
+                  "symbol": "]"
+                },
+                {
+                  "args": [],
+                  "symbol": "["
+                },
+                {
+                  "args": [
+                    1
+                  ],
+                  "symbol": "+"
+                },
+                {
+                  "args": [
+                    2
+                  ],
+                  "symbol": "B"
+                },
+                {
+                  "args": [],
+                  "symbol": "]"
+                }
+              ],
+              "symbol": "A"
+            },
+            {
+              "guards": [
+                {
+                  "arg": 0,
+                  "op": "eq",
+                  "value": 1
+                }
+              ],
+              "rhs": [
+                {
+                  "args": [
+                    {
+                      "add": 0,
+                      "arg": 0,
+                      "mul": 1
+                    }
+                  ],
+                  "symbol": "F"
+                },
+                {
+                  "args": [],
+                  "symbol": "S"
+                }
+              ],
+              "symbol": "B"
+            },
+            {
+              "guards": [
+                {
+                  "arg": 0,
+                  "op": "ge",
+                  "value": 1
+                }
+              ],
+              "rhs": [
+                {
+                  "args": [
+                    {
+                      "add": 0,
+                      "arg": 0,
+                      "mul": 1
+                    }
+                  ],
+                  "symbol": "F"
+                },
+                {
+                  "args": [],
+                  "symbol": "S"
+                },
+                {
+                  "args": [
+                    2
+                  ],
+                  "symbol": "R"
+                }
+              ],
+              "symbol": "B"
+            },
+            {
+              "guards": [],
+              "rhs": [],
+              "symbol": "D"
+            }
+          ],
+          "symbols": [
+            {
+              "arity": 1,
+              "name": "A"
+            },
+            {
+              "arity": 1,
+              "name": "B"
+            },
+            {
+              "arity": 0,
+              "name": "D"
+            }
+          ]
+        },
+        "routing": {
+          "format": "hadamard-klein-routing-v1",
+          "gains": [
+            [
+              1,
+              1
+            ],
+            [
+              -1,
+              1
+            ],
+            [
+              -1,
+              -1
+            ],
+            [
+              1,
+              -1
+            ]
+          ]
+        },
+        "stages": [
+          {
+            "epoch": 1,
+            "prefix_sha256": "82a488932b67287af70fc963d1fee96c15e7d4541fd1cf6745b3e2d411aaf6d3",
+            "start_pair": "06011145160111BB",
+            "tick": 5
+          }
+        ]
+      },
+      "geometry_epoch": 1,
+      "peak_preparation_payload": {
+        "active_fifo_pair_bytes": 16,
+        "candidate_derivation_json_bytes": 4564,
+        "device_buffer_bytes": 102176,
+        "device_payload_bytes": 118412,
+        "device_texture_bytes": 16236,
+        "grammar_movement_texture_bytes": 320,
+        "grammar_private_stack_payload_bytes": 640,
+        "grammar_retained_recipe_bytes": 2043,
+        "grammar_retained_transcript_bytes": 4564,
+        "grammar_scratch_buffer_bytes": 3472,
+        "host_field_code_payload_bytes": 160,
+        "host_geometry_payload_bytes": 640,
+        "host_index_bytes": 2592,
+        "host_routing_gains_bytes": 64,
+        "host_routing_geometry_bytes": 640,
+        "host_routing_table_bytes": 2720,
+        "instruction_texture_bytes": 76,
+        "peak_grammar_host_stage_payload_bytes": 11379,
+        "peak_grammar_host_tape_metadata_bytes": 1007,
+        "peak_grammar_host_tape_word_bytes": 76,
+        "recipe_json_bytes": 2175
+      }
+    },
+    "host_stages": [
+      "geometric-certificate",
+      "psi-index-certificate",
+      "observation-admission",
+      "route-search",
+      "action-admission",
+      "journal",
+      "independent-routing-certificate",
+      "growth-admission",
+      "derived-target-selection",
+      "parameterized-parallel-rewrite",
+      "tape-preflight",
+      "independent-stage-certificate"
+    ],
+    "index": {
+      "accounting": "Logical u32 record/tree payload outside the sample FIFO. Peak counts complete old and candidate index bundles. Recipe, expanded geometry, temporary compiler work, Python objects and device copies are additional; CPU index stores no scalar field tuple or complete sample pairs.",
+      "descriptor_count": 20,
+      "host_binding_payload_bytes": 16,
+      "host_index_payload_bytes": 1296,
+      "host_record_payload_bytes": 640,
+      "host_tree_payload_bytes": 640,
+      "maximum_lookup_visits": 5,
+      "peak_rebuild_host_index_payload_bytes": 1296,
+      "retained_world_node_pair_count": 0,
+      "version": {
+        "binding": {
+          "epoch": 20,
+          "format": "f8-klein-sdf-v1",
+          "phase_origin": 0,
+          "psi_sign": -1
+        },
+        "recipe": {
+          "base": {
+            "baseline_id": "klein-field-world-v1",
+            "center": 0,
+            "format": "klein-ball-world-v1",
+            "height": 5,
+            "radius": 2,
+            "turns": [
+              11,
+              53,
+              137
+            ],
+            "width": 4
+          },
+          "format": "klein-organogram-world-v1",
+          "organogram": {
+            "axiom": [
+              {
+                "args": [
+                  {
+                    "add": 0,
+                    "context": "tick",
+                    "mul": 1
+                  }
+                ],
+                "symbol": "A"
+              },
+              {
+                "args": [],
+                "symbol": "D"
+              }
+            ],
+            "cost": 1,
+            "format": "klein-branch-organogram-v1",
+            "generations": 2,
+            "limits": {
+              "max_balls": 16,
+              "max_stack": 8,
+              "max_steps": 128,
+              "max_symbols": 128
+            },
+            "max_epochs": 1,
+            "rules": [
+              {
+                "guards": [
+                  {
+                    "arg": 0,
+                    "mask": 1,
+                    "op": "xor_eq",
+                    "value": 4
+                  }
+                ],
+                "rhs": [
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "+"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "SCALE"
+                  },
+                  {
+                    "args": [
+                      10
+                    ],
+                    "symbol": "-"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "-"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  }
+                ],
+                "symbol": "A"
+              },
+              {
+                "guards": [],
+                "rhs": [
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "-"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "SCALE"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "+"
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "R"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "["
+                  },
+                  {
+                    "args": [
+                      1
+                    ],
+                    "symbol": "+"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "B"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "]"
+                  }
+                ],
+                "symbol": "A"
+              },
+              {
+                "guards": [
+                  {
+                    "arg": 0,
+                    "op": "eq",
+                    "value": 1
+                  }
+                ],
+                "rhs": [
+                  {
+                    "args": [
+                      {
+                        "add": 0,
+                        "arg": 0,
+                        "mul": 1
+                      }
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  }
+                ],
+                "symbol": "B"
+              },
+              {
+                "guards": [
+                  {
+                    "arg": 0,
+                    "op": "ge",
+                    "value": 1
+                  }
+                ],
+                "rhs": [
+                  {
+                    "args": [
+                      {
+                        "add": 0,
+                        "arg": 0,
+                        "mul": 1
+                      }
+                    ],
+                    "symbol": "F"
+                  },
+                  {
+                    "args": [],
+                    "symbol": "S"
+                  },
+                  {
+                    "args": [
+                      2
+                    ],
+                    "symbol": "R"
+                  }
+                ],
+                "symbol": "B"
+              },
+              {
+                "guards": [],
+                "rhs": [],
+                "symbol": "D"
+              }
+            ],
+            "symbols": [
+              {
+                "arity": 1,
+                "name": "A"
+              },
+              {
+                "arity": 1,
+                "name": "B"
+              },
+              {
+                "arity": 0,
+                "name": "D"
+              }
+            ]
+          },
+          "routing": {
+            "format": "hadamard-klein-routing-v1",
+            "gains": [
+              [
+                1,
+                1
+              ],
+              [
+                -1,
+                1
+              ],
+              [
+                -1,
+                -1
+              ],
+              [
+                1,
+                -1
+              ]
+            ]
+          },
+          "stages": [
+            {
+              "epoch": 1,
+              "prefix_sha256": "82a488932b67287af70fc963d1fee96c15e7d4541fd1cf6745b3e2d411aaf6d3",
+              "start_pair": "06011145160111BB",
+              "tick": 5
+            }
+          ]
+        }
+      }
+    },
+    "routing": {
+      "accounting": "Logical 16N penalties and N increments, plus eight gains. Geometry, search labels/routes, weights, Python objects and GPU field/table copies are separate.",
+      "binding": {
+        "format": "hadamard-klein-routing-v1",
+        "gains": [
+          [
+            1,
+            1
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            1,
+            -1
+          ]
+        ]
+      },
+      "gains_payload_bytes": 32,
+      "host_routing_geometry_payload_bytes": 320,
+      "host_routing_table_payload_bytes": 1360,
+      "peak_rebuild_host_routing_table_payload_bytes": 1360,
+      "phase_source": "live intrinsic phase",
+      "retained_cpu_scalar_field_count": 0
+    },
+    "search_state": "canonical node, intrinsic phase, hop count",
+    "word_profile": "RP32-relational-sdf-v2"
+  },
+  "final_state": {
+    "agent_pair": "860006BA16000646",
+    "current_recipe": {
+      "base": {
+        "baseline_id": "klein-field-world-v1",
+        "center": 0,
+        "format": "klein-ball-world-v1",
+        "height": 5,
+        "radius": 2,
+        "turns": [
+          11,
+          53,
+          137
+        ],
+        "width": 4
+      },
+      "format": "klein-organogram-world-v1",
+      "organogram": {
+        "axiom": [
+          {
+            "args": [
+              {
+                "add": 0,
+                "context": "tick",
+                "mul": 1
+              }
+            ],
+            "symbol": "A"
+          },
+          {
+            "args": [],
+            "symbol": "D"
+          }
+        ],
+        "cost": 1,
+        "format": "klein-branch-organogram-v1",
+        "generations": 2,
+        "limits": {
+          "max_balls": 16,
+          "max_stack": 8,
+          "max_steps": 128,
+          "max_symbols": 128
+        },
+        "max_epochs": 1,
+        "rules": [
+          {
+            "guards": [
+              {
+                "arg": 0,
+                "mask": 1,
+                "op": "xor_eq",
+                "value": 4
+              }
+            ],
+            "rhs": [
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "+"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "SCALE"
+              },
+              {
+                "args": [
+                  10
+                ],
+                "symbol": "-"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "-"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              }
+            ],
+            "symbol": "A"
+          },
+          {
+            "guards": [],
+            "rhs": [
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "-"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "SCALE"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "+"
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "R"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              },
+              {
+                "args": [],
+                "symbol": "["
+              },
+              {
+                "args": [
+                  1
+                ],
+                "symbol": "+"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "B"
+              },
+              {
+                "args": [],
+                "symbol": "]"
+              }
+            ],
+            "symbol": "A"
+          },
+          {
+            "guards": [
+              {
+                "arg": 0,
+                "op": "eq",
+                "value": 1
+              }
+            ],
+            "rhs": [
+              {
+                "args": [
+                  {
+                    "add": 0,
+                    "arg": 0,
+                    "mul": 1
+                  }
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              }
+            ],
+            "symbol": "B"
+          },
+          {
+            "guards": [
+              {
+                "arg": 0,
+                "op": "ge",
+                "value": 1
+              }
+            ],
+            "rhs": [
+              {
+                "args": [
+                  {
+                    "add": 0,
+                    "arg": 0,
+                    "mul": 1
+                  }
+                ],
+                "symbol": "F"
+              },
+              {
+                "args": [],
+                "symbol": "S"
+              },
+              {
+                "args": [
+                  2
+                ],
+                "symbol": "R"
+              }
+            ],
+            "symbol": "B"
+          },
+          {
+            "guards": [],
+            "rhs": [],
+            "symbol": "D"
+          }
+        ],
+        "symbols": [
+          {
+            "arity": 1,
+            "name": "A"
+          },
+          {
+            "arity": 1,
+            "name": "B"
+          },
+          {
+            "arity": 0,
+            "name": "D"
+          }
+        ]
+      },
+      "routing": {
+        "format": "hadamard-klein-routing-v1",
+        "gains": [
+          [
+            1,
+            1
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -1,
+            -1
+          ],
+          [
+            1,
+            -1
+          ]
+        ]
+      },
+      "stages": [
+        {
+          "epoch": 1,
+          "prefix_sha256": "82a488932b67287af70fc963d1fee96c15e7d4541fd1cf6745b3e2d411aaf6d3",
+          "start_pair": "06011145160111BB",
+          "tick": 5
+        }
+      ]
+    },
+    "cycle": 9,
+    "energy": 76,
+    "footprint": {
+      "agent": "TOMIGIDt",
+      "baseline": "klein-field-world-v1",
+      "derivation": "k:1:1",
+      "epoch": 1,
+      "profile": "tomigidt-agent-v1",
+      "sequence": 9
+    },
+    "geometry_epoch": 1,
+    "identity": "TOMIGIDt",
+    "last_decision": {
+      "cost": 5,
+      "expansions": 0,
+      "expected_pair": "860006BA16000646",
+      "forecast": [],
+      "kind": "REPAIR",
+      "reason": "Observed target reached",
+      "route": []
+    },
+    "observations": {
+      "k:0:1": "80000100",
+      "k:0:2": "80000200",
+      "k:0:3": "00000300",
+      "k:1:0": "00000500",
+      "k:1:1": "00000600",
+      "k:1:2": "80000700",
+      "k:1:3": "80000800",
+      "k:2:1": "80000B00",
+      "k:2:2": "00000C00",
+      "k:2:3": "80000D00",
+      "k:3:1": "80001000",
+      "k:3:2": "00001100",
+      "k:3:3": "00001200"
+    },
+    "planning": null,
+    "position": "k:1:1",
+    "status": "COMPLETE",
+    "target": "k:1:1",
+    "word_profile": "RP32-relational-sdf-v2"
+  },
+  "formal_binding_commit": "5c76f2cec3a1cec8fd2d16eeeac2021c45b0aea9",
+  "format": "organogram-verification-v1",
+  "original_source_sha256": {
+    "Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf": "8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647",
+    "sources/solipsism.pdf": "1091e0435aa1648b4ede127837e66ddbf2c5dbd0a67f49cbb7a7ae134ee547e7",
+    "sources/solus-ion-ad-infinitum.pdf": "a2ace794138bcad68463d1ce2ba4a6e9954540bb4f2f29e4090d68d6e0440489"
+  },
+  "preimplementation_formal_pdf_sha256": "64d1489cad789cf45e3171295076559ca2295030a5348561292bb977b19f91b0",
+  "remaining_obligations": [
+    "Arbitrary cone/pyramid and graph productions",
+    "Global spectral choices",
+    "WElip and clock continuation",
+    "Physical adapters",
+    "Comparative hardware measurements"
+  ],
+  "report_sha256_lf": {
+    "cli-replay.json": "5ed9429101fe756d637e526af13b1731ba643ceac3b7c247e7f29833ebf406a5",
+    "conformance.json": "47b5bde9ade06f1393c0f96452f801a6f422ef43f3a479ce3a46744cbd238746",
+    "full-tests.txt": "32496b785707281606830e1a189ecb3fe5960527fd7c641cb414816231671b53"
+  },
+  "scope": "Finite OG1-OG8 correctness and continuation evidence; no universality, throughput, cache saturation or physical-energy claim.",
+  "source_sha256_lf": {
+    "docs/evidence/organogram-v1/formal-reference.json": "21df28af479fbae2c70a7390a71b0baf9322fcbf38de3ce9db8ff5e5f3b4a6fe",
+    "docs/evidence/organogram-v1/reference-builder.py": "987c0adced856312fc3581d921ec1badaec236c0230c63f25ef6f024959f32d8",
+    "examples/field_agent_conformance.py": "60db27132ea22ee67012210b493294b1b844aafe2a188d40e6c01ca10e575f66",
+    "examples/field_conformance.py": "1a4b219427055b6833886b8905d153d2fa4d69f80702f7245eded8f5384d6d12",
+    "examples/gpu_benchmark.py": "41e553445b9d5a68f84350fcb0e4f33578d9ade5605fc8339aa74d06f6d2f6e2",
+    "examples/growth_conformance.py": "83dbc8bc5fee5d4cfeb9136fe75ee6eecd9c8e4ca41e38475ba5b1649d299d05",
+    "examples/hadamard_conformance.py": "40d79706ea80073d7f68bc8a24dd00a93bfb0546e42ae7270cef44dd4c5f3825",
+    "examples/klein_conformance.py": "f84cd90461078ee5c2b69da72188733b8f52e1c9d5d8d95a8557b450534b5bf0",
+    "examples/live_sensor_demo.py": "636ca080d18241be58cdb3f37511bfc8a1aaac7381746687cca1adf0521c586b",
+    "examples/organogram_conformance.py": "9fad861ffeb627d4eca02b3ef341f21743bf964787d9c952c6cb45bd121af438",
+    "examples/psi_f8_conformance.py": "b4fd66f1ddd2ef26f6675cdac59d1b515b2b982b272c0f10831e263aef4b86e6",
+    "examples/relational-sdf-v1.json": "975d160ebb708c231fd5680b35915f3033e0b5f7ad80ebc75ba19fad5ccb93cc",
+    "examples/relational-sdf-v2.json": "9dbe45507d7c23fa69ad5c8eeb98029fcbed1f87e8805b56e83e3b7bdf1e36c1",
+    "examples/tomigidt-colony.json": "848cb2196bf326ef050342070b134121a0f3e303d1f502e182507b23a562e28c",
+    "examples/tomigidt-field-live.json": "7a2120350f447d4c8d3af8c3ec0a4a007270867c6d39671249f6addf5974780a",
+    "examples/tomigidt-field.json": "66b8708a03635329371da4bb71a5d4c4f256d519d0307f9e369093227b421e9b",
+    "examples/tomigidt-hadamard.json": "24dd5e3b2d63be38829d6c7c4ffba2b61fceaad362f955a2cb738654f06ffb7b",
+    "examples/tomigidt-incremental.json": "ae791bba1cc5537eba2a8e4463a029c42a4cc8bca1e6603d71b8debfceb345a9",
+    "examples/tomigidt-live.json": "73e9ce732187a6d0523fe44c120302c2de6d33ca93f4c96d5ffa3371cce3893e",
+    "solvefinite/__init__.py": "b3c2d34b93ee298fd2dd900a85b57cb550f456fe56fec13e885ff6bc6315f889",
+    "solvefinite/__main__.py": "4da3b19cf73dc4135d13c0d14730bb0850cd3f8f9ef916bcc814eed53aeb848c",
+    "solvefinite/f8.py": "f3db90140ec6ea2b051c23a3c934b80f387b57a86f5b15f0e556b59f02cbb73a",
+    "solvefinite/field.py": "8960d29bb6893ff63f7c74f8f3153428b277c942b4593673e0035dc4ec20589d",
+    "solvefinite/field_agent.py": "bdc75a4cfd998c135afe8daca325acd2186fd0a8d8230daa8e94a2e052f957eb",
+    "solvefinite/field_agent_gpu.py": "2adadc017f192e57af0f40def0d3afe09668b6441d18dc1fb0969e00d36a38cf",
+    "solvefinite/field_cli.py": "a9532e03ca1b76b5f51dac139f82fdfd728e6eab1761629b9df88178deab1779",
+    "solvefinite/field_world.py": "05aac19950cd53b8e183d31f59cda1600f6d533bc9876f5dfd8ffc12874bb22b",
+    "solvefinite/gpu.py": "b899ad08fce5db1d3defcfe5093fc638318671846c2b26fdf39d69b813a86744",
+    "solvefinite/growth.py": "8e76cd7b52da464bb42e9818bffd6c76b15beaec1b5f86c0d47418f70d445398",
+    "solvefinite/hadamard.py": "78cb848760d58a0aa99837db9bbcf976491a1e29592ba7432a7d272580434f33",
+    "solvefinite/hadamard_navigation.py": "b401c6fa4863f24ada0b99c6ea51b4ef6528a69aeb5f9b10b3e49b5abcc3f6f1",
+    "solvefinite/klein.py": "7f75a857d5ad4d19d37806a51e9cde905211d5390d01c9ef3965d9c38c33f6db",
+    "solvefinite/live.py": "897c81516457d5354394911a05ddd60dbfd0d23e8683c8aac64513a1fdbd8546",
+    "solvefinite/motion.py": "6b65b1836be618f3bbc426e0f983f2493bea3716ad9235e5da8b77b5e72b9762",
+    "solvefinite/navigation.py": "3f82bcf963ebca3141b6a3a6c44c38bd2887346a59d5160c621bd085028eb98f",
+    "solvefinite/organogram.py": "0e84c9374c86eba7d0389731becb93f1e68ab249d20a156873d636494fcf03cb",
+    "solvefinite/organogram_gpu.py": "1bbe6bcb53a7a225488ce8ed17463074062c4eeddffdae603d0ac1ba5b3378fb",
+    "solvefinite/psi.py": "3017e168a94c3afd376eb98d4783757a789ad186791c8b7b01ce95e0b59c54e4",
+    "solvefinite/rp32.py": "bdee9105693db443641b64f0062707aaa76af5c74b5ed3106eaf66fe954444ad",
+    "solvefinite/runtime.py": "532a0adc9d5655ac642426cfb0b2ab95d41933695e840576eb738dcfcf6bedb4",
+    "solvefinite/sdf_gpu.py": "6d109ca4a5932c8375baf568c807373716d1bdb1341533f6c31947c5bebe43ae",
+    "solvefinite/session.py": "963d63dbb159951fcc2cbcc7e94c00a177e7adf6a7035e4afa6e32b7f930598f",
+    "solvefinite/shaders/field.wgsl": "189b8926a582cc1e40483c5ccc41ff76d0a693469c142919b57a258714559384",
+    "solvefinite/shaders/field_agent.wgsl": "70334b34d795723908beb9cb548a7a84299ea65907649eff3a79fc11abe13c2c",
+    "solvefinite/shaders/organogram.wgsl": "0825f2e56ce9722886864de33c95f37d5285b877bc8ba7e56172207e898dc785",
+    "solvefinite/shaders/packed.wgsl": "76250a5ea0560df53ecb082554282742ce888fc2f346ca7cfa5eebf4700ff5b3",
+    "solvefinite/tomigidt.py": "584c5444056d80773c5e584d9665c691c9ca95eca9e8750945c0199842442e9b",
+    "solvefinite/world.py": "c60e02783a4f0ac348e16aa755c9c1847f5993ce9bc6db862c6c46a60fa24c63",
+    "tests/fixtures/tomigidt_v1_default_session.json": "9fb8782903d96589f559317382d3a91a2df1429dfac3c61c4c3990797c3a0d3e",
+    "tests/fixtures/tomigidt_v1_deferred_session.json": "551c0e892ff9befad0cac16cfd7b60a8b9cb1be6f5e4331c06e6a3d3d6886cb1",
+    "tests/fixtures/tomigidt_v1_waiting_agent.json": "abd7605b7c81a834c83bd2313f7fd1f2d091749a149f559c1b0cc85cfd74c8cd",
+    "tests/test_agent_cli.py": "ce3bac7ea8ecca94cd32359543a0e0ec3eecc98638c11f28f97f03101cfafb4b",
+    "tests/test_backend_plumbing.py": "031095d5206f6d817d7379dad168cb7bb58f17c5ebba15890ceb3dc9016cb2ab",
+    "tests/test_cli.py": "04a2fe906f031f16a8cedc70098973469ca172d426fb6fc3b91e46e31c045f92",
+    "tests/test_f8.py": "c9d1dc1c875ecab32189b7633eefe592c979884b38cc9af806d06c18a2b175a1",
+    "tests/test_f8_agent.py": "2f319328ad394c7d09ee6ba9c62229b221f5880b1970568655356bd5d93df09b",
+    "tests/test_f8_gpu.py": "f7f080d95f12170f875d019ec62c6bbdb1f0e80fad716a24f1496ba66a91d0c9",
+    "tests/test_field.py": "3043598c649a5ab6e53b907aea4b01551e54aed659d61956d8ae6326111e1d49",
+    "tests/test_field_agent.py": "a0dab25a1ecb86f9e014f98cfd18376c0449a7aab42aef9cb66b18a719d8f495",
+    "tests/test_field_agent_cli.py": "e51fba551603407fb8ca5ade2fd8781a1c3d581d10b33459459f30c3a2064eaf",
+    "tests/test_field_agent_gpu.py": "60bc38bbbb7f2168ccf20508c41722df261ace592af25112bd46379729cdf675",
+    "tests/test_field_cli.py": "0d0189513908c1b86fb9ca479e27db4334465941861f85aa889cab6ed06cd304",
+    "tests/test_field_v2.py": "e12edd8358616b35fc63f362330b058e0ed288810a056b4310003376a5076281",
+    "tests/test_field_world.py": "ad358f9f78a898b598105a130e671ae9c2f92782385a60755c3d907ce094562f",
+    "tests/test_gpu.py": "1e114edf14b023d5a86f5b7463cac990aeaae90a2126ef834382f86829179b7b",
+    "tests/test_growth.py": "dd3eae8b10a85bf324ac75f6eb88eb175cc5da59e1b9418900aac3b8f3940a64",
+    "tests/test_growth_agent.py": "7b1323abd33228080d852adc1b92300d7896d7400596a383eb708d4c0e90ad12",
+    "tests/test_growth_gpu.py": "e38486180cc85003cf2664defde9f6701bd7218c2175c0f94b1a695e074458cb",
+    "tests/test_growth_session.py": "8f88bb87ea78ded56224860d1931525c1d28eacc041e724ef44ecd7e50783729",
+    "tests/test_hadamard.py": "299d9949ed8cc97cda02728f8c0938e6cef290b71bcfaa7b9cd1708d198a33a5",
+    "tests/test_hadamard_agent.py": "6ee4cc4bfa719dd7a798f7fb3f08521fd416a3b424202d2c3c10674d6f4e118f",
+    "tests/test_hadamard_gpu.py": "81e059060d6c1703bd1687bd0cea196560190914e9011e56b9dd386991d857cd",
+    "tests/test_hadamard_navigation.py": "f0d32798a7aed0e08aea1e382e8e1b6debdddc075e1626428fa5cefc7b6dadaa",
+    "tests/test_incremental_agent.py": "4faf231f1e7880d33f2aeeee51a83b2e33e5b81f0fa9245b13d9cdc78bcb6adb",
+    "tests/test_incremental_navigation.py": "c19404d2129ae1e08ef9dd685714a5641ccea63208a0077471e7a16070a9cb95",
+    "tests/test_klein.py": "7bd55d61186d17584d70e7a5b2808a32549680bab9761a2cdc3458c701e5c63a",
+    "tests/test_klein_gpu.py": "e36d50268db7be7a62cc99e3f0f3113081cecd3e3480680f0e45294bbad590b5",
+    "tests/test_live.py": "24586fbfcdc1f5792e5f862958eb09b3ebc4ea2c8bf0a52fd9db34f1e73a2f1c",
+    "tests/test_live_cli.py": "b0d825bdfb59bcecffc8a4b85e200e7a8a24ce660f16a984ef7b925d5573ebbc",
+    "tests/test_motion.py": "8c2c0292d0c8858787188f97a5e03548d90b4ccb950ac7b92a1b654b092f98bd",
+    "tests/test_navigation.py": "2850b5df3f870a45cbf12c6f7125ca7b69c9d3fc305449e5309def48b8f56a4f",
+    "tests/test_organogram.py": "f82c4c6ae97905983d2285cbdaa895237ec8700c7c36d256cfb1ae2c289a238c",
+    "tests/test_organogram_agent.py": "78c8c9110f61132c98ad367fdec15f2357b58bf383ad9281599e3fa9080fe46b",
+    "tests/test_organogram_gpu.py": "5126199b85eb09027028772dd192b98f95262610ef01aadf844642e661f98f1c",
+    "tests/test_organogram_session.py": "8969d8acf49c7d0d23c460e1231aadb32c8934974ae69a696869a7c26631c5ab",
+    "tests/test_psi.py": "58ea1663dd9e3ec074921a5e61e7f7b39ab9aab4a06a9df30f59386bcef16e09",
+    "tests/test_relational_navigation.py": "602389c71fbc42723f04d2e21c89747730f63e21c55d1534b29847937bf8227e",
+    "tests/test_rp32.py": "434949666c98da29dbed40756ec9399ce67ef0ee1a2001d0384d259630c4d902",
+    "tests/test_runtime.py": "a7947278a895f78876c387d0ac507960b6df4b0f233b87db2dd2c16d8e042350",
+    "tests/test_sdf_gpu.py": "167dc1b16f626a3b5417d3911cc6f4002ed9d677165ff201568d0c4657e61f1a",
+    "tests/test_session.py": "298693be37985dc8ad3eb8ad7fed20ca84ac5c8e508b9e3e5023333b4d4e8964",
+    "tests/test_tomigidt.py": "08b8a056433bbb5df798948bfbce46f28f5326a61521f1fca80fe6facfb87366",
+    "tests/test_world.py": "b37bd556d90b96f80dda9c38f31fc1ce32ebacd58a8a0ff5d0b630141c085583",
+    "tools/capture_organogram_evidence.py": "b6139362d9a4ba6834104dff64739ffddf37d82977c81c98ec258758144759b1"
+  },
+  "tests": {
+    "actual_device_methods": {
+      "F8GpuTests": 14,
+      "GrowthGpuTests": 18,
+      "HadamardGpuTests": 15,
+      "OrganogramGpuTests": 14,
+      "RealFieldAgentGpuTests": 13,
+      "RealGpuTests": 12,
+      "RealGrowthAgentTests": 10,
+      "RealGrowthContinuationTests": 2,
+      "RealHadamardAgentTests": 7,
+      "RealKleinGpuTests": 7,
+      "RealOrganogramAgentTests": 13,
+      "RealOrganogramContinuationTests": 2,
+      "RealSdfGpuTests": 9
+    },
+    "elapsed_seconds": 204.464,
+    "module_counts": {
+      "test_agent_cli": 8,
+      "test_backend_plumbing": 6,
+      "test_cli": 4,
+      "test_f8": 22,
+      "test_f8_agent": 8,
+      "test_f8_gpu": 14,
+      "test_field": 16,
+      "test_field_agent": 21,
+      "test_field_agent_cli": 3,
+      "test_field_agent_gpu": 14,
+      "test_field_cli": 8,
+      "test_field_v2": 19,
+      "test_field_world": 15,
+      "test_gpu": 14,
+      "test_growth": 15,
+      "test_growth_agent": 22,
+      "test_growth_gpu": 18,
+      "test_growth_session": 12,
+      "test_hadamard": 13,
+      "test_hadamard_agent": 17,
+      "test_hadamard_gpu": 15,
+      "test_hadamard_navigation": 13,
+      "test_incremental_agent": 18,
+      "test_incremental_navigation": 17,
+      "test_klein": 20,
+      "test_klein_gpu": 7,
+      "test_live": 23,
+      "test_live_cli": 11,
+      "test_motion": 9,
+      "test_navigation": 20,
+      "test_organogram": 26,
+      "test_organogram_agent": 26,
+      "test_organogram_gpu": 14,
+      "test_organogram_session": 11,
+      "test_psi": 9,
+      "test_relational_navigation": 4,
+      "test_rp32": 14,
+      "test_runtime": 17,
+      "test_sdf_gpu": 10,
+      "test_session": 28,
+      "test_tomigidt": 28,
+      "test_world": 14
+    },
+    "passed": 623,
+    "skipped": 0
+  }
+}

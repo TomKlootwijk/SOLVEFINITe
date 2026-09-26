@@ -215,12 +215,16 @@ class LiveCLITests(unittest.TestCase):
         deadline = time.monotonic() + 5
         while True:
             self.assertIsNone(client.process.poll())
-            _, retained = load_live(self.state)
-            if retained.cycle == 1:
+            # The reader queues the acknowledgement without the client
+            # consuming it. Its arrival proves the disk write has completed;
+            # opening the destination during replacement races Windows sharing.
+            if not client.lines.empty():
                 break
             if time.monotonic() >= deadline:
                 self.fail("Live request did not commit its cycle within five seconds")
             time.sleep(.01)
+        _, retained = load_live(self.state)
+        self.assertEqual(retained.cycle, 1)
         committed = retained.snapshot()
         event = retained.events[0]
         # The client has never consumed its queued response. Lose this process

@@ -5,12 +5,14 @@ from dataclasses import dataclass, field
 from .field_world import KleinFieldRecipe
 from .hadamard import HadamardBinding
 from .growth import GrowthBinding
+from .organogram import OrganogramBinding
 from .runtime import _integer, _keys
 
 
 FIELD_POLICY = "tomigidt-field-observe-plan-act-v1"
 HADAMARD_POLICY = "tomigidt-field-hadamard-plan-act-v1"
 GROWTH_POLICY = "tomigidt-field-growth-plan-act-v1"
+ORGANOGRAM_POLICY = "tomigidt-field-organogram-plan-act-v1"
 FIELD_WORD_PROFILE = "RP32-relational-sdf-v2"
 MAX_ENERGY = (1 << 31) - 1
 _KEYS = {"identity", "target", "world", "initial_node", "initial_phase",
@@ -36,12 +38,13 @@ class FieldAgentManifest:
     policy: str = FIELD_POLICY
     routing: HadamardBinding | None = None
     growth: GrowthBinding | None = None
+    organogram: OrganogramBinding | None = None
     graph: tuple[tuple[str, tuple[str, ...]], ...] = field(init=False)
 
     def __post_init__(self):
-        if type(self.policy) is not str or self.policy not in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY):
+        if type(self.policy) is not str or self.policy not in (FIELD_POLICY, HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
             raise ValueError("Unsupported field-agent policy")
-        if self.policy in (HADAMARD_POLICY, GROWTH_POLICY):
+        if self.policy in (HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
             if self.routing is None:
                 object.__setattr__(self, "routing", HadamardBinding())
             elif type(self.routing) is not HadamardBinding:
@@ -55,6 +58,13 @@ class FieldAgentManifest:
                 raise ValueError("growth must be a GrowthBinding")
         elif self.growth is not None:
             raise ValueError("Only the growth policy admits growth")
+        if self.policy == ORGANOGRAM_POLICY:
+            if self.organogram is None:
+                object.__setattr__(self, "organogram", OrganogramBinding())
+            elif type(self.organogram) is not OrganogramBinding:
+                raise ValueError("organogram must be an OrganogramBinding")
+        elif self.organogram is not None:
+            raise ValueError("Only the organogram policy admits an organogram")
         if type(self.identity) is not str or not self.identity.strip() or len(self.identity) > 128:
             raise ValueError("identity must be a nonempty name of at most 128 characters")
         if type(self.world) is not KleinFieldRecipe:
@@ -76,6 +86,11 @@ class FieldAgentManifest:
     def start(self):
         return self.initial_node
 
+    @property
+    def growth_binding(self):
+        """The declared lifecycle; the two production families stay distinct."""
+        return self.organogram if self.policy == ORGANOGRAM_POLICY else self.growth
+
     def to_dict(self):
         result = {"identity": self.identity, "target": self.target, "world": self.world.to_dict(),
                 "initial_node": self.initial_node, "initial_phase": self.initial_phase,
@@ -83,18 +98,22 @@ class FieldAgentManifest:
                 "repair_cost": self.repair_cost, "max_search_expansions": self.max_search_expansions,
                 "max_hops": self.max_hops, "max_cycles": self.max_cycles, "policy": self.policy,
                 "word_profile": FIELD_WORD_PROFILE, "perspective": "local-observation-v1"}
-        if self.policy in (HADAMARD_POLICY, GROWTH_POLICY):
+        if self.policy in (HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY):
             result["routing"] = self.routing.to_dict()
         if self.policy == GROWTH_POLICY:
             result["growth"] = self.growth.to_dict()
+        if self.policy == ORGANOGRAM_POLICY:
+            result["organogram"] = self.organogram.to_dict()
         return result
 
     @classmethod
     def from_dict(cls, value):
         growing = type(value) is dict and value.get("policy") == GROWTH_POLICY
-        hadamard = type(value) is dict and value.get("policy") in (HADAMARD_POLICY, GROWTH_POLICY)
+        generated = type(value) is dict and value.get("policy") == ORGANOGRAM_POLICY
+        hadamard = type(value) is dict and value.get("policy") in (HADAMARD_POLICY, GROWTH_POLICY, ORGANOGRAM_POLICY)
         _keys(value, _KEYS | ({"routing"} if hadamard else set())
-              | ({"growth"} if growing else set()), "Field-agent manifest")
+              | ({"growth"} if growing else set())
+              | ({"organogram"} if generated else set()), "Field-agent manifest")
         if (type(value["word_profile"]) is not str or value["word_profile"] != FIELD_WORD_PROFILE
                 or type(value["perspective"]) is not str
                 or value["perspective"] != "local-observation-v1"):
@@ -102,4 +121,5 @@ class FieldAgentManifest:
         return cls(**{key: value[key] for key in _KEYS - {"world", "word_profile", "perspective"}},
                    world=KleinFieldRecipe.from_dict(value["world"]),
                    routing=HadamardBinding.from_dict(value["routing"]) if hadamard else None,
-                   growth=GrowthBinding.from_dict(value["growth"]) if growing else None)
+                   growth=GrowthBinding.from_dict(value["growth"]) if growing else None,
+                   organogram=OrganogramBinding.from_dict(value["organogram"]) if generated else None)

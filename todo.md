@@ -477,17 +477,17 @@ The new field must become the same individual's planning and action context.
 - [x] Bind OG1-OG8, exact schemas, numerical semantics, original-context
   identities and independent arithmetic vectors in the existing consolidated
   PDF before runtime changes. Preserve earlier contracts and source PDFs.
-- [ ] Implement strict parameterized parallel rewriting, original-context
+- [x] Implement strict parameterized parallel rewriting, original-context
   substitution, branch restoration and a certified generated-field recipe.
-- [ ] Integrate REPAIR, GROW, the generated target and later action into the
+- [x] Integrate REPAIR, GROW, the generated target and later action into the
   same Tomigidt while preserving prior policies and canonical histories.
-- [ ] Execute the branch interpreter, primitive placement and field generation
+- [x] Execute the branch interpreter, primitive placement and field generation
   on the actual GPU. Keep structural host compilation explicit and prohibit a
   CPU-generated trajectory or field from substituting for device results.
-- [ ] Verify nested seam-crossing branches, rule priority, bounds, full mirrors,
+- [x] Verify nested seam-crossing branches, rule priority, bounds, full mirrors,
   exact union fields, original identity, historical reconstruction, planning
   continuation, failure atomicity and CPU/GPU process recovery.
-- [ ] Capture source-bound measurements, update the same PDF's measured status,
+- [x] Capture source-bound measurements, update the same PDF's measured status,
   commit and push. Keep the complete architecture objective active.
 
 This finite sphere/ball production family leaves arbitrary cone/pyramid
@@ -507,3 +507,61 @@ scale before restoring the complete frame. Its generated field changes a
 subsequent route's reference cost from 14 to 4. Expected default and two-epoch
 missions take 9 and 14 cycles, with energy 76 and 66. These are mathematical
 expectations, not completed OG runtime or GPU conformance.
+
+The intervening robot-naming check was a verification of existing work, with no
+new architecture progress. Resuming the goal revalidated the worktree and then
+completed the finite OG implementation against the already committed contract.
+The same individual now interprets parameterized productions, generates its
+next exact field and selects a new target while retaining identity, phase,
+orientation, energy and history. A complete branch frame restores radius and
+scale as well as the packed pair; emitted geometry and execution counts remain.
+
+The source-bound OG capture passes **623 tests with zero skips**, including
+**136 actual-device GPU methods**, and all **15 conformance checks**. Four
+complete literal missions match the independent oracle on CPU and GPU. The
+default finishes in 9 cycles with energy 76; two generations finish in 14 cycles
+with energy 66. Its canonical runtime archive is
+`e2834ba2cc6b4d51f2b23f274cd9f2a0db8a4e88754ed9d2aadc76c074f134df`.
+Seventeen CPU producer/compiler paths are disabled for explicit GPU conformance;
+six fresh-process cuts preserve the complete archive across growth and DEFER.
+
+The device suite exercises the maximum 32-frame stack and 4,096 forward steps.
+An unbranched F(1),S case distinguishes the hypothetical cursor from the owner
+and proves that growth preserves the owner. Invalid boundary, corrupted tape,
+malformed transcripts, wrong original contexts, rejected complete candidates,
+uncertain device operations, committed cleanup and durable retry paths are
+covered. Earlier field/Hadamard/dyadic archive hashes remain unchanged.
+
+The complete suite exposed two Windows test-coordination errors. The abrupt
+exit check now terminates the actual Python lock holder, which can differ from
+the virtual-environment launcher's PID. The lost-response check waits for an
+unconsumed acknowledgement to be queued before reading the durable archive,
+avoiding a concurrent-reader/file-replacement race. Runtime ownership and save
+semantics are unchanged by these test corrections.
+
+Default device preparation holds 118,412 bytes across the old and candidate
+worlds; the current generated world holds 61,140 device bytes. Host grammar,
+transcript, recipe and stack payloads are reported separately, along with the
+unmeasured Python, compiler and driver overhead. These are correctness and
+retention measurements, not evidence of cache saturation or a speed advantage.
+The full architecture goal remains active with the outstanding obligations
+listed above.
+
+A read-only look ahead identifies a concrete next source gap: the original
+specification's logical tick plus wrap epoch (page 4), WElip envelope (page 8)
+and structured read/write event mediation with local invalidation (pages 14-15).
+The current producer epoch and geometry epoch have different meanings; neither
+implements clock carry. The next numerical binding must be placed in the same
+consolidated PDF before code changes, while preserving energy, global admission
+order and original organogram contexts. This is a proposed next milestone,
+not an implemented temporal protocol or a completed architecture claim.
+
+Revision 10 records the OG implementation in the same consolidated 68-page
+PDF. All pages were rendered and visually reviewed; 68 bookmarks and 66
+contents links resolve. Earlier FI/PX/HP/GD bodies are preserved, and OG1-OG8
+retain their normative definitions with updated measured-status framing.
+The formal builder verifies the 94 source/reference identities, report hashes,
+original formal chronology and complete archived missions before rebuilding.
+Original source documents and the Tom/Jitske ELI5 booklet remain unchanged.
+The implementation, evidence, updated PDF and this progress record are included
+in the same committed and pushed milestone.

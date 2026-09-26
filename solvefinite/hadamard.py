@@ -56,9 +56,8 @@ class HadamardBinding:
 
 def _inputs(recipe, binding):
     # FieldWorld imports routing; importing its recipe here avoids a cycle.
-    from .field_world import KleinFieldRecipe
-    if type(recipe) is not KleinFieldRecipe:
-        raise ValueError("recipe must be a KleinFieldRecipe")
+    from .field_world import require_field_recipe
+    require_field_recipe(recipe)
     if type(binding) is not HadamardBinding:
         raise ValueError("binding must be a HadamardBinding")
 
@@ -72,11 +71,14 @@ def _table(value, count, upper, label):
     return result
 
 
-def _fields(recipe, value):
+def _fields(recipe, value, certificate=None):
     if type(value) not in (tuple, list):
         raise ValueError("Routing fields require a tuple or list")
     fields = tuple(value)
-    certify_field(recipe.field_manifest(), fields)
+    from .field_world import resolve_field_certificate
+    certificate = resolve_field_certificate(recipe, fields, certificate)
+    manifest = recipe.field_manifest() if certificate is None else certificate.manifest
+    certify_field(manifest, fields)
     return fields
 
 
@@ -159,22 +161,24 @@ class RoutingModel:
 
     @classmethod
     def build(cls, recipe: KleinFieldRecipe, binding: HadamardBinding,
-              fields=None) -> RoutingModel:
+              fields=None, *, certificate=None) -> RoutingModel:
         _inputs(recipe, binding)
+        from .field_world import resolve_field_certificate
+        certificate = resolve_field_certificate(recipe, fields, certificate)
         if fields is None:
-            fields = evaluate_field(recipe.field_manifest())
-        fields = _fields(recipe, fields)
+            fields = evaluate_field(recipe.field_manifest()) if certificate is None else certificate.fields
+        fields = _fields(recipe, fields, certificate)
         penalties, increments = _compile_model(recipe, binding, fields)
-        return cls.certified(recipe, binding, penalties, increments, fields)
+        return cls.certified(recipe, binding, penalties, increments, fields, certificate=certificate)
 
     @classmethod
     def certified(cls, recipe: KleinFieldRecipe, binding: HadamardBinding,
-                  penalties, increments, fields) -> RoutingModel:
+                  penalties, increments, fields, *, certificate=None) -> RoutingModel:
         _inputs(recipe, binding)
         count = recipe.width * recipe.height
         penalties = _table(penalties, 16 * count, 80, "Routing penalties")
         increments = _table(increments, count, 255, "Routing increments")
-        fields = _fields(recipe, fields)
+        fields = _fields(recipe, fields, certificate)
         neighbors = _certify_model(recipe, binding, penalties, increments, fields)
         model = object.__new__(cls)
         for name, value in (("recipe", recipe), ("binding", binding),

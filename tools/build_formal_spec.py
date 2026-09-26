@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 9. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 10. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -7,6 +7,7 @@ from pathlib import Path
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 from xml.sax.saxutils import escape
 
@@ -33,6 +34,8 @@ HP_VERIFICATION = None
 GD_VERIFICATION = None
 GD_CONFORMANCE = None
 OG_REFERENCE = None
+OG_VERIFICATION = None
+OG_CONFORMANCE = None
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -103,8 +106,9 @@ def page(title, subtitle, *items):
 
 
 def build_content():
-    if HP_VERIFICATION is None or GD_VERIFICATION is None or GD_CONFORMANCE is None or OG_REFERENCE is None:
-        raise ValueError('Verify historical HP/GD evidence and the independent OG reference before revision 9')
+    if any(value is None for value in (HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE,
+                                       OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE)):
+        raise ValueError('Verify historical HP/GD and current OG evidence before revision 10')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
@@ -117,10 +121,15 @@ def build_content():
     gd_deferred = GD_CONFORMANCE['GPU_deferred']
     gd_allocation = GD_VERIFICATION['execution_info']['allocation_info']
     gd_peak = GD_VERIFICATION['execution_info']['growth']['peak_preparation_payload']
+    og_tests = OG_VERIFICATION['tests']['passed']
+    og_device_tests = sum(OG_VERIFICATION['tests']['actual_device_methods'].values())
+    og_checks = OG_VERIFICATION['conformance_checks_passed']
+    og_allocation = OG_VERIFICATION['execution_info']['allocation_info']
+    og_peak = OG_VERIFICATION['execution_info']['growth']['peak_preparation_payload']
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 9. FI1-FI8, PX1-PX8 and HP1-HP8 retain their contracts on pages 35-48; page 49 retains the measured Hadamard result at commit 5a304bc. GD1-GD8 and their measured result remain on pages 50-57 at commit 94f86c7. OG1-OG8 on pages 58-66 bind finite branching organograms before implementation. Earlier profiles retain their meanings.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 10. FI1-FI8, PX1-PX8 and HP1-HP8 retain their contracts on pages 35-48; page 49 retains the Hadamard capture at 5a304bc. GD1-GD8 and their result remain on pages 50-57 at 94f86c7. OG1-OG8 on pages 58-66 preserve the formal-first binding at 5c76f2c; measured CPU/GPU integration is on pages 67-68. Earlier profiles retain their meanings.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -237,7 +246,7 @@ def build_content():
         p('The reference contract uses parallel rewriting of one finite generation at a time. A realization shall bind priorities, unmatched-symbol handling, branch order, maximum depth, stack bounds, time inputs and interpretation costs. Regenerable derivations must be well-founded and retain every non-derived dependency.'),
         h('Current binary realization'),
         p('The binary world derives nodes from finite paths of depth at most 32. Its operator lookup depends on the current phase/selector; a branch updates the selector by (3*g + branch + 1) modulo 256. Packed GROW words, declared field updates and complete mirrors are reproducible from the retained rule set.'),
-        small('The binary organogram remains its own bounded profile. GD1-GD8 integrate a finite geometry-changing production. OG1-OG8 on pages 58-66 now bind parameterized productions and a complete branch context, but remain formal only in this revision. Arbitrary cone/pyramid generation and general graph rewriting remain separate obligations.')
+        small('The binary organogram remains its own bounded profile. GD1-GD8 integrate a finite geometry-changing production. OG1-OG8 now have measured parameterized production, complete branch context and generated field evidence on pages 67-68. Arbitrary cone/pyramid generation and general graph rewriting remain separate obligations.')
     )
     page('Psi, f8 and typed field operators', 'FORMAL CONTRACTS | ORIGINAL §§5, 9',
         h('Psi requires an operator'),
@@ -443,7 +452,7 @@ def build_content():
         p('The architecture can host deterministic simulation, regenerable world models, compact geometric controllers and device-independent continuation once their profiles and adapters are specified. Robotics, optical/FPGA execution, biological growth and physical autonomous construction require additional realizations. The current repository demonstrates software/GPU substrates and a simulated/live-observation individual.'),
         box('A complete application must identify what the field means, where its inputs come from, what action an output authorizes, and how the model is validated. The formal architecture supplies a common representation and execution discipline; it does not supply an absent sensor or actuator model.')
     )
-    page('Implementation map and integration', 'MEASURED PROFILES | FI, PX, HP AND GD',
+    page('Implementation map and integration', 'MEASURED PROFILES | FI, PX, HP, GD AND OG',
         p('The field-agent policy joins recipe-derived Klein geometry to the existing individual. The module map identifies implemented scope; remaining architectural concepts retain their separate obligations.'),
         table(['Layer','Existing implementation','Scope'],[
             ['Packed core','rp32.py','Encoding, phase, parity, full mirror and pair.'],
@@ -459,8 +468,8 @@ def build_content():
         h('Profile meanings remain explicit'),
         p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and implement a field-agent policy with B=phi and separate integer energy. Shared encoding never permits an implicit role change.'),
         h('Measured integration'),
-        p('Tomigidt observes, plans and acts through Klein seams. hadamard.py and hadamard_navigation.py add phase-state routing. growth.py and the integrated world/device/session layers now generate a larger geometry, map the same individual and continue to a derived target. Global Psi, general grammars and physical adapters remain separate.'),
-        small('Paths are relative to solvefinite/. Historical GD source hashes at 94f86c7: docs/evidence/growth-v1/. Earlier FI, Klein, PX and HP captures remain retained. Formal-first chronology is on pages 33, 49 and 57; OG is formal only on pages 58-66.')
+        p('Tomigidt observes, plans and acts through Klein seams. hadamard.py adds phase-state routing; growth.py supplies dyadic geometry growth. organogram.py, organogram_gpu.py and organogram.wgsl now produce a branching grammar field and continue the same individual. Global Psi, general primitives and physical adapters remain separate.'),
+        small('Paths are relative to solvefinite/. Historical GD hashes at 94f86c7: docs/evidence/growth-v1/. Earlier FI, Klein, PX and HP captures remain retained. OG source/report hashes and formal-first chronology are in docs/evidence/organogram-v1/ and on pages 67-68.')
     )
     page('Retained PX verification and field trace', 'HISTORICAL CAPTURE | 25 SEPTEMBER 2026',
         table(['Measurement','Observed result'],[
@@ -490,12 +499,12 @@ def build_content():
         h('What the tests establish'),
         p('The implemented graph profile has exact arithmetic and a field certificate, and its tested CPU/GPU realizations agree. These are substantial completed components. They do not establish every named architectural layer by association with the same word carrier.'),
         h('What will count as progress next'),
-        p('FI, PX and HP provide field-guided planning, indexed lookup and phase-directed routing. GD1-GD8 add finite dyadic growth and continued action. OG1-OG8 now bind parameterized productions and branch context before implementation. Global Psi, general primitives, physical adapters and wider continuation remain separate obligations.'),
+        p('FI, PX and HP provide field-guided planning, indexed lookup and phase-directed routing. GD1-GD8 add finite dyadic growth and continued action. OG1-OG8 now execute parameterized productions and branch context on CPU/GPU. Global Psi, general primitives, physical adapters and wider continuation remain separate obligations.'),
         small('The requirements matrix continues on page 29. No percentage is assigned because architectural obligations differ in size and some remain unbound; counting passing tests would produce a misleading completion estimate.')
     )
     page('Progress against the architecture: II', 'CAPABILITY STATUS | INTEGRATION AND APPLICATIONS',
         table(['Obligation','Measured status and remaining work'],[
-            ['C5: generative world','<b>Verified GD; formal OG.</b> GD supplies dyadic Klein generations and continued action. OG binds finite parameterized productions, complete branch context and field changes, but has no runtime evidence yet. General primitives remain separate.'],
+            ['C5: generative world','<b>Verified finite GD and OG.</b> Dyadic Klein generations and parameterized branching productions change geometry or field and continue the same individual. Complete branch context and original-time replay are tested. General primitives remain separate.'],
             ['C6: finite active memory','<b>Verified subset.</b> Pair-atomic sample FIFO, genuine reconstruction and capacity-independent agent histories work. Journals, geometry, fields and device arenas consume additional memory.'],
             ['C7: complete mirror','<b>Verified subset.</b> Phase involution/commutation, parity and full pair relations work, including K8 phase reflection and orientation transport on CPU/GPU.'],
             ['C8: individual and footprint','<b>Verified subset.</b> Planning, observations, epoch/sequence, retry handling, ownership and durable continuation work. Full LUS/DIGID envelopes and global admission/authentication remain profile obligations.'],
@@ -504,7 +513,7 @@ def build_content():
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
         h('Continuation after the integrated field agent'),
-        p('FI joins geometry to the individual; PX adds an interchangeable index; HP makes phase and local eigenstructure affect actions. GD extends the history across finite geometry generations and durable replay. OG now has a formal-first branching contract; implementation remains unverified. Global traversal, general primitives and wider continuation need further work.'),
+        p('FI joins geometry to the individual; PX adds an interchangeable index; HP makes phase and local eigenstructure affect actions. GD extends history across geometry generations. OG now produces exact new union-boundary fields from branching grammars and continues that history. Global traversal, general primitives and wider continuation need further work.'),
         small('The measured integration is finite and profile-scoped. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present profiles.')
     )
     page('Conformance and performance scope', 'ACCEPTANCE CRITERIA | ORIGINAL T1-T10',
@@ -571,7 +580,7 @@ for tick in admitted_finite_budget:
             ['Adapters / scaling','Exact word preservation, finite cascade stages, ownership, input delivery and resource controls; R14-R15.'],
             ['Physical adapters','Samples, units, calibration, transfer functions and retained scheduling effects; R16.'],
         ],[.27,.73]),
-        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38, <b>PX1-PX8</b> on pages 39-43, <b>HP1-HP8</b> on pages 44-48 and <b>GD1-GD8</b> on pages 50-56. <b>OG1-OG8</b> on pages 58-66 remain formal only. Satisfying one profile does not silently complete another.'),
+        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38, <b>PX1-PX8</b> on pages 39-43, <b>HP1-HP8</b> on pages 44-48, <b>GD1-GD8</b> on pages 50-56 and <b>OG1-OG8</b> on pages 58-66. Satisfying one profile does not silently complete another.'),
         small('Original property cross-reference: P1 replay is I1 on p.22; P2 FIFO and P3 regeneration are R1/R2 on p.18; P4 mirror preservation is on p.8; P5 representation independence is the adapter/refinement contract on pp.16,23.'),
         small('Historical vocabulary: mosTADPOLE(thegreenone) names the source input/output lineage; TPVM is Topological Fixed-Point Virtual Machine. Det-0 names reproducibility with complete dependencies. Generative Topological Fabric, Packed Topological FIFO Matrix and Uniform Packed Operator Paradigm are successive functional views. REW expands to Reverse Electronic Warfare in the WElip source. f8’s “BVH replacement / S2 superseder” is an intended indexing/comparison role, not a measured replacement result.'),
         small('A complete manifest may reference immutable versioned rule tables rather than embedding every algorithm in a packet. No “infallible” designation waives a missing binding. A profile is executable only once all choices that affect its outputs are single-valued and finitely evaluable.')
@@ -608,7 +617,7 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box(f'<b>Revision 9 status.</b> Historical HP evidence retains {hp_tests} tests and {hp_checks} checks. GD at 94f86c7 retains {gd_tests} tests, {gd_device_tests} device methods and {gd_checks} checks. OG1-OG8 on pages 58-66 are formal only. These distinct captures and expectations do not establish whole-architecture completion.')
+        box(f'<b>Revision 10 status.</b> Historical HP retains {hp_tests} tests and {hp_checks} checks; GD at 94f86c7 retains {gd_tests} tests and {gd_checks} checks. Current OG integration passes {og_tests} tests, {og_device_tests} actual-device methods and {og_checks} conformance checks. These distinct finite captures do not establish whole-architecture completion.')
     )
     page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
@@ -945,9 +954,9 @@ for tick in admitted_finite_budget:
         small('Retained evidence: docs/evidence/growth-v1/. verification.json binds source hashes at historical commit 94f86c7, report hashes, actual counts and formal-first commits. Device figures are logical resource payloads; Python objects, drivers, journals and other overhead remain additional.'),
         small('<b>Remaining scope:</b> general production tables and branch stacks, global eigenmodes, physical adapters, wider temporal continuation and comparative hardware measurements. This finite growth result establishes no GPU saturation, speedup, calibrated energy advantage or whole-architecture completion.')
     )
-    page('Parameterized branching organogram', 'FORMAL ONLY | OG1 | NEW NUMERICAL BINDING',
+    page('Parameterized branching organogram', 'VERIFIED FINITE PROFILE | OG1 | NEW NUMERICAL BINDING',
         p('<b>Policy:</b> tomigidt-field-organogram-plan-act-v1. The same individual uses its prior certified field to interpret finite parameterized productions. Emitted intrinsic balls define its next field on the existing Klein quotient. This changes the boundary and distances, not the quotient dimensions, edges, cocycle, departure turns or original index anchor.'),
-        box('OG1-OG8 are formal requirements in revision 9. The independent reference supplies expected finite results; no OG runtime or device conformance is asserted. GD and all earlier policies retain their contracts.'),
+        box('OG1-OG8 retain their formal-first requirements at commit 5c76f2c. Revision 10 adds source-bound CPU/GPU implementation evidence on pages 67-68. GD and all earlier policies retain their contracts.'),
         h('OG1. Strict immutable grammar schema'),
         code('binding = {format,max_epochs,cost,symbols,axiom,rules,\n           generations,limits}\nformat = "klein-branch-organogram-v1"'),
         table(['Field','Exact finite domain'],[
@@ -962,7 +971,7 @@ for tick in admitted_finite_budget:
         small('The separately tagged 32-bit instruction profile uses the sole tape argument a, or 0 when absent; scaling occurs in interpreter state. Decode a from bits 0..15 and code from 24..26; require bits 16..23 and 27..30 zero, even parity and terminal-specific bounds on device. One exact r32uint texel per instruction uses integer textureLoad in tape order, without filtering. This is not a current RP32 state or field sample. No instruction mirror is asserted: the same tape acts on full cursor pairs. Addresses and branch identities remain separate metadata.'),
         small('Source basis: original pp.4-5,7,10,12,16,18; Solus pp.3-4,6; solipsism pp.13,16. These motivate grammar, field-guided generation and branch context. The selected syntax, limits, ball union and interpreter are explicit numerical choices. Cone/pyramid primitives, general graph rewriting, global Psi and clock-wrap continuation remain separate obligations.')
     )
-    page('Parameters, productions and finite tape', 'FORMAL ONLY | OG1-OG2 | SINGLE-VALUED EXPANSION',
+    page('Parameters, productions and finite tape', 'VERIFIED FINITE PROFILE | OG1-OG2 | SINGLE-VALUED EXPANSION',
         h('OG1. Parameters and exact predicates'),
         p('Parameters and literals are signed i32. An axiom argument is a literal or exactly {context,mul,add}, with context tick, epoch, phase or field. A rule RHS argument is a literal or exactly {arg,mul,add}, with arg a valid left-side parameter index. mul is -32768..32767; add is signed i32. Evaluate multiplication/addition as mathematical integers and reject a result outside signed i32 before device dispatch.'),
         eq('tick = original admitting GROW sequence\nepoch = next geometry epoch in 1..4\nphase = (-1)^eta * R mod 256; field = old B\naffine(x) = mul*x + add'),
@@ -975,7 +984,7 @@ for tick in admitted_finite_budget:
         p('Before device work, preflight the complete tape. Brackets shall balance and every prefix depth is 0..max_stack; an initial POP is invalid. Track radius/scale with branch restoration. F takes n=1..256 and executes n*2^scale steps; + and - take m=1..16; R takes radius 1..127; SCALE sets absolute exponent 0..4. Each S emits radius*2^scale, at most 127. Total F steps obey max_steps and S count is 1..max_balls.'),
         small('Finite generations, words and interpreter work prove stage termination. There is no partial grammar GROW or grammar DEFER; agent planning still supports DEFER. Because DEFER advances the logical cycle, changing the manifest search quantum can change the original GROW tick and hence a time-conditioned production. Retain that manifest/input history; different search budgets need not yield the same mission. Cache and reindex operations do not advance T and must preserve results. XOR predicates do not replace parity, mirrors or geometric certification.')
     )
-    page('Prior-field interpreter and branch context', 'FORMAL ONLY | OG3 | ORDERED PACKED EXECUTION',
+    page('Prior-field interpreter and branch context', 'VERIFIED FINITE PROFILE | OG3 | ORDERED PACKED EXECUTION',
         p('The complete stage uses its prior certified phi as a fixed waveguide. Begin at the actual repaired EMIT pair, changing only its opcode to STEP; local radius is 1 and scale is 0. Recompute parity and the full mirror whenever repacking. There is no independent heading state.'),
         h('OG3. Field-directed F and phase operators'),
         eq('t = (-1)^eta * R mod 256; bank = floor(t/64)\nd_i = gains[bank][i] * (1 + Psi_i^2)\nq = d Hadamard g; choose e maximizing dot(q,e)'),
@@ -992,7 +1001,7 @@ for tick in admitted_finite_budget:
         p('Immutable tape arguments and the original stage context supply the rule environment. Program position, work counters, accumulated trace/segments/balls, owner energy and admitted history never rewind. Record a trace entry after every terminal, including PUSH and POP. The final hypothetical cursor does not replace the owner: OG5 admits the new field at the owner\'s unchanged node/phase/orientation.'),
         small('A saved orientation bit alone is not the complete frame. Restoration must recover the entire pair and local shape context even after a nested reversing-seam crossing, signed turn and local scale change.')
     )
-    page('Intrinsic ball union and exact new field', 'FORMAL ONLY | OG4 | GEOMETRIC CONSTRUCTION',
+    page('Intrinsic ball union and exact new field', 'VERIFIED FINITE PROFILE | OG4 | GEOMETRIC CONSTRUCTION',
         p('Every S emission declares an intrinsic ball on the unchanged unit-edge Klein quotient K. Let its canonical centre and positive integer radius be (c_i,r_i). The primitive list is ordered and retains duplicates; geometry is determined by its union potential.'),
         eq('q(v) = min_i [d_K(v,c_i) - r_i]\nsigma(v) = sign(q(v)); Z = {v : q(v)=0}\nphi_new(v) = sigma(v) * min_(z in Z) d_K(v,z)'),
         p('Reject a candidate with empty Z. Compute distance to the new zero set and apply the existing independent field certificate against the fixed graph and these signs. The union potential q is not generally the final signed distance: an individual ball boundary can become internal to the union. No old or per-ball distance may substitute for the certified result.'),
@@ -1004,7 +1013,7 @@ for tick in admitted_finite_budget:
         p('The original Klein cells, adjacency, cocycle and orientation-cover certificates stay unchanged. The new boundary, signs, exact field, PX descriptors and HP operator tables receive their own candidate certificates. The index anchor remains base.center. Reject any new distance outside the existing exact signed-code domain.'),
         small('These are intrinsic discrete balls and their union. The formula supplies no Euclidean sphere surface, cone, pyramid, continuum embedding or calibrated physical unit. Different stage fields genuinely change the represented internal distance rules while retaining the same quotient topology.')
     )
-    page('The same individual admits a generated world', 'FORMAL ONLY | OG5 | SUBGOAL, TARGET AND ENERGY',
+    page('The same individual admits a generated world', 'VERIFIED FINITE PROFILE | OG5 | SUBGOAL, TARGET AND ENERGY',
         p('The initial KleinFieldRecipe remains immutable. The new policy manifest includes organogram and the existing Hadamard routing binding. After REPAIR, if the current epoch k is below max_epochs, enter GROWTH_PENDING. The next complete fresh local observation frame admits one GROW transition; observations cannot supply productions, primitive centres, targets or actions.'),
         eq('reserve(k) = repair_cost\n           + (max_epochs-k)*(organogram.cost+repair_cost)'),
         p('Apply the existing GD reserve/admission bounds using organogram.cost. MOVE and REPAIR must preserve the required remaining reserve. GROW requires its cost plus reserve(k+1), consumes one global cycle, and debits its cost exactly once. Global cycle, energy and event order never reset. With max_epochs=0 the initial mission finishes without a grammar stage.'),
@@ -1017,7 +1026,7 @@ for tick in admitted_finite_budget:
         p('Observations and retries retain GD epoch semantics: new input must name the current pre-cycle geometry epoch and satisfy its locality; a duplicate original producer sequence resolves in its original geometry and returns its original result. Simulator hazards remain an explicitly selected input model. Arbitrary admitted local live hazards remain possible.'),
         small('Cost is an abstract mission-resource unit, not measured physical energy or interpreter work; F steps have a separate bound. Reindex preserves semantic field, target, observations, search and identities; GROW invalidates their context. A successful integration shall demonstrate changed distances and autonomous behavior, not only a detached tape.')
     )
-    page('Original recipes, transcripts and replay', 'FORMAL ONLY | OG6 | COMPLETE DERIVATION CONTEXT',
+    page('Original recipes, transcripts and replay', 'VERIFIED FINITE PROFILE | OG6 | COMPLETE DERIVATION CONTEXT',
         code('recipe = {format,base,organogram,routing,stages}\nformat = "klein-organogram-world-v1"\nstage = {epoch,tick,start_pair,prefix_sha256}'),
         p('base is the original KleinFieldRecipe; organogram and routing retain the immutable bindings. A generated recipe has 1..max_epochs stages; epoch 0 uses the base type. Stage epoch is 1..length, ticks strictly increase, and start_pair is the original full EMIT pair as 16 uppercase hex characters. Require valid parity/mirror, legal node and B equal to the preceding field. Reconstruct preceding stages before the next; never substitute current time or recipe.'),
         eq('stage.prefix_sha256 = SHA256(canonical(events before GROW))\ncanonical(x) = json.dumps(x, sort_keys=True,\n  separators=(\',\',\':\'), ensure_ascii=True,\n  allow_nan=False).encode(\'utf-8\')'),
@@ -1033,7 +1042,7 @@ for tick in admitted_finite_budget:
         ],[.24,.76]),
         small('branch_path is an outermost-first array of PUSH terminal addresses. Every transcript pair is the current prior-field STEP pair, encoded as 16 uppercase hex characters. Hash the complete document with the canonical encoding above. Schema, ordering and numeric/string types are part of the digest contract. Event/receipt and snapshot schemas continue on page 64.')
     )
-    page('Device production and atomic admission', 'FORMAL ONLY | OG6-OG7 | REFINEMENT AND RESOURCE OWNERSHIP',
+    page('Device production and atomic admission', 'VERIFIED FINITE PROFILE | OG6-OG7 | REFINEMENT AND RESOURCE OWNERSHIP',
         h('OG6. Event, receipt and snapshot schema'),
         code('event = {seq,input,decision,output,energy,\n         geometry_epoch,growth}\nreceipt = {format,from_epoch,to_epoch,mapped_node,\n           target,recipe,derivation_sha256}'),
         p('geometry_epoch is the pre-cycle epoch; growth is null except on GROW. Receipt format is klein-organogram-growth-v1 and mapped_node is the unchanged canonical owner name. derivation_sha256 hashes OG6\'s complete document. The OG snapshot adds geometry_epoch and current_recipe; unlike GD it has no global scale_exponent because branches may use different local scales.'),
@@ -1049,7 +1058,7 @@ for tick in admitted_finite_budget:
         ],[.29,.71]),
         small('Valid productions may yield an empty boundary or other rejected field; arbitrary grammar and finite energy/cycles do not guarantee GROW completion. Account old plus candidate host/device payloads, tapes, stacks, traces, recipes, journal and cache separately, including rejected complete-candidate peaks. The pair FIFO bound of 8C bytes is not total constant memory.')
     )
-    page('Independent organogram reference', 'FORMAL ONLY | OG8 | EXPECTED RESULTS BEFORE RUNTIME',
+    page('Independent organogram reference', 'FORMAL-FIRST REFERENCE | OG8 | EXPECTED RESULTS BEFORE RUNTIME',
         p('The independent reference in docs/evidence/organogram-v1/ expands the grammar and evaluates integer branches, quotient BFS, union redistance and lifted HP planning without importing solvefinite. A layered dynamic-programming oracle cross-checks its mission paths. These are mathematical expected results, not runtime conformance.'),
         h('Standalone context and branch restoration'),
         p('The retained standalone input names epoch 1, original tick 5 and repaired pair 06011145160111BB. Its explicit prefix is the digest of []; this mathematical input is not a claim that a runtime admitted sequence 5 with an empty journal. Production addresses, traces, branch paths and the complete derivation document remain in the reference.'),
@@ -1065,7 +1074,7 @@ for tick in admitted_finite_budget:
         code('F(256) 80000100   +(16) 01000010   -(16) 02000010\n[      03000000   ]     84000000   R(127) 8500007F\nS      06000000   SCALE(4) 07000004'),
         small('Independent BFS checks all 702 supported quotients, 106,045 vertices and 19,130,481 ordered pairs against the closed metric. The builder pins reference and generator hashes. Mathematical mission prefixes are scoped to that transcript, not runtime canonical archive hashes; actual journal/source identities require separate evidence.')
     )
-    page('Organogram acceptance obligations', 'FORMAL ONLY | OG8 | REQUIRED IMPLEMENTATION EVIDENCE',
+    page('Organogram acceptance obligations', 'VERIFIED FINITE PROFILE | OG8 | REQUIRED ACCEPTANCE SCOPE',
         p('The retained reference in docs/evidence/organogram-v1/ supplies independent grammar expansion, integer interpretation and geometric calculations without importing solvefinite. Its vectors are mathematical expectations prepared before runtime implementation; a separate source-bound CPU/GPU capture must demonstrate refinement.'),
         h('OG8. Required acceptance evidence'),
         table(['Object','Required scope'],[
@@ -1077,8 +1086,45 @@ for tick in admitted_finite_budget:
             ['Device refinement','Actual GPU interpreter, traces, balls, signs, fields and subsequent actions; host producers/compilers disabled on explicit GPU paths; fresh-process cross-backend replay.'],
             ['Atomicity and retention','Pure rejection, uncertain dispatch/readback, committed cleanup and save/reopen boundaries; cache/reindex/planner-DEFER preservation; unchanged earlier-policy hashes.'],
         ],[.25,.75]),
-        box('Revision 9 status: FORMAL ONLY. No OG test count, device run, resource measurement or autonomous continuation result is claimed until a separate implementation capture passes these obligations.'),
+        box('Revision 10 status: VERIFIED FINITE PROFILE. The separate implementation capture passes the required finite acceptance scope: 623 tests, 136 actual-device methods and 15 conformance checks. Measured results and limits follow on pages 67-68.'),
         small('This finite organogram does not complete cone/pyramid or arbitrary graph production, global eigenmodes, WElip/clock-wrap continuation, physical adapters, computational universality or comparative hardware performance. Completing OG must be judged against the full contract, not only literal reference examples.')
+    )
+    page('Measured organogram continuation', 'IMPLEMENTATION CAPTURE | OG1-OG8 | 26 SEPTEMBER 2026',
+        p('The grammar now generates a new exact signed boundary field on the original Klein topology. The same Tomigidt admits it, keeps its actual node/phase/orientation and energy history, derives a new target and continues. The independent expectations on page 65 preceded implementation at formal commit 5c76f2c.'),
+        table(['Measurement','Retained observed result'],[
+            ['Complete regression',f'{og_tests} tests passed in {OG_VERIFICATION["tests"]["elapsed_seconds"]:.3f} s; zero skipped. {og_device_tests} actual-device methods include 29 OG methods.'],
+            ['Independent conformance',f'All {og_checks} checks passed; capture wall time {OG_VERIFICATION["conformance_elapsed_seconds"]:.3f} s. Full stage tapes, traces, branch paths, balls, fields and digests agree with the independent reference at original runtime context.'],
+            ['Adapter','NVIDIA GeForce RTX 5070 Ti Laptop GPU; Vulkan; driver 591.59; wgpu 0.32.0; Python 3.12.14.'],
+        ],[.29,.71]),
+        h('Measured missions agree across CPU and actual GPU'),
+        table(['Fixture','Cycles / final energy','Final pair'],[
+            ['Default; target 6','9 / 76','860006BA16000646'],
+            ['Full mirror; target 6','9 / 76',OG_CONFORMANCE['GPU']['mirrored_default']['archive']['expected']['agent_pair']],
+            ['Two epochs; targets 6,14','14 / 66','06000E2F16000ED1'],
+            ['Zero epochs; initial target','4 / 86','06011145160111BB'],
+        ],[.35,.26,.39]),
+        p('With search quantum 7, DEFER advances original time: GROW occurs at sequence 8 and the mission completes in 17 cycles with energy 74. Different original ticks select different productions. Under the same quantum and admitted inputs, cache churn, reindex and CPU/GPU continuation preserve the complete canonical history.'),
+        h('Canonical default runtime archive SHA-256'),
+        code('e2834ba2cc6b4d51f2b23f274cd9f2a0db8\na4e88754ed9d2aadc76c074f134df'),
+        small('Join the displayed hash lines. The runtime stage-1 derivation digest is 30f0164177a5e289cb9e7b7e244960c4bef49bcc444208cb94c618295a0c2aa3. It differs from the standalone page-65 digest because it binds the actual pre-GROW journal prefix. Timing here measures correctness capture, not comparative hardware performance.'),
+        box('Evidence supports the declared finite OG profile. It does not establish general universality, texture-cache saturation, physical-energy advantage or indefinite autonomous continuation.')
+    )
+    page('Organogram device and retention evidence', 'IMPLEMENTATION CAPTURE | DEVICE WORK, FAILURE AND RESOURCE SCOPE',
+        p('The GPU reads OG-TAPE32 instructions from an integer texture, interprets branch state, emits balls, derives signs, reconstructs exact field distances and supplies subsequent packed actions. Host work performs strict parsing, bounded expansion, independent certification, route search and admission. Six OG producers and eleven earlier CPU compilers are disabled on the guarded GPU paths; the owner is never host-reseeded after initialization.'),
+        h('Boundary and continuation evidence'),
+        p('Coverage includes 32 nested branches and 4,096 actual F substeps; nested seam/radius/scale restoration; the literal union-redistance counterexample; and an unbranched F(1),S case whose hypothetical cursor leaves the actual owner. Rejection probes cover malformed/over-budget grammar, empty boundary, forged certificates and mismatched original context.'),
+        p('Pure precommit rejection preserves the old owner. Uncertain device failure closes it without admission; committed cleanup failure retains GROW. Save failures on either side of replacement, original-epoch retries and durable reopen are exercised. Six fresh-process CPU/GPU crossovers cover before GROW, after GROW and generated-world DEFER. Earlier FI/HP/GD archive hashes remain unchanged.'),
+        h('Explicit payloads for the default CLI continuation'),
+        table(['Payload','Observed bytes / interpretation'],[
+            ['Current device',f'{og_allocation["device_payload_bytes"]:,} = {og_allocation["device_buffer_bytes"]:,} buffers + {og_allocation["device_texture_bytes"]:,} textures.'],
+            ['GROW preparation peak',f'{og_peak["device_payload_bytes"]:,} device bytes, including old and candidate bundles plus grammar work. Instruction texture {og_peak["instruction_texture_bytes"]:,}; movement texture {og_peak["grammar_movement_texture_bytes"]:,}; grammar scratch {og_peak["grammar_scratch_buffer_bytes"]:,}.'],
+            ['Shader / retained grammar',f'Private branch stack {og_peak["grammar_private_stack_payload_bytes"]:,} logical bytes; retained grammar recipe {og_peak["grammar_retained_recipe_bytes"]:,}; transcript {og_peak["grammar_retained_transcript_bytes"]:,}. Peak host stage payload {og_peak["peak_grammar_host_stage_payload_bytes"]:,}.'],
+            ['Separate active FIFO',f'{og_peak["active_fifo_pair_bytes"]:,} pair bytes for CLI capacity 2. Current host index {og_allocation["host_index_payload_bytes"]:,}; routing table {og_allocation["host_routing_table_payload_bytes"]:,}; field codes {og_allocation["host_field_code_payload_bytes"]:,}.'],
+        ],[.31,.69]),
+        small('Logical private-stack bytes do not identify physical GPU residency. Payload accounting excludes Python objects and driver overhead; geometry, observations, planning and journals remain additional. Preparation/rebuild peaks are distinct. The sample FIFO does not bound total memory.'),
+        h('Recheck execution and rebuild this retained edition'),
+        code('python -m unittest discover -s tests -v\npython -m examples.organogram_conformance --output og-recheck.json\npython tools/build_formal_spec.py'),
+        small('docs/evidence/organogram-v1/ retains verification.json, full-tests.txt, conformance.json and cli-replay.json with source/report hashes. The builder binds this capture; replacing evidence requires reviewed pins. It checks formal chronology, source/reference identity, device counts, original stage prefixes and archives. Remaining work includes general primitives/graphs, global spectral choices, WElip/clock continuation, physical adapters and comparative hardware measurements.')
     )
 
 
@@ -1086,7 +1132,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 9')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 10')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -1119,7 +1165,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 9')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 10')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -1127,7 +1173,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 9')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 10')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -1187,7 +1233,7 @@ def render(output):
 
 
 def verify_retained_inputs():
-    global HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE, OG_REFERENCE
+    global HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE, OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE
     expected_hashes = {
         'Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf':
             '8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647',
@@ -1443,6 +1489,130 @@ def verify_retained_inputs():
             or og['instruction_profile']['encoding_vectors']['words'] != ['80000100','01000010','02000010','03000000','84000000','8500007F','06000000','07000004']):
         raise ValueError('OG displayed formal vectors disagree with the independent reference')
     OG_REFERENCE = og
+    og_verification_bytes = (ORGANOGRAM_EVIDENCE/'verification.json').read_bytes().replace(b'\r\n', b'\n')
+    if hashlib.sha256(og_verification_bytes).hexdigest() != '0c1a392bcfe22c4c493291e9ad2b4fe750a40279f53702f8a21e631d55b6e52d':
+        raise ValueError('Revision 10 requires its complete named OG implementation capture')
+    measured = json.loads(og_verification_bytes)
+    formal_commit = '5c76f2cec3a1cec8fd2d16eeeac2021c45b0aea9'
+    formal_pdf = subprocess.check_output(['git', 'show',
+        f'{formal_commit}:output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf'], cwd=ROOT)
+    if (measured['format'] != 'organogram-verification-v1'
+            or measured['formal_binding_commit'] != formal_commit
+            or measured['base_commit'] != '94f86c7ae84a6eee9b99d3101d3b531b7a307c17'
+            or measured['preimplementation_formal_pdf_sha256'] != hashlib.sha256(formal_pdf).hexdigest()
+            or measured['preimplementation_formal_pdf_sha256'] != '64d1489cad789cf45e3171295076559ca2295030a5348561292bb977b19f91b0'):
+        raise ValueError('OG implementation chronology disagrees with the frozen revision 9 formal binding')
+    expected_sources = {path.relative_to(ROOT).as_posix()
+                        for directory in ('solvefinite', 'tests', 'examples')
+                        for path in (ROOT/directory).rglob('*')
+                        if path.is_file() and path.suffix in ('.py', '.wgsl', '.json')}
+    expected_sources.update({'tools/capture_organogram_evidence.py',
+                             'docs/evidence/organogram-v1/reference-builder.py',
+                             'docs/evidence/organogram-v1/formal-reference.json'})
+    if set(measured['source_sha256_lf']) != expected_sources:
+        raise ValueError('OG evidence must identify the entire current runtime, examples and test sources')
+    for relative, expected in measured['source_sha256_lf'].items():
+        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(source).hexdigest() != expected:
+            raise ValueError(f'OG evidence source identity changed: {relative}')
+    if set(measured['report_sha256_lf']) != {'full-tests.txt', 'conformance.json', 'cli-replay.json'}:
+        raise ValueError('OG capture requires the complete suite, conformance and CLI replay reports')
+    for filename, expected in measured['report_sha256_lf'].items():
+        report = (ORGANOGRAM_EVIDENCE/filename).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(report).hexdigest() != expected:
+            raise ValueError(f'OG evidence report identity changed: {filename}')
+    og_tests = measured['tests']
+    log = (ORGANOGRAM_EVIDENCE/'full-tests.txt').read_text(encoding='utf-8')
+    suite_match = re.search(r'Ran (\d+) tests in ([0-9.]+)s', log)
+    if (suite_match is None or int(suite_match[1]) != og_tests['passed']
+            or float(suite_match[2]) != og_tests['elapsed_seconds']
+            or og_tests['passed'] != 623 or og_tests['skipped'] != 0
+            or sum(og_tests['module_counts'].values()) != og_tests['passed']
+            or sum(og_tests['actual_device_methods'].values()) != 136
+            or not log.rstrip().endswith('OK') or '... skipped' in log or 'skipped=' in log):
+        raise ValueError('OG measured counts require the complete passing zero-skip suite log')
+    for module, count in og_tests['module_counts'].items():
+        if len(re.findall(r'\(' + re.escape(module) + r'\.', log)) != count:
+            raise ValueError(f'OG test module count disagrees with its retained log: {module}')
+    for name, count in og_tests['actual_device_methods'].items():
+        if len(re.findall(r'\(\w+\.' + re.escape(name) + r'\.', log)) != count:
+            raise ValueError(f'OG actual-device class count disagrees with its retained log: {name}')
+    captured = json.loads((ORGANOGRAM_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    if (captured['format'] != 'organogram-conformance-v1'
+            or captured['actual_GPU_capture'] is not True
+            or captured['formal_commit'] != formal_commit
+            or captured['formal_reference_sha256_lf'] != hashlib.sha256(og_bytes).hexdigest()
+            or len(captured['checks']) != 15
+            or measured['conformance_checks_passed'] != len(captured['checks'])
+            or any(value is not True for value in captured['checks'].values())
+            or len(captured['disabled_OG_CPU_producers']) != 6
+            or len(captured['disabled_legacy_CPU_compilers']) != 11):
+        raise ValueError('OG conformance requires every actual CPU/GPU acceptance check')
+
+    def canonical_hash(value):
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'),
+                                         ensure_ascii=True, allow_nan=False).encode('utf-8')).hexdigest()
+
+    for label in ('default', 'mirrored_default', 'two_epoch', 'zero_epoch'):
+        cpu = captured['CPU']['cases'][label]
+        gpu = captured['GPU'][label]
+        expected = og[label+'_mission']
+        actual = gpu['archive']['expected']
+        if (cpu['archive'] != gpu['archive']
+                or canonical_hash(gpu['archive']) != gpu['archive_sha256']
+                or actual['cycle'] != expected['cycles']
+                or actual['agent_pair'] != expected['final']['pair']
+                or actual['energy'] != expected['final']['energy']
+                or actual['status'] != 'COMPLETE'
+                or len(gpu['actual_device_states']) != actual['cycle']+1
+                or len(gpu['stages']) != len(expected['stages'])):
+            raise ValueError(f'OG measured mission disagrees with its independent reference: {label}')
+        for device_state, snapshot in zip(gpu['actual_device_states'], gpu['snapshots']):
+            if (device_state['cycle'], device_state['pair'], device_state['energy']) != (
+                    snapshot['cycle'], snapshot['agent_pair'], snapshot['energy']):
+                raise ValueError(f'OG actual device owner disagrees with its cycle snapshot: {label}')
+        for stage in gpu['stages']:
+            context = stage['context']
+            events = gpu['archive']['events']
+            event = events[context['tick']-1]
+            if (canonical_hash(stage['expected_derivation']) != stage['derivation_sha256']
+                    or stage['expected_derivation']['context'] != context
+                    or canonical_hash(events[:context['tick']-1]) != context['prefix_sha256']
+                    or event['growth']['derivation_sha256'] != stage['derivation_sha256']
+                    or event['growth']['recipe']['stages'][-1] != context):
+                raise ValueError(f'OG stage transcript, original context or admission digest disagrees: {label}')
+    default_archive = captured['GPU']['default']['archive']
+    archive_hash = canonical_hash(default_archive)
+    cli = json.loads((ORGANOGRAM_EVIDENCE/'cli-replay.json').read_text(encoding='utf-8'))
+    if (archive_hash != 'e2834ba2cc6b4d51f2b23f274cd9f2a0db8a4e88754ed9d2aadc76c074f134df'
+            or archive_hash != captured['canonical_archive_sha256']
+            or archive_hash != measured['canonical_archive_sha256']
+            or archive_hash != cli['canonical_archive_sha256']
+            or cli['inspection_kept_saved_bytes'] is not True
+            or measured['final_state'] != default_archive['expected']
+            or cli['outputs'][-1]['state'] != measured['final_state']
+            or cli['outputs'][1]['state']['status'] != 'GROWTH_PENDING'
+            or cli['outputs'][2]['state']['geometry_epoch'] != 1
+            or cli['outputs'][3]['execution_info'] != measured['execution_info']
+            or measured['environment']['adapter'] != measured['execution_info']['adapter']
+            or captured['CPU']['deferred']['archive'] != captured['GPU_deferred']['archive']):
+        raise ValueError('OG archive, CLI continuation, original-time DEFER or device evidence disagrees')
+    replays = captured['fresh_process_replays']
+    if set(replays) != {point+'_to_'+backend for point in ('before_growth_1', 'after_growth_1', 'DEFER_after_growth')
+                        for backend in ('cpu', 'gpu')}:
+        raise ValueError('OG requires all six fresh-process cross-backend continuations')
+    for name, replay in replays.items():
+        expected = captured['GPU_deferred']['archive'] if name.startswith('DEFER_') else default_archive
+        if (replay['archive'] != expected or replay['archive_sha256'] != canonical_hash(expected)
+                or (name.endswith('_gpu') and replay['CPU_producers_disabled'] is not True)):
+            raise ValueError(f'OG fresh-process continuation disagrees: {name}')
+    if (measured['original_source_sha256'] != expected_hashes
+            or measured['eli5_pdf_unchanged_sha256'] != '06556d7bbae0de54e99f3abb9329869da1fbf085c6c1aab66d563528989c3ea0'
+            or measured['eli5_pdf_unchanged_sha256'] != hashlib.sha256(
+                (ROOT/'output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf').read_bytes()).hexdigest()):
+        raise ValueError('OG capture changed an original source or the separate ELI5 document')
+    OG_VERIFICATION = measured
+    OG_CONFORMANCE = captured
 
 
 if __name__=='__main__':

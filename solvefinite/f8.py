@@ -60,9 +60,8 @@ class IndexBinding:
 
 def _recipe(value):
     # FieldWorld uses this module; defer this import to avoid a module cycle.
-    from .field_world import KleinFieldRecipe
-    if type(value) is not KleinFieldRecipe:
-        raise ValueError("recipe must be a KleinFieldRecipe")
+    from .field_world import require_field_recipe
+    require_field_recipe(value)
 
 
 def _binding(value):
@@ -251,24 +250,28 @@ class F8Index:
         raise TypeError("Construct an F8Index with build or certified")
 
     @classmethod
-    def build(cls, recipe, binding=None, fields=None) -> F8Index:
+    def build(cls, recipe, binding=None, fields=None, *, certificate=None) -> F8Index:
         _recipe(recipe)
         binding = IndexBinding() if binding is None else binding
         _binding(binding)
-        manifest = recipe.field_manifest()
-        fields = evaluate_field(manifest) if fields is None else fields
+        from .field_world import resolve_field_certificate
+        certificate = resolve_field_certificate(recipe, fields, certificate)
+        manifest = recipe.field_manifest() if certificate is None else certificate.manifest
+        fields = (evaluate_field(manifest) if certificate is None else certificate.fields) if fields is None else fields
         certify_field(manifest, fields)
         geometry = build_geometry(recipe)
         records = _compile_records(recipe, binding, fields, geometry)
         rows = _compile_rows(records)
-        return cls.certified(recipe, binding, records, rows, fields)
+        return cls.certified(recipe, binding, records, rows, fields, certificate=certificate)
 
     @classmethod
-    def certified(cls, recipe, binding, records, rows, fields) -> F8Index:
+    def certified(cls, recipe, binding, records, rows, fields, *, certificate=None) -> F8Index:
         """Admit device/other results with no CPU key, tree or Psi compilation."""
         _recipe(recipe)
         _binding(binding)
-        manifest = recipe.field_manifest()
+        from .field_world import resolve_field_certificate
+        certificate = resolve_field_certificate(recipe, fields, certificate)
+        manifest = recipe.field_manifest() if certificate is None else certificate.manifest
         certify_field(manifest, fields)
         count = recipe.width * recipe.height
         records = _matrix(records, count, "Index records")
@@ -355,14 +358,15 @@ class F8Index:
 
     @classmethod
     def from_snapshot(cls, value: object) -> F8Index:
-        from .field_world import KleinFieldRecipe
+        from .field_world import field_recipe_from_dict, resolve_field_certificate
         _keys(value, {"format", "recipe", "binding", "records", "rows"}, "Index snapshot")
         if type(value["format"]) is not str or value["format"] != SNAPSHOT_FORMAT:
             raise ValueError("Unsupported index snapshot format")
         for label in ("records", "rows"):
             if type(value[label]) is not list or any(type(row) is not list for row in value[label]):
                 raise ValueError("Index snapshot records and rows must be JSON arrays")
-        recipe = KleinFieldRecipe.from_dict(value["recipe"])
+        recipe = field_recipe_from_dict(value["recipe"])
         binding = IndexBinding.from_dict(value["binding"])
-        fields = evaluate_field(recipe.field_manifest())
-        return cls.certified(recipe, binding, value["records"], value["rows"], fields)
+        certificate = resolve_field_certificate(recipe)
+        fields = evaluate_field(recipe.field_manifest()) if certificate is None else certificate.fields
+        return cls.certified(recipe, binding, value["records"], value["rows"], fields, certificate=certificate)

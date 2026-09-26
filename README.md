@@ -12,7 +12,7 @@ The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
 This single, self-contained PDF integrates the original specification,
 both supplied addenda, the exact SDF contract, the Klein extension and
-implementation evidence for the SDF, Klein, field-agent, Psi/f8, Hadamard and geometry-growth profiles. It defines
+implementation evidence for the SDF, Klein, field-agent, Psi/f8, Hadamard, geometry-growth and organogram profiles. It defines
 conditional infallibility through explicit deterministic execution and
 invariant-preservation obligations.
 The documentation detour is complete. The subsequent implementation now supports
@@ -26,11 +26,11 @@ movement, phase-aware search and the certified GPU routing atlas.
 GD1-GD8 were committed at `ec1181e`, with the original-prefix identity bound at
 `00b0e64`, before their respective implementations. The same individual can
 now generate a larger intrinsic geometry and select its next subgoal internally.
-Revision 9 additionally binds OG1-OG8 before implementation: parameterized
-parallel productions, complete branch restoration, and generated intrinsic-ball
+OG1-OG8 were committed at `5c76f2c` before implementing parameterized parallel
+productions, complete branch restoration and generated intrinsic-ball
 boundaries that become the same individual's next field. The
-[independent arithmetic reference](docs/evidence/organogram-v1/README.md)
-records expected results; OG runtime and GPU conformance remain pending.
+[organogram evidence](docs/evidence/organogram-v1/README.md) separates the
+independent arithmetic reference from measured CPU/GPU execution.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
@@ -316,12 +316,66 @@ textures across the old and candidate worlds. Host tables and fields, expanded
 topology, search, history, Python objects and driver allocations are additional;
 the active FIFO bound is not a total-memory bound. See
 [growth evidence and reproduction](docs/evidence/growth-v1/README.md).
-The complete suite passes **546 tests with zero skips**, including **107
+The retained GD baseline suite passes **546 tests with zero skips**, including **107
 actual-device GPU methods**. The growth conformance capture adds **16 checks**
 and preserves the earlier field and Hadamard canonical histories. Reproduce
 the source-bound evidence with `python tools/capture_growth_evidence.py`.
-General production grammars, global spectral traversal, physical adapters,
-wider temporal continuation and comparative hardware measurements remain open.
+The organogram profile below extends the production grammar. Global spectral
+traversal, physical adapters, wider temporal continuation and comparative
+hardware measurements remain open.
+
+## Parameterized branching in the same field-guided individual
+
+The `organogram` profile interprets parameterized productions using the previous
+certified field as its guide. Branches carry a complete packed phase, position,
+orientation, radius and scale. Closing a branch restores that frame while
+retaining the generated segments and spheres. Their combined boundary defines
+the next signed-distance field on the same Klein quotient. The agent keeps its
+own position, phase and orientation, spends the declared generation cost and
+selects a new subgoal in the generated field.
+
+```sh
+python -m solvefinite agent scenario --profile organogram --output output/organogram/scenario.json
+python -m solvefinite agent run --scenario output/organogram/scenario.json --state output/organogram/session.json --backend gpu --steps 4
+python -m solvefinite agent run --state output/organogram/session.json --backend cpu --steps 1
+python -m solvefinite agent run --state output/organogram/session.json --backend gpu --steps 64
+python -m solvefinite agent inspect output/organogram/session.json --backend cpu
+python -m solvefinite agent live-config --profile organogram --output output/organogram/live-config.json
+python -m examples.organogram_conformance
+```
+
+The default mission finishes in **9 cycles with energy 76**. Its nested branch
+crosses an orientation-reversing seam and emits three intrinsic balls. The
+GPU reads exact integer instruction and movement textures, computes branch
+states and sphere placement, then constructs and certifies the new distances.
+Host code expands and checks the bounded grammar, verifies device results,
+searches routes and retains the journal. Explicit GPU execution rejects CPU
+trajectory or field substitution.
+
+Each stage retains its original GROW sequence, starting pair and event-prefix
+fingerprint together with the immutable grammar and routing rules. Historical
+samples reconstruct that exact context. Cache capacity and storage reindexing
+preserve the result. Changing the search-work allowance can change the GROW
+sequence and therefore a time-dependent production; replay retains that input.
+Live observations use `geometry_epoch`, as in the growth profile.
+
+This implementation accepts up to four stages, eight rewrite generations,
+1,024 terminal instructions, 4,096 dynamic forward steps, 64 emitted balls and
+32 nested branch frames. Each stage may have tighter declared limits. An empty
+generated boundary is rejected before admission. Device buffers and textures,
+branch/tape scratch, retained recipe and transcript, search, journal and Python
+or driver overhead are separate from the active sample FIFO.
+
+The [source-bound organogram evidence](docs/evidence/organogram-v1/README.md)
+records exact CPU/GPU histories, independent complete derivations and fresh
+process continuation. The evidence README gives recheck commands that preserve
+the retained reports. `python tools/capture_organogram_evidence.py` creates a new
+capture; replacing the pinned evidence requires a reviewed formal-document update.
+The retained capture passes **623 tests, zero skipped**, including **136
+actual-device GPU methods**, and all **15 organogram conformance checks**.
+Arbitrary cone/pyramid and graph productions, global spectral choices,
+WElip/clock continuation, physical adapters and comparative hardware evidence
+remain obligations of the broader architecture.
 
 ## GPU texture execution
 

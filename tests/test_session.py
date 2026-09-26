@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import queue
+import signal
 import subprocess
 import sys
 import tempfile
@@ -325,9 +326,9 @@ class StateLockTests(unittest.TestCase):
     def start_holder(self):
         script = (
             "from solvefinite.session import StateLock\n"
-            "import sys\n"
+            "import os,sys\n"
             "with StateLock(sys.argv[1]):\n"
-            "    print('locked', flush=True)\n"
+            "    print(f'locked {os.getpid()}', flush=True)\n"
             "    sys.stdin.readline()\n"
         )
         process = subprocess.Popen(
@@ -347,7 +348,9 @@ class StateLockTests(unittest.TestCase):
         self.addCleanup(cleanup)
         ready = queue.Queue()
         threading.Thread(target=lambda: ready.put(process.stdout.readline()), daemon=True).start()
-        self.assertEqual(ready.get(timeout=5), "locked\n")
+        greeting = ready.get(timeout=5).split()
+        self.assertEqual(greeting[0], "locked")
+        process.lock_owner_pid = int(greeting[1])
         self.assertIsNone(process.poll())
         return process
 
@@ -368,7 +371,9 @@ class StateLockTests(unittest.TestCase):
         with self.assertRaises(AgentBusy):
             with StateLock(self.path):
                 pass
-        process.terminate()
+        # A Windows venv executable can be a launcher with a separate Python
+        # child. Kill the actual lock holder, not merely that launcher.
+        os.kill(process.lock_owner_pid, signal.SIGTERM)
         process.wait(timeout=5)
         lock_path = Path(str(self.path) + ".lock")
         self.assertTrue(lock_path.exists())

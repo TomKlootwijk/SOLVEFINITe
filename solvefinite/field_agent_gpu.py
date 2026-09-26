@@ -81,20 +81,24 @@ class GpuFieldAgentExecutor:
 
     def __init__(self, recipe, index_binding=None, *, routing=None):
         from .field_world import KleinFieldRecipe
+        from .organogram import GeneratedFieldRecipe
 
-        if type(recipe) is not KleinFieldRecipe:
-            raise ValueError("recipe must be a KleinFieldRecipe")
+        if type(recipe) not in (KleinFieldRecipe, GeneratedFieldRecipe):
+            raise ValueError("recipe must be a supported field recipe")
         if index_binding is None:
             index_binding = IndexBinding()
         if type(index_binding) is not IndexBinding:
             raise ValueError("index_binding must be an IndexBinding")
         if routing is not None and type(routing) is not HadamardBinding:
             raise ValueError("routing must be a HadamardBinding")
+        generated = type(recipe) is GeneratedFieldRecipe
+        if generated and routing != recipe.routing:
+            raise ValueError("Generated recipe requires its original routing binding")
         self._lock = RLock()
         self._routing = routing
         self._initial_binding = index_binding
         self._recipe = recipe
-        self._manifest = recipe.field_manifest()
+        self._manifest = recipe.base.field_manifest() if generated else recipe.field_manifest()
         self._nodes = self._manifest.nodes
         self._indices = {name: index for index, name in enumerate(self._nodes)}
         neighbors = [set() for _ in self._nodes]
@@ -122,7 +126,12 @@ class GpuFieldAgentExecutor:
         try:
             # Reuse the actual-device distance construction and independent
             # certificate. Its fixed-route tick engine is never advanced here.
-            self._geometry = GpuFieldExecutor(self._manifest)
+            if generated:
+                from .organogram_gpu import GpuOrganogramGeometry
+                self._geometry = GpuOrganogramGeometry(recipe)
+                self._manifest = self._geometry.manifest
+            else:
+                self._geometry = GpuFieldExecutor(self._manifest)
             self._device = self._geometry._device
             self._wgpu = self._geometry._wgpu
             self._initialize()
@@ -144,6 +153,22 @@ class GpuFieldAgentExecutor:
     @property
     def fields(self) -> tuple[int, ...]:
         return self._geometry.fields
+
+    @property
+    def manifest(self):
+        return self._manifest
+
+    @property
+    def certificate(self):
+        return getattr(self._geometry, "certificate", None)
+
+    @property
+    def last_derivation(self):
+        return None if self.certificate is None else self.certificate.last_derivation
+
+    @property
+    def stage_digests(self):
+        return () if self.certificate is None else self.certificate.stage_digests
 
     @property
     def adapter_info(self) -> dict:
@@ -169,7 +194,8 @@ class GpuFieldAgentExecutor:
     def allocation_info(self) -> dict:
         buffers = sum(buffer.size for buffer in
                       self._buffers + self._geometry._buffers + self._bundle.buffers)
-        textures = (384 if self._routing is not None else 48) * len(self._nodes) + 12 * len(self._nodes)
+        textures = ((384 if self._routing is not None else 48) * len(self._nodes)
+                    + 12 * len(self._nodes) + getattr(self._geometry, "extra_texture_bytes", 0))
         index_payload = 64 * len(self._nodes) + 16
         result = {
             "device_buffer_bytes": buffers,
@@ -205,6 +231,8 @@ class GpuFieldAgentExecutor:
                                             > 68 * len(self._nodes) else 1)),
                 routing_binding=self._routing.to_dict(),
             )
+        if self.certificate is not None:
+            result["organogram"] = self._geometry.allocation_info
         return result
 
     def _buffer(self, size, data=None, *, bundle=None):
@@ -256,7 +284,7 @@ class GpuFieldAgentExecutor:
         shader = self._device.create_shader_module(code=Path(__file__).with_name(
             "shaders").joinpath("field_agent.wgsl").read_text(encoding="utf-8"))
         entries = ("build_keys", "build_tree", "compile_neighbors", "lookup_node",
-                   "derive_node", "forecast", "advance_to", "repair", "admit_growth")
+                   "derive_node", "forecast", "advance_to", "repair", "admit_growth", "admit_generated")
         if self._routing is not None:
             entries += ("compile_hadamard", "export_routing")
         self._pipelines = {
@@ -290,7 +318,8 @@ class GpuFieldAgentExecutor:
                        | self._wgpu.TextureUsage.COPY_DST | self._wgpu.TextureUsage.COPY_SRC))
             self._bind_bundle(candidate)
             base = sum(buffer.size for buffer in self._buffers + self._geometry._buffers)
-            payload = base + 12 * count + sum(buffer.size for buffer in candidate.buffers) + atlas_bytes
+            payload = (base + 12 * count + getattr(self._geometry, "extra_texture_bytes", 0)
+                       + sum(buffer.size for buffer in candidate.buffers) + atlas_bytes)
             host_payload = 64 * count + 16
             routing_payload = 68 * count if self._routing is not None else 0
             if self._bundle is not None:
@@ -319,7 +348,9 @@ class GpuFieldAgentExecutor:
             rows = tuple(struct.iter_unpack("<8I", row_bytes))
             # This is an independent admission certificate, never a compiler.
             device_work = self._failed = False
-            candidate.index = F8Index.certified(self.recipe, binding, records, rows, self.fields)
+            certificate_options = {} if self.certificate is None else {"certificate": self.certificate}
+            candidate.index = F8Index.certified(self.recipe, binding, records, rows, self.fields,
+                                               **certificate_options)
             device_work = self._failed = True
             compiler = "compile_neighbors" if self._routing is None else "compile_hadamard"
             self._dispatch(self._pipelines[compiler], candidate.groups[compiler],
@@ -337,7 +368,8 @@ class GpuFieldAgentExecutor:
                 raise ValueError("GPU index or routing atlas rejected an operator texture row")
             if tables is not None:
                 candidate.routing_model = RoutingModel.certified(
-                    self.recipe, self._routing, tables[:16 * count], tables[16 * count:], self.fields)
+                    self.recipe, self._routing, tables[:16 * count], tables[16 * count:], self.fields,
+                    **certificate_options)
                 if self._bundle is not None:
                     if candidate.routing_model != self._bundle.routing_model:
                         raise ValueError("Index replacement changed the semantic routing model")
@@ -392,6 +424,10 @@ class GpuFieldAgentExecutor:
                 **index, 6: resource(self._jobs),
                 7: resource(self._canonical), 8: output,
             }),
+            "admit_generated": self._group(self._pipelines["admit_generated"], {
+                **index, 6: resource(self._jobs),
+                7: resource(self._canonical), 8: output,
+            }),
         }
         if self._routing is not None:
             gains = resource(bundle.gains)
@@ -435,6 +471,75 @@ class GpuFieldAgentExecutor:
             raise ValueError("GPU index lookup rejected a malformed key or tree")
         self._failed = False
         return row[0]
+
+    @_serialized
+    def admit_generated(self, source, cost, *, organogram, prefix_sha256):
+        """OG7: admit one exact historical extension without host state seeding."""
+        from .field_world import KleinFieldRecipe
+        from .organogram import GeneratedFieldRecipe, OrganogramBinding
+        self._check_open()
+        if self._seeded or type(self.recipe) is not GeneratedFieldRecipe:
+            raise ValueError("Generated admission requires an unseeded generated candidate")
+        if type(source) is not GpuFieldAgentExecutor or source is self:
+            raise ValueError("Generated admission requires a distinct source executor")
+        if type(organogram) is not OrganogramBinding or organogram != self.recipe.organogram:
+            raise ValueError("Candidate grammar differs from the owner's immutable binding")
+        _integer(cost, 1, 127, "organogram cost")
+        if cost != organogram.cost:
+            raise ValueError("Generated admission cost must equal its immutable binding")
+        if (type(prefix_sha256) is not str or len(prefix_sha256) != 64
+                or any(c not in "0123456789abcdef" for c in prefix_sha256)):
+            raise ValueError("prefix_sha256 must be a lowercase SHA256 digest")
+        new, old = self.recipe, source.recipe
+        if source._routing != self._routing or self._routing != new.routing:
+            raise ValueError("Generated admission requires identical routing")
+        if type(old) is KleinFieldRecipe:
+            valid = new.base == old and len(new.stages) == 1
+        elif type(old) is GeneratedFieldRecipe:
+            valid = (new.base == old.base and new.organogram == old.organogram
+                     and new.routing == old.routing and new.stages[:-1] == old.stages
+                     and len(new.stages) == len(old.stages) + 1)
+        else:
+            valid = False
+        if not valid or new.stages[-1].prefix_sha256 != prefix_sha256:
+            raise ValueError("Generated recipe does not extend the owner's exact original context")
+        source._check_open()
+        if not source._seeded or not source._terminal:
+            raise ValueError("Generated admission requires a repaired EMIT source")
+        old_pair, old_energy = source.snapshot()
+        if f"{old_pair:016X}" != new.stages[-1].start_pair:
+            raise ValueError("Generated stage does not begin at the actual old device state")
+        left, right, phase, node, metadata = source._live_pair(old_pair, Opcode.EMIT)
+        if cost > old_energy:
+            raise EnergyExhausted("Insufficient separate energy for generated admission")
+        expected = pair(pack(phase, node, self.fields[node], int(Opcode.STEP) | (metadata & 16)))
+        remaining = old_energy - cost
+        payload = struct.pack("<8I", left, right, old_energy, cost, len(source.fields),
+                              source.fields[node] & 0xffffffff, 0, 0)
+        try:
+            self._failed = True
+            self._device.queue.write_buffer(self._jobs, 0, payload)
+            self._dispatch(self._pipelines["admit_generated"], self._groups["admit_generated"])
+            row = self._read_outputs(1)[0]
+            canonical = struct.unpack("<4I", self._device.queue.read_buffer(self._canonical))
+            self._failed = False
+            actual = self._pair_from_result(row)
+            self._live_pair(actual)
+            if (actual, row[2], row[3], row[5:]) != (expected, cost, remaining, (0, 0, 0)):
+                raise ValueError("Device generated admission disagrees with its state mapping")
+            if canonical != (*unpair(expected), remaining, 0):
+                raise ValueError("Canonical generated state differs from the admitted output")
+        except BaseException as exc:
+            _tag_device_uncertainty(exc, self._failed)
+            if not self._failed:
+                try:
+                    self.close()
+                except BaseException:
+                    _tag_device_uncertainty(exc, True)
+            raise
+        self._pair, self._energy = actual, remaining
+        self._ticks, self._seeded, self._terminal = 0, True, False
+        return actual, remaining
 
     def _check_open(self):
         if self._closed:
@@ -497,6 +602,8 @@ class GpuFieldAgentExecutor:
         self._check_open()
         if self._seeded:
             raise ValueError("Canonical GPU state may only be seeded once")
+        if self.certificate is not None:
+            raise ValueError("Generated canonical state requires admitted continuation, not a host seed")
         left, right, _, _, _ = self._live_pair(agent_pair)
         _integer(energy, 0, MAX_ENERGY, "energy")
         self._failed = True
@@ -519,6 +626,9 @@ class GpuFieldAgentExecutor:
             raise ValueError("Canonical GPU state may only be admitted once")
         if type(source) is not GpuFieldAgentExecutor or source is self:
             raise ValueError("Growth requires a distinct source GPU executor")
+        from .field_world import KleinFieldRecipe
+        if type(source.recipe) is not KleinFieldRecipe or type(self.recipe) is not KleinFieldRecipe:
+            raise ValueError("Dyadic admission requires original Klein field recipes")
         _integer(cost, 1, 127, "growth cost")
         if self._routing is None or source._routing != self._routing:
             raise ValueError("Growth requires the same Hadamard routing binding")

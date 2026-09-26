@@ -108,6 +108,53 @@ class KleinFieldRecipe:
                    baseline_id=value["baseline_id"], version=value["format"])
 
 
+def require_field_recipe(value):
+    """Admit only the two versioned recipe types, never arbitrary lookalikes."""
+    from .organogram import GeneratedFieldRecipe
+    if type(value) not in (KleinFieldRecipe, GeneratedFieldRecipe):
+        raise ValueError("recipe must be a registered Klein field recipe")
+
+
+def field_recipe_from_dict(value):
+    from .organogram import GeneratedFieldRecipe
+    if type(value) is not dict:
+        raise ValueError("Field recipe must be an object")
+    if value.get("format") == WORLD_VERSION:
+        return KleinFieldRecipe.from_dict(value)
+    return GeneratedFieldRecipe.from_dict(value)
+
+
+def resolve_field_certificate(recipe, fields=None, certificate=None):
+    """Validate generated-field provenance without invoking its CPU producer.
+
+    A missing certificate requests CPU reconstruction. Explicit device callers
+    provide the certificate made from their actual ordered stage outputs.
+    Legacy recipes retain their original manifest and certificate semantics.
+    """
+    from .organogram import GeneratedFieldRecipe, GeneratedFieldCertificate, regenerate
+    require_field_recipe(recipe)
+    if type(recipe) is not GeneratedFieldRecipe:
+        if certificate is not None:
+            raise ValueError("A generated-field certificate requires its generated recipe")
+        return None
+    if certificate is None:
+        certificate = regenerate(recipe)
+    if type(certificate) is not GeneratedFieldCertificate or certificate.recipe != recipe:
+        raise ValueError("Generated certificate belongs to a different recipe")
+    if fields is not None:
+        if type(fields) not in (tuple, list) or len(fields) != len(certificate.fields):
+            raise ValueError("Generated certificate differs from the supplied field")
+        for value in fields:
+            _integer(value, -127, 127, "supplied generated field")
+        if tuple(fields) != certificate.fields:
+            raise ValueError("Generated certificate differs from the supplied field")
+    if certificate.manifest != recipe.field_manifest_from_signs(certificate.manifest.signs):
+        raise ValueError("Generated manifest differs from its fixed geometry and bindings")
+    from .field import certify_field
+    certify_field(certificate.manifest, certificate.fields)
+    return certificate
+
+
 @dataclass(frozen=True, slots=True)
 class FieldNode:
     """A canonical node and its atomic DATA pair; no embedding is implied."""
@@ -126,9 +173,8 @@ class FieldWorld:
 
     def __init__(self, recipe: KleinFieldRecipe, capacity: int, executor=None, *,
                  index_binding: IndexBinding | None = None,
-                 routing: HadamardBinding | None = None):
-        if type(recipe) is not KleinFieldRecipe:
-            raise ValueError("recipe must be a KleinFieldRecipe")
+                 routing: HadamardBinding | None = None, certificate=None):
+        require_field_recipe(recipe)
         capacity = _capacity(capacity)
         if index_binding is not None and type(index_binding) is not IndexBinding:
             raise ValueError("index_binding must be an IndexBinding")
@@ -152,9 +198,18 @@ class FieldWorld:
         self._config = recipe
         self._capacity = capacity
         self._executor = executor
-        self._manifest = recipe.field_manifest()
-        self._index = F8Index.build(recipe, index_binding) if executor is None else None
-        self._routing_model = (RoutingModel.build(recipe, routing)
+        supplied = certificate if executor is None else getattr(executor, "certificate", None)
+        if executor is not None and certificate is not None and certificate != supplied:
+            raise ValueError("Field world and device certificates differ")
+        if executor is not None and type(recipe) is not KleinFieldRecipe and supplied is None:
+            raise ValueError("Generated device execution requires its field certificate")
+        certificate = resolve_field_certificate(
+            recipe, None if executor is None else executor.fields, supplied)
+        self._manifest = certificate.manifest if certificate is not None else recipe.field_manifest()
+        options = ({"fields": certificate.fields, "certificate": certificate}
+                   if certificate is not None else {})
+        self._index = F8Index.build(recipe, index_binding, **options) if executor is None else None
+        self._routing_model = (RoutingModel.build(recipe, routing, **options)
                                if executor is None and routing is not None else None)
         self._peak_index_payload = 64 * len(self._manifest.nodes) + 16
         neighbors = [set() for _ in self._manifest.nodes]
