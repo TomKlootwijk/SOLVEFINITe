@@ -1,0 +1,4136 @@
+{
+  "format": "growth-independent-formal-reference-v1",
+  "provenance": "Independent quotient reduction, BFS field construction, integer Hadamard routing, lifted Dijkstra, layered-DP route verification and RP32 packing. Imports no solvefinite module.",
+  "normative_contract": "TK-LPLUT-2.0 revision 7, GD1-GD8; these are formal expected vectors, not runtime measurements.",
+  "generator_sha256_lf": "b9be4e73dcfd81eb3daa7507f6a991208c1ba82abc3c009d4a2193cda75c1d7d",
+  "hadamard_gains": [
+    [
+      1,
+      1
+    ],
+    [
+      -1,
+      1
+    ],
+    [
+      -1,
+      -1
+    ],
+    [
+      1,
+      -1
+    ]
+  ],
+  "default_mission": {
+    "initial_recipe": {
+      "width": 4,
+      "height": 5,
+      "center": 0,
+      "radius": 2,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "initial_target": 17,
+    "growth": {
+      "format": "klein-dyadic-growth-v1",
+      "max_epochs": 1,
+      "cost": 1
+    },
+    "repair_cost": 5,
+    "initial": {
+      "node": 0,
+      "path": "k:0:0",
+      "phase": 250,
+      "orientation": 0,
+      "intrinsic_phase": 250,
+      "field": -2,
+      "pair": "91FE000601FE00FA",
+      "energy": 100
+    },
+    "hazard_rule": "Node 3 becomes hazard 70 at global cycle 2 in epoch 0 only; all other hazards zero.",
+    "worlds": [
+      {
+        "geometry_epoch": 0,
+        "recipe": {
+          "width": 4,
+          "height": 5,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -2,
+          -1,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          2,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          1,
+          0
+        ],
+        "target": 17,
+        "target_path": "k:3:2"
+      },
+      {
+        "geometry_epoch": 1,
+        "recipe": {
+          "width": 8,
+          "height": 10,
+          "center": 0,
+          "radius": 4,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -4,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          0,
+          -1,
+          -2,
+          -3,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0,
+          -1,
+          -2,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          4,
+          3,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1,
+          0,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0,
+          -1,
+          -2
+        ],
+        "target": 39,
+        "target_path": "k:3:9"
+      }
+    ],
+    "events": [
+      {
+        "cycle": 1,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:4": 0,
+          "k:1:0": 0,
+          "k:3:0": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          4,
+          3,
+          17
+        ],
+        "paths": [
+          "k:0:4",
+          "k:0:3",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 23,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          4
+        ],
+        "forecast": [
+          "11FF04FB01FF0405",
+          "110003F001000310",
+          "81011145910111BB"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 4,
+          "path": "k:0:4",
+          "phase": 5,
+          "orientation": 0,
+          "intrinsic_phase": 5,
+          "field": -1,
+          "pair": "11FF04FB01FF0405",
+          "energy": 98
+        }
+      },
+      {
+        "cycle": 2,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:3": 70,
+          "k:0:4": 0,
+          "k:1:4": 0,
+          "k:3:1": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          16,
+          17
+        ],
+        "paths": [
+          "k:3:1",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 6,
+        "action_cost": 5,
+        "forecast_costs": [
+          5,
+          2
+        ],
+        "forecast": [
+          "81001010910010F0",
+          "81011145910111BB"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 16,
+          "path": "k:3:1",
+          "phase": 240,
+          "orientation": 1,
+          "intrinsic_phase": 16,
+          "field": 0,
+          "pair": "81001010910010F0",
+          "energy": 93
+        }
+      },
+      {
+        "cycle": 3,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:4": 0,
+          "k:2:1": 0,
+          "k:3:0": 0,
+          "k:3:1": 0,
+          "k:3:2": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          17
+        ],
+        "paths": [
+          "k:3:2"
+        ],
+        "cost": 2,
+        "expansions": 2,
+        "action_cost": 2,
+        "forecast_costs": [
+          2
+        ],
+        "forecast": [
+          "81011145910111BB"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 187,
+          "orientation": 1,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "81011145910111BB",
+          "energy": 91
+        }
+      },
+      {
+        "cycle": 4,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "GROWTH_PENDING",
+        "state": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 187,
+          "orientation": 1,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "06011145160111BB",
+          "energy": 86
+        }
+      },
+      {
+        "cycle": 5,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "GROW",
+        "route": [],
+        "cost": 1,
+        "before": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 187,
+          "orientation": 1,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "06011145160111BB",
+          "energy": 86
+        },
+        "source_recipe": {
+          "width": 4,
+          "height": 5,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "next_recipe": {
+          "width": 8,
+          "height": 10,
+          "center": 0,
+          "radius": 4,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "selection": {
+          "generated_node_count": 60,
+          "minimum_absolute_field": 0,
+          "maximum_hop_distance": 8,
+          "tied_candidates": [
+            39
+          ],
+          "intrinsic_phase": 69,
+          "selected_rank": 0,
+          "target": 39,
+          "target_path": "k:3:9"
+        },
+        "status": "RUNNING",
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "state": {
+          "node": 64,
+          "path": "k:6:4",
+          "phase": 187,
+          "orientation": 1,
+          "intrinsic_phase": 69,
+          "field": 2,
+          "pair": "01024045110240BB",
+          "energy": 85
+        }
+      },
+      {
+        "cycle": 6,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:5:4": 0,
+          "k:6:3": 0,
+          "k:6:4": 0,
+          "k:6:5": 0,
+          "k:7:4": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          74,
+          73,
+          7,
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:7:4",
+          "k:7:3",
+          "k:0:7",
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 16,
+        "expansions": 123,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "01014ACE91014A32",
+          "81004957910049A9",
+          "91FF077481FF078C",
+          "1100116901001197",
+          "91FF123481FF12CC",
+          "11001C2901001CD7",
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 74,
+          "path": "k:7:4",
+          "phase": 50,
+          "orientation": 1,
+          "intrinsic_phase": 206,
+          "field": 1,
+          "pair": "01014ACE91014A32",
+          "energy": 83
+        }
+      },
+      {
+        "cycle": 7,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:6": 0,
+          "k:6:4": 0,
+          "k:7:3": 0,
+          "k:7:4": 0,
+          "k:7:5": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          73,
+          7,
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:7:3",
+          "k:0:7",
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 14,
+        "expansions": 109,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "81004957910049A9",
+          "91FF077481FF078C",
+          "1100116901001197",
+          "91FF123481FF12CC",
+          "11001C2901001CD7",
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 73,
+          "path": "k:7:3",
+          "phase": 169,
+          "orientation": 1,
+          "intrinsic_phase": 87,
+          "field": 0,
+          "pair": "81004957910049A9",
+          "energy": 82
+        }
+      },
+      {
+        "cycle": 8,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:7": 0,
+          "k:6:3": 0,
+          "k:7:2": 0,
+          "k:7:3": 0,
+          "k:7:4": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          7,
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:0:7",
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 13,
+        "expansions": 65,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "91FF077481FF078C",
+          "1100116901001197",
+          "91FF123481FF12CC",
+          "11001C2901001CD7",
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 7,
+          "path": "k:0:7",
+          "phase": 140,
+          "orientation": 0,
+          "intrinsic_phase": 140,
+          "field": -1,
+          "pair": "91FF077481FF078C",
+          "energy": 80
+        }
+      },
+      {
+        "cycle": 9,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:6": 0,
+          "k:0:7": 0,
+          "k:0:8": 0,
+          "k:1:7": 0,
+          "k:7:3": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 11,
+        "expansions": 21,
+        "action_cost": 5,
+        "forecast_costs": [
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "1100116901001197",
+          "91FF123481FF12CC",
+          "11001C2901001CD7",
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 17,
+          "path": "k:1:7",
+          "phase": 151,
+          "orientation": 0,
+          "intrinsic_phase": 151,
+          "field": 0,
+          "pair": "1100116901001197",
+          "energy": 75
+        }
+      },
+      {
+        "cycle": 10,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:7": 0,
+          "k:1:6": 0,
+          "k:1:7": 0,
+          "k:1:8": 0,
+          "k:2:7": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 6,
+        "expansions": 9,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "91FF123481FF12CC",
+          "11001C2901001CD7",
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 18,
+          "path": "k:1:8",
+          "phase": 204,
+          "orientation": 0,
+          "intrinsic_phase": 204,
+          "field": -1,
+          "pair": "91FF123481FF12CC",
+          "energy": 73
+        }
+      },
+      {
+        "cycle": 11,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:8": 0,
+          "k:1:7": 0,
+          "k:1:8": 0,
+          "k:1:9": 0,
+          "k:2:8": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 4,
+        "expansions": 6,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "11001C2901001CD7",
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 28,
+          "path": "k:2:8",
+          "phase": 215,
+          "orientation": 0,
+          "intrinsic_phase": 215,
+          "field": 0,
+          "pair": "11001C2901001CD7",
+          "energy": 72
+        }
+      },
+      {
+        "cycle": 12,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:1:8": 0,
+          "k:2:7": 0,
+          "k:2:8": 0,
+          "k:2:9": 0,
+          "k:3:8": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          29,
+          39
+        ],
+        "paths": [
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 3,
+        "expansions": 4,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1
+        ],
+        "forecast": [
+          "91FF1DF481FF1D0C",
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 29,
+          "path": "k:2:9",
+          "phase": 12,
+          "orientation": 0,
+          "intrinsic_phase": 12,
+          "field": -1,
+          "pair": "91FF1DF481FF1D0C",
+          "energy": 70
+        }
+      },
+      {
+        "cycle": 13,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:1:9": 0,
+          "k:2:0": 0,
+          "k:2:8": 0,
+          "k:2:9": 0,
+          "k:3:9": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          39
+        ],
+        "paths": [
+          "k:3:9"
+        ],
+        "cost": 1,
+        "expansions": 2,
+        "action_cost": 1,
+        "forecast_costs": [
+          1
+        ],
+        "forecast": [
+          "910027E981002717"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 39,
+          "path": "k:3:9",
+          "phase": 23,
+          "orientation": 0,
+          "intrinsic_phase": 23,
+          "field": 0,
+          "pair": "910027E981002717",
+          "energy": 69
+        }
+      },
+      {
+        "cycle": 14,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:2:9": 0,
+          "k:3:0": 0,
+          "k:3:8": 0,
+          "k:3:9": 0,
+          "k:4:9": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "COMPLETE",
+        "state": {
+          "node": 39,
+          "path": "k:3:9",
+          "phase": 23,
+          "orientation": 0,
+          "intrinsic_phase": 23,
+          "field": 0,
+          "pair": "160027E906002717",
+          "energy": 64
+        }
+      }
+    ],
+    "final": {
+      "node": 39,
+      "path": "k:3:9",
+      "phase": 23,
+      "orientation": 0,
+      "intrinsic_phase": 23,
+      "field": 0,
+      "pair": "160027E906002717",
+      "energy": 64
+    },
+    "cycles": 14,
+    "final_geometry_epoch": 1
+  },
+  "mirrored_default_mission": {
+    "initial_recipe": {
+      "width": 4,
+      "height": 5,
+      "center": 0,
+      "radius": 2,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "initial_target": 17,
+    "growth": {
+      "format": "klein-dyadic-growth-v1",
+      "max_epochs": 1,
+      "cost": 1
+    },
+    "repair_cost": 5,
+    "initial": {
+      "node": 0,
+      "path": "k:0:0",
+      "phase": 6,
+      "orientation": 1,
+      "intrinsic_phase": 250,
+      "field": -2,
+      "pair": "01FE00FA91FE0006",
+      "energy": 100
+    },
+    "hazard_rule": "Node 3 becomes hazard 70 at global cycle 2 in epoch 0 only; all other hazards zero.",
+    "worlds": [
+      {
+        "geometry_epoch": 0,
+        "recipe": {
+          "width": 4,
+          "height": 5,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -2,
+          -1,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          2,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          1,
+          0
+        ],
+        "target": 17,
+        "target_path": "k:3:2"
+      },
+      {
+        "geometry_epoch": 1,
+        "recipe": {
+          "width": 8,
+          "height": 10,
+          "center": 0,
+          "radius": 4,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -4,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          0,
+          -1,
+          -2,
+          -3,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0,
+          -1,
+          -2,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          4,
+          3,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1,
+          0,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0,
+          -1,
+          -2
+        ],
+        "target": 39,
+        "target_path": "k:3:9"
+      }
+    ],
+    "events": [
+      {
+        "cycle": 1,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:4": 0,
+          "k:1:0": 0,
+          "k:3:0": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          4,
+          3,
+          17
+        ],
+        "paths": [
+          "k:0:4",
+          "k:0:3",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 23,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          4
+        ],
+        "forecast": [
+          "01FF040511FF04FB",
+          "01000310110003F0",
+          "910111BB81011145"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 4,
+          "path": "k:0:4",
+          "phase": 251,
+          "orientation": 1,
+          "intrinsic_phase": 5,
+          "field": -1,
+          "pair": "01FF040511FF04FB",
+          "energy": 98
+        }
+      },
+      {
+        "cycle": 2,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:3": 70,
+          "k:0:4": 0,
+          "k:1:4": 0,
+          "k:3:1": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          16,
+          17
+        ],
+        "paths": [
+          "k:3:1",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 6,
+        "action_cost": 5,
+        "forecast_costs": [
+          5,
+          2
+        ],
+        "forecast": [
+          "910010F081001010",
+          "910111BB81011145"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 16,
+          "path": "k:3:1",
+          "phase": 16,
+          "orientation": 0,
+          "intrinsic_phase": 16,
+          "field": 0,
+          "pair": "910010F081001010",
+          "energy": 93
+        }
+      },
+      {
+        "cycle": 3,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:4": 0,
+          "k:2:1": 0,
+          "k:3:0": 0,
+          "k:3:1": 0,
+          "k:3:2": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          17
+        ],
+        "paths": [
+          "k:3:2"
+        ],
+        "cost": 2,
+        "expansions": 2,
+        "action_cost": 2,
+        "forecast_costs": [
+          2
+        ],
+        "forecast": [
+          "910111BB81011145"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 69,
+          "orientation": 0,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "910111BB81011145",
+          "energy": 91
+        }
+      },
+      {
+        "cycle": 4,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "GROWTH_PENDING",
+        "state": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 69,
+          "orientation": 0,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "160111BB06011145",
+          "energy": 86
+        }
+      },
+      {
+        "cycle": 5,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "target_before": 17,
+        "reserve_before": 11,
+        "kind": "GROW",
+        "route": [],
+        "cost": 1,
+        "before": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 69,
+          "orientation": 0,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "160111BB06011145",
+          "energy": 86
+        },
+        "source_recipe": {
+          "width": 4,
+          "height": 5,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "next_recipe": {
+          "width": 8,
+          "height": 10,
+          "center": 0,
+          "radius": 4,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "selection": {
+          "generated_node_count": 60,
+          "minimum_absolute_field": 0,
+          "maximum_hop_distance": 8,
+          "tied_candidates": [
+            39
+          ],
+          "intrinsic_phase": 69,
+          "selected_rank": 0,
+          "target": 39,
+          "target_path": "k:3:9"
+        },
+        "status": "RUNNING",
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "state": {
+          "node": 64,
+          "path": "k:6:4",
+          "phase": 69,
+          "orientation": 0,
+          "intrinsic_phase": 69,
+          "field": 2,
+          "pair": "110240BB01024045",
+          "energy": 85
+        }
+      },
+      {
+        "cycle": 6,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:5:4": 0,
+          "k:6:3": 0,
+          "k:6:4": 0,
+          "k:6:5": 0,
+          "k:7:4": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          74,
+          73,
+          7,
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:7:4",
+          "k:7:3",
+          "k:0:7",
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 16,
+        "expansions": 123,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "91014A3201014ACE",
+          "910049A981004957",
+          "81FF078C91FF0774",
+          "0100119711001169",
+          "81FF12CC91FF1234",
+          "01001CD711001C29",
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 74,
+          "path": "k:7:4",
+          "phase": 206,
+          "orientation": 0,
+          "intrinsic_phase": 206,
+          "field": 1,
+          "pair": "91014A3201014ACE",
+          "energy": 83
+        }
+      },
+      {
+        "cycle": 7,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:6": 0,
+          "k:6:4": 0,
+          "k:7:3": 0,
+          "k:7:4": 0,
+          "k:7:5": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          73,
+          7,
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:7:3",
+          "k:0:7",
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 14,
+        "expansions": 109,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "910049A981004957",
+          "81FF078C91FF0774",
+          "0100119711001169",
+          "81FF12CC91FF1234",
+          "01001CD711001C29",
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 73,
+          "path": "k:7:3",
+          "phase": 87,
+          "orientation": 0,
+          "intrinsic_phase": 87,
+          "field": 0,
+          "pair": "910049A981004957",
+          "energy": 82
+        }
+      },
+      {
+        "cycle": 8,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:7": 0,
+          "k:6:3": 0,
+          "k:7:2": 0,
+          "k:7:3": 0,
+          "k:7:4": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          7,
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:0:7",
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 13,
+        "expansions": 65,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "81FF078C91FF0774",
+          "0100119711001169",
+          "81FF12CC91FF1234",
+          "01001CD711001C29",
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 7,
+          "path": "k:0:7",
+          "phase": 116,
+          "orientation": 1,
+          "intrinsic_phase": 140,
+          "field": -1,
+          "pair": "81FF078C91FF0774",
+          "energy": 80
+        }
+      },
+      {
+        "cycle": 9,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:6": 0,
+          "k:0:7": 0,
+          "k:0:8": 0,
+          "k:1:7": 0,
+          "k:7:3": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          17,
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:1:7",
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 11,
+        "expansions": 21,
+        "action_cost": 5,
+        "forecast_costs": [
+          5,
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "0100119711001169",
+          "81FF12CC91FF1234",
+          "01001CD711001C29",
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 17,
+          "path": "k:1:7",
+          "phase": 105,
+          "orientation": 1,
+          "intrinsic_phase": 151,
+          "field": 0,
+          "pair": "0100119711001169",
+          "energy": 75
+        }
+      },
+      {
+        "cycle": 10,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:7": 0,
+          "k:1:6": 0,
+          "k:1:7": 0,
+          "k:1:8": 0,
+          "k:2:7": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          18,
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:1:8",
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 6,
+        "expansions": 9,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "81FF12CC91FF1234",
+          "01001CD711001C29",
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 18,
+          "path": "k:1:8",
+          "phase": 52,
+          "orientation": 1,
+          "intrinsic_phase": 204,
+          "field": -1,
+          "pair": "81FF12CC91FF1234",
+          "energy": 73
+        }
+      },
+      {
+        "cycle": 11,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:8": 0,
+          "k:1:7": 0,
+          "k:1:8": 0,
+          "k:1:9": 0,
+          "k:2:8": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          28,
+          29,
+          39
+        ],
+        "paths": [
+          "k:2:8",
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 4,
+        "expansions": 6,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          1
+        ],
+        "forecast": [
+          "01001CD711001C29",
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 28,
+          "path": "k:2:8",
+          "phase": 41,
+          "orientation": 1,
+          "intrinsic_phase": 215,
+          "field": 0,
+          "pair": "01001CD711001C29",
+          "energy": 72
+        }
+      },
+      {
+        "cycle": 12,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:1:8": 0,
+          "k:2:7": 0,
+          "k:2:8": 0,
+          "k:2:9": 0,
+          "k:3:8": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          29,
+          39
+        ],
+        "paths": [
+          "k:2:9",
+          "k:3:9"
+        ],
+        "cost": 3,
+        "expansions": 4,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1
+        ],
+        "forecast": [
+          "81FF1D0C91FF1DF4",
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 29,
+          "path": "k:2:9",
+          "phase": 244,
+          "orientation": 1,
+          "intrinsic_phase": 12,
+          "field": -1,
+          "pair": "81FF1D0C91FF1DF4",
+          "energy": 70
+        }
+      },
+      {
+        "cycle": 13,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:1:9": 0,
+          "k:2:0": 0,
+          "k:2:8": 0,
+          "k:2:9": 0,
+          "k:3:9": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          39
+        ],
+        "paths": [
+          "k:3:9"
+        ],
+        "cost": 1,
+        "expansions": 2,
+        "action_cost": 1,
+        "forecast_costs": [
+          1
+        ],
+        "forecast": [
+          "81002717910027E9"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "RUNNING",
+        "state": {
+          "node": 39,
+          "path": "k:3:9",
+          "phase": 233,
+          "orientation": 1,
+          "intrinsic_phase": 23,
+          "field": 0,
+          "pair": "81002717910027E9",
+          "energy": 69
+        }
+      },
+      {
+        "cycle": 14,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:2:9": 0,
+          "k:3:0": 0,
+          "k:3:8": 0,
+          "k:3:9": 0,
+          "k:4:9": 0
+        },
+        "target_before": 39,
+        "reserve_before": 5,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 1,
+        "target_after": 39,
+        "status": "COMPLETE",
+        "state": {
+          "node": 39,
+          "path": "k:3:9",
+          "phase": 233,
+          "orientation": 1,
+          "intrinsic_phase": 23,
+          "field": 0,
+          "pair": "06002717160027E9",
+          "energy": 64
+        }
+      }
+    ],
+    "final": {
+      "node": 39,
+      "path": "k:3:9",
+      "phase": 233,
+      "orientation": 1,
+      "intrinsic_phase": 23,
+      "field": 0,
+      "pair": "06002717160027E9",
+      "energy": 64
+    },
+    "cycles": 14,
+    "final_geometry_epoch": 1
+  },
+  "two_epoch_mission": {
+    "initial_recipe": {
+      "width": 3,
+      "height": 3,
+      "center": 0,
+      "radius": 1,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "initial_target": 4,
+    "growth": {
+      "format": "klein-dyadic-growth-v1",
+      "max_epochs": 2,
+      "cost": 1
+    },
+    "repair_cost": 5,
+    "initial": {
+      "node": 0,
+      "path": "k:0:0",
+      "phase": 250,
+      "orientation": 0,
+      "intrinsic_phase": 250,
+      "field": -1,
+      "pair": "11FF000681FF00FA",
+      "energy": 100
+    },
+    "hazard_rule": "All hazards zero in all epochs.",
+    "worlds": [
+      {
+        "geometry_epoch": 0,
+        "recipe": {
+          "width": 3,
+          "height": 3,
+          "center": 0,
+          "radius": 1,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "target": 4,
+        "target_path": "k:1:1"
+      },
+      {
+        "geometry_epoch": 1,
+        "recipe": {
+          "width": 6,
+          "height": 6,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -2,
+          -1,
+          0,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0
+        ],
+        "target": 31,
+        "target_path": "k:5:1"
+      },
+      {
+        "geometry_epoch": 2,
+        "recipe": {
+          "width": 12,
+          "height": 12,
+          "center": 0,
+          "radius": 4,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -4,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          1,
+          0,
+          -1,
+          -2,
+          -3,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -2,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          1,
+          0,
+          -1,
+          -2
+        ],
+        "target": 15,
+        "target_path": "k:1:3"
+      }
+    ],
+    "events": [
+      {
+        "cycle": 1,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:2": 0,
+          "k:1:0": 0,
+          "k:2:0": 0
+        },
+        "target_before": 4,
+        "reserve_before": 17,
+        "kind": "MOVE",
+        "route": [
+          1,
+          4
+        ],
+        "paths": [
+          "k:0:1",
+          "k:1:1"
+        ],
+        "cost": 5,
+        "expansions": 15,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          4
+        ],
+        "forecast": [
+          "110001FB01000105",
+          "110104C68101043A"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 4,
+        "status": "RUNNING",
+        "state": {
+          "node": 1,
+          "path": "k:0:1",
+          "phase": 5,
+          "orientation": 0,
+          "intrinsic_phase": 5,
+          "field": 0,
+          "pair": "110001FB01000105",
+          "energy": 99
+        }
+      },
+      {
+        "cycle": 2,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:2": 0,
+          "k:1:1": 0,
+          "k:2:2": 0
+        },
+        "target_before": 4,
+        "reserve_before": 17,
+        "kind": "MOVE",
+        "route": [
+          4
+        ],
+        "paths": [
+          "k:1:1"
+        ],
+        "cost": 4,
+        "expansions": 4,
+        "action_cost": 4,
+        "forecast_costs": [
+          4
+        ],
+        "forecast": [
+          "110104C68101043A"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 4,
+        "status": "RUNNING",
+        "state": {
+          "node": 4,
+          "path": "k:1:1",
+          "phase": 58,
+          "orientation": 0,
+          "intrinsic_phase": 58,
+          "field": 1,
+          "pair": "110104C68101043A",
+          "energy": 95
+        }
+      },
+      {
+        "cycle": 3,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:1": 0,
+          "k:1:0": 0,
+          "k:1:1": 0,
+          "k:1:2": 0,
+          "k:2:1": 0
+        },
+        "target_before": 4,
+        "reserve_before": 17,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 0,
+        "target_after": 4,
+        "status": "GROWTH_PENDING",
+        "state": {
+          "node": 4,
+          "path": "k:1:1",
+          "phase": 58,
+          "orientation": 0,
+          "intrinsic_phase": 58,
+          "field": 1,
+          "pair": "960104C60601043A",
+          "energy": 90
+        }
+      },
+      {
+        "cycle": 4,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:1": 0,
+          "k:1:0": 0,
+          "k:1:1": 0,
+          "k:1:2": 0,
+          "k:2:1": 0
+        },
+        "target_before": 4,
+        "reserve_before": 17,
+        "kind": "GROW",
+        "route": [],
+        "cost": 1,
+        "before": {
+          "node": 4,
+          "path": "k:1:1",
+          "phase": 58,
+          "orientation": 0,
+          "intrinsic_phase": 58,
+          "field": 1,
+          "pair": "960104C60601043A",
+          "energy": 90
+        },
+        "source_recipe": {
+          "width": 3,
+          "height": 3,
+          "center": 0,
+          "radius": 1,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "next_recipe": {
+          "width": 6,
+          "height": 6,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "selection": {
+          "generated_node_count": 27,
+          "minimum_absolute_field": 0,
+          "maximum_hop_distance": 4,
+          "tied_candidates": [
+            11,
+            31,
+            35
+          ],
+          "intrinsic_phase": 58,
+          "selected_rank": 1,
+          "target": 31,
+          "target_path": "k:5:1"
+        },
+        "status": "RUNNING",
+        "geometry_epoch": 1,
+        "target_after": 31,
+        "state": {
+          "node": 14,
+          "path": "k:2:2",
+          "phase": 58,
+          "orientation": 0,
+          "intrinsic_phase": 58,
+          "field": 2,
+          "pair": "11020EC681020E3A",
+          "energy": 89
+        }
+      },
+      {
+        "cycle": 5,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:1:2": 0,
+          "k:2:1": 0,
+          "k:2:2": 0,
+          "k:2:3": 0,
+          "k:3:2": 0
+        },
+        "target_before": 31,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          20,
+          26,
+          32,
+          31
+        ],
+        "paths": [
+          "k:3:2",
+          "k:4:2",
+          "k:5:2",
+          "k:5:1"
+        ],
+        "cost": 14,
+        "expansions": 31,
+        "action_cost": 4,
+        "forecast_costs": [
+          4,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "9103143D810314C3",
+          "11021AB401021A4C",
+          "1101202B010120D5",
+          "11001FA281001F5E"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 31,
+        "status": "RUNNING",
+        "state": {
+          "node": 20,
+          "path": "k:3:2",
+          "phase": 195,
+          "orientation": 0,
+          "intrinsic_phase": 195,
+          "field": 3,
+          "pair": "9103143D810314C3",
+          "energy": 85
+        }
+      },
+      {
+        "cycle": 6,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0,
+          "k:4:2": 0
+        },
+        "target_before": 31,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          26,
+          32,
+          31
+        ],
+        "paths": [
+          "k:4:2",
+          "k:5:2",
+          "k:5:1"
+        ],
+        "cost": 10,
+        "expansions": 13,
+        "action_cost": 7,
+        "forecast_costs": [
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "11021AB401021A4C",
+          "1101202B010120D5",
+          "11001FA281001F5E"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 31,
+        "status": "RUNNING",
+        "state": {
+          "node": 26,
+          "path": "k:4:2",
+          "phase": 76,
+          "orientation": 0,
+          "intrinsic_phase": 76,
+          "field": 2,
+          "pair": "11021AB401021A4C",
+          "energy": 78
+        }
+      },
+      {
+        "cycle": 7,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:3:2": 0,
+          "k:4:1": 0,
+          "k:4:2": 0,
+          "k:4:3": 0,
+          "k:5:2": 0
+        },
+        "target_before": 31,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          32,
+          31
+        ],
+        "paths": [
+          "k:5:2",
+          "k:5:1"
+        ],
+        "cost": 3,
+        "expansions": 2,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1
+        ],
+        "forecast": [
+          "1101202B010120D5",
+          "11001FA281001F5E"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 31,
+        "status": "RUNNING",
+        "state": {
+          "node": 32,
+          "path": "k:5:2",
+          "phase": 213,
+          "orientation": 0,
+          "intrinsic_phase": 213,
+          "field": 1,
+          "pair": "1101202B010120D5",
+          "energy": 76
+        }
+      },
+      {
+        "cycle": 8,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:4": 0,
+          "k:4:2": 0,
+          "k:5:1": 0,
+          "k:5:2": 0,
+          "k:5:3": 0
+        },
+        "target_before": 31,
+        "reserve_before": 11,
+        "kind": "MOVE",
+        "route": [
+          31
+        ],
+        "paths": [
+          "k:5:1"
+        ],
+        "cost": 1,
+        "expansions": 1,
+        "action_cost": 1,
+        "forecast_costs": [
+          1
+        ],
+        "forecast": [
+          "11001FA281001F5E"
+        ],
+        "geometry_epoch": 1,
+        "target_after": 31,
+        "status": "RUNNING",
+        "state": {
+          "node": 31,
+          "path": "k:5:1",
+          "phase": 94,
+          "orientation": 0,
+          "intrinsic_phase": 94,
+          "field": 0,
+          "pair": "11001FA281001F5E",
+          "energy": 75
+        }
+      },
+      {
+        "cycle": 9,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:5": 0,
+          "k:4:1": 0,
+          "k:5:0": 0,
+          "k:5:1": 0,
+          "k:5:2": 0
+        },
+        "target_before": 31,
+        "reserve_before": 11,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 1,
+        "target_after": 31,
+        "status": "GROWTH_PENDING",
+        "state": {
+          "node": 31,
+          "path": "k:5:1",
+          "phase": 94,
+          "orientation": 0,
+          "intrinsic_phase": 94,
+          "field": 0,
+          "pair": "96001FA206001F5E",
+          "energy": 70
+        }
+      },
+      {
+        "cycle": 10,
+        "input_geometry_epoch": 1,
+        "input": {
+          "k:0:5": 0,
+          "k:4:1": 0,
+          "k:5:0": 0,
+          "k:5:1": 0,
+          "k:5:2": 0
+        },
+        "target_before": 31,
+        "reserve_before": 11,
+        "kind": "GROW",
+        "route": [],
+        "cost": 1,
+        "before": {
+          "node": 31,
+          "path": "k:5:1",
+          "phase": 94,
+          "orientation": 0,
+          "intrinsic_phase": 94,
+          "field": 0,
+          "pair": "96001FA206001F5E",
+          "energy": 70
+        },
+        "source_recipe": {
+          "width": 6,
+          "height": 6,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "next_recipe": {
+          "width": 12,
+          "height": 12,
+          "center": 0,
+          "radius": 4,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "selection": {
+          "generated_node_count": 108,
+          "minimum_absolute_field": 0,
+          "maximum_hop_distance": 8,
+          "tied_candidates": [
+            15,
+            37
+          ],
+          "intrinsic_phase": 94,
+          "selected_rank": 0,
+          "target": 15,
+          "target_path": "k:1:3"
+        },
+        "status": "RUNNING",
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "state": {
+          "node": 122,
+          "path": "k:10:2",
+          "phase": 94,
+          "orientation": 0,
+          "intrinsic_phase": 94,
+          "field": 0,
+          "pair": "11007AA281007A5E",
+          "energy": 69
+        }
+      },
+      {
+        "cycle": 11,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:10:1": 0,
+          "k:10:2": 0,
+          "k:10:3": 0,
+          "k:11:2": 0,
+          "k:9:2": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          123,
+          135,
+          136,
+          8,
+          9,
+          8,
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:10:3",
+          "k:11:3",
+          "k:11:4",
+          "k:0:8",
+          "k:0:9",
+          "k:0:8",
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 31,
+        "expansions": 2141,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          1,
+          2,
+          1,
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "11017B6D01017B93",
+          "110087E40100871C",
+          "910188AF81018851",
+          "810008DA11000826",
+          "81FF090F91FF09F1",
+          "8100081A110008E6",
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 123,
+          "path": "k:10:3",
+          "phase": 147,
+          "orientation": 0,
+          "intrinsic_phase": 147,
+          "field": 1,
+          "pair": "11017B6D01017B93",
+          "energy": 67
+        }
+      },
+      {
+        "cycle": 12,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:10:2": 0,
+          "k:10:3": 0,
+          "k:10:4": 0,
+          "k:11:3": 0,
+          "k:9:3": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          135,
+          136,
+          8,
+          9,
+          8,
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:11:3",
+          "k:11:4",
+          "k:0:8",
+          "k:0:9",
+          "k:0:8",
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 29,
+        "expansions": 1685,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          1,
+          2,
+          1,
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "110087E40100871C",
+          "910188AF81018851",
+          "810008DA11000826",
+          "81FF090F91FF09F1",
+          "8100081A110008E6",
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 135,
+          "path": "k:11:3",
+          "phase": 28,
+          "orientation": 0,
+          "intrinsic_phase": 28,
+          "field": 0,
+          "pair": "110087E40100871C",
+          "energy": 66
+        }
+      },
+      {
+        "cycle": 13,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:9": 0,
+          "k:10:3": 0,
+          "k:11:2": 0,
+          "k:11:3": 0,
+          "k:11:4": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          136,
+          8,
+          9,
+          8,
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:11:4",
+          "k:0:8",
+          "k:0:9",
+          "k:0:8",
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 28,
+        "expansions": 1344,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          1,
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "910188AF81018851",
+          "810008DA11000826",
+          "81FF090F91FF09F1",
+          "8100081A110008E6",
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 136,
+          "path": "k:11:4",
+          "phase": 81,
+          "orientation": 0,
+          "intrinsic_phase": 81,
+          "field": 1,
+          "pair": "910188AF81018851",
+          "energy": 64
+        }
+      },
+      {
+        "cycle": 14,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:8": 0,
+          "k:10:4": 0,
+          "k:11:3": 0,
+          "k:11:4": 0,
+          "k:11:5": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          8,
+          9,
+          8,
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:8",
+          "k:0:9",
+          "k:0:8",
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 26,
+        "expansions": 674,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          1,
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "810008DA11000826",
+          "81FF090F91FF09F1",
+          "8100081A110008E6",
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 8,
+          "path": "k:0:8",
+          "phase": 38,
+          "orientation": 1,
+          "intrinsic_phase": 218,
+          "field": 0,
+          "pair": "810008DA11000826",
+          "energy": 63
+        }
+      },
+      {
+        "cycle": 15,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:7": 0,
+          "k:0:8": 0,
+          "k:0:9": 0,
+          "k:11:4": 0,
+          "k:1:8": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          9,
+          8,
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:9",
+          "k:0:8",
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 25,
+        "expansions": 521,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "81FF090F91FF09F1",
+          "8100081A110008E6",
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 9,
+          "path": "k:0:9",
+          "phase": 241,
+          "orientation": 1,
+          "intrinsic_phase": 15,
+          "field": -1,
+          "pair": "81FF090F91FF09F1",
+          "energy": 61
+        }
+      },
+      {
+        "cycle": 16,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:10": 0,
+          "k:0:8": 0,
+          "k:0:9": 0,
+          "k:11:3": 0,
+          "k:1:9": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          8,
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:8",
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 23,
+        "expansions": 385,
+        "action_cost": 1,
+        "forecast_costs": [
+          1,
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "8100081A110008E6",
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 8,
+          "path": "k:0:8",
+          "phase": 230,
+          "orientation": 1,
+          "intrinsic_phase": 26,
+          "field": 0,
+          "pair": "8100081A110008E6",
+          "energy": 60
+        }
+      },
+      {
+        "cycle": 17,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:7": 0,
+          "k:0:8": 0,
+          "k:0:9": 0,
+          "k:11:4": 0,
+          "k:1:8": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          7,
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:7",
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 22,
+        "expansions": 163,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "0101074F110107B1",
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 7,
+          "path": "k:0:7",
+          "phase": 177,
+          "orientation": 1,
+          "intrinsic_phase": 79,
+          "field": 1,
+          "pair": "0101074F110107B1",
+          "energy": 58
+        }
+      },
+      {
+        "cycle": 18,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:6": 0,
+          "k:0:7": 0,
+          "k:0:8": 0,
+          "k:11:5": 0,
+          "k:1:7": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          6,
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:6",
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 20,
+        "expansions": 102,
+        "action_cost": 3,
+        "forecast_costs": [
+          3,
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "010206D891020628",
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 6,
+          "path": "k:0:6",
+          "phase": 40,
+          "orientation": 1,
+          "intrinsic_phase": 216,
+          "field": 2,
+          "pair": "010206D891020628",
+          "energy": 55
+        }
+      },
+      {
+        "cycle": 19,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:5": 0,
+          "k:0:6": 0,
+          "k:0:7": 0,
+          "k:11:6": 0,
+          "k:1:6": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          5,
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:5",
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 17,
+        "expansions": 57,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "810105619101059F",
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 5,
+          "path": "k:0:5",
+          "phase": 159,
+          "orientation": 1,
+          "intrinsic_phase": 97,
+          "field": 1,
+          "pair": "810105619101059F",
+          "energy": 53
+        }
+      },
+      {
+        "cycle": 20,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:4": 0,
+          "k:0:5": 0,
+          "k:0:6": 0,
+          "k:11:7": 0,
+          "k:1:5": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          6,
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:6",
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 15,
+        "expansions": 41,
+        "action_cost": 3,
+        "forecast_costs": [
+          3,
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "810206EA11020616",
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 6,
+          "path": "k:0:6",
+          "phase": 22,
+          "orientation": 1,
+          "intrinsic_phase": 234,
+          "field": 2,
+          "pair": "810206EA11020616",
+          "energy": 50
+        }
+      },
+      {
+        "cycle": 21,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:5": 0,
+          "k:0:6": 0,
+          "k:0:7": 0,
+          "k:11:6": 0,
+          "k:1:6": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          5,
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:0:5",
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 12,
+        "expansions": 26,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "810105739101058D",
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 5,
+          "path": "k:0:5",
+          "phase": 141,
+          "orientation": 1,
+          "intrinsic_phase": 115,
+          "field": 1,
+          "pair": "810105739101058D",
+          "energy": 48
+        }
+      },
+      {
+        "cycle": 22,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:4": 0,
+          "k:0:5": 0,
+          "k:0:6": 0,
+          "k:11:7": 0,
+          "k:1:5": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          17,
+          16,
+          15
+        ],
+        "paths": [
+          "k:1:5",
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 10,
+        "expansions": 17,
+        "action_cost": 7,
+        "forecast_costs": [
+          7,
+          2,
+          1
+        ],
+        "forecast": [
+          "010211FC11021104",
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 17,
+          "path": "k:1:5",
+          "phase": 4,
+          "orientation": 1,
+          "intrinsic_phase": 252,
+          "field": 2,
+          "pair": "010211FC11021104",
+          "energy": 41
+        }
+      },
+      {
+        "cycle": 23,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:5": 0,
+          "k:1:4": 0,
+          "k:1:5": 0,
+          "k:1:6": 0,
+          "k:2:5": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          16,
+          15
+        ],
+        "paths": [
+          "k:1:4",
+          "k:1:3"
+        ],
+        "cost": 3,
+        "expansions": 3,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1
+        ],
+        "forecast": [
+          "010110851101107B",
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 16,
+          "path": "k:1:4",
+          "phase": 123,
+          "orientation": 1,
+          "intrinsic_phase": 133,
+          "field": 1,
+          "pair": "010110851101107B",
+          "energy": 39
+        }
+      },
+      {
+        "cycle": 24,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:4": 0,
+          "k:1:3": 0,
+          "k:1:4": 0,
+          "k:1:5": 0,
+          "k:2:4": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          15
+        ],
+        "paths": [
+          "k:1:3"
+        ],
+        "cost": 1,
+        "expansions": 2,
+        "action_cost": 1,
+        "forecast_costs": [
+          1
+        ],
+        "forecast": [
+          "01000F0E91000FF2"
+        ],
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "RUNNING",
+        "state": {
+          "node": 15,
+          "path": "k:1:3",
+          "phase": 242,
+          "orientation": 1,
+          "intrinsic_phase": 14,
+          "field": 0,
+          "pair": "01000F0E91000FF2",
+          "energy": 38
+        }
+      },
+      {
+        "cycle": 25,
+        "input_geometry_epoch": 2,
+        "input": {
+          "k:0:3": 0,
+          "k:1:2": 0,
+          "k:1:3": 0,
+          "k:1:4": 0,
+          "k:2:3": 0
+        },
+        "target_before": 15,
+        "reserve_before": 5,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 2,
+        "target_after": 15,
+        "status": "COMPLETE",
+        "state": {
+          "node": 15,
+          "path": "k:1:3",
+          "phase": 242,
+          "orientation": 1,
+          "intrinsic_phase": 14,
+          "field": 0,
+          "pair": "86000F0E16000FF2",
+          "energy": 33
+        }
+      }
+    ],
+    "final": {
+      "node": 15,
+      "path": "k:1:3",
+      "phase": 242,
+      "orientation": 1,
+      "intrinsic_phase": 14,
+      "field": 0,
+      "pair": "86000F0E16000FF2",
+      "energy": 33
+    },
+    "cycles": 25,
+    "final_geometry_epoch": 2
+  },
+  "zero_epoch_mission": {
+    "initial_recipe": {
+      "width": 4,
+      "height": 5,
+      "center": 0,
+      "radius": 2,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "initial_target": 17,
+    "growth": {
+      "format": "klein-dyadic-growth-v1",
+      "max_epochs": 0,
+      "cost": 1
+    },
+    "repair_cost": 5,
+    "initial": {
+      "node": 0,
+      "path": "k:0:0",
+      "phase": 250,
+      "orientation": 0,
+      "intrinsic_phase": 250,
+      "field": -2,
+      "pair": "91FE000601FE00FA",
+      "energy": 100
+    },
+    "hazard_rule": "Node 3 becomes hazard 70 at global cycle 2 in epoch 0 only; all other hazards zero.",
+    "worlds": [
+      {
+        "geometry_epoch": 0,
+        "recipe": {
+          "width": 4,
+          "height": 5,
+          "center": 0,
+          "radius": 2,
+          "turns": [
+            11,
+            53,
+            137
+          ]
+        },
+        "field": [
+          -2,
+          -1,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          2,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          1,
+          0
+        ],
+        "target": 17,
+        "target_path": "k:3:2"
+      }
+    ],
+    "events": [
+      {
+        "cycle": 1,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:1": 0,
+          "k:0:4": 0,
+          "k:1:0": 0,
+          "k:3:0": 0
+        },
+        "target_before": 17,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          4,
+          3,
+          17
+        ],
+        "paths": [
+          "k:0:4",
+          "k:0:3",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 23,
+        "action_cost": 2,
+        "forecast_costs": [
+          2,
+          1,
+          4
+        ],
+        "forecast": [
+          "11FF04FB01FF0405",
+          "110003F001000310",
+          "81011145910111BB"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 4,
+          "path": "k:0:4",
+          "phase": 5,
+          "orientation": 0,
+          "intrinsic_phase": 5,
+          "field": -1,
+          "pair": "11FF04FB01FF0405",
+          "energy": 98
+        }
+      },
+      {
+        "cycle": 2,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:0": 0,
+          "k:0:3": 70,
+          "k:0:4": 0,
+          "k:1:4": 0,
+          "k:3:1": 0
+        },
+        "target_before": 17,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          16,
+          17
+        ],
+        "paths": [
+          "k:3:1",
+          "k:3:2"
+        ],
+        "cost": 7,
+        "expansions": 6,
+        "action_cost": 5,
+        "forecast_costs": [
+          5,
+          2
+        ],
+        "forecast": [
+          "81001010910010F0",
+          "81011145910111BB"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 16,
+          "path": "k:3:1",
+          "phase": 240,
+          "orientation": 1,
+          "intrinsic_phase": 16,
+          "field": 0,
+          "pair": "81001010910010F0",
+          "energy": 93
+        }
+      },
+      {
+        "cycle": 3,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:4": 0,
+          "k:2:1": 0,
+          "k:3:0": 0,
+          "k:3:1": 0,
+          "k:3:2": 0
+        },
+        "target_before": 17,
+        "reserve_before": 5,
+        "kind": "MOVE",
+        "route": [
+          17
+        ],
+        "paths": [
+          "k:3:2"
+        ],
+        "cost": 2,
+        "expansions": 2,
+        "action_cost": 2,
+        "forecast_costs": [
+          2
+        ],
+        "forecast": [
+          "81011145910111BB"
+        ],
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "RUNNING",
+        "state": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 187,
+          "orientation": 1,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "81011145910111BB",
+          "energy": 91
+        }
+      },
+      {
+        "cycle": 4,
+        "input_geometry_epoch": 0,
+        "input": {
+          "k:0:3": 70,
+          "k:2:2": 0,
+          "k:3:1": 0,
+          "k:3:2": 0,
+          "k:3:3": 0
+        },
+        "target_before": 17,
+        "reserve_before": 5,
+        "kind": "REPAIR",
+        "route": [],
+        "cost": 5,
+        "geometry_epoch": 0,
+        "target_after": 17,
+        "status": "COMPLETE",
+        "state": {
+          "node": 17,
+          "path": "k:3:2",
+          "phase": 187,
+          "orientation": 1,
+          "intrinsic_phase": 69,
+          "field": 1,
+          "pair": "06011145160111BB",
+          "energy": 86
+        }
+      }
+    ],
+    "final": {
+      "node": 17,
+      "path": "k:3:2",
+      "phase": 187,
+      "orientation": 1,
+      "intrinsic_phase": 69,
+      "field": 1,
+      "pair": "06011145160111BB",
+      "energy": 86
+    },
+    "cycles": 4,
+    "final_geometry_epoch": 0
+  },
+  "field_recomputation_counterexample": {
+    "old_recipe": {
+      "width": 3,
+      "height": 5,
+      "center": 1,
+      "radius": 3,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "new_recipe": {
+      "width": 6,
+      "height": 10,
+      "center": 2,
+      "radius": 6,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "old_node": 0,
+    "new_node": 0,
+    "old_field": -3,
+    "new_field": -4,
+    "incorrect_doubled_old_field": -6,
+    "old_boundary": [
+      8,
+      12
+    ],
+    "new_boundary": [
+      17,
+      26,
+      35,
+      44,
+      53
+    ],
+    "old_fields": [
+      -3,
+      -3,
+      -2,
+      -1,
+      -2,
+      -2,
+      -2,
+      -1,
+      0,
+      -1,
+      -2,
+      -1,
+      0,
+      -1,
+      -2
+    ],
+    "new_fields": [
+      -4,
+      -5,
+      -6,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      -2,
+      -3,
+      -3,
+      -4,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      -1,
+      -2,
+      -4,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      -1,
+      -2,
+      -3,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      -1,
+      -2,
+      -3,
+      -4,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      -1,
+      -2,
+      -3,
+      -4,
+      -5,
+      -3,
+      -2,
+      -1,
+      0,
+      -1,
+      -2,
+      -3,
+      -4,
+      -5,
+      -4
+    ],
+    "explanation": "Newly generated boundary vertices may be nearer than embedded old boundary vertices; recompute B."
+  },
+  "phase_selected_target_ties": {
+    "recipe": {
+      "width": 8,
+      "height": 10,
+      "center": 0,
+      "radius": 4,
+      "turns": [
+        11,
+        53,
+        137
+      ]
+    },
+    "old_node": 0,
+    "mapped_node": 0,
+    "selections": [
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 0,
+        "selected_rank": 0,
+        "target": 13,
+        "target_path": "k:1:3"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 1,
+        "selected_rank": 1,
+        "target": 17,
+        "target_path": "k:1:7"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 2,
+        "selected_rank": 2,
+        "target": 31,
+        "target_path": "k:3:1"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 63,
+        "selected_rank": 7,
+        "target": 77,
+        "target_path": "k:7:7"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 64,
+        "selected_rank": 0,
+        "target": 13,
+        "target_path": "k:1:3"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 127,
+        "selected_rank": 7,
+        "target": 77,
+        "target_path": "k:7:7"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 128,
+        "selected_rank": 0,
+        "target": 13,
+        "target_path": "k:1:3"
+      },
+      {
+        "generated_node_count": 60,
+        "minimum_absolute_field": 0,
+        "maximum_hop_distance": 4,
+        "tied_candidates": [
+          13,
+          17,
+          31,
+          39,
+          51,
+          59,
+          73,
+          77
+        ],
+        "intrinsic_phase": 255,
+        "selected_rank": 7,
+        "target": 77,
+        "target_path": "k:7:7"
+      }
+    ]
+  },
+  "refinement_certificates": {
+    "all_refinable_quotients_checked": 92,
+    "directed_edge_two_step_and_seam_checks": 15332,
+    "old_vertex_pair_distance_checks": 180141,
+    "oriented_equivalent_representative_checks": 191650,
+    "certificate_transcript_sha256": "9609a6c5072cc5aeef225b6dd510aed33283191ac7078fba567dd8b2f2732bde",
+    "invariants": [
+      "E commutes with quotient reduction and orientation transport",
+      "Each old edge has a two-edge image with the same seam XOR",
+      "distance_new(E(a),E(b)) = 2*distance_old(a,b)"
+    ]
+  },
+  "planner_cross_check": "Every MOVE route in every mission is independently checked by hop-layer dynamic programming; every positive edge costs at least one."
+}

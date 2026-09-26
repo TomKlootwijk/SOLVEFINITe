@@ -393,3 +393,34 @@ the three original sources and the Tom/Jitske ELI5 booklet are byte-identical.
 The complete architecture goal remains active. Global Psi traversal,
 geometry-changing growth, active scale transitions, continuing semantic epochs,
 physical adapters and comparative hardware evidence remain explicit work.
+
+## 2026-09-26: semantic geometry growth and continuing subgoals
+
+The previous architecture goal turn made progress through the verified HP
+implementation and the draft growth contract. The intervening naming request
+was checked against the actual ELI5 pages and remote: pink Jitske and green-blue
+Tom remain committed at `6df934e`. The complete architecture objective continues.
+
+Solipsism page 16 describes growth as a modification of internal distance rules.
+The next binding chooses a finite dyadic production: double both quotient
+dimensions and the intrinsic ball radius, map existing nodes to even coordinates,
+and independently reconstruct the new signed field. This production is an
+explicit numerical choice; the source does not supply a complete production table.
+New boundary vertices mean the signed distance cannot simply be doubled.
+
+- [ ] Commit GD1-GD8 and independent arithmetic references in the consolidated
+  PDF before runtime edits; preserve the original sources and ELI5 booklet.
+- [ ] Implement strict bounded growth, certified mapping and an internally
+  derived new target in the same Tomigidt, retaining energy and ordered history.
+- [ ] Compute the mapping on the GPU from the actual old state and new certified
+  field; verify complete candidate admission and ownership failure semantics.
+- [ ] Qualify observations and historical regeneration by geometry epoch, clear
+  effective observations/search/FIFO on growth, and preserve storage reindexing.
+- [ ] Continue simulation, live retries and durable cross-process CPU/GPU replay
+  across REPAIR, GROWTH_PENDING, GROW and the next subgoal.
+- [ ] Verify independent one/two-generation and mirrored missions, exact field
+  reconstruction, energy/cycle bounds, fault recovery and unchanged old archives.
+- [ ] Capture source-bound measurements, update the same PDF, commit and push.
+
+General grammars, global spectral traversal, physical adapters, wider temporal
+continuation and comparative hardware measurements remain part of the full goal.
