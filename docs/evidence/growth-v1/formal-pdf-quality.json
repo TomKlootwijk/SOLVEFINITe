@@ -1,7 +1,7 @@
 {
   "bookmarks": 56,
   "builder": "tools/build_formal_spec.py",
-  "builder_sha256_lf": "ed4357ac17c01a27c195721153417f9ba426468e62733e0d161c63ed6efd4473",
+  "builder_sha256_lf": "a5bf8f55647adeddb39f9e1bd338224021686eb6326ffcecf158675ea76cb754",
   "formal_reference": {
     "path": "docs/evidence/growth-v1/formal-reference.json",
     "role": "Independent mathematical GD reference only; not growth implementation evidence.",
@@ -19,7 +19,13 @@
   },
   "pages": 56,
   "pdf": "output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf",
-  "pdf_sha256": "7342d248565b6aa15232d2ca28333ccdbe5a34808d31c0a9ee0f69a5fecaa941",
+  "pdf_sha256": "6c3389bc14117e9e3bc21abaed633f8538ecba2e5562895018e9755db4e00732",
+  "prefix_refinement": {
+    "encoding": "UTF-8 json.dumps(prefix, sort_keys=True, separators=(comma,colon), ensure_ascii=True, allow_nan=False); no trailing newline",
+    "formal_before_runtime_field": true,
+    "prefix": "Original events through origin_sequence inclusive; empty array at epoch0",
+    "required_field": "EpochFieldNode.prefix_sha256"
+  },
   "preservation": {
     "all_existing_FI_PX_HP_page_bodies_exact_from": "5a304bcca77965778e1acb743d49d54e2a79e380",
     "earlier_normative_contracts_preserved": true,
@@ -118,11 +124,24 @@
       55,
       56
     ],
+    "prefix_refinement": {
+      "base_formal_commit": "ec1181e00f40c3663e73974885573ebfae784e08",
+      "base_full_render_pdf_sha256": "7342d248565b6aa15232d2ca28333ccdbe5a34808d31c0a9ee0f69a5fecaa941",
+      "changed_pages": [
+        55
+      ],
+      "dpi": 120,
+      "remaining_page_text_exact": true,
+      "rendered_and_visually_reviewed_pages": [
+        55
+      ],
+      "scope": "Final complete PDF rebuilt; changed page55 rerendered and visually reviewed. Remaining55pages retain the previous full-render review."
+    },
     "review_scope": "All-page revision-7 contact review plus detail review of changed contents/new GD pages; final 100dpi full render. Unchanged prior bodies were compared exactly with revision6."
   },
   "replacement_character_count": 0,
   "result": "PASS",
-  "reviewed_utc": "2026-09-26T05:02:57.671304+00:00",
+  "reviewed_utc": "2026-09-26T05:16:27.399512+00:00",
   "revision": "TK-LPLUT-2.0 revision 7",
-  "status": "FORMAL PENDING: GD runtime not implemented"
+  "status": "FORMAL PENDING: GD conformance acceptance not yet captured"
 }
