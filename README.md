@@ -377,6 +377,27 @@ Arbitrary cone/pyramid and graph productions, global spectral choices,
 WElip/clock continuation, physical adapters and comparative hardware evidence
 remain obligations of the broader architecture.
 
+## Formal next step: WElip
+
+Revision 11 of the existing consolidated
+[formal PDF](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf)
+binds W1-W8 before implementation. It defines a separate forward interface
+around the same field agent: IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT.
+The 16-bit time field carries into an explicit epoch; agent cycles, geometry
+generations and device counters keep their existing meanings. Current-state
+records carry actual mirrored state and separate energy metadata.
+
+An exact retry acknowledges only the latest saved operation without returning
+its earlier payload. Private recovery replays cache controls in their original
+order alongside agent steps. Failures after working-state mutation close the
+owner until recovery establishes the durable prefix.
+
+The [independent W reference](docs/evidence/welip-v1/README.md) specifies carrier
+arithmetic, clock boundaries, invalid fragments and a lifecycle around the
+existing nine-cycle organogram mission. These are mathematical expectations;
+the W interface and GPU emission are **formal only**. The 623-test OG capture
+remains historical evidence for commit `f125a76`, not a W implementation result.
+
 ## GPU texture execution
 
 The optional hardware backend derives world nodes and forecasts the agent's

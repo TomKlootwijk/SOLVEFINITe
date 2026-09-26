@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 10. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 11. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -30,12 +30,15 @@ PSI_F8_EVIDENCE = ROOT / 'docs/evidence/psi-f8-v1'
 HADAMARD_EVIDENCE = ROOT / 'docs/evidence/hadamard-v1'
 GROWTH_EVIDENCE = ROOT / 'docs/evidence/growth-v1'
 ORGANOGRAM_EVIDENCE = ROOT / 'docs/evidence/organogram-v1'
+WELIP_EVIDENCE = ROOT / 'docs/evidence/welip-v1'
+OG_CAPTURE_COMMIT = 'f125a76b75052c3611c39557779c08e4553e620a'
 HP_VERIFICATION = None
 GD_VERIFICATION = None
 GD_CONFORMANCE = None
 OG_REFERENCE = None
 OG_VERIFICATION = None
 OG_CONFORMANCE = None
+W_REFERENCE = None
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -107,8 +110,8 @@ def page(title, subtitle, *items):
 
 def build_content():
     if any(value is None for value in (HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE,
-                                       OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE)):
-        raise ValueError('Verify historical HP/GD and current OG evidence before revision 10')
+                                       OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE)):
+        raise ValueError('Verify historical HP/GD/OG evidence and the W reference before revision 11')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
@@ -129,7 +132,7 @@ def build_content():
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 10. FI1-FI8, PX1-PX8 and HP1-HP8 retain their contracts on pages 35-48; page 49 retains the Hadamard capture at 5a304bc. GD1-GD8 and their result remain on pages 50-57 at 94f86c7. OG1-OG8 on pages 58-66 preserve the formal-first binding at 5c76f2c; measured CPU/GPU integration is on pages 67-68. Earlier profiles retain their meanings.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 11. FI/PX/HP contracts remain on pages 35-48; HP evidence at 5a304bc is on page 49. GD contracts/evidence at 94f86c7 remain on pages 50-57. OG contracts remain on pages 58-66, with the historical f125a76 capture on pages 67-68. W1-W8 begin on page 69 as a formal-first binding, before implementation. Earlier profiles retain their meanings.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -340,7 +343,7 @@ def build_content():
         h('Regenerative R and forward-only W'),
         table(['Profile','Public interaction contract'],[
             ['R: regenerative','Admit named historical derivations whose original context is retained. This is the current implementation family.'],
-            ['W: WElip','Admit IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT; expose no historical-read operation at this interface. Formal only.'],
+            ['W: WElip','Admit IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT; expose no historical-read operation at this interface. W1-W8 from page 69 bind this finite profile; formal only.'],
         ],[.23,.77]),
         p('PRISM reverse lock names a specified rejection predicate for backward-history requests. “Poisoned pill” means localized active-entry invalidation with a recorded cause and retention policy. A read attempt is an event only if the interface detects it. Observation does not automatically change parity.'),
         small('An internally consistent rewritten archive can still replay. Authentication needs an external trust mechanism. Atomic save and exclusive ownership protect the implemented update protocol; replay consistency is not a signature, nor a claim of immunity to storage failure.')
@@ -420,7 +423,7 @@ def build_content():
         p('Integer execution avoids floating-point rounding in the canonical field arithmetic. Width, signedness, overflow, shifting and conversion still require exact rules. Floating-point rounding is not inherently randomness; evaluation order and arithmetic semantics determine reproducibility [R6]. A finite discrete representation can execute an incorrect rule perfectly.'),
         h('Geometry changes are accepted state changes'),
         p('The addendum’s internally generated growth can be formalized as a versioned graph-rewrite event. Such an event shall supply a finite rule, affected domain, retained derivation context and deterministic node correspondence. Its result must pass connectivity, boundary, range, topology and operator checks before admission. GD1-GD8 now realize one finite dyadic geometry production under this contract; arbitrary rewriting remains separate.'),
-        p('The source’s “zero-order decay” or Lambda label can name a future deterministic invalidation function Lambda_nu(S,e). Its selected entries, predicate, retention effects and result must be bound. It does not acquire a valid numerical meaning by calling unwanted input “noise.” Biological reaction-diffusion analogies require actual equations before they become physical models.'),
+        p('The source’s “zero-order decay” or Lambda label requires a deterministic invalidation function Lambda_nu(S,e), including selected entries, predicate, retention effects and result. W1-W8 bind one finite active-pair invalidation on page 71; it remains formal only. Biological reaction-diffusion analogies require actual equations before they become physical models.'),
         small('Attribution remains attribution. Personal judgments in the exported discussion are not computing predicates. The meaningful architectural claim is a declared domain with exact admitted transitions, for which proof obligations and implementation measurements can be stated and discharged.')
     )
     page('Typed zero, XOR and integrity', 'NEW FORMALIZATION | SOLIPSISM PP.2-3, 7, 11-16',
@@ -469,7 +472,7 @@ def build_content():
         p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and implement a field-agent policy with B=phi and separate integer energy. Shared encoding never permits an implicit role change.'),
         h('Measured integration'),
         p('Tomigidt observes, plans and acts through Klein seams. hadamard.py adds phase-state routing; growth.py supplies dyadic geometry growth. organogram.py, organogram_gpu.py and organogram.wgsl now produce a branching grammar field and continue the same individual. Global Psi, general primitives and physical adapters remain separate.'),
-        small('Paths are relative to solvefinite/. Historical GD hashes at 94f86c7: docs/evidence/growth-v1/. Earlier FI, Klein, PX and HP captures remain retained. OG source/report hashes and formal-first chronology are in docs/evidence/organogram-v1/ and on pages 67-68.')
+        small('Paths are relative to solvefinite/. Historical source hashes: GD at 94f86c7 in docs/evidence/growth-v1/; OG at f125a76 in docs/evidence/organogram-v1/. Earlier FI/Klein/PX/HP captures remain. OG chronology and measurements are on pages 67-68.')
     )
     page('Retained PX verification and field trace', 'HISTORICAL CAPTURE | 25 SEPTEMBER 2026',
         table(['Measurement','Observed result'],[
@@ -508,7 +511,7 @@ def build_content():
             ['C6: finite active memory','<b>Verified subset.</b> Pair-atomic sample FIFO, genuine reconstruction and capacity-independent agent histories work. Journals, geometry, fields and device arenas consume additional memory.'],
             ['C7: complete mirror','<b>Verified subset.</b> Phase involution/commutation, parity and full pair relations work, including K8 phase reflection and orientation transport on CPU/GPU.'],
             ['C8: individual and footprint','<b>Verified subset.</b> Planning, observations, epoch/sequence, retry handling, ownership and durable continuation work. Full LUS/DIGID envelopes and global admission/authentication remain profile obligations.'],
-            ['WElip / Lambda','<b>Formal / unbound.</b> Current profiles permit regeneration. A forward-only interface and complete invalidation/clock-wrap binding remain to be implemented.'],
+            ['WElip / Lambda','<b>Formal only.</b> W1-W8 from page 69 bind a forward interface, local invalidation, finite epoch clock, current-state emission and private recovery. Runtime conformance remains to be implemented.'],
             ['GPU / performance','<b>Verified subset.</b> Exact tested adapters and device execution exist. Cache saturation, general speed/energy superiority and other hardware adapters are unmeasured.'],
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
@@ -580,7 +583,7 @@ for tick in admitted_finite_budget:
             ['Adapters / scaling','Exact word preservation, finite cascade stages, ownership, input delivery and resource controls; R14-R15.'],
             ['Physical adapters','Samples, units, calibration, transfer functions and retained scheduling effects; R16.'],
         ],[.27,.73]),
-        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38, <b>PX1-PX8</b> on pages 39-43, <b>HP1-HP8</b> on pages 44-48, <b>GD1-GD8</b> on pages 50-56 and <b>OG1-OG8</b> on pages 58-66. Satisfying one profile does not silently complete another.'),
+        p('Original R1-R16 are preserved above. Implemented extensions use <b>SDF.R1-R12</b> on pages 13-17 and 31, <b>K1-K9</b> on pages 19-21, <b>FI1-FI8</b> on pages 35-38, <b>PX1-PX8</b> on pages 39-43, <b>HP1-HP8</b> on pages 44-48, <b>GD1-GD8</b> on pages 50-56 and <b>OG1-OG8</b> on pages 58-66. <b>W1-W8</b> from page 69 are formal only. Satisfying one profile does not silently complete another.'),
         small('Original property cross-reference: P1 replay is I1 on p.22; P2 FIFO and P3 regeneration are R1/R2 on p.18; P4 mirror preservation is on p.8; P5 representation independence is the adapter/refinement contract on pp.16,23.'),
         small('Historical vocabulary: mosTADPOLE(thegreenone) names the source input/output lineage; TPVM is Topological Fixed-Point Virtual Machine. Det-0 names reproducibility with complete dependencies. Generative Topological Fabric, Packed Topological FIFO Matrix and Uniform Packed Operator Paradigm are successive functional views. REW expands to Reverse Electronic Warfare in the WElip source. f8’s “BVH replacement / S2 superseder” is an intended indexing/comparison role, not a measured replacement result.'),
         small('A complete manifest may reference immutable versioned rule tables rather than embedding every algorithm in a packet. No “infallible” designation waives a missing binding. A profile is executable only once all choices that affect its outputs are single-valued and finitely evaluable.')
@@ -617,7 +620,7 @@ for tick in admitted_finite_budget:
         small('[R5] Allen Hatcher. <a href="https://pi.math.cornell.edu/~hatcher/AT/AT.pdf" color="#007D83">Algebraic Topology, section 3.3</a>. Orientation covers. The concrete finite quotient and required audits are specified in this edition.'),
         small('[R6] David Goldberg. <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html" color="#007D83">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a> (1991). Rounding and evaluation semantics; cited to separate numerical error from inherent randomness.'),
         small('[R7] John C. Hart. <a href="https://experts.illinois.edu/en/publications/sphere-tracing-a-geometric-method-for-the-antialiased-ray-tracing/" color="#007D83">Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces</a> (1996). Context for geometric distance bounds. The present certificate is proved directly for a finite graph.'),
-        box(f'<b>Revision 10 status.</b> Historical HP retains {hp_tests} tests and {hp_checks} checks; GD at 94f86c7 retains {gd_tests} tests and {gd_checks} checks. Current OG integration passes {og_tests} tests, {og_device_tests} actual-device methods and {og_checks} conformance checks. These distinct finite captures do not establish whole-architecture completion.')
+        box(f'<b>Revision 11 status.</b> Historical HP retains {hp_tests} tests/{hp_checks} checks; GD retains {gd_tests}/{gd_checks}. OG at f125a76 retains {og_tests} tests, {og_device_tests} actual-device methods and {og_checks} checks. W1-W8 are formal only. Distinct finite captures do not establish whole-architecture completion.')
     )
     page('One field-guided Tomigidt', 'VERIFIED FINITE PROFILE | FI1-FI2 | FORMAL-FIRST CONTRACT',
         h('FI1. Identity, schema and typed state'),
@@ -1124,7 +1127,231 @@ for tick in admitted_finite_budget:
         small('Logical private-stack bytes do not identify physical GPU residency. Payload accounting excludes Python objects and driver overhead; geometry, observations, planning and journals remain additional. Preparation/rebuild peaks are distinct. The sample FIFO does not bound total memory.'),
         h('Recheck execution and rebuild this retained edition'),
         code('python -m unittest discover -s tests -v\npython -m examples.organogram_conformance --output og-recheck.json\npython tools/build_formal_spec.py'),
-        small('docs/evidence/organogram-v1/ retains verification.json, full-tests.txt, conformance.json and cli-replay.json with source/report hashes. The builder binds this capture; replacing evidence requires reviewed pins. It checks formal chronology, source/reference identity, device counts, original stage prefixes and archives. Remaining work includes general primitives/graphs, global spectral choices, WElip/clock continuation, physical adapters and comparative hardware measurements.')
+        small('Historical capture f125a76: docs/evidence/organogram-v1/ retains verification.json, full-tests.txt, conformance.json and cli-replay.json. The builder checks that commit\'s source inventory/hashes, retained reports, chronology, reference, device counts and archives. Rechecking another checkout does not reproduce these historical counts. Remaining work at that capture includes general primitives/graphs, global spectral choices, WElip/clock continuation, physical adapters and comparative hardware measurements.')
+    )
+    build_w_content()
+
+
+def build_w_content():
+    page('WElip forward-time binding', 'APPENDIX MAP | W1-W8 | FORMAL ONLY',
+        box('Revision 11 binds W1-W8 before implementation. The independent reference supplies expected finite results. No W runtime, GPU, durability or throughput result is claimed. Historical FI/PX/HP/GD/OG evidence retains its original scope.'),
+        p('One separate W public interface owns the same existing Tomigidt field agent. It supports FI, HP, GD and OG, defaults to OG and preserves their numerical semantics and canonical agent archives. The five forward operations add an explicit clock, lifecycle, typed record and durable admission boundary around that individual.'),
+        table(['Page','Complete section'],[
+            ['<link href="#p70" color="#007D83">70</link>','W1-W2: immutable configuration, clock and request context'],
+            ['<link href="#p71" color="#007D83">71</link>','W3: ignition, advancement and local lifecycle operations'],
+            ['<link href="#p72" color="#007D83">72</link>','W4: forward admission and latest-request retry'],
+            ['<link href="#p73" color="#007D83">73</link>','W5: exact 16+16+32 carrier and state decoding'],
+            ['<link href="#p74" color="#007D83">74</link>','W5: LUS envelope, identity and separate energy'],
+            ['<link href="#p75" color="#007D83">75</link>','W6: ownership, private archive and cache witnesses'],
+            ['<link href="#p76" color="#007D83">76</link>','W6: internal R recovery and whole-operation atomicity'],
+            ['<link href="#p77" color="#007D83">77</link>','W7: actual GPU state emission and failure handling'],
+            ['<link href="#p78" color="#007D83">78</link>','W8: JSONL transport and complete response schemas'],
+            ['<link href="#p79" color="#007D83">79</link>','W8: validation order and exact error classes'],
+            ['<link href="#p80" color="#007D83">80</link>','Independent preimplementation W reference vectors'],
+            ['<link href="#p81" color="#007D83">81</link>','W8 acceptance obligations and remaining architecture'],
+        ],[.12,.88]),
+        h('Source authority and new numerical choices'),
+        p('Original p.4 requires retained output-affecting inputs and clock epochs; p.8 identifies the WElip 16+16+32 carrier; p.14 separates record identity, integrity, admission and reproduction; p.15 defines the five-event forward alphabet, local invalidation and controlled R/W separation. The exact schemas, finite bounds, codec, clock cadence and retry protocol below are declared realization choices.'),
+        small('All old policies, live sessions and CLI commands retain their meanings. W is an API/profile boundary, not OS isolation or issuer authentication. Its finite clock and retained ledger do not establish indefinite time or constant total memory.')
+    )
+    page('W configuration and independent clocks', 'FORMAL ONLY | W1-W2 | STRICT INPUT AND TIME DOMAINS',
+        code('protocol = "welip-field-agent-v1"\nconfig = {format,agent,producer,producer_epoch,\n          clock_origin,max_events,initial_capacity}\nformat = "welip-field-config-v1"'),
+        table(['Field','Exact binding'],[
+            ['agent','Existing FieldAgentManifest schema, with one of the four policies listed below; default OG.'],
+            ['producer','Strict string equal to its trimmed form, nonempty, at most 128 characters; default sensor.'],
+            ['producer_epoch','Strict u32; default 0. Producer namespace, distinct from clock carry.'],
+            ['clock_origin','Strict unsigned 48-bit integer; default 0.'],
+            ['max_events','Strict integer 1..1,000,000; default 1,000,000.'],
+            ['initial_capacity','Strict integer 1..256 complete pairs; default 2.'],
+        ],[.25,.75]),
+        p('Before owner/device allocation require clock_origin + max_events &lt;= 2^48 - 1. No Boolean or float integer coercion, unknown keys or malformed nested JSON is permitted. CLI profile selectors and full agent policies are:'),
+        code('field      tomigidt-field-observe-plan-act-v1\nhadamard   tomigidt-field-hadamard-plan-act-v1\ngrowth     tomigidt-field-growth-plan-act-v1\norganogram tomigidt-field-organogram-plan-act-v1'),
+        h('W2. Four distinct clocks and counters'),
+        code('n = durably admitted W operations, initially 0\nT_W = clock_origin + n\nclock_epoch = T_W >> 16; tick16 = T_W & 65535'),
+        p('Each new operation, including IGNITE and EMIT, advances n and T_W exactly once. Only ADVANCE increments agent.cycle; geometry_epoch remains the existing semantic generation. The device action counter is separate again. W operations never reset energy, agent history or OG\'s original GROW cycle, time or prefix. Records from one operation share T_W and use contiguous record_seq starting at 0. There is no epoch reuse or operation-sequence rollover.'),
+        h('Every request: exact common keys'),
+        code('{protocol,op,producer,producer_epoch,seq,clock_epoch,\n tick16,agent_cycle,geometry_epoch}'),
+        p('Add only page 71\'s operation fields. seq is 1..max_events+1; a new operation requires seq=n+1 and clock=clock_origin+seq. clock_epoch is u32; tick16 is u16; agent_cycle is 0..agent.max_cycles; geometry_epoch is 0..policy.max_epochs, or 0 for FI/HP. Cycle/generation describe the current preoperation owner and are both 0 for initial IGNITE. At n=max_events only exact latest retry is allowed. Static schema/source checks precede retry classification; current-state checks follow it.')
+    )
+    page('The five forward operations', 'FORMAL ONLY | W3 | ONE OWNER, EXPLICIT LOCAL EFFECTS',
+        h('IGNITE: add {payload}'),
+        p('payload is uppercase, even-length hexadecimal encoding 0..4,096 bytes. Only seq=1 before ignition is valid. Retain those literal bytes with the configured baseline and initial owner clock/phase context. They do not replace the initial RP32 state or become instructions. Emit raw payload record 0 followed by actual owner-state record 1. Empty payload still emits record 0 with zero fragments.'),
+        h('ADVANCE: add {position,observations}'),
+        p('Require prior ignition, an open owner below its cycle bound and status other than COMPLETE. WAITING, SEARCH_DEFERRED, UNREACHABLE, INSUFFICIENT_ENERGY and GROWTH_PENDING may admit fresh observations. position is the current canonical path. observations contains only currently visible local paths and strict integer hazards 0..127. Incomplete frames retain existing WAITING semantics.'),
+        p('Delegate exactly one existing Tomigidt.step; the agent chooses its action. Preserve each FI/HP/GD/OG policy\'s fresh-frame, energy reserve, GROW and DEFER contracts. Emit actual postoperation owner-state record 0.'),
+        h('RESIZE: add {capacity}'),
+        p('capacity is a strict integer 1..256 pairs. Set the active FIFO capacity and evict oldest entries until it fits, preserving unaffected order. Identical capacity is a valid new operation. Emit actual owner-state record 0 without an agent step or energy debit.'),
+        h('INVALIDATE: add {paths,cause}'),
+        p('paths is a sorted, unique list of 1..256 canonical paths, all currently active at the request\'s current geometry epoch. cause is a nonempty string equal to its trimmed form, at most 128 characters. Validate the entire selector before removal. Remove complete DATA pairs and preserve unaffected FIFO order. Append removed paths to the eviction diagnostic in original FIFO order so a later get() records regeneration.'),
+        p('Retain baseline, recipes, field/index/routing, observations, pending search, owner pair, energy and admitted history. Retain cause in the W request; emit actual owner-state record 0. This is the bound local invalidation action, with no automatic invalidation for a rejected read.'),
+        h('EMIT: no additional fields'),
+        p('Emit actual current owner-state record 0 and advance W time, without an agent step, energy debit or cache access. After agent COMPLETE, EMIT/RESIZE/INVALIDATE remain available within the W budget; ADVANCE and a new IGNITE reject. Before IGNITE every other operation rejects. Every operation uses the same owner; cache controls never spawn or reseed it.')
+    )
+    page('Forward boundary and latest retry', 'FORMAL ONLY | W4 | NO PUBLIC HISTORICAL PAYLOAD',
+        h('Explicit public alphabet and reverse-lock predicate'),
+        p('Only IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT are public W operations. Explicit op names READ, HISTORY, REPLAY and REGENERATE reject as BACKWARD_READ. Other names and extra selectors are invalid requests. There is no public historical archive, derive_epoch, legacy inspect/status or raw-owner accessor through W. Ready/next admission metadata is transport context, not another W operation.'),
+        box('Detection is explicit at this interface. Rejected requests leave admitted clock, history and cache unchanged. They do not automatically invalidate memory, change parity or authenticate the producer. Controlled private R recovery is defined on page 76.'),
+        h('Exact latest retry precedes dynamic context checks'),
+        p('Only the most recent durably admitted sequence n&gt;0 may be retried. Compare the complete request with the retained latest request using canonical JSON bytes: sorted keys, compact separators, ensure_ascii=True and finite values. Static shapes/ranges and source identity are checked first. Exact equality is checked before current position, generation, active membership, budget or terminal tests, because successful admission may already have changed them.'),
+        table(['Request relation','Required result'],[
+            ['seq=n; exact bytes','DUPLICATE, containing current admission cursor and seq only beyond the common response keys.'],
+            ['seq=n; changed bytes','CONFLICT. Do not reinterpret it against the new owner context.'],
+            ['seq&lt;n','STALE_SEQUENCE without fetching historical payloads.'],
+            ['seq&gt;n+1','SEQUENCE_GAP. seq=0 is always invalid.'],
+            ['seq=n+1','Apply the new-operation admission order on page 79.'],
+        ],[.32,.68]),
+        p('A duplicate returns no records, old event, packed pair, energy or old cache payload. It does not step, dispatch device emission, mutate cache/clock or write the archive. Current admission names in next remain transport metadata, with no past fields or pairs.'),
+        h('Acknowledgment loss and delivery meaning'),
+        p('A lost current-state observation can be replaced by a new forward EMIT at a new clock. This is not recovery of the old record. EMIT does not reproduce IGNITE\'s raw bytes: lost raw ignition output has no public recovery operation, although admitted bytes remain available to private R. No physical exactly-once actuation is implied.')
+    )
+    page('WElip carrier and exact state decoding', 'FORMAL ONLY | W5 | TYPED 16+16+32 WORDS',
+        code('word_profile = "welip-16-16-32-v1"'),
+        eq('W64 = payload32 | (phase16 << 32) | (tick16 << 48)\nphase16 = intrinsic_phase8 << 8\nintrinsic_phase8 = (-R if eta else R) mod 256'),
+        p('All integer fields are strict. Canonical transport words contain exactly 16 uppercase hexadecimal digits. tick16 and phase16 are unsigned 16-bit values; payload32 is unsigned 32-bit. State phase has zero low eight bits: it represents the same angle in 1/65,536-turn units at the existing 8-bit resolution. This binding introduces no additional phase precision.'),
+        h('Raw bytes and finite fragmentation'),
+        p('For byte length L in 0..4,096, split bytes into consecutive four-byte little-endian chunks, zero-padding the final chunk. fragment_count=(L+3)//4; words contains exactly that many W64 values in original order. Empty L has words=[]. Decode exactly L bytes; never infer length by deleting zero padding.'),
+        p('Reject malformed word syntax or range, wrong tick/phase headers, count mismatch or nonzero final padding. The original bytes, including meaningful trailing zeros, must round-trip. Raw IGNITE bytes carry no RP32 semantics or implied parity/integrity.'),
+        h('Owner pair byte order and validation'),
+        code('state bytes = LE32(left_RP32) || LE32(full_mirror_RP32)\nstate byte_length = 8; fragment_count = 2'),
+        p('The pair display convention puts its high word first; payload encoding instead writes the left u32 little-endian, then the full-mirror u32 little-endian. Do not confuse printed pair order with byte order. Each W word carries one of those u32 payloads with the same tick/phase header.'),
+        p('State decoding additionally verifies each RP32 parity, the full mirror relation, legal STEP or EMIT metadata and agreement of the phase header with the left owner channel. Admission requires exact equality of the full owned pair, including orientation/opcode, plus energy and context. Mirror-swapping channels yields a different owned pair even when the representation remains legal.'),
+        box('Word ordering and parity are representation checks. Coordinated payload changes can create another legal record; actual owner/context equality is a separate admission check. Neither the carrier nor a hash supplies issuer authentication or a spatial seed.')
+    )
+    page('LUS envelope and derivation identity', 'FORMAL ONLY | W5 | COMPLETE RECORD SCHEMA',
+        code('record = {format,word_profile,payload_profile,baseline_id,\n producer,producer_epoch,clock_epoch,tick16,phase16,\n operation_seq,record_seq,kind,agent_cycle,geometry_epoch,\n energy,byte_length,fragment_count,words,status}\nformat = "welip-lus-v1"'),
+        table(['Field group','Exact domain and meaning'],[
+            ['Profiles','word_profile is welip-16-16-32-v1. payload_profile is bytes-v1 or RP32-relational-sdf-v2.'],
+            ['Baseline / producer','baseline_id is the immutable initial agent.world.baseline_id, using its existing recipe schema. producer and producer_epoch retain the W configuration bounds.'],
+            ['Time / record order','clock_epoch:u32; tick16/phase16:u16; operation_seq:1..max_events; record_seq:0..1.'],
+            ['Owner context','agent_cycle:0..agent.max_cycles; geometry_epoch:0..policy max_epochs, or 0 for FI/HP.'],
+            ['Separate energy','Actual postoperation owner energy, strict integer 0..2^31-1. Explicit metadata; never hidden in SDF B or W64 padding.'],
+            ['Kind / status','kind is the admitted operation name. status is exactly ADMITTED.'],
+            ['Payload','byte_length:0..4,096; fragment_count=(L+3)//4; ordered words as page 73. State is exactly 8 bytes / 2 words.'],
+        ],[.24,.76]),
+        p('Every key, type and profile must be exact. IGNITE has bytes-v1 record 0 and state record 1; each other operation has only state record 0. All records carry the postoperation agent cycle/generation, actual energy, the same W time and actual intrinsic phase. Raw ignition therefore shares the initial owner context without becoming agent instructions.'),
+        h('Identity under the retained configuration'),
+        eq('ID = (enclosing profile, baseline, producer, producer_epoch,\n      clock_epoch, tick16, operation_seq, record_seq)'),
+        p('This identity is interpreted under the fixed retained configuration and original ignition input. Producer namespace allocation is a declared responsibility, not a theorem of global uniqueness. Retain literal original inputs; no hash seeds phase. Equality of identity, equality of bytes, successful private reproduction, representation integrity and origin/admission are separate claims.'),
+        small('The 64-bit carrier does not contain the whole envelope. Finite ordered uniform words carry payload fragments; explicit surrounding metadata carries the full clock epoch, energy, profiles, byte length and derivation identity.')
+    )
+    page('Durable W ownership and archive', 'FORMAL ONLY | W6 | COMPLETE PRIVATE STATE',
+        h('One protected path and serialized owner'),
+        p('Acquire canonical-path OS StateLock, then the session RLock, then existing Tomigidt operation and cache/device locks in that order. Hold admission, execution, save and result construction inside one ownership boundary. Opening a new file binds configuration and creates the existing agent without implicitly igniting it. Persist genesis with an empty W ledger.'),
+        p('Initial capacity belongs to configuration. Reopen rejects supplied configuration mismatch or a constructor capacity override. Recover the mutable current capacity by replaying retained RESIZE operations from initial_capacity; current capacity may legitimately differ from that initial value. Backend and storage index binding may change on reopen, preserving admitted semantics.'),
+        h('Exact archive and operation row'),
+        code('archive = {format,config,operations,agent,expected}\nformat = "welip-field-session-v1"\nrow = {request,records,agent_pair,energy,status,cache}\ncache = {capacity,active_paths,hit_count,regeneration_count,\n         evicted_count,removed}\nexpected = {seq,clock_epoch,tick16,ignited,cache}'),
+        p('agent is the unchanged canonical agent archive. operations is the ordered private W ledger with at most max_events rows. agent_pair is exactly 16 uppercase hexadecimal digits in the existing pair display convention. Row energy and status equal the actual owner energy and mission status; row status is distinct from the record status ADMITTED.'),
+        h('Cache witnesses and local lifecycle'),
+        p('active_paths contains unique canonical names in FIFO order, bounded by capacity. The three counters are strict nonnegative integers. removed lists explicit RESIZE/INVALIDATE removals in original FIFO order. Other operations use removed=[]; their ordinary sample evictions remain diagnostics. Final expected.cache always has removed=[], because it witnesses current state rather than repeating the last removal receipt.'),
+        table(['State','Required witness'],[
+            ['Genesis','seq=0; clock=clock_origin; ignited=false; capacity=initial_capacity; active_paths=[]; all three counters 0; removed=[].'],
+            ['GROW','Install the existing fresh FieldWorld: preserve capacity, reset active entries, counters and eviction history. Earlier W ledger rows remain retained.'],
+            ['Reopen','Replay lifecycle in original order and verify every cache witness, including capacity and current FIFO order.'],
+        ],[.2,.8]),
+        small('Archive parsing validates all exact types/shapes and bounds. Baselines, recipe inputs, private records, observations, planner state and journal are additional to the active pair FIFO; this profile makes no total constant-memory claim.')
+    )
+    page('Private recovery and operation atomicity', 'FORMAL ONLY | W6 | DURABLE COMMIT AND FAILURE SCOPE',
+        h('Controlled internal R behind the W boundary'),
+        p('Recreate the same agent at initial capacity and replay W operations in order, interleaving original ADVANCE observations with RESIZE and INVALIDATE. Verify every resulting record, owner state and cache witness, then the complete final canonical agent archive and expected W context. Restoring only the agent archive at final capacity is insufficient.'),
+        p('Recovery may recompute on CPU or actual GPU. It emits no public records, receipts or new durable operations. Device computation may repeat; physical exactly-once actuation is not claimed. No eager historical packed-world arena or public old-epoch read is introduced. Original agent-cycle time and GROW prefixes remain unchanged by intervening W operations.'),
+        h('Commit before acknowledgment'),
+        p('Compute the operation result and next archive, then call atomic write_json before acknowledging. Its payload flush/fsync and replacement semantics apply; this is not a guarantee against every hardware or power failure. A successful durable admission consumes one W sequence/time. Lost transport acknowledgment is resolved by exact latest retry without executing that operation again.'),
+        table(['Failure boundary','Required outcome'],[
+            ['Pure validation / rejected output','Remain usable only when the entire admitted semantic W preoperation state is proven unchanged.'],
+            ['After ADVANCE/GROW or cache mutation','Emission failure poisons the owner unless complete preoperation restoration is proven.'],
+            ['Save failure or uncertain replacement','Close/poison; no acknowledgment. A new owner consults disk to determine the durable prefix.'],
+            ['In-memory action before replacement','Reopen from the prior durable prefix. Unwritten state is not a durably admitted operation.'],
+            ['Committed GROW cleanup failure','Preserve existing internal GROW semantics; close the affected owner. Never acknowledge an unsaved W event.'],
+            ['After successful save; transport lost','Latest retry returns only the receipt/current cursor, with no action or emission dispatch.'],
+        ],[.32,.68]),
+        p('The admitted semantic prestate includes all owner state: pair, energy, cycle, history, recipe, generation, target, decision, planning and observations; cache order/counters; W clock/ledger and configuration. Ephemeral emission scratch bytes are excluded. Emission may be validated before mutating a cache control. Unchanged GPU state across emission alone does not prove a preceding ADVANCE was unchanged.'),
+        small('Unexpected postmutation failure closes the owner. Closed/poisoned embedded owners refuse further requests without mutation or emission. Exact latest retry classification precedes budget, terminal and current-context tests only while a valid owner is open.')
+    )
+    page('Actual device W emission', 'FORMAL ONLY | W7 | CANONICAL STATE, READ-ONLY OUTPUT',
+        p('For GPU FI/HP/GD/OG owners, state W words shall be produced from the canonical device [left,right,energy,ticks], including terminal EMIT owners. Upload only the requested tick16/context, never a host replacement pair or phase. The shader reads canonical state, checks parity, full mirror, legal STEP/EMIT, G/B and energy, then computes intrinsic phase16 and both W headers.'),
+        h('Fixed scratch interface'),
+        code('upload = [tick16, 0]  # existing scratch buffer\nheader = (tick16 << 16) | phase16\noutput = [left,header,right,header,energy,device_ticks,ok,0]\n# eight u32; ok=1 only for valid canonical state'),
+        p('The shader never advances or writes canonical owner state. Read complete output and canonical state; independently check exact agreement and preservation. G/B, energy and phase must match the actual certified owner context, in addition to representation validity. Validate reserved zeros and complete output shape.'),
+        h('Device action count is not a logical clock'),
+        p('device_ticks is the existing executor action counter. GROW resets it. It is neither agent.cycle nor W time. Verify and preserve it against that executor\'s expected counter. Read-only emission supports seeded terminal EMIT states and must not invoke an advance-only readiness check that rejects them.'),
+        table(['Device outcome','Required handling'],[
+            ['Complete valid output','Use the device-produced state words to assemble the typed LUS record; preserve the owner.'],
+            ['Failed/truncated dispatch or read','Poison and close the owner; no fabricated output or acknowledgment.'],
+            ['Canonical mismatch','Poison and close the owner. Propagate closure through the owning field agent, including FI.'],
+            ['Complete malformed emission','Nonfatal only under W6\'s whole-operation prestate rule; after semantic mutation, poison unless fully restored.'],
+        ],[.31,.69]),
+        p('The host codec may wrap raw IGNITE bytes and assemble explicit LUS metadata. It may not substitute CPU-produced state words for the GPU result. Existing GPU compiler/producer guards remain active through ADVANCE, GROW and private recovery. CPU reference values certify outputs rather than replacing the device producer.'),
+        box('This page specifies required device work. Revision 11 reports no W GPU run, cache-residency measurement, occupancy, throughput or physical-energy advantage.')
+    )
+    page('W transport and exact responses', 'FORMAL ONLY | W8 | CURRENT ADMISSION METADATA',
+        p('Provide JSONL endpoint <font name="Mono">agent welip</font> with --state, --config, --backend and existing storage index options. Config generator <font name="Mono">agent welip-config</font> uses --profile field/hadamard/growth/organogram, default organogram, mapping to page 70\'s policies. No W inspect/status/history command is provided.'),
+        p('Maximum request line length is 65,536 characters. Require unique JSON keys and finite numbers. An oversized line is fatal; do not parse its tail. EOF or transport failure closes the owner and releases its lock. COMPLETE still permits allowed controls/emission. W budget exhaustion disables new operations; the endpoint stays open for exact latest retries until EOF or close.'),
+        h('Common response and current head'),
+        code('response common = {protocol,type,producer,producer_epoch,head,next}\nhead = {seq,clock_epoch,tick16,agent_cycle,geometry_epoch}\nnext = null  # exactly when the W event budget is exhausted\n# otherwise:\nnext = {seq,clock_epoch,tick16,agent_cycle,geometry_epoch,\n        position,visible_paths,active_paths,capacity,\n        agent_status,allowed_ops}'),
+        p('head describes current durable admission. next sequence/clock are candidate values; cycle/generation are the current preoperation context. position is canonical; visible_paths is sorted local visibility; active_paths is current FIFO order. They contain names, not historical pairs or fields. capacity is current and agent_status is mission status.'),
+        p('allowed_ops preserves IGNITE,ADVANCE,RESIZE,INVALIDATE,EMIT order after filtering. Before ignition allow only IGNITE; afterward remove IGNITE. Remove ADVANCE on COMPLETE or agent-cycle exhaustion. Remove INVALIDATE when no active entry exists. Controls and emission remain available when advancement is unavailable.'),
+        table(['Response type','Exact additional fields and delivery'],[
+            ['READY','{restored:boolean}; once after durable open/recovery.'],
+            ['RESULT','{op,seq,records,cache,agent_status}; only after durable save.'],
+            ['DUPLICATE','{seq}; no prior records, pair, energy or event.'],
+            ['ERROR','{code,message,fatal}; nonfatal errors retain unchanged head/next. Fatal errors use head=null,next=null, with admitted configuration producer fields.'],
+        ],[.23,.77]),
+        small('Startup failure before a valid owner exists terminates with stderr/nonzero exit and no READY. Error messages are human-readable diagnostics, not retained canonical history or archive dumps. On transport write failure the owner closes; no response is assured. Current cursor metadata is an explicit forward admission interface, not a public historical read.')
+    )
+    page('W admission order and rejection classes', 'FORMAL ONLY | W8 | DETERMINISTIC VALIDATION BOUNDARY',
+        h('Classification order'),
+        table(['Stage','Required checks before proceeding'],[
+            ['1. Transport','Reject malformed/oversized transport; require protocol/op syntax.'],
+            ['2. Public alphabet','Deny explicit READ/HISTORY/REPLAY/REGENERATE as BACKWARD_READ; reject other unknown ops.'],
+            ['3. Static request','Require exact operation keys, shapes/ranges, canonical path syntax and source identity.'],
+            ['4. Retry/order','Handle exact latest retry or conflict, then stale sequence and gap. No historical payload retrieval.'],
+            ['5. New request context','Check W event budget, complete clock, current agent cycle/generation, ignition/terminal/cycle eligibility.'],
+            ['6. Dynamic admission','Check current position, visibility and active membership before execution.'],
+        ],[.25,.75]),
+        p('The request sequence domain is 1..max_events+1, so a next-sequence request at the exhausted budget receives BUDGET_EXHAUSTED. No admitted sequence exceeds max_events. Budget classification precedes candidate-clock checks, including at the maximal 48-bit horizon. No JSON duplicate keys, unknown keys, Boolean-to-integer coercion or nonfinite values are admitted.'),
+        h('Complete nonfatal error alphabet'),
+        code('INVALID_REQUEST       SOURCE_MISMATCH      BACKWARD_READ\nCONFLICT              STALE_SEQUENCE       SEQUENCE_GAP\nBUDGET_EXHAUSTED      CLOCK_MISMATCH       CONTEXT_MISMATCH\nNOT_IGNITED           ALREADY_IGNITED      AGENT_COMPLETE\nAGENT_BOUND           INVALID_SELECTOR     MALFORMED_EMISSION'),
+        p('INVALID_REQUEST covers malformed static/protocol input; SOURCE_MISMATCH covers producer/namespace; CLOCK_MISMATCH covers the full clock; CONTEXT_MISMATCH covers cycle/generation/position; INVALID_SELECTOR covers nonlocal observations or nonactive invalidation paths. Missing ignition, repeated ignition, COMPLETE and agent cycle exhaustion use NOT_IGNITED, ALREADY_IGNITED, AGENT_COMPLETE and AGENT_BOUND respectively. MALFORMED_EMISSION is nonfatal only under W6. Every pure rejection leaves admitted clock/history/cache unchanged.'),
+        h('Fatal error alphabet'),
+        code('REQUEST_TOO_LARGE     OWNER_FAILED         STORAGE_FAILED'),
+        p('Fatal owner/storage errors terminate the valid ownership period. A closed or poisoned embedded owner refuses all further requests without emission or mutation. Fatal transport errors never interpret a remaining line tail as another request. Responses follow page 78\'s null-head/null-next rule only when a valid admitted configuration exists.'),
+        small('The protocol does not turn an attempted read into automatic corruption or eviction. INVALIDATE is an explicit validated forward operation with a recorded cause. Neither denied names nor integrity checks supply global producer authentication.')
+    )
+    build_w_reference_pages()
+
+
+def build_w_reference_pages():
+    page('Independent W reference vectors', 'FORMAL ONLY | MATHEMATICAL EXPECTATIONS BEFORE RUNTIME',
+        p('The independent reference in docs/evidence/welip-v1/ uses frozen OG mathematical owner transitions and separate integer codec/cache logic, with no solvefinite import or device execution. Its main fixture uses producer welip-reference, producer_epoch 7, clock_origin 65,530, max_events 64 and initial capacity 3, around the nine-cycle OG mission on page 65.'),
+        h('Complete lifecycle schedule'),
+        code('I, A1, E, R1, X, A2, A3, A4, E, A5/GROW, R4, A6, A7, X, A8, A9, E'),
+        p('I=IGNITE bytes DEADBEEF0123456789; A means ADVANCE to the stated agent cycle; E=EMIT; R=RESIZE to the stated capacity. The first X invalidates k:3:0 with cause release-old-local-copy; the second invalidates k:2:1 with cause rebuild-current-local-copy. The schedule expects 17 W operations and 18 records while preserving the nine agent transitions.'),
+        h('Exact words: clock, byte order and terminal state'),
+        code('IGNITE raw record0 (9 bytes; phase16=FA00):\n FFFBFA00EFBEADDE FFFBFA0067452301 FFFBFA0000000089\nIGNITE state record1 (same time and phase):\n FFFBFA0001FE00FA FFFBFA0091FE0006\nW operation6 / ADVANCE2 (epoch1, tick0000, phase1000):\n 00001000910010F0 0000100081001010\nW operation17 / EMIT (epoch1, tick000B, phaseBA00):\n 000BBA0016000646 000BBA00860006BA'),
+        p('At operation 6, T_W=65,536, agent cycle=2 and energy=93. At operation 10, GROW reaches agent cycle 5 and geometry epoch 1; the new cache is empty with zero counters. Final owner pair is 860006BA16000646, energy 76, agent cycle 9, geometry epoch 1 and W clock (1,11). Final cache capacity is 4, with FIFO k:1:0,k:1:1,k:1:2,k:2:1; hits 0, regenerations 7, evictions 16.'),
+        h('Independent boundary qualifications'),
+        p('The reference includes raw lengths 0,1,5,9 and 4,096; 1,024 phase/orientation/STEP-or-EMIT codec cases; mirrored and capacity-8 lifecycle variants; malformed padding/count/header/parity/mirror vectors; and legal channel-swap rejection against the actual owner. The generic full-width carrier word FFFFFFFFFFFFFFFF is legal for tick=phase=65,535 and four FF bytes; state phase adds its stricter resolution rule.'),
+        small('Maximum-clock fixture: origin=281474976710591 and max_events=64 end at (4294967295,65535). A next sequence 65 receives BUDGET_EXHAUSTED before clock equality; no next cursor wraps. Full requests, records, retry receipts, cache witnesses and separate executor-counter expectations are retained. Historical OG runtime archive identity is labelled separately from these mathematical W transcript identities.'),
+        small('Main operation-transcript SHA-256: e2b7b8b47b057319f77fbdeea6146b73eba714c1a8e132b065b7c4671ad4c5e0. The builder pins the complete reference and generator; these are expected values, not measured W runtime results.')
+    )
+    build_w_acceptance_page()
+
+
+def build_w_acceptance_page():
+    page('W acceptance and architectural scope', 'FORMAL ONLY | W8 | REQUIRED IMPLEMENTATION EVIDENCE',
+        p('A separate source-bound implementation capture shall demonstrate the complete finite contract. Passing carrier examples alone does not establish durable lifecycle, device refinement or forward-only admission. The independent reference precedes runtime work; actual implementation evidence must retain its original inputs and versions.'),
+        table(['Obligation','Required acceptance scope'],[
+            ['Codec and metadata','Raw lengths 0,1,5,9 and 4,096; exact padding/count/header checks; full parity/mirror; ordered owner channels; energy metadata, wrong actual owner/context and coordinated legal-but-wrong payload rejection.'],
+            ['Clocks / identity','All five new operations advance W time; IGNITE record sequence 0,1; 16-bit carry and 48-bit exhaustion; independent producer epoch, agent cycle, geometry epoch and device counter; no wrap reuse.'],
+            ['Agent projection','All four supported policies; unchanged canonical agent archive under inserted W controls; exact original OG GROW time/prefix; mirrored owner, incomplete WAIT frames, incremental DEFER and fresh recovery from nonterminal outcomes.'],
+            ['FIFO lifecycle','Capacity-preserving semantics, oldest eviction, complete selected-pair invalidation, unaffected order, cause retention and later regeneration; whole-selector rejection; fresh cache/counter reset at GROW; interleaved lifecycle replay.'],
+            ['Forward boundary','All backward names and extra selectors denied; latest exact retry before changed context; stale/conflicting/gapped requests; no historical payload, duplicate device dispatch, clock mutation or archive write.'],
+            ['Actual GPU refinement','Canonical device W production for all four policies and terminal EMIT states; host state-word fallback forbidden; complete canonical/scratch checks, preserved device counter and no reseeding after initialization.'],
+            ['Durability / ownership','One OS-held owner and serialized calls; immutable configuration/path; before/after replacement failures, unread acknowledgment, post-ADVANCE/cache emission failure, save uncertainty, EOF/oversized/transport failure and fresh CPU/GPU process recovery.'],
+            ['Prior profiles','FI/PX/HP/GD/OG schemas, numerical contracts and canonical reference archives remain unchanged. Existing live retry/history APIs keep their separate R semantics.'],
+        ],[.25,.75]),
+        box('Revision 11 status: FORMAL ONLY. No W test count, actual-device execution, durable continuation result or resource measurement is claimed. A later measured edition must identify source/report hashes and test the full acceptance scope.'),
+        small('Remaining architecture includes general primitive/graph productions, broader spectral choices, physical adapters, universality and comparative hardware measurements. This finite W binding is not indefinite time, global authentication, exactly-once physical actuation or total constant memory.')
     )
 
 
@@ -1132,7 +1359,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 10')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 11')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -1165,7 +1392,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 10')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 11')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -1173,7 +1400,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 10')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 11')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -1186,6 +1413,7 @@ def render(output):
             items=[]
             for pg,(t,s,_) in enumerate(PAGES,2):
                 if t=='Contents': continue
+                if pg > 69: continue  # The W appendix supplies its own complete section map.
                 items.append((pg,t))
             column_width = (CONTENT_W-22)/2
             split = (len(items)+1)//2
@@ -1203,7 +1431,7 @@ def render(output):
                     c.setFont('Bold',8.6); c.setFillColor(TEAL)
                     c.drawRightString(x+column_width,y-9,str(pg))
                     c.linkRect('',f'p{pg}',(x,y-ht-2,x+column_width,y+2),relative=0,thickness=0)
-                    y -= max(19,ht+7)
+                    y -= max(18.5,ht+6.5)
                 bottoms.append(y)
             y=min(bottoms)
             if y < 59: raise ValueError(f'Contents overflow: bottom={y:.1f}')
@@ -1233,7 +1461,7 @@ def render(output):
 
 
 def verify_retained_inputs():
-    global HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE, OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE
+    global HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE, OG_REFERENCE, OG_VERIFICATION, OG_CONFORMANCE, W_REFERENCE
     expected_hashes = {
         'Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf':
             '8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647',
@@ -1502,17 +1730,19 @@ def verify_retained_inputs():
             or measured['preimplementation_formal_pdf_sha256'] != hashlib.sha256(formal_pdf).hexdigest()
             or measured['preimplementation_formal_pdf_sha256'] != '64d1489cad789cf45e3171295076559ca2295030a5348561292bb977b19f91b0'):
         raise ValueError('OG implementation chronology disagrees with the frozen revision 9 formal binding')
-    expected_sources = {path.relative_to(ROOT).as_posix()
-                        for directory in ('solvefinite', 'tests', 'examples')
-                        for path in (ROOT/directory).rglob('*')
-                        if path.is_file() and path.suffix in ('.py', '.wgsl', '.json')}
+    historical_paths = subprocess.check_output(
+        ['git', 'ls-tree', '-r', '--name-only', '-z', OG_CAPTURE_COMMIT,
+         '--', 'solvefinite', 'tests', 'examples'], cwd=ROOT).decode('utf-8').split('\0')
+    expected_sources = {path for path in historical_paths
+                        if path and Path(path).suffix in ('.py', '.wgsl', '.json')}
     expected_sources.update({'tools/capture_organogram_evidence.py',
                              'docs/evidence/organogram-v1/reference-builder.py',
                              'docs/evidence/organogram-v1/formal-reference.json'})
     if set(measured['source_sha256_lf']) != expected_sources:
-        raise ValueError('OG evidence must identify the entire current runtime, examples and test sources')
+        raise ValueError('OG evidence must identify all runtime, example and test sources at f125a76')
     for relative, expected in measured['source_sha256_lf'].items():
-        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        source = subprocess.check_output(
+            ['git', 'show', f'{OG_CAPTURE_COMMIT}:{relative}'], cwd=ROOT).replace(b'\r\n', b'\n')
         if hashlib.sha256(source).hexdigest() != expected:
             raise ValueError(f'OG evidence source identity changed: {relative}')
     if set(measured['report_sha256_lf']) != {'full-tests.txt', 'conformance.json', 'cli-replay.json'}:
@@ -1613,6 +1843,84 @@ def verify_retained_inputs():
         raise ValueError('OG capture changed an original source or the separate ELI5 document')
     OG_VERIFICATION = measured
     OG_CONFORMANCE = captured
+    w_bytes = (WELIP_EVIDENCE/'formal-reference.json').read_bytes().replace(b'\r\n', b'\n')
+    w_generator = (WELIP_EVIDENCE/'reference-builder.py').read_bytes().replace(b'\r\n', b'\n')
+    if (hashlib.sha256(w_bytes).hexdigest() != '0ec46f6668867eb176285d821666de7e0fb3b71c5fac462d9a0e61973c71e210'
+            or hashlib.sha256(w_generator).hexdigest() != '369c4f4f9d81cdbf5e897c20a06a08fd0d9949deadefb6f9c42975c9063c7eb7'):
+        raise ValueError('Revision 11 requires its frozen independent W reference and generator')
+    w = json.loads(w_bytes)
+    if (w['format'] != 'welip-independent-formal-reference-v1'
+            or w['generator_sha256_lf'] != hashlib.sha256(w_generator).hexdigest()
+            or w['source_OG_reference_sha256'] != hashlib.sha256(og_bytes).hexdigest()
+            or w['source_OG_generator_sha256_lf'] != hashlib.sha256(og_generator).hexdigest()
+            or w['source_GD_generator_sha256_lf'] != gd['generator_sha256_lf']
+            or w['phase_vectors']['checked_cases'] != 1024
+            or len(w['malformed_vectors']['rejections']) != 14
+            or [item['byte_length'] for item in w['raw_payload_vectors']['length_cases']] != [0,1,5,9,4096]):
+        raise ValueError('W formal reference provenance or displayed coverage disagrees')
+    hashes = {'main_lifecycle': 'e2b7b8b47b057319f77fbdeea6146b73eba714c1a8e132b065b7c4671ad4c5e0',
+              'mirrored_lifecycle': '91e4d28efd3cc55bfd5f88bb71e01f3dec488fe2a02434571e1954a64ec1e24a',
+              'capacity8_lifecycle': 'c0fcef115c34ebe0c6ed8b840d673a2937c530657d0969111f0d4a6b109d67d4'}
+    for name, expected_digest in hashes.items():
+        lifecycle = w[name]
+        rows = lifecycle['operations']
+        if (len(rows) != 17 or lifecycle['record_count'] != 18
+                or lifecycle['fragment_count'] != 37
+                or len(lifecycle['projected_owner_transitions']) != 9
+                or lifecycle['operation_transcript_sha256'] != expected_digest
+                or canonical_hash(rows) != expected_digest
+                or [item['executor_action_ticks'] for item in lifecycle['executor_action_tick_expectations']]
+                != [0,1,1,1,1,2,3,4,4,0,0,1,2,2,3,4,4]):
+            raise ValueError(f'W displayed lifecycle schedule or independent digest disagrees: {name}')
+        for number, row in enumerate(rows, 1):
+            tick = lifecycle['config']['clock_origin'] + number
+            request = row['request']
+            if (request['seq'], request['clock_epoch'], request['tick16']) != (number, tick >> 16, tick & 65535):
+                raise ValueError(f'W independent request clock disagrees: {name}/{number}')
+            state = int(row['agent_pair'], 16)
+            left = state & 0xffffffff
+            phase = ((-(left & 255) if left & (1 << 28) else left & 255) & 255) << 8
+            if len(row['records']) != (2 if number == 1 else 1):
+                raise ValueError('W record count differs from the five-operation contract')
+            for record_seq, record in enumerate(row['records']):
+                if (record['operation_seq'], record['record_seq'], record['clock_epoch'],
+                        record['tick16'], record['phase16'], record['energy']) != (
+                        number, record_seq, tick >> 16, tick & 65535, phase, row['energy']):
+                    raise ValueError(f'W record identity/phase/energy disagrees: {name}/{number}')
+                if (record['fragment_count'] != len(record['words'])
+                        or record['fragment_count'] != (record['byte_length']+3)//4
+                        or any((int(word,16) >> 32) != ((tick & 65535) << 16) | phase
+                               for word in record['words'])):
+                    raise ValueError('W displayed word fragmentation/header arithmetic disagrees')
+                if record['payload_profile'] == 'RP32-relational-sdf-v2':
+                    if [int(word,16) & 0xffffffff for word in record['words']] != [left, state >> 32]:
+                        raise ValueError('W state payload order differs from the original owner pair')
+    main = w['main_lifecycle']
+    first, carry, grow, final = [main['operations'][index] for index in (0,5,9,16)]
+    if (first['records'][0]['words'] != ['FFFBFA00EFBEADDE','FFFBFA0067452301','FFFBFA0000000089']
+            or first['records'][1]['words'] != ['FFFBFA0001FE00FA','FFFBFA0091FE0006']
+            or carry['records'][0]['words'] != ['00001000910010F0','0000100081001010']
+            or (carry['records'][0]['agent_cycle'], carry['energy']) != (2,93)
+            or grow['cache'] != {'capacity':1,'active_paths':[],'hit_count':0,
+                                'regeneration_count':0,'evicted_count':0,'removed':[]}
+            or final['records'][0]['words'] != ['000BBA0016000646','000BBA00860006BA']
+            or (final['agent_pair'], final['energy'], final['records'][0]['agent_cycle'],
+                final['records'][0]['geometry_epoch']) != ('860006BA16000646',76,9,1)
+            or final['cache'] != {'capacity':4,'active_paths':['k:1:0','k:1:1','k:1:2','k:2:1'],
+                                 'hit_count':0,'regeneration_count':7,'evicted_count':16,'removed':[]}
+            or main['projected_owner_transitions'] != w['capacity8_lifecycle']['projected_owner_transitions']):
+        raise ValueError('W displayed literal carrier, lifecycle or cache vectors disagree')
+    horizon = w['clock_vectors']['u48_maximum'][-1]
+    historical = w['historical_runtime_preservation_expectation']
+    if ((horizon['origin'], horizon['max_events'], horizon['seq'], horizon['clock_epoch'], horizon['tick16'])
+            != (281474976710591,64,64,4294967295,65535)
+            or w['clock_vectors']['exhausted_next_request']['request_seq'] != 65
+            or w['clock_vectors']['exhausted_next_request']['next'] is not None
+            or w['raw_payload_vectors']['generic_full_width']['words'] != ['FFFFFFFFFFFFFFFF']
+            or historical['canonical_agent_archive_sha256'] != measured['canonical_archive_sha256']
+            or historical['source_sha256'] != measured['report_sha256_lf']['conformance.json']):
+        raise ValueError('W horizon or separately labelled historical OG preservation expectation disagrees')
+    W_REFERENCE = w
 
 
 if __name__=='__main__':

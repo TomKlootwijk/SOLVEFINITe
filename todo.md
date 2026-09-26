@@ -565,3 +565,57 @@ original formal chronology and complete archived missions before rebuilding.
 Original source documents and the Tom/Jitske ELI5 booklet remain unchanged.
 The implementation, evidence, updated PDF and this progress record are included
 in the same committed and pushed milestone.
+
+## WElip clock, carrier and forward interface
+
+The intervening robot-name verification confirmed an already committed result;
+it made no new architecture change. The worktree and remote were revalidated at
+`f125a76`, and the next concrete action is the original specification's WElip
+contract (pages 4, 8 and 14-15), formalized before runtime implementation.
+
+This profile gives the existing field-guided individual a separate forward
+interface: IGNITE, ADVANCE, RESIZE, INVALIDATE and EMIT. Its logical clock uses
+a 16-bit tick and explicit carry epoch. That clock is distinct from the agent's
+decision cycle, the world generation and the GPU executor counter. The same
+original inputs and organogram event contexts remain the basis for regeneration.
+
+- [x] Freeze W1-W8 and independent carrier, clock, cache and lifecycle vectors
+  in the existing consolidated formal PDF; preserve earlier contracts and
+  identify the OG measurements with their historical source commit.
+- [ ] Implement strict W64/LUS encoding, the five-operation interface, ordered
+  local invalidation and capacity changes, and terminal-state emission.
+- [ ] Produce GPU state records from the actual canonical device owner with
+  no replacement CPU state producer; preserve pair, energy and device counter.
+- [ ] Persist the complete W operation order before acknowledgement and
+  reconstruct cache controls alongside agent steps during private recovery.
+- [ ] Verify latest-only retry without historical payload, clock carry and
+  exhaustion, all four policies, incomplete observations, GROW/DEFER, mirrors,
+  cache regeneration, atomic failure handling and fresh CPU/GPU processes.
+- [ ] Capture source-bound implementation evidence, update the same PDF's
+  measured status, commit and push. Keep broader architecture work active.
+
+The frozen design treats a lost state response as replaceable by a new forward
+EMIT; it does not expose old IGNITE bytes through a retry. After any admitted
+working-state mutation, an uncertain output or save closes the owner until
+durable recovery determines the prefix. This rule applies to the whole
+operation, including cache and planning state, not only to its GPU readback.
+
+Revision 11 adds W1-W8 on pages 69-81 of the same consolidated PDF. Its exact
+schemas, error ordering and acceptance obligations are formal-only requirements.
+Three independent lifecycle references each contain 17 operations, 18 records
+and 37 carrier words while preserving the nine-cycle OG projection. Operation
+6 crosses the clock carry; operation 10 changes geometry and resets the cache
+and executor counter. The final owner remains `860006BA16000646`, with energy
+76. A capacity-eight variant changes cache hits/regenerations without changing
+the owner transitions. All 1,024 phase/orientation/opcode cases, five raw
+payload lengths, fourteen malformed vectors and the 48-bit clock horizon were
+checked independently. These are mathematical expectations, not W runtime tests.
+
+The reference rebuilt byte-for-byte identically, and a separate review checked
+its packing with struct-based encoding and its cache with an independent FIFO
+model. The PDF has 81 pages/bookmarks and 79 resolved internal links. The
+previous normative pages 35-66 retain identical source ASTs and extracted
+bodies. All 94 OG source/reference identities, the three source PDFs and the
+Tom/Jitske ELI5 booklet are unchanged. Historical OG measurements are now pinned
+to `f125a76` so later code cannot silently inherit that capture. This formal
+baseline is committed and pushed before the still-pending W implementation.
