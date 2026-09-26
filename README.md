@@ -26,6 +26,11 @@ movement, phase-aware search and the certified GPU routing atlas.
 GD1-GD8 were committed at `ec1181e`, with the original-prefix identity bound at
 `00b0e64`, before their respective implementations. The same individual can
 now generate a larger intrinsic geometry and select its next subgoal internally.
+Revision 9 additionally binds OG1-OG8 before implementation: parameterized
+parallel productions, complete branch restoration, and generated intrinsic-ball
+boundaries that become the same individual's next field. The
+[independent arithmetic reference](docs/evidence/organogram-v1/README.md)
+records expected results; OG runtime and GPU conformance remain pending.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including

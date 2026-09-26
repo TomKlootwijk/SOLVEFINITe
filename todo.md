@@ -455,3 +455,55 @@ clauses and GD normative clauses are preserved. Original source PDFs and the
 Tom/Jitske ELI5 booklet remain byte-identical. General production rules and
 branch context, global eigenmodes, physical adapters, wider continuation and
 comparative hardware evidence remain explicit next work under the full goal.
+
+## 2026-09-26: parameterized production and complete branch context
+
+The preceding architecture milestone made concrete progress through GD1-GD8.
+The intervening ELI5 naming check confirmed an already pushed change and did not
+advance the architecture. This continuation rechecked the clean worktree at
+`94f86c7` and the three source PDFs before choosing the next implementation.
+
+Original source page 10 requires parameterized productions, complete branch
+restoration including orientation, and regeneration under the original tick and
+rule version. The current binary demonstration and fixed dyadic production do
+not yet implement that general interpreter in the field-guided individual.
+
+The next binding uses the prior certified field as the guide for a finite
+branching program. Its emitted intrinsic balls define a new boundary on the
+same Klein quotient. Exact distance to that combined boundary must be rebuilt:
+the minimum of the individual ball margins is not generally the final SDF.
+The new field must become the same individual's planning and action context.
+
+- [x] Bind OG1-OG8, exact schemas, numerical semantics, original-context
+  identities and independent arithmetic vectors in the existing consolidated
+  PDF before runtime changes. Preserve earlier contracts and source PDFs.
+- [ ] Implement strict parameterized parallel rewriting, original-context
+  substitution, branch restoration and a certified generated-field recipe.
+- [ ] Integrate REPAIR, GROW, the generated target and later action into the
+  same Tomigidt while preserving prior policies and canonical histories.
+- [ ] Execute the branch interpreter, primitive placement and field generation
+  on the actual GPU. Keep structural host compilation explicit and prohibit a
+  CPU-generated trajectory or field from substituting for device results.
+- [ ] Verify nested seam-crossing branches, rule priority, bounds, full mirrors,
+  exact union fields, original identity, historical reconstruction, planning
+  continuation, failure atomicity and CPU/GPU process recovery.
+- [ ] Capture source-bound measurements, update the same PDF's measured status,
+  commit and push. Keep the complete architecture objective active.
+
+This finite sphere/ball production family leaves arbitrary cone/pyramid
+construction, global spectral choices, WElip and clock continuation, physical
+adapters and comparative hardware evidence as explicit remaining obligations.
+
+Revision 9 now contains the OG contract and independent literal vectors in the
+same 66-page PDF. All pages were rendered and reviewed; FI/PX/HP/GD normative
+pages 35-56 are unchanged from `94f86c7`. The three original PDFs and ELI5
+booklet are byte-identical. The GD evidence now explicitly names its historical
+implementation commit, so later code cannot silently inherit its measurements.
+
+The independent reference was run twice with identical output. Its closed
+metric agrees with breadth-first search for all 702 supported quotients and
+19,130,481 ordered node pairs. A nested branch changes orientation, radius and
+scale before restoring the complete frame. Its generated field changes a
+subsequent route's reference cost from 14 to 4. Expected default and two-epoch
+missions take 9 and 14 cycles, with energy 76 and 66. These are mathematical
+expectations, not completed OG runtime or GPU conformance.
