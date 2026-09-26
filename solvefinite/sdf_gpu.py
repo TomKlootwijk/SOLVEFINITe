@@ -15,6 +15,12 @@ from .gpu import GpuUnavailable
 from .rp32 import Opcode, pack, pair, unpack, unpair
 
 
+def _tag_device_uncertainty(error, uncertain):
+    """Retain exception identity while exposing uncertain detached candidates."""
+    error.device_uncertain = bool(uncertain or getattr(error, "device_uncertain", False))
+    error.candidate_failed = error.device_uncertain
+
+
 class GpuFieldExecutor:
     """Single-owner, synchronous GPU field and persistent packed execution.
 
@@ -43,6 +49,7 @@ class GpuFieldExecutor:
         self._texture = None
         self._closed = False
         self._failed = False
+        self._construction_device_uncertain = False
         self._ticks = 0
         try:
             adapter = wgpu.gpu.request_adapter_sync(power_preference="high-performance")
@@ -66,8 +73,20 @@ class GpuFieldExecutor:
                 int(Opcode.STEP) | (manifest.initial_orientation << 4),
             ))
             self.reset(initial)
-        except BaseException:
-            self.close()
+            # Finish the constructor's outstanding operator compilation and
+            # initial-state upload before another owner may admit this object.
+            self._construction_device_uncertain = True
+            raw = self._device.queue.read_buffer(self._state)
+            actual = struct.unpack("<4I", raw)
+            self._construction_device_uncertain = False
+            if actual != (*unpair(initial), 0, 0):
+                raise ValueError("GPU initial state disagrees with its admitted field")
+        except BaseException as exc:
+            _tag_device_uncertainty(exc, self._failed or self._construction_device_uncertain)
+            try:
+                self.close()
+            except BaseException:
+                _tag_device_uncertainty(exc, True)
             raise
 
     @property
@@ -82,7 +101,11 @@ class GpuFieldExecutor:
         )
         self._buffers.append(buffer)
         if data is not None:
-            self._device.queue.write_buffer(buffer, 0, data)
+            try:
+                self._device.queue.write_buffer(buffer, 0, data)
+            except BaseException as exc:
+                _tag_device_uncertainty(exc, True)
+                raise
         return buffer
 
     @staticmethod
@@ -171,9 +194,11 @@ class GpuFieldExecutor:
         for round_index in range(count - 1):
             self._pass(encoder, pipelines["relax_distances"], relax[round_index % 2], groups)
         self._pass(encoder, pipelines["write_fields"], finish, groups)
+        self._construction_device_uncertain = True
         device.queue.submit([encoder.finish()])
         raw = device.queue.read_buffer(self._field_buffer)
         self._fields = tuple(struct.unpack(f"<{count}i", raw))
+        self._construction_device_uncertain = False
         certify_field(manifest, self._fields)
 
         # Compile only after certification, so an unrepresentable magnitude can
@@ -186,6 +211,7 @@ class GpuFieldExecutor:
         encoder = device.create_command_encoder()
         self._pass(encoder, pipelines["compile_operators"], compile_group,
                    (3 * count + 63) // 64)
+        self._construction_device_uncertain = True
         device.queue.submit([encoder.finish()])
         self._advance_pipeline = pipelines["advance_ticks"]
         self._advance_group = self._group(self._advance_pipeline, {

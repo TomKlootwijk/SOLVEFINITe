@@ -368,3 +368,39 @@ fn repair() {
     state[3] += 1u;
     emit(0u, state[0], cost, state[2], 0u);
 }
+
+// GD5: jobs contain the admitted old pair, energy/height, count/cost,
+// signed old field/new height. Read only source data; write candidate state.
+@compute @workgroup_size(1)
+fn admit_growth() {
+    let word = jobs[0].x;
+    let mirror = jobs[0].y;
+    let energy = jobs[1].x;
+    let old_height = jobs[1].y;
+    let old_count = jobs[2].x;
+    let cost = jobs[2].y;
+    let old_field = bitcast<i32>(jobs[3].x);
+    let new_height = jobs[3].y;
+    let source = (word >> 8u) & 255u;
+    let metadata = (word >> 24u) & 127u;
+    if old_height < 3u || old_height > 64u || old_count < 9u || old_count > 64u
+        || old_count % old_height != 0u || old_count / old_height < 3u
+        || config[0] != 4u * old_count || new_height != 2u * old_height
+        || source >= old_count || energy > 2147483647u || cost < 1u || cost > 127u
+        || (metadata != 6u && metadata != 22u)
+        || (countOneBits(word) & 1u) != 0u || mirror != mirror_rp32(word)
+        || old_field < -128 || old_field > 127 || signed_field(word) != old_field {
+        emit(0u, word, cost, energy, 1u); return;
+    }
+    if cost > energy { emit(0u, word, cost, energy, 2u); return; }
+    let mapped = 2u * (source / old_height) * new_height + 2u * (source % old_height);
+    if resolve_row(mapped) >= config[0] {
+        emit(0u, word, cost, energy, 3u); return;
+    }
+    let next_word = pack_rp32(word & 255u, mapped, fields[mapped], 1u | (metadata & 16u));
+    state[0] = next_word;
+    state[1] = mirror_rp32(next_word);
+    state[2] = energy - cost;
+    state[3] = 0u;
+    emit(0u, next_word, cost, state[2], 0u);
+}

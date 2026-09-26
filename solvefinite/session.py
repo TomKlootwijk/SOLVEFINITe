@@ -15,7 +15,7 @@ from pathlib import Path
 from .rp32 import unpack
 from .runtime import _integer, _keys, write_json
 from .tomigidt import AgentManifest, Tomigidt
-from .field_agent import FieldAgentManifest
+from .field_agent import FieldAgentManifest, GROWTH_POLICY
 from .f8 import IndexBinding
 
 
@@ -107,17 +107,26 @@ class Scenario:
     def load(cls, path: str | Path) -> Scenario:
         return cls.from_dict(_read_json(path))
 
-    def observe(self, position: str, cycle: int) -> dict[str, int]:
-        """Fresh full local frame; changes apply starting at their named cycle."""
-        graph = dict(self.manifest.graph)
+    def observe(self, position: str, cycle: int, *, geometry_epoch: int = 0) -> dict[str, int]:
+        """Fresh local frame; configured hazards belong only to geometry epoch 0."""
+        is_growth = self.manifest.policy == GROWTH_POLICY
+        maximum = self.manifest.growth.max_epochs if is_growth else 0
+        _integer(geometry_epoch, 0, maximum, "geometry_epoch")
+        if is_growth:
+            from .growth import recipe_at_epoch
+            recipe = recipe_at_epoch(self.manifest.world, self.manifest.growth, geometry_epoch)
+            graph = dict(recipe.graph())
+        else:
+            graph = dict(self.manifest.graph)
         if type(position) is not str or position not in graph:
             raise ValueError("observer position must be a declared graph node")
         _integer(cycle, 1, self.manifest.max_cycles, "observation cycle")
-        hazards = dict(self.hazards)
-        for effective_cycle, path, hazard in self.changes:
-            if effective_cycle > cycle:
-                break
-            hazards[path] = hazard
+        hazards = dict(self.hazards) if geometry_epoch == 0 else {}
+        if geometry_epoch == 0:
+            for effective_cycle, path, hazard in self.changes:
+                if effective_cycle > cycle:
+                    break
+                hazards[path] = hazard
         return {path: hazards.get(path, 0)
                 for path in sorted({position, *graph[position]})}
 
@@ -202,10 +211,14 @@ def load_session(path: str | Path, capacity: int = 2, *,
         for event in agent.events:
             recorded = {path: unpack(int(word, 16))[2]
                         for path, word in event["input"].items()}
-            if recorded != scenario.observe(position, event["seq"]):
+            observation_context = ({"geometry_epoch": event["geometry_epoch"]}
+                                   if agent.is_growth else {})
+            if recorded != scenario.observe(position, event["seq"], **observation_context):
                 raise ValueError("Retained sensor input disagrees with the scenario timeline")
             if event["decision"]["kind"] == "MOVE":
                 position = event["decision"]["route"][0]
+            elif event["decision"]["kind"] == "GROW":
+                position = event["growth"]["mapped_node"]
         return scenario, agent
     except BaseException:
         agent.close()
@@ -257,17 +270,22 @@ def run_session(
             for _ in range(steps):
                 if agent.status == "COMPLETE" or agent.cycle >= agent.manifest.max_cycles:
                     break
-                decision = agent.step(scenario.observe(agent.position, agent.cycle + 1))
+                observation_context = ({"geometry_epoch": agent.geometry_epoch}
+                                       if agent.is_growth else {})
+                decision = agent.step(scenario.observe(agent.position, agent.cycle + 1,
+                                                       **observation_context))
                 write_json(path, {"format": SESSION_FORMAT,
                                   "scenario": scenario.to_dict(), "agent": agent.archive()})
                 decisions.append(decision.to_dict())
-                if agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
+                if (agent.status not in ("ACTIVE", "GROWTH_PENDING")
+                        and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search)):
                     break
             if agent.status == "COMPLETE":
                 stop_reason = "COMPLETE"
             elif agent.cycle >= agent.manifest.max_cycles:
                 stop_reason = "CYCLE_BUDGET_EXHAUSTED"
-            elif agent.status != "ACTIVE" and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search):
+            elif (agent.status not in ("ACTIVE", "GROWTH_PENDING")
+                  and not (agent.status == "SEARCH_DEFERRED" and agent.pending_search)):
                 stop_reason = agent.status
             else:
                 stop_reason = "STEP_BUDGET_EXHAUSTED"

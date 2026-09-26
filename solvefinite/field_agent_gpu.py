@@ -16,9 +16,9 @@ from threading import RLock
 from .f8 import F8Index, IndexBinding, build_geometry
 from .hadamard import HadamardBinding, RoutingModel
 from .motion import EnergyExhausted
-from .rp32 import Opcode, unpack, unpair
+from .rp32 import Opcode, pack, pair, unpack, unpair
 from .runtime import _integer
-from .sdf_gpu import GpuFieldExecutor
+from .sdf_gpu import GpuFieldExecutor, _tag_device_uncertainty
 
 
 MAX_ENERGY = (1 << 31) - 1
@@ -127,8 +127,14 @@ class GpuFieldAgentExecutor:
             self._wgpu = self._geometry._wgpu
             self._initialize()
             del self._initial_binding
-        except BaseException:
-            self.close()
+        except BaseException as exc:
+            # A composed field constructor can fail before _geometry receives
+            # its return value. Preserve its uncertainty and exception type.
+            _tag_device_uncertainty(exc, self._failed)
+            try:
+                self.close()
+            except BaseException:
+                _tag_device_uncertainty(exc, True)
             raise
 
     @property
@@ -207,7 +213,11 @@ class GpuFieldAgentExecutor:
             size=size, usage=usage.STORAGE | usage.COPY_SRC | usage.COPY_DST)
         (self._buffers if bundle is None else bundle.buffers).append(buffer)
         if data is not None:
-            self._device.queue.write_buffer(buffer, 0, data)
+            try:
+                self._device.queue.write_buffer(buffer, 0, data)
+            except BaseException as exc:
+                _tag_device_uncertainty(exc, True)
+                raise
         return buffer
 
     def _group(self, pipeline, resources):
@@ -246,7 +256,7 @@ class GpuFieldAgentExecutor:
         shader = self._device.create_shader_module(code=Path(__file__).with_name(
             "shaders").joinpath("field_agent.wgsl").read_text(encoding="utf-8"))
         entries = ("build_keys", "build_tree", "compile_neighbors", "lookup_node",
-                   "derive_node", "forecast", "advance_to", "repair")
+                   "derive_node", "forecast", "advance_to", "repair", "admit_growth")
         if self._routing is not None:
             entries += ("compile_hadamard", "export_routing")
         self._pipelines = {
@@ -377,6 +387,11 @@ class GpuFieldAgentExecutor:
             "repair": self._group(self._pipelines["repair"], {
                 0: config, 7: resource(self._canonical), 8: output,
             }),
+            # Eight storage buffers, reusing independent job and state arenas.
+            "admit_growth": self._group(self._pipelines["admit_growth"], {
+                **index, 6: resource(self._jobs),
+                7: resource(self._canonical), 8: output,
+            }),
         }
         if self._routing is not None:
             gains = resource(bundle.gains)
@@ -489,6 +504,80 @@ class GpuFieldAgentExecutor:
         self._pair, self._energy = agent_pair, energy
         self._seeded = True
         self._failed = False
+
+    @_serialized
+    def admit_growth(self, source: GpuFieldAgentExecutor, cost: int) -> tuple[int, int]:
+        """GD5: map an actual repaired source into this unseeded dyadic world.
+
+        Only this candidate's buffers are written. The source remains an
+        independent, completed owner until Tomigidt commits the whole epoch.
+        Complete readbacks precede pure admission checks; uncertain device
+        results are tagged so an owning agent can conservatively close itself.
+        """
+        self._check_open()
+        if self._seeded:
+            raise ValueError("Canonical GPU state may only be admitted once")
+        if type(source) is not GpuFieldAgentExecutor or source is self:
+            raise ValueError("Growth requires a distinct source GPU executor")
+        _integer(cost, 1, 127, "growth cost")
+        if self._routing is None or source._routing != self._routing:
+            raise ValueError("Growth requires the same Hadamard routing binding")
+        old, new = source.recipe, self.recipe
+        u, v = divmod(old.center, old.height)
+        if (new.width, new.height, new.center, new.radius, new.turns,
+                new.baseline_id, new.version) != (
+                2 * old.width, 2 * old.height, 2 * u * new.height + 2 * v,
+                2 * old.radius, old.turns, old.baseline_id, old.version):
+            raise ValueError("Growth candidate must be the exact dyadic recipe")
+        source._check_open()
+        if not source._seeded or not source._terminal:
+            raise ValueError("Growth requires a completed source EMIT state")
+        # The actual old canonical state, not a caller's packed-state claim.
+        old_pair, old_energy = source.snapshot()
+        left, right, phase, node, metadata = source._live_pair(old_pair, Opcode.EMIT)
+        if cost > old_energy:
+            raise EnergyExhausted("Insufficient separate energy for growth")
+        old_field = source.fields[node]
+        u, v = divmod(node, old.height)
+        mapped = 2 * u * new.height + 2 * v
+        expected = pair(pack(phase, mapped, self.fields[mapped],
+                             int(Opcode.STEP) | (metadata & 16)))
+        expected_energy = old_energy - cost
+        # jobs: pair, energy/height, count/cost, signed old-field/new-height.
+        payload = struct.pack("<8I", left, right, old_energy, old.height,
+                              len(source.fields), cost, old_field & 0xffffffff, new.height)
+        try:
+            self._failed = True
+            self._device.queue.write_buffer(self._jobs, 0, payload)
+            self._dispatch(self._pipelines["admit_growth"], self._groups["admit_growth"])
+            rows = self._read_outputs(1)
+            canonical = struct.unpack("<4I", self._device.queue.read_buffer(self._canonical))
+            # Both complete results are known. Later rejection changes no
+            # admitted owner and is not an uncertain device operation.
+            self._failed = False
+            row = rows[0]
+            actual = self._pair_from_result(row)
+            self._live_pair(actual)
+            if (actual, row[2], row[3], row[5:]) != (
+                    expected, cost, expected_energy, (0, 0, 0)):
+                raise ValueError("GPU growth disagrees with its dyadic state mapping")
+            if canonical != (*unpair(expected), expected_energy, 0):
+                raise ValueError("Canonical GPU growth state disagrees with its admitted result")
+        except BaseException as exc:
+            _tag_device_uncertainty(exc, self._failed)
+            # A complete but rejected candidate is disposable, not seedable
+            # again. It must never be mistaken for a usable admitted state.
+            if not self._failed:
+                try:
+                    self.close()
+                except BaseException:
+                    _tag_device_uncertainty(exc, True)
+            raise
+        self._pair, self._energy = actual, expected_energy
+        self._ticks = 0
+        self._seeded = True
+        self._terminal = False
+        return actual, expected_energy
 
     @_serialized
     def forecast(self, agent_pair: int, route, hazards) -> tuple[tuple[int, ...], tuple[int, ...]]:

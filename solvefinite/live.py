@@ -167,6 +167,8 @@ class LiveSession:
                 positions.append(position)
                 if event["decision"]["kind"] == "MOVE":
                     position = event["decision"]["route"][0]
+                elif event["decision"]["kind"] == "GROW":
+                    position = event["growth"]["mapped_node"]
             self._config, self._agent = config, agent
             self._positions = positions
             self._restored = restored
@@ -225,12 +227,15 @@ class LiveSession:
         self._require_open()
         agent, config = self._agent, self._config
         terminal = agent.status == "COMPLETE" or agent.cycle >= config.manifest.max_cycles
-        return {
+        result = {
             "protocol": PROTOCOL, "producer": config.producer, "epoch": config.epoch,
             "state": agent.snapshot(),
             "next": None if terminal else {"seq": agent.cycle + 1, "position": agent.position,
                                            "paths": list(agent.visible_paths)},
         }
+        if agent.is_growth and result["next"] is not None:
+            result["next"]["geometry_epoch"] = agent.geometry_epoch
+        return result
 
     @_serialized
     def ready(self) -> dict:
@@ -252,9 +257,12 @@ class LiveSession:
             return {**self._context(), "type": "status"}
         if request.get("type") != "observe":
             raise LiveProtocolError("INVALID_REQUEST", "Live request type must be observe or status")
-        _request_keys(request, {"protocol", "type", "producer", "epoch", "seq",
-                                "position", "observations"})
         agent, config = self._agent, self._config
+        request_keys = {"protocol", "type", "producer", "epoch", "seq",
+                        "position", "observations"}
+        if agent.is_growth:
+            request_keys.add("geometry_epoch")
+        _request_keys(request, request_keys)
         if (type(request["producer"]) is not str or request["producer"] != config.producer
                 or type(request["epoch"]) is not int or request["epoch"] != config.epoch):
             raise LiveProtocolError("SOURCE", "Producer and epoch must match the retained live configuration")
@@ -265,11 +273,21 @@ class LiveSession:
         if seq > agent.cycle + 1:
             raise LiveProtocolError("OUT_OF_ORDER", "A preceding observation sequence is missing")
         duplicate = seq <= agent.cycle
+        original_event = agent.recorded_event(seq) if duplicate else None
+        if agent.is_growth:
+            expected_epoch = (original_event["geometry_epoch"] if duplicate
+                              else agent.geometry_epoch)
+            if (type(request["geometry_epoch"]) is not int
+                    or request["geometry_epoch"] != expected_epoch):
+                raise LiveProtocolError("GEOMETRY_EPOCH", "Geometry epoch differs from the original cycle context")
+            graph = dict(agent.recipe_at_epoch(expected_epoch).graph())
+        else:
+            graph = dict(config.manifest.graph)
         position = self._positions[seq - 1] if duplicate else agent.position
         if type(request["position"]) is not str or request["position"] != position:
             raise LiveProtocolError("POSITION", "Observation position differs from the original cycle context")
         observations = request["observations"]
-        visible = {position, *dict(config.manifest.graph)[position]}
+        visible = {position, *graph[position]}
         if (type(observations) is not dict
                 or any(type(path) is not str or path not in visible for path in observations)):
             raise LiveProtocolError("OBSERVATIONS", "Observations must be an object containing only local paths")
@@ -279,7 +297,7 @@ class LiveSession:
         except ValueError as exc:
             raise LiveProtocolError("OBSERVATIONS", str(exc)) from exc
         if duplicate:
-            event = agent.recorded_event(seq)
+            event = original_event
             recorded = {path: unpack(int(word, 16))[2] for path, word in event["input"].items()}
             if observations != recorded:
                 raise LiveProtocolError("CONFLICT", "This sequence already names a different admitted observation")
@@ -288,7 +306,12 @@ class LiveSession:
                 raise LiveProtocolError("TERMINAL", "The declared mission or cycle budget is complete")
             # All admission checks precede step. The existing policy stages
             # its forecast before mutating its simulated state.
-            agent.step(observations)
+            try:
+                agent.step(observations)
+            except BaseException as exc:
+                if agent.closed or getattr(exc, "committed", False):
+                    self._failed = True
+                raise
             try:
                 write_json(self.path, {"format": LIVE_FORMAT, "config": config.to_dict(),
                                        "agent": agent.archive()})

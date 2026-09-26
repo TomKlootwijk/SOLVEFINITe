@@ -10,9 +10,9 @@ It explains the idea in everyday language and shows which pieces already work.
 
 The consolidated formal reading edition is
 [TK-LPLUT-2.0: The Infallible Contract](output/pdf/Tom_Klootwijk_Ontological_Deterministic_Computing_v2.0.pdf).
-This single, self-contained 49-page PDF integrates the original specification,
+This single, self-contained PDF integrates the original specification,
 both supplied addenda, the exact SDF contract, the Klein extension and
-implementation evidence for the SDF, Klein, field-agent, Psi/f8 and Hadamard profiles. It defines
+implementation evidence for the SDF, Klein, field-agent, Psi/f8, Hadamard and geometry-growth profiles. It defines
 conditional infallibility through explicit deterministic execution and
 invariant-preservation obligations.
 The documentation detour is complete. The subsequent implementation now supports
@@ -23,6 +23,9 @@ evicted field samples. FI1-FI8 were committed in the consolidated PDF at
 before adding exact local eigenvectors and an executable canonical index.
 HP1-HP8 were committed at `0c862c3` before adding phase-directed Hadamard
 movement, phase-aware search and the certified GPU routing atlas.
+GD1-GD8 were committed at `ec1181e`, with the original-prefix identity bound at
+`00b0e64`, before their respective implementations. The same individual can
+now generate a larger intrinsic geometry and select its next subgoal internally.
 The ELI5 booklet retains its original baseline and the names Tom and Jitske.
 
 Historical verification at `8f4b87b`: **262 tests passed, zero skipped**, including
@@ -257,11 +260,63 @@ retain up to `N * 256 * (max_hops + 1)` labels, plus route/frontier overhead.
 See [Hadamard evidence and reproduction](docs/evidence/hadamard-v1/README.md)
 for the measured implementation and its limits.
 
-The complete verification capture passes **479 tests with zero skips**,
+The retained HP baseline capture passes **479 tests with zero skips**,
 including **77 actual-device GPU methods**, and all **15 HP conformance checks**.
 The default device payload is **57,272 bytes**, with a **67,752-byte** rebuild
 peak. Reproduce the source-bound capture with
 `python tools/capture_hadamard_evidence.py`.
+
+## Geometry growth within the same individual
+
+The `growth` profile completes a subgoal, enters `GROWTH_PENDING`, and uses a
+fresh local observation to admit `GROW`. Its declared production doubles both
+Klein dimensions and the intrinsic ball radius, maps old vertices to even
+coordinates, and rebuilds the field, index and routing operators. It then
+selects a genuinely new node by boundary proximity, graph distance and live
+intrinsic phase. The original manifest, identity, event ordering and remaining
+energy continue through the transition.
+
+```sh
+python -m solvefinite agent scenario --profile growth --output output/growth/scenario.json
+python -m solvefinite agent run --scenario output/growth/scenario.json --state output/growth/session.json --backend gpu --steps 4
+python -m solvefinite agent run --state output/growth/session.json --backend cpu --steps 1
+python -m solvefinite agent run --state output/growth/session.json --backend gpu --steps 64
+python -m solvefinite agent inspect output/growth/session.json --backend cpu
+python -m solvefinite agent live-config --profile growth --output output/growth/live-config.json
+python -m examples.growth_conformance
+```
+
+The default mission grows from 20 to 80 nodes and completes its second repair
+in 14 cycles with energy **64**. A separately configured two-generation case
+grows from 9 to 36 to 144 nodes and completes in 25 cycles with energy **33**.
+The grammar allows zero, one or two generations and validates the complete
+256-node budget before preparing a candidate. These are finite, declared
+integer application costs and limits.
+
+The GPU computes the mapped live state from the actual old EMIT pair and the
+new device-produced field. It recomputes signed distance rather than doubling
+the old scalar: a retained counterexample changes **-3 to -4**, not -6. A
+complete certified candidate replaces the old world atomically; observations,
+pending planning and the active FIFO are cleared for the new geometry.
+
+Growth-policy live observations require `geometry_epoch` from the returned
+`next` context, separately from the producer's `epoch`. Retries use their
+original geometry and result. `derive_epoch(epoch, path)` reconstructs a
+historical sample with its original admission sequence and a fingerprint of
+the exact event prefix. Replay, FIFO capacity and storage reindexing preserve
+that identity. Reindexing alone preserves current observations and search.
+
+The default preparation holds **177,504 bytes** of covered device buffers and
+textures across the old and candidate worlds. Host tables and fields, expanded
+topology, search, history, Python objects and driver allocations are additional;
+the active FIFO bound is not a total-memory bound. See
+[growth evidence and reproduction](docs/evidence/growth-v1/README.md).
+The complete suite passes **546 tests with zero skips**, including **107
+actual-device GPU methods**. The growth conformance capture adds **16 checks**
+and preserves the earlier field and Hadamard canonical histories. Reproduce
+the source-bound evidence with `python tools/capture_growth_evidence.py`.
+General production grammars, global spectral traversal, physical adapters,
+wider temporal continuation and comparative hardware measurements remain open.
 
 ## GPU texture execution
 

@@ -1,4 +1,4 @@
-"""Build integrated TK-LPLUT-2.0 revision 7. Requires ReportLab and pypdf.
+"""Build integrated TK-LPLUT-2.0 revision 8. Requires ReportLab and pypdf.
 
 Run with the bundled PDF runtime, or install reportlab and pypdf. The default
 output is the single tracked artifact under output/pdf/. No runtime is changed.
@@ -29,6 +29,8 @@ PSI_F8_EVIDENCE = ROOT / 'docs/evidence/psi-f8-v1'
 HADAMARD_EVIDENCE = ROOT / 'docs/evidence/hadamard-v1'
 GROWTH_EVIDENCE = ROOT / 'docs/evidence/growth-v1'
 HP_VERIFICATION = None
+GD_VERIFICATION = None
+GD_CONFORMANCE = None
 INK = colors.HexColor('#172B3A')
 TEAL = colors.HexColor('#007D83')
 GOLD = colors.HexColor('#C37F28')
@@ -99,16 +101,24 @@ def page(title, subtitle, *items):
 
 
 def build_content():
-    if HP_VERIFICATION is None:
-        raise ValueError('Verify historical Hadamard evidence before building revision 7')
+    if HP_VERIFICATION is None or GD_VERIFICATION is None or GD_CONFORMANCE is None:
+        raise ValueError('Verify historical HP and current GD evidence before building revision 8')
     hp_tests = HP_VERIFICATION['tests']['passed']
     hp_device_tests = sum(HP_VERIFICATION['tests']['actual_device_methods'].values())
     hp_checks = HP_VERIFICATION['conformance_checks_passed']
     hp_allocation = HP_VERIFICATION['allocation_info']
+    gd_tests = GD_VERIFICATION['tests']['passed']
+    gd_device_tests = sum(GD_VERIFICATION['tests']['actual_device_methods'].values())
+    gd_checks = GD_VERIFICATION['conformance_checks_passed']
+    gd_default = GD_CONFORMANCE['GPU']['default']
+    gd_two = GD_CONFORMANCE['GPU']['two_epoch']
+    gd_deferred = GD_CONFORMANCE['GPU_deferred']
+    gd_allocation = GD_VERIFICATION['execution_info']['allocation_info']
+    gd_peak = GD_VERIFICATION['execution_info']['growth']['peak_preparation_payload']
     page('Edition and authority', 'READING CONTRACT | 26 SEPTEMBER 2026',
         p('<b>Paradigm author:</b> Tom Klootwijk | NL200678942 | 10-07-1990. These are the author-supplied attribution details. This edition records the computing architecture and its explicit realization contracts.'),
         box('<b>Purpose.</b> Consolidate the original formal specification, the Solus addendum, the newest Infallible discussion in <i>solipsism.pdf</i>, and the SDF/Klein bindings into one self-contained formal document. Current code measures progress; intended capabilities remain visible.'),
-        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 7. FI1-FI8, PX1-PX8 and HP1-HP8 retain their contracts on pages 35-48; page 49 retains the measured Hadamard result at commit 5a304bc. GD1-GD8 on pages 50-56 now bind autonomous dyadic geometry growth before implementation. Earlier profiles retain their meanings.'),
+        p('<b>Document identity:</b> TK-LPLUT-2.0, revision 8. FI1-FI8, PX1-PX8 and HP1-HP8 retain their contracts on pages 35-48; page 49 retains the measured Hadamard result at commit 5a304bc. GD1-GD8 on pages 50-56 retain their formal-first growth contract; page 57 records its measured implementation. Earlier profiles retain their meanings.'),
         h('How statements acquire authority'),
         p('A <b>definition</b> fixes a mathematical meaning. A <b>requirement</b> uses “shall” to state an obligation of the named profile. A <b>theorem</b> follows from listed premises. An <b>evidence statement</b> reports a particular observed implementation result. A proposed binding is never counted as executed behavior.'),
         table(['Status','Meaning'],[
@@ -163,7 +173,7 @@ def build_content():
         eq('q_T = key_nu(X_T, e_T)\nO_T = L_nu(q_T)\nX_(T+1) = interpret_nu(O_T, X_T, e_T)'),
         p('The next key is derived from the updated packed state. In the implemented field profile it is (current node, sign class of current field). This produces a closed sequence without an externally supplied action list during the batch. The manifest still supplies the program and its initial conditions.'),
         p('A LUT miss, phase tie, endpoint, orientation change and budget exhaustion shall each have a defined outcome. The finite action group is Z_m semidirect Z_2, with multiplication (a,eta)*(b,zeta) = (a + (-1)^eta b, eta XOR zeta). Its continuous design analogue uses phases in R/Z. This does not identify the Klein bottle itself with a Lie group.'),
-        small('Current evidence: RP32 phase/mirror arithmetic and field-selected lookup execute on CPU and GPU. The binary world carries a base-2 depth scale annotation. Active log-radius resolution changes and general physical scale adapters remain separate obligations.')
+        small('Current evidence: RP32 phase/mirror arithmetic and field-selected lookup execute on CPU and GPU. GD1-GD8 add actual dyadic geometry generations with exponent k and scale factor 2^k. General resolution policies and calibrated physical scale adapters remain separate obligations.')
     )
     page('Uniform carrier and RP32', 'PACKED REPRESENTATION | ORIGINAL §§6-7',
         eq('W_w = {0, 1, ..., 2^w - 1}'),
@@ -225,7 +235,7 @@ def build_content():
         p('The reference contract uses parallel rewriting of one finite generation at a time. A realization shall bind priorities, unmatched-symbol handling, branch order, maximum depth, stack bounds, time inputs and interpretation costs. Regenerable derivations must be well-founded and retain every non-derived dependency.'),
         h('Current binary realization'),
         p('The binary world derives nodes from finite paths of depth at most 32. Its operator lookup depends on the current phase/selector; a branch updates the selector by (3*g + branch + 1) modulo 256. Packed GROW words, declared field updates and complete mirrors are reproducible from the retained rule set.'),
-        small('This realizes a bounded binary organogram. General production tables, arbitrary cone/pyramid generation, an orientation-aware branch stack and geometry-changing growth in the SDF machine are not yet integrated. The source’s geometry vocabulary is retained on page 12 rather than replaced by the binary demo.')
+        small('The binary organogram remains its own bounded profile. GD1-GD8 now integrate a finite geometry-changing production into the field-guided individual. General production tables, arbitrary cone/pyramid generation and an orientation-aware branch stack remain separate obligations.')
     )
     page('Psi, f8 and typed field operators', 'FORMAL CONTRACTS | ORIGINAL §§5, 9',
         h('Psi requires an operator'),
@@ -398,7 +408,7 @@ def build_content():
         h('Discrete does not mean unspecified'),
         p('Integer execution avoids floating-point rounding in the canonical field arithmetic. Width, signedness, overflow, shifting and conversion still require exact rules. Floating-point rounding is not inherently randomness; evaluation order and arithmetic semantics determine reproducibility [R6]. A finite discrete representation can execute an incorrect rule perfectly.'),
         h('Geometry changes are accepted state changes'),
-        p('The addendum’s internally generated growth can be formalized as a versioned graph-rewrite event. Such an event shall supply a finite rule, affected domain, retained derivation context and deterministic node correspondence. Its result must pass connectivity, boundary, range, topology and operator checks before admission. This is a contract for future growth; no dynamic SDF rewrite is implemented yet.'),
+        p('The addendum’s internally generated growth can be formalized as a versioned graph-rewrite event. Such an event shall supply a finite rule, affected domain, retained derivation context and deterministic node correspondence. Its result must pass connectivity, boundary, range, topology and operator checks before admission. GD1-GD8 now realize one finite dyadic geometry production under this contract; arbitrary rewriting remains separate.'),
         p('The source’s “zero-order decay” or Lambda label can name a future deterministic invalidation function Lambda_nu(S,e). Its selected entries, predicate, retention effects and result must be bound. It does not acquire a valid numerical meaning by calling unwanted input “noise.” Biological reaction-diffusion analogies require actual equations before they become physical models.'),
         small('Attribution remains attribution. Personal judgments in the exported discussion are not computing predicates. The meaningful architectural claim is a declared domain with exact admitted transitions, for which proof obligations and implementation measurements can be stated and discharged.')
     )
@@ -431,7 +441,7 @@ def build_content():
         p('The architecture can host deterministic simulation, regenerable world models, compact geometric controllers and device-independent continuation once their profiles and adapters are specified. Robotics, optical/FPGA execution, biological growth and physical autonomous construction require additional realizations. The current repository demonstrates software/GPU substrates and a simulated/live-observation individual.'),
         box('A complete application must identify what the field means, where its inputs come from, what action an output authorizes, and how the model is validated. The formal architecture supplies a common representation and execution discipline; it does not supply an absent sensor or actuator model.')
     )
-    page('Implementation map and integration', 'MEASURED PROFILES | FI, PX AND HP',
+    page('Implementation map and integration', 'MEASURED PROFILES | FI, PX, HP AND GD',
         p('The field-agent policy joins recipe-derived Klein geometry to the existing individual. The module map identifies implemented scope; remaining architectural concepts retain their separate obligations.'),
         table(['Layer','Existing implementation','Scope'],[
             ['Packed core','rp32.py','Encoding, phase, parity, full mirror and pair.'],
@@ -447,8 +457,8 @@ def build_content():
         h('Profile meanings remain explicit'),
         p('Earlier motion/world profiles use B for terrain or energy; relational-sdf-v1/v2 use B for exact signed distance. FI1-FI8 preserve these schemas and implement a field-agent policy with B=phi and separate integer energy. Shared encoding never permits an implicit role change.'),
         h('Measured integration'),
-        p('Tomigidt observes, plans and acts through Klein seams. hadamard.py and hadamard_navigation.py add certified directional gains and phase-state planning. Indexed device actions and rebuilds preserve admitted history. Global Psi, growth and physical adapters remain separate.'),
-        small('Paths are relative to solvefinite/. Current source hashes: docs/evidence/hadamard-v1/. Earlier field-agent, Klein and PX captures remain retained. Formal-first chronology is on pages 33 and 49.')
+        p('Tomigidt observes, plans and acts through Klein seams. hadamard.py and hadamard_navigation.py add phase-state routing. growth.py and the integrated world/device/session layers now generate a larger geometry, map the same individual and continue to a derived target. Global Psi, general grammars and physical adapters remain separate.'),
+        small('Paths are relative to solvefinite/. Current source hashes: docs/evidence/growth-v1/. Earlier FI, Klein, PX and HP captures remain retained. Formal-first chronology is on pages 33, 49 and 57.')
     )
     page('Retained PX verification and field trace', 'HISTORICAL CAPTURE | 25 SEPTEMBER 2026',
         table(['Measurement','Observed result'],[
@@ -468,7 +478,7 @@ def build_content():
     )
     page('Progress against the architecture: I', 'CAPABILITY STATUS | FINITE REALIZATIONS',
         table(['Obligation','Measured status and remaining work'],[
-            ['C1-C3: relational packed execution','<b>Verified subset.</b> RP32 and state-selected integer texture execution work. General active log-radius scale transitions and alternate historical carriers remain unbound.'],
+            ['C1-C3: relational packed execution','<b>Verified subset.</b> RP32, state-selected integer texture execution and GD dyadic geometry scale transitions work. General resolution policies and alternate historical carriers remain unbound.'],
             ['Exact intrinsic SDF','<b>Verified subset.</b> Weighted graph distance, declared separating boundary, units, certificate and field-governed traces work. Continuous primitives and physical calibration are separate.'],
             ['C4: Klein geometry','<b>Verified finite profile.</b> Quotient cells, nonorientability, connected orientable cover, torus maps, intrinsic ball and CPU/GPU seam transport are audited.'],
             ['Local Psi / traversal','<b>Verified local roles.</b> Exact SDF eigen-operator, primitive axis and chart transport govern indexing and HP directional gains. Global eigenmode traversal remains separate.'],
@@ -478,12 +488,12 @@ def build_content():
         h('What the tests establish'),
         p('The implemented graph profile has exact arithmetic and a field certificate, and its tested CPU/GPU realizations agree. These are substantial completed components. They do not establish every named architectural layer by association with the same word carrier.'),
         h('What will count as progress next'),
-        p('FI1-FI8, PX1-PX8 and HP1-HP8 implement field-guided planning, indexed lookup and phase-directed Hadamard routing. Global Psi, geometry-changing growth, active scale transitions and wider continuation remain separate obligations.'),
+        p('FI, PX and HP provide field-guided planning, indexed lookup and phase-directed routing. GD1-GD8 add finite autonomous dyadic geometry growth and continued action in the same history. Global Psi, general productions, physical scale adapters and wider continuation remain separate obligations.'),
         small('The requirements matrix continues on page 29. No percentage is assigned because architectural obligations differ in size and some remain unbound; counting passing tests would produce a misleading completion estimate.')
     )
     page('Progress against the architecture: II', 'CAPABILITY STATUS | INTEGRATION AND APPLICATIONS',
         table(['Obligation','Measured status and remaining work'],[
-            ['C5: generative world','<b>Verified subset.</b> Binary derivation and recipe-only Klein cold rebuild work. General primitives and geometry-changing grammar execution remain separate.'],
+            ['C5: generative world','<b>Verified finite growth profile.</b> GD adds internally triggered dyadic Klein generations, changed fields/targets and continued action. General primitives, production tables and branch stacks remain separate.'],
             ['C6: finite active memory','<b>Verified subset.</b> Pair-atomic sample FIFO, genuine reconstruction and capacity-independent agent histories work. Journals, geometry, fields and device arenas consume additional memory.'],
             ['C7: complete mirror','<b>Verified subset.</b> Phase involution/commutation, parity and full pair relations work, including K8 phase reflection and orientation transport on CPU/GPU.'],
             ['C8: individual and footprint','<b>Verified subset.</b> Planning, observations, epoch/sequence, retry handling, ownership and durable continuation work. Full LUS/DIGID envelopes and global admission/authentication remain profile obligations.'],
@@ -492,7 +502,7 @@ def build_content():
             ['Waves / physical growth','<b>Unbound applications.</b> Signal models, physical transfer functions and calibrated action semantics are not supplied by the present code.'],
         ],[.3,.7]),
         h('Continuation after the integrated field agent'),
-        p('FI1-FI8 join retained geometry to the existing individual; PX1-PX8 add an interchangeable verified index. HP1-HP8 make live phase and local eigenstructure affect directional costs and actual decisions. Legacy profiles remain preserved. Global traversal, geometry-changing growth and wider continuation require separate work and evidence.'),
+        p('FI joins retained geometry to the individual; PX adds an interchangeable index; HP makes phase and local eigenstructure affect actions. GD extends that same history across finite geometry generations and durable replay. Legacy profiles remain preserved. Global traversal, general productions and wider continuation require further work and evidence.'),
         small('The measured integration is finite and profile-scoped. Whole-system indefinite continuation, autonomous physical self-replication, consciousness and universal immunity are not demonstrated outcomes of the present profiles.')
     )
     page('Conformance and performance scope', 'ACCEPTANCE CRITERIA | ORIGINAL T1-T10',
@@ -814,7 +824,7 @@ for tick in admitted_finite_budget:
         small('Retained capture: docs/evidence/hadamard-v1/. verification.json binds source/report hashes at commit 5a304bc, formal chronology and measured counts. Earlier FI/PX captures retain their named commits and original counts.'),
         small('<b>Remaining scope:</b> global eigenmodes, geometry-changing growth, active scale transitions, physical adapters and wider continuation. These finite measurements establish no GPU saturation, general speedup or calibrated physical-energy claim.'),
     )
-    page('Autonomous growth binding', 'FORMAL ONLY | GD1 | SEMANTIC PROFILE',
+    page('Autonomous growth binding', 'VERIFIED FINITE PROFILE | GD1 | SEMANTIC PROFILE',
         p('Source basis: original sections 3, 8, 14 and 16; Solus page 6; Solipsism pages 13 and 16. The addendum describes growth through changes to internal distance rules. GD1-GD8 choose a finite dyadic production for the same Tomigidt individual. The source does not supply this numerical production or its target, cost and continuation rules.'),
         h('GD1. A versioned production with one history'),
         eq('policy = tomigidt-field-growth-plan-act-v1\ngrowth.format = klein-dyadic-growth-v1\ngrowth = {format, max_epochs, cost}'),
@@ -822,10 +832,10 @@ for tick in admitted_finite_budget:
         eq('N_initial * 4^max_epochs <= 256\nepoch k starts at 0; 0 <= k <= max_epochs'),
         p('Validate the maximum node bound before allocating a candidate. When max_epochs is positive, the initial radius must be at least one. Other initial recipe, word, routing, observation, energy, search and cycle bounds retain their declared meanings. The immutable manifest stores the initial recipe, initial target and complete grammar binding; it is not overwritten with a later recipe.'),
         p('The live state additionally retains semantic geometry epoch k, current recipe and current target. A production extends this same individual and its ordered history. It neither creates a replacement agent nor resets its energy, global cycle or event sequence. Producer epochs and interchangeable storage-index epochs are distinct from k.'),
-        box('<b>Revision 7 status: FORMAL ONLY.</b> The contracts and independent arithmetic references precede runtime implementation. Existing HP measurements remain historical evidence for HP1-HP8; they are not growth measurements.'),
+        box(f'<b>Revision 8 status: VERIFIED FINITE PROFILE.</b> GD1-GD8 preceded implementation at ec1181e; the prefix-identity refinement preceded its runtime field at 00b0e64. The separate GD capture has {gd_tests} passing tests, {gd_device_tests} actual-device methods and {gd_checks} conformance checks. Page 57 identifies that evidence.'),
         small('This binding is a finite grammar with one production family. It does not complete arbitrary L-systems, cone/pyramid synthesis, physical growth or indefinite continuation.')
     )
-    page('Dyadic geometry and active scale', 'FORMAL ONLY | GD2 | QUOTIENT PRODUCTION',
+    page('Dyadic geometry and active scale', 'VERIFIED FINITE PROFILE | GD2 | QUOTIENT PRODUCTION',
         h('GD2. Generate a larger intrinsic quotient'),
         eq('(W,H,c,r,k) -> (2W,2H,E(c),2r,k+1)\nE(u,v) = (2u,2v)\nG = u*H+v; E(G) = (2u)*(2H)+2v\nrho(k) = rho(0)*2^k; log-radius exponent = k'),
         p('Apply exactly one finite generation. All new edges have unit integer weight. The new Klein quotient, oriented seams, centre and intrinsic-ball boundary are regenerated from the production. Node names remain canonical for that epoch. New names alone cannot identify a historical sample: the geometry epoch is part of its semantic context.'),
@@ -838,7 +848,7 @@ for tick in admitted_finite_budget:
         small('Literal field counterexample: W=3,H=5,centre=1,radius=3,old G=0 gives B=-3. After growth, W=6,H=10,centre=2,radius=6 and mapped G=0 give B=-4, not -6. Generated boundary vertices change the nearest-boundary distance.'),
         small('Connectivity, audited quotient cells/links, boundary separation, exact field range, local Psi, f8 and HP operator conformance must hold at every candidate epoch. A rejected candidate is not an admitted generation.')
     )
-    page('Subgoals, growth and energy reserve', 'FORMAL ONLY | GD3 | ONE AUTONOMOUS LIFECYCLE',
+    page('Subgoals, growth and energy reserve', 'VERIFIED FINITE PROFILE | GD3 | ONE AUTONOMOUS LIFECYCLE',
         h('GD3. Complete a subgoal, then derive the next world'),
         p('Within an epoch, retain HP planning, fresh local observations, positive directional costs, full forecasts and one-edge action admission. At the freshly observed current target, REPAIR debits the manifest repair_cost and emits the same EMIT pair as FI4. The default repair cost remains five.'),
         table(['Condition after REPAIR','Required status and continuation'],[
@@ -854,7 +864,7 @@ for tick in admitted_finite_budget:
         p('On a successful GROW, clear effective observations, retained search and active sample FIFO. The new epoch requires a new complete fresh local observation before MOVE or REPAIR. Previous observations remain in admitted history for replay; they are not silently interpreted as measurements of the new geometry.'),
         small('A zero-growth binding executes one HP subgoal with no GROW events. Max_epochs selects this finite mission size; it does not claim whole-system indefinite progression.')
     )
-    page('State-selected next target', 'FORMAL ONLY | GD4 | INTRINSIC DETERMINISTIC SELECTION',
+    page('State-selected next target', 'VERIFIED FINITE PROFILE | GD4 | INTRINSIC DETERMINISTIC SELECTION',
         h('GD4. Choose among genuinely generated nodes'),
         p('Let a=E(current_node) in the certified candidate quotient. New nodes are exactly those whose canonical u or v is odd. Use the independently certified candidate field and unweighted shortest-path distance from a. The selection order below is semantic and independent of f8 storage order.'),
         eq('C0 = {v : u(v) is odd or v_coordinate(v) is odd}\nb = min(abs(phi_next(v)) for v in C0)\nC1 = {v in C0 : abs(phi_next(v)) = b}\nd = max(distance(a,v) for v in C1)\nC2 = sorted({v in C1 : distance(a,v)=d}, by numeric G)\ntarget_next = C2[t mod len(C2)]'),
@@ -867,7 +877,7 @@ for tick in admitted_finite_budget:
         small('Literal tie: in the 8 by 10 candidate with centre 0, radius 4 and mapped current node 0, C2=[13,17,31,39,51,59,73,77]. Intrinsic phases 0,1,2,63 select targets 13,17,31,77 respectively.'),
         small('Two-generation reference: a 3 by 3 quotient, centre 0, radius 1, start 0 and target 4, phase 250, eta 0, energy 100 and zero hazards grows at cycles 4 and 10. New targets are 31 then 15. Cycle 25 ends at pair 86000F0E16000FF2, energy 33, in the 12 by 12 quotient. These are mathematical expected values.')
     )
-    page('Atomic growth and device mapping', 'FORMAL ONLY | GD5 | COMPLETE CANDIDATE ADMISSION',
+    page('Atomic growth and device mapping', 'VERIFIED FINITE PROFILE | GD5 | COMPLETE CANDIDATE ADMISSION',
         h('GD5. Prepare, certify, map, then commit'),
         p('Prepare a complete candidate audited quotient, boundary field, local Psi/f8 structure, HP atlas, certified exported routing model, empty sample FIFO and runtime resources. The candidate must pass the existing independent geometry, field, index and all-bank/class operator certificates before it can replace the old world.'),
         p('For explicit GPU execution, a device growth-mapping pass reads the old packed pair and energy with the old height, computes the mapped G, reads the certified new phi, debits growth cost and writes the candidate canonical pair/energy. Read back and independently validate this result before the serialized swap. Host seeding of a precomputed mapped pair is not an allowed fallback.'),
@@ -883,7 +893,7 @@ for tick in admitted_finite_budget:
         eq('M_active_pairs <= 8*C bytes\nM_peak_growth >= M_old_world + M_candidate_world'),
         small('GD7 resource accounting includes fields, topology, indexes, routing, state, grammar, journals, observations, search and all host/device metadata. Resource ownership remains explicit until cleanup completes; the active-pair FIFO bound is not a total-memory bound.')
     )
-    page('Epoch-aware replay and regeneration', 'FORMAL ONLY | GD6-GD7 | CONTEXT AND RETENTION',
+    page('Epoch-aware replay and regeneration', 'VERIFIED FINITE PROFILE | GD6-GD7 | CONTEXT AND RETENTION',
         h('GD6. Preserve the context of every observation'),
         code('event = {seq,input,decision,output,energy,geometry_epoch,growth}\nreceipt = {format,from_epoch,to_epoch,mapped_node,target,recipe}'),
         p('For this policy only, geometry_epoch is the pre-cycle integer; growth is null except on GROW. Its receipt has exactly the keys above: format is klein-dyadic-growth-v1, mapped_node and target are new canonical names, and recipe is the full new recipe. Strict replay regenerates every event and receipt from the immutable initial manifest and admitted prefix.'),
@@ -898,7 +908,7 @@ for tick in admitted_finite_budget:
         p('Historical derivation does not mutate the current FIFO or state. GROW starts an empty active FIFO; capacity changes may alter residency but not samples or decisions. Reindex preserves the current recipe, target, observations, search and identities; GROW invalidates that semantic context. Resource bounds and complete candidate peaks are on page 54.'),
         small('The generation exponent, global cycle, producer epoch/sequence and storage-index epoch have separate purposes. None may silently substitute for another during replay, retries or regeneration.')
     )
-    page('Growth reference and acceptance', 'FORMAL ONLY | GD8 | INDEPENDENT VECTORS',
+    page('Growth reference and acceptance', 'VERIFIED FINITE PROFILE | GD8 | INDEPENDENT VECTORS',
         h('GD8. Mathematical reference before runtime'),
         small('Use the HP8 default world, initial pair, energy and epoch-0 hazard timeline; max_epochs=1, growth cost 1 and repair cost 5. The independent reference imports no solvefinite module; every MOVE route is cross-checked by hop-layer dynamic programming.'),
         eq('cycle 4 REPAIR: 06011145160111BB, energy 86\ncycle 5 GROW:   01024045110240BB, energy 85\ncycle 14 REPAIR:160027E906002717, energy 64'),
@@ -913,8 +923,25 @@ for tick in admitted_finite_budget:
             ['Replay and residency','Generation-qualified historical samples, empty new FIFO, stale observation rejection, duplicate original-epoch retries, current-geometry simulation and cross-backend/process continuation.'],
         ],[.29,.71]),
         small('Capacity and index variations must preserve history at every epoch. Reindex during DEFER and after growth; invalidate semantic planning only for growth or changed effective observations. Test cycle/energy boundaries without resetting the individual.'),
-        box('<b>Acceptance remains pending.</b> Independent formal vectors are expected outputs, not measurements of implementation. GD1-GD8 require a separate runtime and actual-device capture before the profile may be marked verified.'),
+        box(f'<b>Revision 8 acceptance: VERIFIED FINITE PROFILE.</b> The separate runtime/device capture passes all {gd_checks} named conformance checks. The independent formal vectors remain expected outputs; page 57 reports their tested implementation and retained evidence.'),
         small('The full architecture still includes general production systems, global spectral traversal, physical adapters, wider temporal continuation and measured performance. Completing this finite profile does not discharge those obligations.')
+    )
+    page('Measured autonomous geometry growth', 'REVISION 8 EVIDENCE | GD1-GD8 | SAME INDIVIDUAL',
+        p('The same Tomigidt now repairs a subgoal, derives a larger Klein quotient, maps its packed state on the device and continues to an internally selected target. GD1-GD8 were committed at ec1181e before runtime coding; the original-event-prefix digest was bound at 00b0e64 before its runtime field. Neither step rewrites the initial manifest.'),
+        table(['Capture','Measured result'],[
+            ['Complete regression suite', f'{gd_tests} passed; {GD_VERIFICATION["tests"]["skipped"]} skipped; {GD_VERIFICATION["tests"]["elapsed_seconds"]} seconds.'],
+            ['Actual-device coverage', f'{gd_device_tests} executed GPU methods. All {gd_checks} named GD conformance checks pass, including device mapping and post-growth actions.'],
+            ['One generation', f'{gd_default["archive"]["expected"]["cycle"]} cycles, final energy {gd_default["archive"]["expected"]["energy"]}. The 20-node world becomes 80 nodes; cycle 5 maps node 17 to 64 and selects target 39.'],
+            ['Two generations', f'{gd_two["archive"]["expected"]["cycle"]} cycles, final energy {gd_two["archive"]["expected"]["energy"]}. The 9-node world becomes 36, then 144 nodes, under the same global history.'],
+            ['Retained incremental search', f'Quantum 7: {gd_deferred["archive"]["expected"]["cycle"]} cycles. Reindexing throughout generated-world DEFER preserves the canonical history.'],
+            ['Device payload / growth peak', f'{gd_allocation["device_payload_bytes"]:,} / {gd_peak["device_payload_bytes"]:,} bytes in the default final world / complete old-plus-candidate growth preparation.'],
+        ],[.31,.69]),
+        h('Original context survives continuation'),
+        p('Historical samples retain geometry epoch, original admission sequence and the digest of the exact original event prefix. Capacity changes and storage rebuilds preserve that context. Sensors describe the current geometry; stale epochs are rejected and earlier duplicates use their original geometry. The retained suite covers rejected candidates, uncertain results, committed cleanup failures and durable save/reopen boundaries.'),
+        p('CPU/GPU histories agree for default, mirrored, zero-growth and two-generation missions. The conformance capture includes six fresh-process continuations before/after growth and during generated-world DEFER, with host field/index/routing compilers disabled on explicit GPU paths. A separate CLI capture resumes GPU to CPU to GPU and verifies read-only inspection.'),
+        code('python -m unittest discover -s tests -v\npython -m examples.growth_conformance --output gd.json'),
+        small('Retained evidence: docs/evidence/growth-v1/. verification.json binds current source and report hashes, actual counts and the formal-first commits. Device figures are logical resource payloads; Python objects, drivers, journals and other overhead remain additional.'),
+        small('<b>Remaining scope:</b> general production tables and branch stacks, global eigenmodes, physical adapters, wider temporal continuation and comparative hardware measurements. This finite growth result establishes no GPU saturation, speedup, calibrated energy advantage or whole-architecture completion.')
     )
 
 
@@ -922,7 +949,7 @@ def cover(c, count):
     c.setFillColor(INK); c.rect(0,0,WIDTH,HEIGHT,fill=1,stroke=0)
     c.setFillColor(TEAL); c.rect(LEFT,HEIGHT-85,54,5,fill=1,stroke=0)
     c.setFont('Bold',11); c.setFillColor(colors.HexColor('#A8D5D4'))
-    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 7')
+    c.drawString(LEFT,HEIGHT-117,'TK-LPLUT-2.0  /  REVISION 8')
     c.setFillColor(colors.white); c.setFont('Bold',36)
     c.drawString(LEFT,HEIGHT-184,'The Infallible Contract')
     c.setFont('Body',21)
@@ -955,7 +982,7 @@ def cover(c, count):
 def render(output):
     output.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(output),pagesize=A4,invariant=1,pageCompression=1)
-    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 7')
+    c.setTitle('The Infallible Contract - Ontological Deterministic Computing - TK-LPLUT-2.0 revision 8')
     c.setAuthor('Tom Klootwijk - paradigm author; consolidated formalization prepared with Codex')
     c.setSubject('Integrated formal specification and implementation evidence, 26 September 2026')
     count=len(PAGES)+1
@@ -963,7 +990,7 @@ def render(output):
     layout=[]
     for number,(title,subtitle,items) in enumerate(PAGES,2):
         c.bookmarkPage(f'p{number}'); c.addOutlineEntry(title,f'p{number}',0)
-        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 7')
+        c.setFillColor(TEAL); c.setFont('Bold',8.5); c.drawString(LEFT,HEIGHT-42,'TK-LPLUT-2.0 / REVISION 8')
         c.setFillColor(MUTED); c.setFont('Body',8.2); c.drawRightString(WIDTH-RIGHT,HEIGHT-42,'TOM KLOOTWIJK  /  26 SEPTEMBER 2026')
         c.setStrokeColor(RULE); c.setLineWidth(.6); c.line(LEFT,HEIGHT-51,WIDTH-RIGHT,HEIGHT-51)
         title_style=ParagraphStyle('title',fontName='Bold',fontSize=22,leading=26,textColor=INK)
@@ -1023,7 +1050,7 @@ def render(output):
 
 
 def verify_retained_inputs():
-    global HP_VERIFICATION
+    global HP_VERIFICATION, GD_VERIFICATION, GD_CONFORMANCE
     expected_hashes = {
         'Tom_Klootwijk_Log_Encoded_Polar_LUT_Paradigm_v1.0.pdf':
             '8ea9cfb077630993e1d472ba72715a25d2402bf243518663f7d08b03f8b83647',
@@ -1175,6 +1202,75 @@ def verify_retained_inputs():
             or gd['two_epoch_mission']['final']['pair'] != '86000F0E16000FF2'
             or gd['two_epoch_mission']['final']['energy'] != 33):
         raise ValueError('GD displayed formal vectors disagree with the independent reference')
+    growth = json.loads((GROWTH_EVIDENCE/'verification.json').read_text(encoding='utf-8'))
+    if (growth['format'] != 'growth-verification-v1'
+            or growth['formal_binding_commit'] != '00b0e64decd2d8202725b71c101480843b1af1e2'
+            or growth['initial_formal_binding_commit'] != 'ec1181e00f40c3663e73974885573ebfae784e08'
+            or growth['base_commit'] != '5a304bcca77965778e1acb743d49d54e2a79e380'):
+        raise ValueError('Retained GD chronology disagrees with revision 8')
+    growth_tests = growth['tests']
+    if (type(growth_tests['passed']) is not int or growth_tests['passed'] <= tests['passed']
+            or growth_tests['skipped'] != 0
+            or sum(growth_tests['actual_device_methods'].values()) <= sum(tests['actual_device_methods'].values())):
+        raise ValueError('GD requires a separate complete passing actual-device capture')
+    required_sources = {'solvefinite/growth.py', 'solvefinite/tomigidt.py',
+                        'solvefinite/field_agent_gpu.py', 'solvefinite/session.py',
+                        'solvefinite/live.py', 'examples/growth_conformance.py',
+                        'tests/test_growth_session.py', 'tools/capture_growth_evidence.py'}
+    if not required_sources <= growth['source_sha256_lf'].keys():
+        raise ValueError('GD capture lacks required source identities')
+    for relative, expected in growth['source_sha256_lf'].items():
+        source = (ROOT/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(source).hexdigest() != expected:
+            raise ValueError(f'GD evidence source identity changed: {relative}')
+    for relative, expected in growth['report_sha256_lf'].items():
+        report = (GROWTH_EVIDENCE/relative).read_bytes().replace(b'\r\n', b'\n')
+        if hashlib.sha256(report).hexdigest() != expected:
+            raise ValueError(f'GD evidence report identity changed: {relative}')
+    growth_conformance = json.loads((GROWTH_EVIDENCE/'conformance.json').read_text(encoding='utf-8'))
+    if (growth_conformance['format'] != 'growth-conformance-v1'
+            or growth_conformance['actual_GPU_capture'] is not True
+            or growth_conformance['formal_commit'] != growth['formal_binding_commit']
+            or growth_conformance['initial_formal_commit'] != growth['initial_formal_binding_commit']
+            or not growth_conformance['checks']
+            or any(value is not True for value in growth_conformance['checks'].values())
+            or len(growth_conformance['checks']) != growth['conformance_checks_passed']
+            or growth_conformance['formal_reference_sha256_lf'] != hashlib.sha256(gd_bytes).hexdigest()):
+        raise ValueError('GD conformance lacks complete current CPU/GPU acceptance')
+    for label in ('default', 'mirrored_default', 'two_epoch', 'zero_epoch'):
+        cpu_archive = growth_conformance['CPU']['cases'][label]['archive']
+        gpu_archive = growth_conformance['GPU'][label]['archive']
+        expected = gd[label+'_mission']
+        actual = gpu_archive['expected']
+        if (cpu_archive != gpu_archive
+                or actual['cycle'] != expected['cycles']
+                or actual['geometry_epoch'] != expected['final_geometry_epoch']
+                or actual['agent_pair'] != expected['final']['pair']
+                or actual['energy'] != expected['final']['energy']
+                or actual['status'] != 'COMPLETE'):
+            raise ValueError(f'GD measured mission disagrees with its independent reference: {label}')
+    default_archive = growth_conformance['GPU']['default']['archive']
+    archive_hash = hashlib.sha256(json.dumps(default_archive, sort_keys=True,
+                                           separators=(',', ':'), ensure_ascii=True,
+                                           allow_nan=False).encode('utf-8')).hexdigest()
+    cli = json.loads((GROWTH_EVIDENCE/'cli-replay.json').read_text(encoding='utf-8'))
+    if (archive_hash != growth_conformance['canonical_archive_sha256']
+            or archive_hash != growth['canonical_archive_sha256']
+            or archive_hash != cli['canonical_archive_sha256']
+            or cli['inspection_kept_saved_bytes'] is not True
+            or growth['final_state'] != default_archive['expected']
+            or growth_conformance['CPU']['deferred']['archive'] != growth_conformance['GPU_deferred']['archive']
+            or len(growth_conformance['fresh_process_replays']) != 6):
+        raise ValueError('GD captured histories or cross-process continuation disagree')
+    log = (GROWTH_EVIDENCE/'full-tests.txt').read_text(encoding='utf-8')
+    if (f'Ran {growth_tests["passed"]} tests in ' not in log
+            or not log.rstrip().endswith('OK') or '... skipped' in log or 'skipped=' in log):
+        raise ValueError('GD suite counts require the complete passing zero-skip log')
+    if growth['eli5_pdf_unchanged_sha256'] != hashlib.sha256(
+            (ROOT/'output/pdf/Tom_Klootwijk_Paradigm_ELI5.pdf').read_bytes()).hexdigest():
+        raise ValueError('ELI5 identity differs from the GD capture')
+    GD_VERIFICATION = growth
+    GD_CONFORMANCE = growth_conformance
 
 
 if __name__=='__main__':

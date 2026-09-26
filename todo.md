@@ -408,19 +408,50 @@ and independently reconstruct the new signed field. This production is an
 explicit numerical choice; the source does not supply a complete production table.
 New boundary vertices mean the signed distance cannot simply be doubled.
 
-- [ ] Commit GD1-GD8 and independent arithmetic references in the consolidated
+- [x] Commit GD1-GD8 and independent arithmetic references in the consolidated
   PDF before runtime edits; preserve the original sources and ELI5 booklet.
-- [ ] Implement strict bounded growth, certified mapping and an internally
+- [x] Implement strict bounded growth, certified mapping and an internally
   derived new target in the same Tomigidt, retaining energy and ordered history.
-- [ ] Compute the mapping on the GPU from the actual old state and new certified
+- [x] Compute the mapping on the GPU from the actual old state and new certified
   field; verify complete candidate admission and ownership failure semantics.
-- [ ] Qualify observations and historical regeneration by geometry epoch, clear
+- [x] Qualify observations and historical regeneration by geometry epoch, clear
   effective observations/search/FIFO on growth, and preserve storage reindexing.
-- [ ] Continue simulation, live retries and durable cross-process CPU/GPU replay
+- [x] Continue simulation, live retries and durable cross-process CPU/GPU replay
   across REPAIR, GROWTH_PENDING, GROW and the next subgoal.
-- [ ] Verify independent one/two-generation and mirrored missions, exact field
+- [x] Verify independent one/two-generation and mirrored missions, exact field
   reconstruction, energy/cycle bounds, fault recovery and unchanged old archives.
-- [ ] Capture source-bound measurements, update the same PDF, commit and push.
+- [x] Capture source-bound measurements, update the same PDF, commit and push.
 
 General grammars, global spectral traversal, physical adapters, wider temporal
 continuation and comparative hardware measurements remain part of the full goal.
+
+GD1-GD8 were committed before runtime at `ec1181e`; the original event-prefix
+fingerprint was additionally bound at `00b0e64` before implementing that field.
+The same Tomigidt now admits REPAIR, GROW and later subgoals, rebuilds geometry
+and operators, and reconstructs historical samples from their original epoch
+and admitted event prefix. The complete old and candidate worlds coexist
+until the serialized swap. Pure rejection, uncertain device outcomes and
+committed cleanup failure have distinct, verified recovery behavior.
+
+The retained source-bound capture passes **546 tests, zero skipped**, including
+**107 actual-device GPU methods**, and all **16 GD conformance checks**. Its
+default mission grows from 20 to 80 nodes and completes in 14 cycles with energy
+64; the two-generation case reaches 144 nodes in 25 cycles with energy 33.
+The 61-cycle DEFER mission preserves its search across storage rebuilds after
+growth. Six fresh-process CPU/GPU cuts cover both sides of GROW and retained
+search in generated geometry. Eleven CPU compiler paths are disabled during
+explicit GPU construction, growth, historical regeneration and continuation.
+
+The default canonical growth archive hashes to
+`de88d26b78d0defab4e17cff9e4771cef39b85ba0707791d88f2103bf393601e`.
+Earlier field and Hadamard hashes remain unchanged. Default covered device
+preparation payload is 177,504 bytes across the complete old and candidate
+worlds, with host and unmeasured object/driver costs separately identified.
+This finite implementation does not complete the broader architecture goal.
+
+Revision 8 records the verified growth implementation in the same consolidated
+57-page formal PDF. All pages were rendered and reviewed; earlier FI/PX/HP
+clauses and GD normative clauses are preserved. Original source PDFs and the
+Tom/Jitske ELI5 booklet remain byte-identical. General production rules and
+branch context, global eigenmodes, physical adapters, wider continuation and
+comparative hardware evidence remain explicit next work under the full goal.
