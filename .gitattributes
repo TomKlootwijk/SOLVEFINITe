@@ -1,2 +1,5 @@
 # Preserve PDF bytes and avoid text conversion or text diffs on generated PDFs.
 *.pdf binary
+
+# Keep deterministic JSON evidence and fixture hashes stable across checkouts.
+*.json text eol=lf
